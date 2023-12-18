@@ -31,6 +31,13 @@ public interface IBaseUnit<TBaseUnit, TScalar>
     public TUnit ToUnit<TUnit>() where TUnit : class, IUnit<TUnit, TBaseUnit, TScalar>;
 }
 
+//public interface IMeasurement<TMeasurement, TScalar>
+//    where TMeasurement : IMeasurement<TMeasurement, TScalar>
+//    where TScalar : notnull, INumberBase<TScalar>, new()
+//{
+//    public static abstract string Name { get; }
+//}
+
 public abstract record AbstractUnit<TUnit, TScalar>(TScalar Value)
     : IAdditionOperators<TUnit, TUnit, TUnit>
     , ISubtractionOperators<TUnit, TUnit, TUnit>
@@ -50,15 +57,13 @@ public abstract record AbstractUnit<TUnit, TScalar>(TScalar Value)
     where TScalar : notnull, INumberBase<TScalar>, new()
 {
     private static readonly InvalidProgramException _exception = new($"Type '{typeof(TUnit)}' does not have a constructor with a single parameter of type '{typeof(TScalar)}'.");
-    private static readonly ConstructorInfo _constructor;
+    private static readonly ConstructorInfo _constructor = typeof(TUnit).GetConstructor([typeof(TScalar)]) ?? throw _exception;
 
 
     public static TUnit Zero { get; } = (TUnit)TScalar.Zero;
 
     public static TUnit One { get; } = (TUnit)TScalar.One;
 
-
-    static AbstractUnit() => _constructor = typeof(TUnit).GetConstructor([typeof(TScalar)]) ?? throw _exception;
 
     public sealed override string ToString() => ToString(null, null);
 
@@ -133,31 +138,38 @@ public abstract record AbstractUnit<TUnit, TScalar>(TScalar Value)
     static TUnit IDecrementOperators<TUnit>.operator --(TUnit value) => --value;
 }
 
-public abstract record Unit<TUnit, TBaseUnit, TScalar>(TScalar Value)
-    : AbstractUnit<TBaseUnit, TScalar>(Value)
-    where TUnit : Unit<TUnit, TBaseUnit, TScalar>, IUnit<TUnit, TBaseUnit, TScalar>
-    where TBaseUnit : BaseUnit<TBaseUnit, TScalar>, IBaseUnit<TBaseUnit, TScalar>
+public abstract class Measurement<TMeasurement, TScalar>
+    //: IMeasurement<TMeasurement, TScalar>
+    where TMeasurement : Measurement<TMeasurement, TScalar>
     where TScalar : notnull, INumberBase<TScalar>, new()
 {
-    public abstract TBaseUnit ToBaseUnit();
+    // TODO : conversion between measurements
 
-    public abstract TUnit FromBaseUnit(TBaseUnit base_unit);
 
-    public static TUnit From(TBaseUnit base_unit) => base_unit.ToUnit<TUnit>();
+    public abstract record Unit<TUnit, TBaseUnit>(TScalar Value)
+        : AbstractUnit<TBaseUnit, TScalar>(Value)
+        where TUnit : Unit<TUnit, TBaseUnit>, IUnit<TUnit, TBaseUnit, TScalar>
+        where TBaseUnit : BaseUnit<TBaseUnit>, IBaseUnit<TBaseUnit, TScalar>
+    {
+        public abstract TBaseUnit ToBaseUnit();
 
-    public static implicit operator BaseUnit<TBaseUnit, TScalar>(Unit<TUnit, TBaseUnit, TScalar> unit) => unit.ToBaseUnit();
+        public abstract TUnit FromBaseUnit(TBaseUnit base_unit);
 
-    public static implicit operator Unit<TUnit, TBaseUnit, TScalar>(BaseUnit<TBaseUnit, TScalar> base_unit) => From(base_unit);
-}
+        public static TUnit From(TBaseUnit base_unit) => base_unit.ToUnit<TUnit>();
 
-public abstract record BaseUnit<TBaseUnit, TScalar>(TScalar Value)
-    : Unit<TBaseUnit, TBaseUnit, TScalar>(Value)
-    where TBaseUnit : BaseUnit<TBaseUnit, TScalar>, IBaseUnit<TBaseUnit, TScalar>
-    where TScalar : notnull, INumberBase<TScalar>, new()
-{
-    public sealed override TBaseUnit ToBaseUnit() => this;
+        public static implicit operator BaseUnit<TBaseUnit>(Unit<TUnit, TBaseUnit> unit) => unit.ToBaseUnit();
 
-    public abstract TUnit ToUnit<TUnit>() where TUnit : Unit<TUnit, TBaseUnit, TScalar>, IUnit<TUnit, TBaseUnit, TScalar>;
+        public static implicit operator Unit<TUnit, TBaseUnit>(BaseUnit<TBaseUnit> base_unit) => From(base_unit);
+    }
 
-    public sealed override TBaseUnit FromBaseUnit(TBaseUnit base_unit) => base_unit;
+    public abstract record BaseUnit<TBaseUnit>(TScalar Value)
+        : Unit<TBaseUnit, TBaseUnit>(Value)
+        where TBaseUnit : BaseUnit<TBaseUnit>, IBaseUnit<TBaseUnit, TScalar>
+    {
+        public sealed override TBaseUnit ToBaseUnit() => this;
+
+        public abstract TUnit ToUnit<TUnit>() where TUnit : Unit<TUnit, TBaseUnit>, IUnit<TUnit, TBaseUnit, TScalar>;
+
+        public sealed override TBaseUnit FromBaseUnit(TBaseUnit base_unit) => base_unit;
+    }
 }
