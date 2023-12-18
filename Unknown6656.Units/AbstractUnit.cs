@@ -31,7 +31,6 @@ public interface IBaseUnit<TBaseUnit, TScalar>
     public TUnit ToUnit<TUnit>() where TUnit : class, IUnit<TUnit, TBaseUnit, TScalar>;
 }
 
-
 public abstract record AbstractUnit<TUnit, TScalar>(TScalar Value)
     : IAdditionOperators<TUnit, TUnit, TUnit>
     , ISubtractionOperators<TUnit, TUnit, TUnit>
@@ -132,4 +131,33 @@ public abstract record AbstractUnit<TUnit, TScalar>(TScalar Value)
     static TUnit IIncrementOperators<TUnit>.operator ++(TUnit value) => ++value;
 
     static TUnit IDecrementOperators<TUnit>.operator --(TUnit value) => --value;
+}
+
+public abstract record Unit<TUnit, TBaseUnit, TScalar>(TScalar Value)
+    : AbstractUnit<TBaseUnit, TScalar>(Value)
+    where TUnit : Unit<TUnit, TBaseUnit, TScalar>, IUnit<TUnit, TBaseUnit, TScalar>
+    where TBaseUnit : BaseUnit<TBaseUnit, TScalar>, IBaseUnit<TBaseUnit, TScalar>
+    where TScalar : notnull, INumberBase<TScalar>, new()
+{
+    public abstract TBaseUnit ToBaseUnit();
+
+    public abstract TUnit FromBaseUnit(TBaseUnit base_unit);
+
+    public static TUnit From(TBaseUnit base_unit) => base_unit.ToUnit<TUnit>();
+
+    public static implicit operator BaseUnit<TBaseUnit, TScalar>(Unit<TUnit, TBaseUnit, TScalar> unit) => unit.ToBaseUnit();
+
+    public static implicit operator Unit<TUnit, TBaseUnit, TScalar>(BaseUnit<TBaseUnit, TScalar> base_unit) => From(base_unit);
+}
+
+public abstract record BaseUnit<TBaseUnit, TScalar>(TScalar Value)
+    : Unit<TBaseUnit, TBaseUnit, TScalar>(Value)
+    where TBaseUnit : BaseUnit<TBaseUnit, TScalar>, IBaseUnit<TBaseUnit, TScalar>
+    where TScalar : notnull, INumberBase<TScalar>, new()
+{
+    public sealed override TBaseUnit ToBaseUnit() => this;
+
+    public abstract TUnit ToUnit<TUnit>() where TUnit : Unit<TUnit, TBaseUnit, TScalar>, IUnit<TUnit, TBaseUnit, TScalar>;
+
+    public sealed override TBaseUnit FromBaseUnit(TBaseUnit base_unit) => base_unit;
 }
