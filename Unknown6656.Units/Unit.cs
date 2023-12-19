@@ -9,12 +9,19 @@ using System;
 namespace Unknown6656.Units;
 
 
+public enum UnitSystem
+{
+    Metric,
+    Imperial
+}
+
 public interface IUnit<TUnit, TBaseUnit, TScalar>
     where TUnit : class, IUnit<TUnit, TBaseUnit, TScalar>
     where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>
-    where TScalar : notnull, INumber<TScalar>, new()
+    where TScalar : INumber<TScalar>
 {
     public static abstract string UnitSymbol { get; }
+    public static abstract UnitSystem UnitSystem { get; }
 
 
     public TBaseUnit ToBaseUnit();
@@ -25,7 +32,7 @@ public interface IUnit<TUnit, TBaseUnit, TScalar>
 public interface IBaseUnit<TBaseUnit, TScalar>
     : IUnit<TBaseUnit, TBaseUnit, TScalar>
     where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>
-    where TScalar : notnull, INumber<TScalar>, new()
+    where TScalar : INumber<TScalar>
 {
 }
 
@@ -47,7 +54,7 @@ public static class Unit
     {
         TScalar @base = TScalar.CreateChecked((int)scale);
         bool negative = value < TScalar.Zero;
-        int order = 0;
+        int order = -1;
 
         value = TScalar.Abs(value);
 
@@ -59,15 +66,36 @@ public static class Unit
             ++order;
 
             if (submultiple)
-                value /= @base;
-            else
                 value *= @base;
+            else
+                value /= @base;
         }
 
         if (negative)
             value = -value;
 
-        return $"{value.ToString(format, format_provider)} {prefixes[order]}{(scale == SIUnitScale._1024 ? "i" : "")}{unit_symbol}";
+        return $"{value.ToString(format ?? "#.###", format_provider)} {(order < 0 ? "" : prefixes[order])}{(scale == SIUnitScale._1024 ? "i" : "")}{unit_symbol}";
+    }
+
+    public static bool TryParse<TScalar>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar, SIUnitScale scale = SIUnitScale._1000)
+        where TScalar : INumber<TScalar>
+    {
+        scalar = default;
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            scalar = TScalar.Zero;
+
+            return true;
+        }
+        else if (TScalar.TryParse(value, provider, out scalar))
+            return true;
+        else
+        {
+#warning TODO : parse prefixes (e.g. "1.5 kV" -> 1500 V, "200 MiB" -> 209'715'200 B)
+        }
+
+        return false;
     }
 }
 
@@ -90,7 +118,7 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
                 , IUnit<TUnit, TBaseUnit, TScalar>
               //, IBaseUnit<TUnit, TScalar>
     where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>
-    where TScalar : notnull, INumber<TScalar>, new()
+    where TScalar : INumber<TScalar>
 {
     private static readonly InvalidProgramException _exception = new($"Type '{typeof(TUnit)}' does not have a constructor with a single parameter of type '{typeof(TScalar)}'.");
     private static readonly ConstructorInfo _constructor = typeof(TUnit).GetConstructor([typeof(TScalar)]) ?? throw _exception;
@@ -107,14 +135,25 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format, formatProvider, SIUnitScale._1000);
 
-    public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale) => Unit.FormatSIPrefix(Value, TUnit.UnitSymbol, format, formatProvider, scale);
-
-    public static TUnit Parse(string s, IFormatProvider? provider) =>
-        TryParse(s, provider, out TUnit? result) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TUnit)} or {typeof(TScalar)}.");
-
-    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale)
     {
-        if (TScalar.TryParse(s, provider, out TScalar? scalar))
+        if (TUnit.UnitSystem is UnitSystem.Metric)
+            return Unit.FormatSIPrefix(Value, TUnit.UnitSymbol, format, formatProvider, scale);
+        else
+            return $"{Value.ToString(format, formatProvider)} {TUnit.UnitSymbol}";
+    }
+
+    public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, provider, SIUnitScale._1000);
+
+    public static TUnit Parse(string s, IFormatProvider? provider, SIUnitScale scale) =>
+        TryParse(s, provider, out TUnit? result, scale) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TUnit)} or {typeof(TScalar)}.");
+
+    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) =>
+        TryParse(s, provider, out result, SIUnitScale._1000);
+
+    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result, SIUnitScale scale)
+    {
+        if (Unit.TryParse(s, provider, out TScalar? scalar, scale))
         {
             result = FromScalar(scalar);
 
@@ -194,7 +233,7 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
 public abstract class Measurement<TMeasurement, TScalar>
     where TMeasurement : Measurement<TMeasurement, TScalar>
-    where TScalar : notnull, INumber<TScalar>, new()
+    where TScalar : INumber<TScalar>
 {
     private static readonly Dictionary<Type, MethodInfo> _from_baseunit = [];
     private static Type? _baseunit = null;
@@ -298,4 +337,4 @@ public abstract class Measurement<TMeasurement, TScalar>
 // TODO : build source generators using attributes such as:
 //
 // [AttributeUsage(AttributeTargets.Class)]
-// public sealed class MeasurementAttribute<TScalar>() : Attribute() where TScalar : notnull, INumber<TScalar>, new();
+// public sealed class MeasurementAttribute<TScalar>() : Attribute() where TScalar : INumber<TScalar>();
