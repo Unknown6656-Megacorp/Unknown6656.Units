@@ -1,5 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+        <!-- change the following for different precisions -->
+        <DefineConstants>F64</DefineConstants>
+
+
         <TargetFramework>net8.0</TargetFramework>
 
         <LangVersion>preview</LangVersion>
@@ -11,6 +15,7 @@
 
         <OutputType>Library</OutputType>
         <OutputPath>$(SolutionDir)bin</OutputPath>
+        <AssemblyName>Unknown6656.Units.$(DefineConstants)</AssemblyName>
 
         <Deterministic>true</Deterministic>
         <IsPackable>true</IsPackable>
@@ -39,7 +44,7 @@
             unknown6656;unit;physical;units;math;mathematics;physics
         </PackageTags>
 
-        <PackageId>Unknown6656.Units</PackageId>
+        <PackageId>Unknown6656.Units.$(DefineConstants)</PackageId>
         <IncludeSymbols>true</IncludeSymbols>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
