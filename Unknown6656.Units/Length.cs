@@ -22,18 +22,41 @@ public abstract class Volume<TScalar>
 }
 
 // TODO:
-// - inch
-// - mile
-// - nautical mile
-// - light year
-// - parsec
-// - astronomical unit
-// - league
-// - fathom
-// - rod
-// - chain
-// - furlong
-// - from KM, CM, MM, ...
+//  - lengths
+//      - inch
+//      - mile
+//      - nautical mile
+//      - light year
+//      - parsec
+//      - astronomical unit
+//      - league
+//      - fathom
+//      - rod
+//      - chain
+//      - furlong
+//      - from KM, CM, MM, ...
+//      - from inches, feet, yards, ...
+//  - areas
+//      - acre
+//      - hectare
+//      - barn
+//      - from KM², CM², MM², ...
+//      - from inches², feet², yards², ...
+//  - volumes
+//      - liter
+//      - gallon
+//      - from KM³, CM³, MM³, ...
+//      - from inches³, feet³, yards³, ...
+//      - cup
+//      - pint
+//      - quart
+//      - barrel
+//      - fluid ounce
+//      - teaspoon
+//      - tablespoon
+//      - drop
+//      - peck
+//      - bushel
 
 
 
