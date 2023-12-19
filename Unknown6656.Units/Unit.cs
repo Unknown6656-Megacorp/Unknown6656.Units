@@ -231,15 +231,15 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     #endregion
 }
 
-public abstract class Measurement<TMeasurement, TScalar>
-    where TMeasurement : Measurement<TMeasurement, TScalar>
+public abstract class Quantity<TQuantity, TScalar>
+    where TQuantity : Quantity<TQuantity, TScalar>
     where TScalar : INumber<TScalar>
 {
     private static readonly Dictionary<Type, MethodInfo> _from_baseunit = [];
     private static Type? _baseunit = null;
 
     // TODO : public abstract static TBaseUnit BaseUnit { get; }
-    // TODO : conversion between measurements
+    // TODO : conversion between quantities
 
 
     public abstract record Unit<TUnit, TBaseUnit>(TScalar Value)
@@ -316,11 +316,11 @@ public abstract class Measurement<TMeasurement, TScalar>
         , IAffineUnit
         where TBaseUnit : BaseUnit<TBaseUnit>, IBaseUnit<TBaseUnit, TScalar>
     {
-        static TScalar Measurement<TMeasurement, TScalar>.IAffineUnit.ScalingFactor { get; } = TScalar.One;
+        static TScalar Quantity<TQuantity, TScalar>.IAffineUnit.ScalingFactor { get; } = TScalar.One;
 
-        static TScalar Measurement<TMeasurement, TScalar>.IAffineUnit.PreScalingOffset { get; } = TScalar.Zero;
+        static TScalar Quantity<TQuantity, TScalar>.IAffineUnit.PreScalingOffset { get; } = TScalar.Zero;
 
-        static TScalar Measurement<TMeasurement, TScalar>.IAffineUnit.PostScalingOffset { get; } = TScalar.Zero;
+        static TScalar Quantity<TQuantity, TScalar>.IAffineUnit.PostScalingOffset { get; } = TScalar.Zero;
 
 
         static BaseUnit()
@@ -328,7 +328,7 @@ public abstract class Measurement<TMeasurement, TScalar>
             if (_baseunit is null)
                 _baseunit = typeof(TBaseUnit);
             else
-                throw new InvalidProgramException($"The type '{typeof(TBaseUnit)}' cannot be used as base unit type for the measurement '{typeof(TMeasurement)}', as '{_baseunit}' has already been registered.");
+                throw new InvalidProgramException($"The type '{typeof(TBaseUnit)}' cannot be used as base unit type for the quantity '{typeof(TQuantity)}', as '{_baseunit}' has already been registered.");
         }
     }
 }
@@ -336,5 +336,5 @@ public abstract class Measurement<TMeasurement, TScalar>
 
 // TODO : build source generators using attributes such as:
 //
-// [AttributeUsage(AttributeTargets.Class)]
+//[AttributeUsage(AttributeTargets.Class)]
 // public sealed class MeasurementAttribute<TScalar>() : Attribute() where TScalar : INumber<TScalar>();
