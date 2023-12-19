@@ -1,4 +1,4 @@
-// #define IGNORE_CS0695
+﻿// #define IGNORE_CS0695
 
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
@@ -18,6 +18,8 @@ public interface IUnit<TUnit, TBaseUnit, TScalar>
 
 
     public TBaseUnit ToBaseUnit();
+
+    public static abstract TUnit FromBaseUnit(TBaseUnit base_unit);
 }
 
 public interface IBaseUnit<TBaseUnit, TScalar>
@@ -25,18 +27,7 @@ public interface IBaseUnit<TBaseUnit, TScalar>
     where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>
     where TScalar : notnull, INumberBase<TScalar>, new()
 {
-    // TODO : overrides
-
-
-    public TUnit ToUnit<TUnit>() where TUnit : class, IUnit<TUnit, TBaseUnit, TScalar>;
 }
-
-//public interface IMeasurement<TMeasurement, TScalar>
-//    where TMeasurement : IMeasurement<TMeasurement, TScalar>
-//    where TScalar : notnull, INumberBase<TScalar>, new()
-//{
-//    public static abstract string Name { get; }
-//}
 
 public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     : IAdditionOperators<TUnit, TUnit, TUnit>
@@ -68,6 +59,8 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     public static TUnit One { get; } = (TUnit)TScalar.One;
 
 
+    #region TOSTRING / PARSING
+
     public sealed override string ToString() => ToString(null, null);
 
     public string ToString(string? format, IFormatProvider? formatProvider) => $"{Value.ToString(format, formatProvider)} {TUnit.UnitSymbol}";
@@ -91,7 +84,17 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
         }
     }
 
+    #endregion
+
+    public abstract TBaseUnit ToBaseUnit();
+
     public static TUnit FromScalar(TScalar value) => _constructor.Invoke([value]) as TUnit ?? throw _exception;
+
+    #region CASTING / CONVERSION OPERATORS
+
+    public static implicit operator TBaseUnit(AbstractUnit<TUnit, TBaseUnit, TScalar> unit) => unit.ToBaseUnit();
+
+    public static implicit operator AbstractUnit<TUnit, TBaseUnit, TScalar>(TBaseUnit base_unit) => TUnit.FromBaseUnit(base_unit);
 
     public static explicit operator AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar value) => FromScalar(value);
 
@@ -99,6 +102,8 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public static explicit operator TScalar(AbstractUnit<TUnit, TBaseUnit, TScalar> unit) => unit.Value;
 
+    #endregion
+    #region ARITHMETIC OPERATORS
 
     public static TUnit operator +(AbstractUnit<TUnit, TBaseUnit, TScalar> left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => FromScalar(left.Value + right.Value);
 
@@ -139,99 +144,109 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     static TUnit IIncrementOperators<TUnit>.operator ++(TUnit value) => ++value;
 
     static TUnit IDecrementOperators<TUnit>.operator --(TUnit value) => --value;
+
+    #endregion
 }
 
 public abstract class Measurement<TMeasurement, TScalar>
-    //: IMeasurement<TMeasurement, TScalar>
     where TMeasurement : Measurement<TMeasurement, TScalar>
     where TScalar : notnull, INumberBase<TScalar>, new()
 {
     private static readonly Dictionary<Type, MethodInfo> _from_baseunit = [];
+    private static Type? _baseunit = null;
 
-
+    // TODO : public abstract static TBaseUnit BaseUnit { get; }
     // TODO : conversion between measurements
 
 
-    public interface IUnit<TUnit, TBaseUnit>
-        where TUnit : class
-                    , IUnit<TUnit, TBaseUnit>
-                    , IUnit<TUnit, TBaseUnit, TScalar>
-        where TBaseUnit : BaseUnit<TBaseUnit>
-                        , IBaseUnit<TBaseUnit, TScalar>
-    {
-        public static abstract TUnit FromBaseUnit(TBaseUnit base_unit);
-    }
-
     public abstract record Unit<TUnit, TBaseUnit>(TScalar Value)
-        : AbstractUnit<TBaseUnit, TBaseUnit, TScalar>(Value)
-        where TUnit : Unit<TUnit, TBaseUnit>
-                    , IUnit<TUnit, TBaseUnit>
-                    , IUnit<TUnit, TBaseUnit, TScalar>
-        where TBaseUnit : BaseUnit<TBaseUnit>
-                        , IBaseUnit<TBaseUnit, TScalar>
+        : AbstractUnit<TUnit, TBaseUnit, TScalar>(Value)
+        where TUnit : Unit<TUnit, TBaseUnit>, IUnit<TUnit, TBaseUnit, TScalar>
+        where TBaseUnit : BaseUnit<TBaseUnit>, IBaseUnit<TBaseUnit, TScalar>
     {
-        public abstract TBaseUnit ToBaseUnit();
-
-        public static implicit operator TBaseUnit(Unit<TUnit, TBaseUnit> unit) => unit.ToBaseUnit();
-
-        public static implicit operator Unit<TUnit, TBaseUnit>(TScalar value) => throw null;
-
-        public static implicit operator Unit<TUnit, TBaseUnit>(BaseUnit<TBaseUnit> base_unit) => TUnit.FromBaseUnit(base_unit);
     }
 
-    public interface ILinearUnit<TUnit, TBaseUnit>
-        : IUnit<TUnit, TBaseUnit>
-        where TUnit : class
-                    , ILinearUnit<TUnit, TBaseUnit>
-                    , IUnit<TUnit, TBaseUnit, TScalar>
-        where TBaseUnit : BaseUnit<TBaseUnit>
-                        , IBaseUnit<TBaseUnit, TScalar>
+    /// <summary>
+    /// Conversion between unit and base unit:
+    /// <para/>
+    /// <c>
+    ///     <see langword="this"/> = (<see langword="base"/> + <see cref="PreScalingOffset"/>) * <see cref="ScalingFactor"/> + <see cref="PostScalingOffset"/>
+    ///     <br/>
+    ///     <see langword="base"/> = (<see langword="this"/> - <see cref="PostScalingOffset"/>) / <see cref="ScalingFactor"/> - <see cref="PreScalingOffset"/>
+    /// </c>
+    /// </summary>
+    public interface IAffineUnit
     {
         /// <summary>
         /// Scaling factor multiplied with the base unit to get the unit.
         /// </summary>
         public abstract static TScalar ScalingFactor { get; }
+
+        public abstract static TScalar PreScalingOffset { get; }
+
+        public abstract static TScalar PostScalingOffset { get; }
     }
 
-    public record LinearUnit<TUnit, TBaseUnit>(TScalar Value)
+    public record AffineUnit<TUnit, TBaseUnit>(TScalar Value)
         : Unit<TUnit, TBaseUnit>(Value)
-        where TUnit : LinearUnit<TUnit, TBaseUnit>
-                    , ILinearUnit<TUnit, TBaseUnit>
+        where TUnit : AffineUnit<TUnit, TBaseUnit>
                     , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IAffineUnit
         where TBaseUnit : BaseUnit<TBaseUnit>
                         , IBaseUnit<TBaseUnit, TScalar>
     {
-        public override TBaseUnit ToBaseUnit() => (TUnit)(Value / TUnit.ScalingFactor);
+        public override TBaseUnit ToBaseUnit()
+        {
+            if (this is TBaseUnit base_unit)
+                return base_unit;
+            else
+            {
+                TScalar value = Value;
 
-        public static TUnit FromBaseUnit(TBaseUnit base_unit) => (TUnit)(base_unit.Value * TUnit.ScalingFactor);
+                value -= TUnit.PostScalingOffset;
+                value /= TUnit.ScalingFactor;
+                value -= TUnit.PreScalingOffset;
+
+                return (TBaseUnit)value;
+            }
+        }
+
+        public static TUnit FromBaseUnit(TBaseUnit base_unit)
+        {
+            if (base_unit is TUnit unit)
+                return unit;
+            else
+            {
+                TScalar value = base_unit.Value;
+
+                value += TUnit.PreScalingOffset;
+                value *= TUnit.ScalingFactor;
+                value += TUnit.PostScalingOffset;
+
+                return (TUnit)value;
+            }
+        }
     }
 
     public abstract record BaseUnit<TBaseUnit>(TScalar Value)
-        : LinearUnit<TBaseUnit, TBaseUnit>(Value)
-        , ILinearUnit<TBaseUnit, TBaseUnit>
-        where TBaseUnit : BaseUnit<TBaseUnit>
-                        , IBaseUnit<TBaseUnit, TScalar>
+        : AffineUnit<TBaseUnit, TBaseUnit>(Value)
+        , IAffineUnit
+        where TBaseUnit : BaseUnit<TBaseUnit>, IBaseUnit<TBaseUnit, TScalar>
     {
-        public static TScalar ScalingFactor { get; } = TScalar.One;
+        static TScalar Measurement<TMeasurement, TScalar>.IAffineUnit.ScalingFactor { get; } = TScalar.One;
+
+        static TScalar Measurement<TMeasurement, TScalar>.IAffineUnit.PreScalingOffset { get; } = TScalar.Zero;
+
+        static TScalar Measurement<TMeasurement, TScalar>.IAffineUnit.PostScalingOffset { get; } = TScalar.Zero;
 
 
-        public sealed override TBaseUnit ToBaseUnit() => this;
-
-        //public TUnit ToUnit<TUnit>() where TUnit : Unit<TUnit, TBaseUnit>, IUnit<TUnit, TBaseUnit, TScalar>
-        //{
-        //    Type target = typeof(TUnit);
-        //
-        //    if (target == typeof(TBaseUnit) || target == GetType())
-        //        return (TUnit)this;
-        //    else if (_from_baseunit.TryGetValue(target, out MethodInfo? method))
-        //        return (TUnit)method.Invoke((TUnit)TScalar.Zero, [this])!;
-        //    else
-        //        return ToUnitInternal<TUnit>();
-        //}
-        //
-        //protected abstract TUnit ToUnitInternal<TUnit>() where TUnit : Unit<TUnit, TBaseUnit>, IUnit<TUnit, TBaseUnit, TScalar>;
-
-        public static new TBaseUnit FromBaseUnit(TBaseUnit base_unit) => base_unit;
+        static BaseUnit()
+        {
+            if (_baseunit is null)
+                _baseunit = typeof(TBaseUnit);
+            else
+                throw new InvalidProgramException($"The type '{typeof(TBaseUnit)}' cannot be used as base unit type for the measurement '{typeof(TMeasurement)}', as '{_baseunit}' has already been registered.");
+        }
     }
 }
 
