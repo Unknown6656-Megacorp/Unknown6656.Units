@@ -21,7 +21,8 @@ namespace Unknown6656.Units;
 public enum UnitSystem
 {
     Metric,
-    Imperial
+    MetricNoPrefixes,
+    Imperial,
 }
 
 public interface IUnit
@@ -50,8 +51,8 @@ public interface IBaseUnit<TBaseUnit, TScalar>
 public enum SIUnitScale
     : int
 {
-    _1000 = 1000,
-    _1024 = 1024,
+    Base_1000 = 1000,
+    Base_1024 = 1024,
 }
 
 internal static class Unit
@@ -83,7 +84,7 @@ internal static class Unit
         return !string.IsNullOrWhiteSpace(unit_symbol) ? $"{formatted} {unit_symbol}" : formatted;
     }
 
-    public static string FormatMetricSIPrefix<TScalar>(TScalar value, string? unit_symbol, string? format, IFormatProvider? format_provider, SIUnitScale scale = SIUnitScale._1000)
+    public static string FormatMetricSIPrefix<TScalar>(TScalar value, string? unit_symbol, string? format, IFormatProvider? format_provider, SIUnitScale scale = SIUnitScale.Base_1000)
         where TScalar : INumber<TScalar>
     {
         if (string.IsNullOrWhiteSpace(unit_symbol))
@@ -113,13 +114,13 @@ internal static class Unit
 
         return FormatImperial(
             value,
-            (order < 0 ? "" : prefixes[order]) + (scale == SIUnitScale._1024 ? "i" : "") + unit_symbol,
+            (order < 0 ? "" : prefixes[order]) + (scale == SIUnitScale.Base_1024 ? "i" : "") + unit_symbol,
             format,
             format_provider
         );
     }
 
-    public static bool TryParse<TScalar>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar, SIUnitScale scale = SIUnitScale._1000)
+    public static bool TryParse<TScalar>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar, SIUnitScale scale = SIUnitScale.Base_1000)
         where TScalar : INumber<TScalar>
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -191,7 +192,7 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public sealed override string ToString() => ToString(null, null);
 
-    public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format, formatProvider, SIUnitScale._1000);
+    public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format, formatProvider, SIUnitScale.Base_1000);
 
     public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale)
     {
@@ -201,13 +202,13 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
             return Unit.FormatImperial(Value, TUnit.UnitSymbol, format, formatProvider);
     }
 
-    public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, provider, SIUnitScale._1000);
+    public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, provider, SIUnitScale.Base_1000);
 
     public static TUnit Parse(string s, IFormatProvider? provider, SIUnitScale scale) =>
         TryParse(s, provider, out TUnit? result, scale) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TUnit)} or {typeof(TScalar)}.");
 
     public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) =>
-        TryParse(s, provider, out result, SIUnitScale._1000);
+        TryParse(s, provider, out result, SIUnitScale.Base_1000);
 
     public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result, SIUnitScale scale)
     {
