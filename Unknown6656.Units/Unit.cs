@@ -1,4 +1,4 @@
-﻿// #define IGNORE_CS0695
+// #define IGNORE_CS0695
 
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
@@ -231,21 +231,35 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     #endregion
 }
 
-public abstract class Quantity<TQuantity, TScalar>
+
+
+
+public interface IQuantity
+{
+    public static abstract string BaseUnitSymbol { get; }
+    public static abstract UnitSystem BaseUnitSystem { get; }
+}
+
+public abstract record Quantity<TQuantity, TScalar>(TScalar Value)
+    : AbstractUnit<TQuantity, TQuantity, TScalar>(Value)
+    //: Quantity<TQuantity, TScalar>.Unit<TQuantity>(Value)
+    , IBaseUnit<TQuantity, TScalar>
     where TQuantity : Quantity<TQuantity, TScalar>
+                    , IBaseUnit<TQuantity, TScalar>
+                    , IQuantity
     where TScalar : INumber<TScalar>
 {
-    private static readonly Dictionary<Type, MethodInfo> _from_baseunit = [];
-    private static Type? _baseunit = null;
+    static string IUnit<TQuantity, TQuantity, TScalar>.UnitSymbol { get; } = TQuantity.BaseUnitSymbol;
+    static UnitSystem IUnit<TQuantity, TQuantity, TScalar>.UnitSystem { get; } = TQuantity.BaseUnitSystem;
 
-    // TODO : public abstract static TBaseUnit BaseUnit { get; }
-    // TODO : conversion between quantities
+    public override TQuantity ToBaseUnit() => (TQuantity)this; // TODO
+    static TQuantity IUnit<TQuantity, TQuantity, TScalar>.FromBaseUnit(TQuantity base_unit) => base_unit;
 
 
-    public abstract record Unit<TUnit, TBaseUnit>(TScalar Value)
-        : AbstractUnit<TUnit, TBaseUnit, TScalar>(Value)
-        where TUnit : Unit<TUnit, TBaseUnit>, IUnit<TUnit, TBaseUnit, TScalar>
-        where TBaseUnit : BaseUnit<TBaseUnit>, IBaseUnit<TBaseUnit, TScalar>
+
+    public abstract record Unit<TUnit>(TScalar Value)
+        : AbstractUnit<TUnit, TQuantity, TScalar>(Value)
+        where TUnit : Unit<TUnit>, IUnit<TUnit, TQuantity, TScalar>
     {
     }
 
@@ -270,17 +284,15 @@ public abstract class Quantity<TQuantity, TScalar>
         public abstract static TScalar PostScalingOffset { get; }
     }
 
-    public record AffineUnit<TUnit, TBaseUnit>(TScalar Value)
-        : Unit<TUnit, TBaseUnit>(Value)
-        where TUnit : AffineUnit<TUnit, TBaseUnit>
-                    , IUnit<TUnit, TBaseUnit, TScalar>
+    public record AffineUnit<TUnit>(TScalar Value)
+        : Unit<TUnit>(Value)
+        where TUnit : AffineUnit<TUnit>
+                    , IUnit<TUnit, TQuantity, TScalar>
                     , IAffineUnit
-        where TBaseUnit : BaseUnit<TBaseUnit>
-                        , IBaseUnit<TBaseUnit, TScalar>
     {
-        public override TBaseUnit ToBaseUnit()
+        public override TQuantity ToBaseUnit()
         {
-            if (this is TBaseUnit base_unit)
+            if (this is TQuantity base_unit)
                 return base_unit;
             else
             {
@@ -308,27 +320,6 @@ public abstract class Quantity<TQuantity, TScalar>
 
                 return (TUnit)value;
             }
-        }
-    }
-
-    public abstract record BaseUnit<TBaseUnit>(TScalar Value)
-        : AffineUnit<TBaseUnit, TBaseUnit>(Value)
-        , IAffineUnit
-        where TBaseUnit : BaseUnit<TBaseUnit>, IBaseUnit<TBaseUnit, TScalar>
-    {
-        static TScalar Quantity<TQuantity, TScalar>.IAffineUnit.ScalingFactor { get; } = TScalar.One;
-
-        static TScalar Quantity<TQuantity, TScalar>.IAffineUnit.PreScalingOffset { get; } = TScalar.Zero;
-
-        static TScalar Quantity<TQuantity, TScalar>.IAffineUnit.PostScalingOffset { get; } = TScalar.Zero;
-
-
-        static BaseUnit()
-        {
-            if (_baseunit is null)
-                _baseunit = typeof(TBaseUnit);
-            else
-                throw new InvalidProgramException($"The type '{typeof(TBaseUnit)}' cannot be used as base unit type for the quantity '{typeof(TQuantity)}', as '{_baseunit}' has already been registered.");
         }
     }
 }
