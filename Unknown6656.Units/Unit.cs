@@ -1,12 +1,21 @@
-// #define IGNORE_CS0695
+﻿// #define IGNORE_CS0695
+#define IMPLICT_SCALAR_TO_UNIT
 
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Numerics;
 using System;
 
 namespace Unknown6656.Units;
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+///                                                                                          ///
+/// THIS ENTIRE CODE BASE WILL ENORMOUSLY BENEFIT FROM C# 13 "SHAPES AND EXTENSIONS" FEATURE ///
+///                                                                                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 public enum UnitSystem
@@ -43,13 +52,31 @@ public enum SIUnitScale
     _1024 = 1024,
 }
 
-public static class Unit
+internal static class Unit
 {
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
     public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
+    public static NumberFormatInfo DefaultNumberFormat => new()
+    {
+        CurrencyDecimalSeparator = ".",
+        NumberDecimalSeparator = ".",
+        PercentDecimalSeparator = ".",
+        CurrencyGroupSeparator = "'",
+        NumberGroupSeparator = "'",
+        PercentGroupSeparator = "'",
+        CurrencyDecimalDigits = 2,
+        PercentDecimalDigits = 2,
+        NumberDecimalDigits = 3,
+        PercentSymbol = "%",
+        PerMilleSymbol = "‰",
+        NaNSymbol = "NaN",
+    };
 
 
-    public static string FormatSIPrefix<TScalar>(TScalar value, string unit_symbol, string? format, IFormatProvider? format_provider, SIUnitScale scale = SIUnitScale._1000)
+    public static string FormatImperial<TScalar>(TScalar scalar, string unit_symbol, string? format, IFormatProvider? format_provider)
+        where TScalar : INumber<TScalar> => $"{scalar?.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0"} {unit_symbol}";
+
+    public static string FormatMetricSIPrefix<TScalar>(TScalar value, string unit_symbol, string? format, IFormatProvider? format_provider, SIUnitScale scale = SIUnitScale._1000)
         where TScalar : INumber<TScalar>
     {
         TScalar @base = TScalar.CreateChecked((int)scale);
@@ -74,14 +101,12 @@ public static class Unit
         if (negative)
             value = -value;
 
-        return $"{value.ToString(format ?? "#.###", format_provider)} {(order < 0 ? "" : prefixes[order])}{(scale == SIUnitScale._1024 ? "i" : "")}{unit_symbol}";
+        return $"{value.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0"} {(order < 0 ? "" : prefixes[order])}{(scale == SIUnitScale._1024 ? "i" : "")}{unit_symbol}";
     }
 
     public static bool TryParse<TScalar>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar, SIUnitScale scale = SIUnitScale._1000)
         where TScalar : INumber<TScalar>
     {
-        scalar = default;
-
         if (string.IsNullOrWhiteSpace(value))
         {
             scalar = TScalar.Zero;
@@ -116,7 +141,6 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     , IParsable<TUnit>
     where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
                 , IUnit<TUnit, TBaseUnit, TScalar>
-              //, IBaseUnit<TUnit, TScalar>
     where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>
     where TScalar : INumber<TScalar>
 {
@@ -138,9 +162,9 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale)
     {
         if (TUnit.UnitSystem is UnitSystem.Metric)
-            return Unit.FormatSIPrefix(Value, TUnit.UnitSymbol, format, formatProvider, scale);
+            return Unit.FormatMetricSIPrefix(Value, TUnit.UnitSymbol, format, formatProvider, scale);
         else
-            return $"{Value.ToString(format, formatProvider)} {TUnit.UnitSymbol}";
+            return Unit.FormatImperial(Value, TUnit.UnitSymbol, format, formatProvider);
     }
 
     public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, provider, SIUnitScale._1000);
@@ -179,7 +203,12 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public static implicit operator AbstractUnit<TUnit, TBaseUnit, TScalar>(TBaseUnit base_unit) => TUnit.FromBaseUnit(base_unit);
 
-    public static explicit operator AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar value) => FromScalar(value);
+#if IMPLICT_SCALAR_TO_UNIT
+    public static implicit
+#else
+    public static explicit
+#endif
+        operator AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar value) => FromScalar(value);
 
     public static implicit operator TUnit(AbstractUnit<TUnit, TBaseUnit, TScalar> unit) => unit as TUnit ?? FromScalar(unit.Value);
 
@@ -302,11 +331,11 @@ public abstract record Quantity<TQuantity, TScalar>(TScalar Value)
                 value /= TUnit.ScalingFactor;
                 value -= TUnit.PreScalingOffset;
 
-                return (TBaseUnit)value;
+                return (TQuantity)value;
             }
         }
 
-        public static TUnit FromBaseUnit(TBaseUnit base_unit)
+        public static TUnit FromBaseUnit(TQuantity base_unit)
         {
             if (base_unit is TUnit unit)
                 return unit;
