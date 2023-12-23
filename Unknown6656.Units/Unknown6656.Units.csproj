@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <!-- change the following for different precisions -->
         <DefineConstants>F64</DefineConstants>
@@ -8,7 +8,7 @@
 
         <LangVersion>preview</LangVersion>
         <EnablePreviewFeatures>True</EnablePreviewFeatures>
-        <!-- <GenerateRequiresPreviewFeaturesAttribute>False</GenerateRequiresPreviewFeaturesAttribute> -->
+        <GenerateRequiresPreviewFeaturesAttribute>False</GenerateRequiresPreviewFeaturesAttribute> 
         <Nullable>enable</Nullable>
         <NullableContextOptions>enable</NullableContextOptions>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
