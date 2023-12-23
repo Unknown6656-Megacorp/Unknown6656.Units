@@ -24,15 +24,17 @@ public enum UnitSystem
     Imperial
 }
 
-public interface IUnit<TUnit, TBaseUnit, TScalar>
-    where TUnit : class, IUnit<TUnit, TBaseUnit, TScalar>
-    where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>
-    where TScalar : INumber<TScalar>
+public interface IUnit
 {
     public static abstract string UnitSymbol { get; }
     public static abstract UnitSystem UnitSystem { get; }
+}
 
-
+public interface IUnit<TUnit, TBaseUnit, TScalar>
+    where TUnit : class, IUnit<TUnit, TBaseUnit, TScalar>, IUnit
+    where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>, IUnit
+    where TScalar : INumber<TScalar>
+{
     public TBaseUnit ToBaseUnit();
 
     public static abstract TUnit FromBaseUnit(TBaseUnit base_unit);
@@ -40,7 +42,7 @@ public interface IUnit<TUnit, TBaseUnit, TScalar>
 
 public interface IBaseUnit<TBaseUnit, TScalar>
     : IUnit<TBaseUnit, TBaseUnit, TScalar>
-    where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>
+    where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>, IUnit
     where TScalar : INumber<TScalar>
 {
 }
@@ -73,12 +75,20 @@ internal static class Unit
     };
 
 
-    public static string FormatImperial<TScalar>(TScalar scalar, string unit_symbol, string? format, IFormatProvider? format_provider)
-        where TScalar : INumber<TScalar> => $"{scalar?.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0"} {unit_symbol}";
-
-    public static string FormatMetricSIPrefix<TScalar>(TScalar value, string unit_symbol, string? format, IFormatProvider? format_provider, SIUnitScale scale = SIUnitScale._1000)
+    public static string FormatImperial<TScalar>(TScalar scalar, string? unit_symbol, string? format, IFormatProvider? format_provider)
         where TScalar : INumber<TScalar>
     {
+        string formatted = scalar?.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0";
+
+        return !string.IsNullOrWhiteSpace(unit_symbol) ? $"{formatted} {unit_symbol}" : formatted;
+    }
+
+    public static string FormatMetricSIPrefix<TScalar>(TScalar value, string? unit_symbol, string? format, IFormatProvider? format_provider, SIUnitScale scale = SIUnitScale._1000)
+        where TScalar : INumber<TScalar>
+    {
+        if (string.IsNullOrWhiteSpace(unit_symbol))
+            return FormatImperial(value, null, format, format_provider);
+
         TScalar @base = TScalar.CreateChecked((int)scale);
         bool negative = value < TScalar.Zero;
         int order = -1;
@@ -88,7 +98,7 @@ internal static class Unit
         bool submultiple = value < TScalar.One;
         IReadOnlyList<string> prefixes = submultiple ? MetricSIPrefixesSubmultiple : MetricSIPrefixesMultiple;
 
-        while ((submultiple ? value < TScalar.One : value >= @base) && order < prefixes.Count - 1)
+        while (value != TScalar.Zero && (submultiple ? value < TScalar.One : value >= @base) && order < prefixes.Count - 1)
         {
             ++order;
 
@@ -101,7 +111,12 @@ internal static class Unit
         if (negative)
             value = -value;
 
-        return $"{value.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0"} {(order < 0 ? "" : prefixes[order])}{(scale == SIUnitScale._1024 ? "i" : "")}{unit_symbol}";
+        return FormatImperial(
+            value,
+            (order < 0 ? "" : prefixes[order]) + (scale == SIUnitScale._1024 ? "i" : "") + unit_symbol,
+            format,
+            format_provider
+        );
     }
 
     public static bool TryParse<TScalar>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar, SIUnitScale scale = SIUnitScale._1000)
@@ -141,17 +156,36 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     , IParsable<TUnit>
     where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
                 , IUnit<TUnit, TBaseUnit, TScalar>
-    where TBaseUnit : class, IBaseUnit<TBaseUnit, TScalar>
+                , IUnit
+    where TBaseUnit : AbstractUnit<TBaseUnit, TBaseUnit, TScalar>
+                    , IBaseUnit<TBaseUnit, TScalar>
+                    , IUnit
     where TScalar : INumber<TScalar>
 {
-    private static readonly InvalidProgramException _exception = new($"Type '{typeof(TUnit)}' does not have a constructor with a single parameter of type '{typeof(TScalar)}'.");
-    private static readonly ConstructorInfo _constructor = typeof(TUnit).GetConstructor([typeof(TScalar)]) ?? throw _exception;
+    private static readonly Func<TScalar, TUnit> _constructor;
+
+    public static TUnit Zero { get; }
+
+    public static TUnit One { get; }
 
 
-    public static TUnit Zero { get; } = (TUnit)TScalar.Zero;
+    static AbstractUnit()
+    {
+        Type @this = typeof(TUnit);
+        bool is_quantity = @this.IsAssignableTo(typeof(IQuantity));
+        ConstructorInfo? constructor = @this.GetConstructor([is_quantity ? typeof(TBaseUnit) : typeof(TScalar)]);
+        InvalidProgramException ex = new(
+            is_quantity ? $"The unit type '{@this}' does not have a constructor with a single parameter of type '{typeof(TScalar)}'."
+                        : $"The quantity '{@this}' does not have a constructor with a single parameter of type '{typeof(TBaseUnit)}'."
+        );
 
-    public static TUnit One { get; } = (TUnit)TScalar.One;
+        if (constructor is null)
+            throw ex;
 
+        _constructor = s => constructor.Invoke([is_quantity ? AbstractUnit<TBaseUnit, TBaseUnit, TScalar>.FromScalar(s) : s]) as TUnit ?? throw ex;
+        Zero = _constructor(TScalar.Zero);
+        One = _constructor(TScalar.One);
+    }
 
     #region TOSTRING / PARSING
 
@@ -195,7 +229,7 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public abstract TBaseUnit ToBaseUnit();
 
-    public static TUnit FromScalar(TScalar value) => _constructor.Invoke([value]) as TUnit ?? throw _exception;
+    public static TUnit FromScalar(TScalar value) => _constructor(value);
 
     #region CASTING / CONVERSION OPERATORS
 
@@ -260,68 +294,83 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     #endregion
 }
 
-
-
-
-public interface IQuantity
-{
-    public static abstract string BaseUnitSymbol { get; }
-    public static abstract UnitSystem BaseUnitSystem { get; }
-}
-
-public abstract record Quantity<TQuantity, TScalar>(TScalar Value)
-    : AbstractUnit<TQuantity, TQuantity, TScalar>(Value)
-    //: Quantity<TQuantity, TScalar>.Unit<TQuantity>(Value)
-    , IBaseUnit<TQuantity, TScalar>
-    where TQuantity : Quantity<TQuantity, TScalar>
-                    , IBaseUnit<TQuantity, TScalar>
-                    , IQuantity
+/// <summary>
+/// Conversion between unit and base unit:
+/// <para/>
+/// <c>
+///     <see langword="this"/> = (<see langword="base"/> + <see cref="PreScalingOffset"/>) * <see cref="ScalingFactor"/> + <see cref="PostScalingOffset"/>
+///     <br/>
+///     <see langword="base"/> = (<see langword="this"/> - <see cref="PostScalingOffset"/>) / <see cref="ScalingFactor"/> - <see cref="PreScalingOffset"/>
+/// </c>
+/// </summary>
+public interface IAffineUnit<TScalar>
     where TScalar : INumber<TScalar>
 {
-    static string IUnit<TQuantity, TQuantity, TScalar>.UnitSymbol { get; } = TQuantity.BaseUnitSymbol;
-    static UnitSystem IUnit<TQuantity, TQuantity, TScalar>.UnitSystem { get; } = TQuantity.BaseUnitSystem;
+    /// <summary>
+    /// Scaling factor multiplied with the base unit to get the unit.
+    /// </summary>
+    public abstract static TScalar ScalingFactor { get; }
 
-    public override TQuantity ToBaseUnit() => (TQuantity)this; // TODO
-    static TQuantity IUnit<TQuantity, TQuantity, TScalar>.FromBaseUnit(TQuantity base_unit) => base_unit;
+    public abstract static TScalar PreScalingOffset { get; }
 
+    public abstract static TScalar PostScalingOffset { get; }
+}
+
+internal interface IQuantity;
+
+public record Quantity<TQuantity, TBaseUnit, TScalar>
+    : AbstractUnit<TQuantity, TBaseUnit, TScalar>
+    , IUnit<TQuantity, TBaseUnit, TScalar>
+    , IUnit
+    , IQuantity
+    where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
+    where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>
+                    , IBaseUnit<TBaseUnit, TScalar>
+                    , IUnit<TBaseUnit, TBaseUnit, TScalar>
+                    , IAffineUnit<TScalar>
+                    , IUnit
+    where TScalar : INumber<TScalar>
+{
+    public static string UnitSymbol { get; } = TBaseUnit.UnitSymbol;
+    public static UnitSystem UnitSystem { get; } = TBaseUnit.UnitSystem;
+
+    public new TBaseUnit Value;
+
+
+    private Quantity(TScalar value)
+        : base(value) => Value = BaseUnit<TQuantity, TBaseUnit, TScalar>.FromScalar(value);
+
+    public Quantity(TBaseUnit value)
+        : base(value.Value) => Value = value;
+
+    public sealed override TBaseUnit ToBaseUnit() => Value;
+
+    public static implicit operator Quantity<TQuantity, TBaseUnit, TScalar>(TScalar value) => new(value);
+
+    public static implicit operator TScalar(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => quantity.Value.Value;
 
 
     public abstract record Unit<TUnit>(TScalar Value)
-        : AbstractUnit<TUnit, TQuantity, TScalar>(Value)
-        where TUnit : Unit<TUnit>, IUnit<TUnit, TQuantity, TScalar>
+        : AbstractUnit<TUnit, TBaseUnit, TScalar>(Value)
+        where TUnit : Unit<TUnit>
+                    , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit
     {
+        public static implicit operator TQuantity(Unit<TUnit> unit) => new Quantity<TQuantity, TBaseUnit, TScalar>(unit.ToBaseUnit());
+
+        public static implicit operator Unit<TUnit>(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => TUnit.FromBaseUnit(quantity.Value);
     }
 
-    /// <summary>
-    /// Conversion between unit and base unit:
-    /// <para/>
-    /// <c>
-    ///     <see langword="this"/> = (<see langword="base"/> + <see cref="PreScalingOffset"/>) * <see cref="ScalingFactor"/> + <see cref="PostScalingOffset"/>
-    ///     <br/>
-    ///     <see langword="base"/> = (<see langword="this"/> - <see cref="PostScalingOffset"/>) / <see cref="ScalingFactor"/> - <see cref="PreScalingOffset"/>
-    /// </c>
-    /// </summary>
-    public interface IAffineUnit
-    {
-        /// <summary>
-        /// Scaling factor multiplied with the base unit to get the unit.
-        /// </summary>
-        public abstract static TScalar ScalingFactor { get; }
-
-        public abstract static TScalar PreScalingOffset { get; }
-
-        public abstract static TScalar PostScalingOffset { get; }
-    }
-
-    public record AffineUnit<TUnit>(TScalar Value)
+    public abstract record AffineUnit<TUnit>(TScalar Value)
         : Unit<TUnit>(Value)
         where TUnit : AffineUnit<TUnit>
-                    , IUnit<TUnit, TQuantity, TScalar>
-                    , IAffineUnit
+                    , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IAffineUnit<TScalar>
+                    , IUnit
     {
-        public override TQuantity ToBaseUnit()
+        public override TBaseUnit ToBaseUnit()
         {
-            if (this is TQuantity base_unit)
+            if (this is TBaseUnit base_unit)
                 return base_unit;
             else
             {
@@ -331,11 +380,11 @@ public abstract record Quantity<TQuantity, TScalar>(TScalar Value)
                 value /= TUnit.ScalingFactor;
                 value -= TUnit.PreScalingOffset;
 
-                return (TQuantity)value;
+                return BaseUnit<TQuantity, TBaseUnit, TScalar>.FromScalar(value);
             }
         }
 
-        public static TUnit FromBaseUnit(TQuantity base_unit)
+        public static TUnit FromBaseUnit(TBaseUnit base_unit)
         {
             if (base_unit is TUnit unit)
                 return unit;
@@ -351,10 +400,23 @@ public abstract record Quantity<TQuantity, TScalar>(TScalar Value)
             }
         }
     }
+
+    public static TQuantity FromBaseUnit(TBaseUnit base_unit) => throw new NotImplementedException();
 }
 
-
-// TODO : build source generators using attributes such as:
-//
-//[AttributeUsage(AttributeTargets.Class)]
-// public sealed class MeasurementAttribute<TScalar>() : Attribute() where TScalar : INumber<TScalar>();
+public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
+    : Quantity<TQuantity, TBaseUnit, TScalar>.AffineUnit<TBaseUnit>(Value)
+    , IAffineUnit<TScalar>
+    , IUnit<TBaseUnit, TBaseUnit, TScalar>
+    where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
+    where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>
+                    , IBaseUnit<TBaseUnit, TScalar>
+                    , IUnit<TBaseUnit, TBaseUnit, TScalar>
+                    , IUnit
+                    , IAffineUnit<TScalar>
+    where TScalar : INumber<TScalar>
+{
+    public static TScalar ScalingFactor { get; } = TScalar.One;
+    public static TScalar PreScalingOffset { get; } = TScalar.Zero;
+    public static TScalar PostScalingOffset { get; } = TScalar.Zero;
+}
