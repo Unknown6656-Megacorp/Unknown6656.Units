@@ -8,7 +8,8 @@
 
         <LangVersion>preview</LangVersion>
         <EnablePreviewFeatures>True</EnablePreviewFeatures>
-        <GenerateRequiresPreviewFeaturesAttribute>False</GenerateRequiresPreviewFeaturesAttribute> 
+        <GenerateRequiresPreviewFeaturesAttribute>False</GenerateRequiresPreviewFeaturesAttribute>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <Nullable>enable</Nullable>
         <NullableContextOptions>enable</NullableContextOptions>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -53,6 +54,10 @@
         <PackageVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</PackageVersion>
         <AssemblyVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</AssemblyVersion>
     </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj" OutputItemType="Analyzer" />
+        <ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj"/>
+    </ItemGroup>
     <ItemGroup>
         <None Include="unknown6656-logo-1024.png">
             <Pack>True</Pack>
