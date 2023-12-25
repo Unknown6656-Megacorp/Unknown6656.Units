@@ -421,3 +421,35 @@ public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
     public static TScalar PreScalingOffset { get; } = TScalar.Zero;
     public static TScalar PostScalingOffset { get; } = TScalar.Zero;
 }
+
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+public class QuantityDependency<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, TBaseUnitB, TBaseUnitC, TScalar>
+    : Attribute
+    where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
+    where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
+    where TQuantityC : Quantity<TQuantityC, TBaseUnitC, TScalar>
+    where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
+                     , IBaseUnit<TBaseUnitA, TScalar>
+                     , IUnit
+    where TBaseUnitB : BaseUnit<TQuantityB, TBaseUnitB, TScalar>
+                     , IBaseUnit<TBaseUnitB, TScalar>
+                     , IUnit
+    where TBaseUnitC : BaseUnit<TQuantityC, TBaseUnitC, TScalar>
+                     , IBaseUnit<TBaseUnitC, TScalar>
+                     , IUnit
+    where TScalar : INumber<TScalar>;
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+public class QuantityDependency<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>
+    : QuantityDependency<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>
+    where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
+    where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
+    where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
+                     , IBaseUnit<TBaseUnitA, TScalar>
+                     , IUnit
+    where TBaseUnitB : BaseUnit<TQuantityB, TBaseUnitB, TScalar>
+                     , IBaseUnit<TBaseUnitB, TScalar>
+                     , IUnit
+    where TScalar : INumber<TScalar>;
+
