@@ -1,25 +1,26 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+
+using Unknown6656.Units.Internals;
 
 namespace Unknown6656.Units.Length;
 
 
-public abstract class Length<TScalar>
-    : Quantity<Length<TScalar>, TScalar>
-    where TScalar : INumber<TScalar>
+
+
+[QuantityDependency<Length, Surface, Meters, SquareMeters, scalar>]
+public partial record Length(Meters value)
+    : Quantity<Length, Meters, scalar>(value)
 {
 }
 
-public abstract class Surface<TScalar>
-    : Quantity<Surface<TScalar>, TScalar>
-    where TScalar : INumber<TScalar>
+public record Surface(SquareMeters value)
+    : Quantity<Surface, SquareMeters, scalar>(value)
 {
 }
 
-public abstract class Volume<TScalar>
-    : Quantity<Volume<TScalar>, TScalar>
-    where TScalar : INumber<TScalar>
-{
-}
+//public record Volume(CubicMeters value) : Quantity<Volume, CubicMeters, scalar>(value);
+
 
 // TODO:
 //  - lengths
@@ -60,18 +61,20 @@ public abstract class Volume<TScalar>
 
 
 
-public record Meters(scalar Value)
-    : Length<scalar>.BaseUnit<Meters>(Value)
+public partial record Meters(scalar Value)
+    : BaseUnit<Length, Meters, scalar>(Value)
     , IBaseUnit<Meters, scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "m";
     public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
 }
 
 public record Yards(scalar Value)
-    : Length<scalar>.AffineUnit<Yards, Meters>(Value)
-    , Length<scalar>.IAffineUnit
+    : Length.AffineUnit<Yards>(Value)
+    , IAffineUnit<scalar>
     , IUnit<Yards, Meters, scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "yd";
     public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
@@ -81,27 +84,25 @@ public record Yards(scalar Value)
     public static scalar PostScalingOffset { get; } = 0;
 }
 
-public record Feet(scalar Value)
-    : Length<scalar>.AffineUnit<Feet, Meters>(Value)
-    , Length<scalar>.IAffineUnit
-    , IUnit<Feet, Meters, scalar>
-{
-    public static string UnitSymbol { get; } = "ft";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+//public record Feet(scalar Value)
+//    : Length<scalar>.AffineUnit<Feet>(Value)
+//    , Length<scalar>.IAffineUnit
+//    , IUnit<Feet, Length<scalar>, scalar>
+//{
+//    public static string UnitSymbol { get; } = "ft";
+//    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
 
-    public static scalar ScalingFactor { get; } = (scalar)3.280839895013123359580052493438320209973753;
-    public static scalar PreScalingOffset { get; } = 0;
-    public static scalar PostScalingOffset { get; } = 0;
-}
+//    public static scalar ScalingFactor { get; } = (scalar)3.280839895013123359580052493438320209973753;
+//    public static scalar PreScalingOffset { get; } = 0;
+//    public static scalar PostScalingOffset { get; } = 0;
+//}
 
 
 public record SquareMeters(scalar Value)
-    : Length<scalar>.BaseUnit<SquareMeters>(Value)
+    : BaseUnit<Surface, SquareMeters, scalar>(Value)
     , IBaseUnit<SquareMeters, scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "m²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNoPrefixes;
 }
-
-
-
