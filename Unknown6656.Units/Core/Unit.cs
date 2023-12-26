@@ -55,11 +55,11 @@ public enum SIUnitScale
     Base_1024 = 1024,
 }
 
-internal static class Unit
+public static partial class Unit
 {
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
     public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
-    public static NumberFormatInfo DefaultNumberFormat => new()
+    public static NumberFormatInfo DefaultNumberFormat { get; set; } = new()
     {
         CurrencyDecimalSeparator = ".",
         NumberDecimalSeparator = ".",

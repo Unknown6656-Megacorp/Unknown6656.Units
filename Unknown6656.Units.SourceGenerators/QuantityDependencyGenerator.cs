@@ -7,10 +7,7 @@ using System;
 
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis;
-using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace Unknown6656.Units.Internals;
 
@@ -21,6 +18,7 @@ public sealed class QuantityDependencyGenerator
 {
     public const string Identifier_QuantityDependency = "Unknown6656.Units.QuantityDependency";
     public const string Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
+    public const string Identifier_ExtensionClass = "Unknown6656.Units.Unit";
 
     #region DIAGNOSTIC ERRORS
 
@@ -251,6 +249,26 @@ public sealed class QuantityDependencyGenerator
                     // TODO : use known_units to generate mathematical operators
                 }
             }
+
+        sb.AppendLine($$""""
+        namespace {{GetNamespace(Identifier_ExtensionClass)}}
+        {
+            public static partial class {{GetTypeName(Identifier_ExtensionClass)}}
+            {
+        """");
+
+        foreach (GenericAttributeClassUsage usage in known_units)
+            if (usage.SemanticModel.GetDeclaredSymbol(usage.TargetType, ct) is INamedTypeSymbol target_symbol)
+            {
+                string target_name = target_symbol.ToDisplayString();
+
+                sb.AppendLine($"        public static {target_name} {GetTypeName(target_name)}(this Scalar /* <-- TODO : fix this shite */ value) => new(value);");
+            }
+
+        sb.AppendLine($$""""
+            }
+        }
+        """");
 
         production_context.AddSource($"{typeof(QuantityDependencyGenerator)}.g.cs", sb.ToString());
     }
