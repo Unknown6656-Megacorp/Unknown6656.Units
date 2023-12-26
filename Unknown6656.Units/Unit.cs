@@ -317,6 +317,15 @@ public interface IAffineUnit<TScalar>
     public abstract static TScalar PostScalingOffset { get; }
 }
 
+public interface ILinearUnit<TScalar>
+    : IAffineUnit<TScalar>
+    where TScalar : INumber<TScalar>
+{
+    static TScalar IAffineUnit<TScalar>.PreScalingOffset { get; } = TScalar.Zero;
+
+    static TScalar IAffineUnit<TScalar>.PostScalingOffset { get; } = TScalar.Zero;
+}
+
 internal interface IQuantity;
 
 public record Quantity<TQuantity, TBaseUnit, TScalar>
