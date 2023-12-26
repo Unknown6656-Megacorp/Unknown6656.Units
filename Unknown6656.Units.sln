@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unknown6656.Units", "Unknow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "Demo\Demo.csproj", "{D2377BFA-8DC9-404C-81E7-0B0BA2E5BA75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unknown6656.Units.SourceGenerators", "Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj", "{0D9F17A8-D3D2-4D94-B69B-C3264D8B235A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unknown6656.Units.SourceGenerators", "Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj", "{0D9F17A8-D3D2-4D94-B69B-C3264D8B235A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
