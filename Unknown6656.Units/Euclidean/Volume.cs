@@ -1,4 +1,4 @@
-namespace Unknown6656.Units.Euclidean;
+﻿namespace Unknown6656.Units.Euclidean;
 
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
@@ -145,16 +145,84 @@ public partial record UKFluidOunces(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)35195.079727854;
 }
 
+[KnownUnit<Volume, Barrels, CubicMeters, Scalar>]
+public partial record Barrels(Scalar Value)
+    : Volume.AffineUnit<Barrels>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Barrels, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "bbl";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)6.2898105697751;
+}
+
+[KnownUnit<Volume, Quarts, CubicMeters, Scalar>]
+public partial record Quarts(Scalar Value)
+    : Volume.AffineUnit<Quarts>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Quarts, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "qt";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)1056.68820943259366;
+}
+
+[KnownUnit<Volume, CubicFeet, CubicMeters, Scalar>]
+public partial record CubicFeet(Scalar Value)
+    : Volume.AffineUnit<CubicFeet>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<CubicFeet, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "ft³";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)35.31466672148859025;
+}
+
+[KnownUnit<Volume, CubicInches, CubicMeters, Scalar>]
+public partial record CubicInches(Scalar Value)
+    : Volume.AffineUnit<CubicInches>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<CubicInches, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "in³";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)61023.744094732284;
+}
+
+[KnownUnit<Volume, Teaspoons, CubicMeters, Scalar>]
+public partial record Teaspoons(Scalar Value)
+    : Volume.AffineUnit<Teaspoons>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Teaspoons, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "tsp";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)202884.13621106095;
+}
+
+[KnownUnit<Volume, Tablespoons, CubicMeters, Scalar>]
+public partial record Tablespoons(Scalar Value)
+    : Volume.AffineUnit<Tablespoons>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Tablespoons, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "tbsp";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)67628.04540368698;
+}
+
 
 
 // TODO:
 //  - volumes
 //      - from KM³, CM³, MM³, ...
 //      - from inches³, feet³, yards³, ...
-//      - quart
-//      - barrel
-//      - teaspoon
-//      - tablespoon
 //      - drop
 //      - peck
 //      - bushel
