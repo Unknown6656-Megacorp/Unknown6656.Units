@@ -432,8 +432,9 @@ public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
 }
 
 
+
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-public class QuantityDependency<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, TBaseUnitB, TBaseUnitC, TScalar>
+public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, TBaseUnitB, TBaseUnitC, TScalar>
     : Attribute
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
@@ -450,8 +451,21 @@ public class QuantityDependency<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, 
     where TScalar : INumber<TScalar>;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-public class QuantityDependency<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>
-    : QuantityDependency<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>
+public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>
+    : MultiplicativeQuantityRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>
+    where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
+    where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
+    where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
+                     , IBaseUnit<TBaseUnitA, TScalar>
+                     , IUnit
+    where TBaseUnitB : BaseUnit<TQuantityB, TBaseUnitB, TScalar>
+                     , IBaseUnit<TBaseUnitB, TScalar>
+                     , IUnit
+    where TScalar : INumber<TScalar>;
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+public class InverseQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>
+    : MultiplicativeQuantityRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
     where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>

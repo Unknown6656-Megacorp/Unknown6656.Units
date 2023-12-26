@@ -16,7 +16,8 @@ namespace Unknown6656.Units.Internals;
 public sealed class QuantityDependencyGenerator
     : IIncrementalGenerator
 {
-    public const string Identifier_QuantityDependency = "Unknown6656.Units.QuantityDependency";
+    public const string Identifier_MultiplicativeQuantityRelationship = "Unknown6656.Units.MultiplicativeQuantityRelationship";
+    public const string Identifier_InverseQuantityRelationship = "Unknown6656.Units.InverseQuantityRelationship";
     public const string Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
     public const string Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
     public const string Identifier_ExtensionClass = "Unknown6656.Units.Unit";
@@ -61,7 +62,7 @@ public sealed class QuantityDependencyGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        IncrementalValuesProvider<GenericAttributeClassUsage> quantity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_QuantityDependency);
+        IncrementalValuesProvider<GenericAttributeClassUsage> quantity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeQuantityRelationship);
         IncrementalValuesProvider<GenericAttributeClassUsage> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
         IncrementalValuesProvider<GenericAttributeClassUsage> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
 
