@@ -1,11 +1,11 @@
 ﻿#if F16
-global using scalar = System.Half;
+global using Scalar = System.Half;
 #elif F32
-global using scalar = float;
+global using Scalar = float;
 #elif F64
-global using scalar = double;
+global using Scalar = double;
 #elif D128
-global using scalar = decimal;
+global using Scalar = decimal;
 #else
-global using scalar = double;
+global using Scalar = double;
 #endif
