@@ -1,14 +1,9 @@
-﻿using System;
-using System.Numerics;
-
-using Unknown6656.Units.Internals;
-
-namespace Unknown6656.Units.Length;
+﻿namespace Unknown6656.Units.Euclidean;
 
 
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
-#region QUANTITIES
+#region BASE QUANTITIES
 
 [QuantityDependency<Length, Area, Meters, SquareMeters, Scalar>]
 public partial record Length(Meters value) : Quantity<Length, Meters, Scalar>(value);
@@ -19,34 +14,6 @@ public partial record Area(SquareMeters value) : Quantity<Area, SquareMeters, Sc
 public record Volume(CubicMeters value) : Quantity<Volume, CubicMeters, Scalar>(value);
 
 #endregion
-
-
-// TODO:
-//  - lengths
-//      - light year
-//      - parsec
-//      - astronomical unit
-//      - from KM, CM, MM, ...
-//      - from inches, feet, yards, ...
-//  - areas
-//      - barn
-//      - from KM², CM², MM², ...
-//      - from inches², feet², yards², ...
-//  - volumes
-//      - gallon
-//      - from KM³, CM³, MM³, ...
-//      - from inches³, feet³, yards³, ...
-//      - cup
-//      - pint
-//      - quart
-//      - barrel
-//      - fluid ounce
-//      - teaspoon
-//      - tablespoon
-//      - drop
-//      - peck
-//      - bushel
-
 #region UNITS OF LENGTH
 
 public partial record Meters(Scalar Value)
@@ -238,6 +205,18 @@ public partial record SquareKilometers(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e-6;
 }
 
+[KnownUnit<Area, Barns, SquareMeters, Scalar>]
+public partial record Barns(Scalar Value)
+    : Area.AffineUnit<Barns>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Barns, SquareMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "b";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e28;
+}
+
 #endregion
 #region UNITS OF VOLUME
 
@@ -259,7 +238,71 @@ public partial record Liters(Scalar Value)
 {
     public static string UnitSymbol { get; } = "l";
     public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
-    public static Scalar ScalingFactor { get; } = (Scalar)0.001;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
+[KnownUnit<Volume, ImperialGallons, CubicMeters, Scalar>]
+public partial record ImperialGallons(Scalar Value)
+    : Volume.AffineUnit<ImperialGallons>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<ImperialGallons, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "imp gal";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)219.96915738094787;
+}
+
+[KnownUnit<Volume, USGallons, CubicMeters, Scalar>]
+public partial record USGallons(Scalar Value)
+    : Volume.AffineUnit<USGallons>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<USGallons, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "US gal";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)264.17205235814842;
+}
+
+[KnownUnit<Volume, USCups, CubicMeters, Scalar>]
+public partial record USCups(Scalar Value)
+    : Volume.AffineUnit<USCups>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<USCups, CubicMeters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "US cups";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)4226.75283773037465;
+}
+
+
+
 #endregion
+
+
+
+// TODO:
+//  - lengths
+//      - light year
+//      - parsec
+//      - astronomical unit
+//      - from KM, CM, MM, ...
+//      - from inches, feet, yards, ...
+//  - areas
+//      - from KM², CM², MM², ...
+//      - from inches², feet², yards², ...
+//  - volumes
+//      - from KM³, CM³, MM³, ...
+//      - from inches³, feet³, yards³, ...
+//      - cup
+//      - pint
+//      - quart
+//      - barrel
+//      - fluid ounce
+//      - teaspoon
+//      - tablespoon
+//      - drop
+//      - peck
+//      - bushel
