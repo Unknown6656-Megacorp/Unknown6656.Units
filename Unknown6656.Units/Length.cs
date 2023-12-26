@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 
 using Unknown6656.Units.Internals;
@@ -6,6 +6,7 @@ using Unknown6656.Units.Internals;
 namespace Unknown6656.Units.Length;
 
 
+#pragma warning disable IDE0004 // Remove Unnecessary Cast
 #region QUANTITIES
 
 [QuantityDependency<Length, Area, Meters, SquareMeters, scalar>]
