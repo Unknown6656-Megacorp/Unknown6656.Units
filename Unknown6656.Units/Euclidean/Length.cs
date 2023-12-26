@@ -132,3 +132,15 @@ public partial record Furlongs(Scalar Value)
     public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.004970969537898686567036;
 }
+
+[KnownUnit<Length, Plancks, Meters, Scalar>]
+public partial record Plancks(Scalar Value)
+    : Length.AffineUnit<Plancks>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Plancks, Meters, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "P";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static Scalar ScalingFactor { get; } = (Scalar)1.616255e-35;
+}
