@@ -17,6 +17,7 @@ public sealed class QuantityDependencyGenerator
     : IIncrementalGenerator
 {
     public const string Identifier_QuantityDependency = "Unknown6656.Units.QuantityDependency";
+    public const string Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
     public const string Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
     public const string Identifier_ExtensionClass = "Unknown6656.Units.Unit";
 
@@ -61,10 +62,17 @@ public sealed class QuantityDependencyGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         IncrementalValuesProvider<GenericAttributeClassUsage> quantity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_QuantityDependency);
+        IncrementalValuesProvider<GenericAttributeClassUsage> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
         IncrementalValuesProvider<GenericAttributeClassUsage> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
-        var combined = context.CompilationProvider.Combine(quantity_dependencies.Collect().Combine(known_units.Collect()));
 
-        context.RegisterSourceOutput(combined, (spc, source) => Execute(context, spc, source.Left, source.Right.Left, source.Right.Right));
+        // which idiot decided to name this stuff "left" and "right"? and not to provide an extension method for combining 3 or more IncrementalValueProvider<>?
+        var combined = context.CompilationProvider.Combine(quantity_dependencies.Collect())
+                                                  .Combine(known_base_units.Collect())
+                                                  .Select(static (t, _) => (compilation: t.Left.Left, dependencies: t.Left.Right, base_units: t.Right))
+                                                  .Combine(known_units.Collect())
+                                                  .Select(static (t, _) => (t.Left.compilation, t.Left.dependencies, t.Left.base_units, units: t.Right));
+
+        context.RegisterSourceOutput(combined, (spc, source) => Execute(context, spc, source.compilation, source.dependencies, source.base_units, source.units));
     }
 
     private static IncrementalValuesProvider<GenericAttributeClassUsage> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, string attribute_name) => context.SyntaxProvider
@@ -100,7 +108,14 @@ public sealed class QuantityDependencyGenerator
         return null;
     }
 
-    private static void Execute(IncrementalGeneratorInitializationContext incremental_context, SourceProductionContext production_context, Compilation compilation, ImmutableArray<GenericAttributeClassUsage> quantity_dependencies, ImmutableArray<GenericAttributeClassUsage> known_units)
+    private static void Execute(
+        IncrementalGeneratorInitializationContext incremental_context,
+        SourceProductionContext production_context,
+        Compilation compilation,
+        ImmutableArray<GenericAttributeClassUsage> quantity_dependencies,
+        ImmutableArray<GenericAttributeClassUsage> known_base_units,
+        ImmutableArray<GenericAttributeClassUsage> known_units
+    )
     {
         CancellationToken ct = production_context.CancellationToken;
         StringBuilder sb = new();
@@ -257,13 +272,11 @@ public sealed class QuantityDependencyGenerator
             {
         """");
 
-        foreach (GenericAttributeClassUsage usage in known_units)
-            if (usage.SemanticModel.GetDeclaredSymbol(usage.TargetType, ct) is INamedTypeSymbol target_symbol)
-            {
-                string target_name = target_symbol.ToDisplayString();
-
-                sb.AppendLine($"        public static {target_name} {GetTypeName(target_name)}(this Scalar /* <-- TODO : fix this shite */ value) => new(value);");
-            }
+        foreach (string target_type in known_units.Concat(known_base_units)
+                                                  .Select(u => u.SemanticModel.GetDeclaredSymbol(u.TargetType, ct)?.ToDisplayString())
+                                                  .Where(static name => name is { })
+                                                  .Distinct() as IEnumerable<string>)
+            sb.AppendLine($"        public static {target_type} {GetTypeName(target_type)}(this Scalar /* <-- TODO : fix this shite */ value) => new(value);");
 
         sb.AppendLine($$""""
             }

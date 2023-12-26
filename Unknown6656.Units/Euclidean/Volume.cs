@@ -1,8 +1,9 @@
-﻿namespace Unknown6656.Units.Euclidean;
+namespace Unknown6656.Units.Euclidean;
 
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
 
+[KnownBaseUnit<Volume, CubicMeters, Scalar>]
 public partial record CubicMeters(Scalar Value)
     : BaseUnit<Volume, CubicMeters, Scalar>(Value)
     , IBaseUnit<CubicMeters, Scalar>

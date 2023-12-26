@@ -3,6 +3,7 @@
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
 
+[KnownBaseUnit<Length, Meters, Scalar>]
 public partial record Meters(Scalar Value)
     : BaseUnit<Length, Meters, Scalar>(Value)
     , IBaseUnit<Meters, Scalar>

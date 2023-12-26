@@ -474,25 +474,11 @@ public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>
                     , IUnit
     where TScalar : INumber<TScalar>;
 
-
-//partial record QA<S>(UA<S> v) : Quantity<QA<S>, UA<S>, S>(v) where S : INumber<S>
-//{
-//    public static QC<S> operator *(QA<S> first, QB<S> second) => new(first.Value * second.Value);
-//    public static QC<S> operator *(QB<S> first, QA<S> second) => new(first.Value * second.Value);
-//    public static QA<S> operator /(QC<S> first, QB<S> second) => new(first.Value / second.Value);
-//    public static QB<S> operator /(QC<S> first, QA<S> second) => new(first.Value / second.Value);
-//}
-//partial record QB<S>(UB<S> v) : Quantity<QB<S>, UB<S>, S>(v) where S : INumber<S>;
-//partial record QC<S>(UC<S> v) : Quantity<QC<S>, UC<S>, S>(v) where S : INumber<S>;
-//partial record UA<S>(S v) : BaseUnit<QA<S>, UA<S>, S>(v), IBaseUnit<UA<S>, S>, IUnit where S : INumber<S>
-//{
-//    public static UC<S> operator *(UA<S> first, UB<S> second) => new(first.Value * second.Value);
-//    public static UC<S> operator *(UB<S> first, UA<S> second) => new(first.Value * second.Value);
-//    public static UA<S> operator /(UC<S> first, UB<S> second) => new(first.Value / second.Value);
-//    public static UB<S> operator /(UC<S> first, UA<S> second) => new(first.Value / second.Value);
-//}
-//partial record UB<S>(S v) : BaseUnit<QB<S>, UB<S>, S>(v), IBaseUnit<UB<S>, S>, IUnit where S : INumber<S>;
-//partial record UC<S>(S v) : BaseUnit<QC<S>, UC<S>, S>(v), IBaseUnit<UC<S>, S>, IUnit where S : INumber<S>;
-
-
-
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+public class KnownBaseUnit<TQuantity, TBaseUnit, TScalar>
+    : KnownUnit<TQuantity, TBaseUnit, TBaseUnit, TScalar>
+    where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
+    where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>
+                    , IBaseUnit<TBaseUnit, TScalar>
+                    , IUnit
+    where TScalar : INumber<TScalar>;
