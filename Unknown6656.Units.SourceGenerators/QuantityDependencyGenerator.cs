@@ -95,7 +95,7 @@ public sealed class QuantityDependencyGenerator
                                 string[] generic_arguments = raw_generic_arguments.Select(genarg => context.SemanticModel.GetSymbolInfo(genarg).Symbol?.ToDisplayString() ?? genarg.ToString())
                                                                                   .ToArray();
 
-                                return new(context.SemanticModel, @namespace, node, generic_arguments, attribute.ArgumentList?.Arguments.ToArray() ?? []);
+                                return new(context.SemanticModel, @namespace, attribute.GetLocation(), node, generic_arguments, attribute.ArgumentList?.Arguments.ToArray() ?? []);
                             }
         }
 
@@ -119,15 +119,14 @@ public sealed class QuantityDependencyGenerator
         foreach (GenericAttributeClassUsage usage in known_units)
             if (usage.SemanticModel.GetDeclaredSymbol(usage.TargetType, ct) is INamedTypeSymbol target_symbol)
             {
-                Location location = usage.TargetType.GetLocation();
                 string target_name = target_symbol.ToDisplayString();
 
                 if (usage.TargetType is not RecordDeclarationSyntax record)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, location, [target_name]));
+                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
                 else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, location, [target_name]));
+                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
                 else if (usage.GenericAttributeArguments.Length < 2 || usage.GenericAttributeArguments[1].ToString() != target_name)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, location, [target_name]));
+                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [target_name]));
                 else
                 {
                     string quantity = usage.GenericAttributeArguments[0].ToString();
@@ -168,15 +167,14 @@ public sealed class QuantityDependencyGenerator
         foreach (GenericAttributeClassUsage usage in quantity_dependencies)
             if (usage.SemanticModel.GetDeclaredSymbol(usage.TargetType, ct) is INamedTypeSymbol target_symbol)
             {
-                Location location = usage.TargetType.GetLocation();
                 string target_name = target_symbol.ToDisplayString();
 
                 if (usage.TargetType is not RecordDeclarationSyntax record)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, location, [target_name]));
+                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
                 else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, location, [target_name]));
+                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
                 else if (!usage.GenericAttributeArguments.Contains(target_name))
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_quantity_as_attribute_argument, location, [target_name]));
+                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_quantity_as_attribute_argument, usage.AttributeLocation, [target_name]));
                 else
                 {
                     string t_quantity_in1, t_quantity_in2, t_quantity_out,
@@ -261,6 +259,7 @@ public sealed class QuantityDependencyGenerator
 public sealed record GenericAttributeClassUsage(
     SemanticModel SemanticModel,
     string Namespace,
+    Location AttributeLocation,
     TypeDeclarationSyntax TargetType,
     string[] GenericAttributeArguments,
     AttributeArgumentSyntax[] AttributeArguments
