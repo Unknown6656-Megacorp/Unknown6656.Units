@@ -1,9 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <!-- change the following for different precisions -->
-        <DefineConstants>F64</DefineConstants>
+        <!-- change the following for different precisions. if all are commented out, every configuration will be built. -->
 
-
+        <!--<Scalar>F16</Scalar>-->
+        <!--<Scalar>F32</Scalar>-->
+        <Scalar>F64</Scalar>
+        <!--<Scalar>D128</Scalar>-->
+        <DefineConstants>$(DefineConstants);$(Scalar)</DefineConstants>
+    </PropertyGroup>
+    <!--<Target Name="BuildOthers" BeforeTargets="DispatchToInnerBuilds" Condition="'$(Scalar)' == ''">-->
+    <Target Name="BuildOthers" BeforeTargets="CoreBuild" Condition="'$(Scalar)' == ''">
+        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F16"/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F32"/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F64"/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=D128"/>
+    </Target>
+    <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
 
         <LangVersion>preview</LangVersion>
@@ -16,7 +28,8 @@
 
         <OutputType>Library</OutputType>
         <OutputPath>$(SolutionDir)bin</OutputPath>
-        <AssemblyName>Unknown6656.Units.$(DefineConstants)</AssemblyName>
+        <AssemblyName>Unknown6656.Units.$(Scalar)</AssemblyName>
+        <AssemblyName Condition="'$(Scalar)' == ''">Unknown6656.Units</AssemblyName>
 
         <Deterministic>true</Deterministic>
         <IsPackable>true</IsPackable>
@@ -33,8 +46,11 @@
 
         <Authors>Unknown6656</Authors>
         <Company>Unknown6656</Company>
-        <Product>Unknown6656.Units by Unknown6656</Product>
-        <Description>A compact library for representing and using (physical) units in C#</Description>
+        <Product>Unknown6656.Units.$(Scalar) by Unknown6656</Product>
+        <Description>
+            A compact library for representing and using (physical) units in C#.
+            Note that this version of the library is compiled for the $(Scalar) precision.
+        </Description>
         <Copyright>
             Copyright © 2023-$([System.DateTime]::Today.ToString(yyyy)), unknown6656
         </Copyright>
@@ -45,7 +61,8 @@
             unknown6656;unit;physical;units;math;mathematics;physics
         </PackageTags>
 
-        <PackageId>Unknown6656.Units.$(DefineConstants)</PackageId>
+        <PackageId>Unknown6656.Units.$(Scalar)</PackageId>
+        <PackageId Condition="'$(Scalar)' == ''">Unknown6656.Units</PackageId>
         <IncludeSymbols>true</IncludeSymbols>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
