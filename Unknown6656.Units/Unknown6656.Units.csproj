@@ -56,7 +56,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj" OutputItemType="Analyzer" />
-        <ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj"/>
+        <!--<ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj"/>-->
     </ItemGroup>
     <ItemGroup>
         <None Include="unknown6656-logo-1024.png">
