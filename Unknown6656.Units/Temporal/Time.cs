@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Time;
+﻿namespace Unknown6656.Units.Temporal;
 
 
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
@@ -23,7 +23,7 @@ public partial record Minutes(Scalar Value)
 {
     public static string UnitSymbol { get; } = "min";
     public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
-    public static Scalar ScalingFactor { get; } = (Scalar)60;
+    public static Scalar ScalingFactor { get; } = (Scalar)1 / (Scalar)60;
 }
 
 [KnownUnit<Time, Hours, Seconds, Scalar>]
@@ -35,9 +35,10 @@ public partial record Hours(Scalar Value)
 {
     public static string UnitSymbol { get; } = "h";
     public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
-    public static Scalar ScalingFactor { get; } = (Scalar)3600;
+    public static Scalar ScalingFactor { get; } = (Scalar)2.7777777777777777777777777777778e-4;
 }
 
+#if !D128
 [KnownUnit<Time, PlanckTime, Seconds, Scalar>]
 public partial record PlanckTime(Scalar Value)
     : Time.AffineUnit<PlanckTime>(Value)
@@ -47,16 +48,13 @@ public partial record PlanckTime(Scalar Value)
 {
     public static string UnitSymbol { get; } = "tₚ";
     public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
-    public static Scalar ScalingFactor { get; } = (Scalar)5.39116e-44;
+    public static Scalar ScalingFactor { get; } = (Scalar)1.8550948324478e43;
 }
+#endif
 
 
-// // - Time
-// //      - datetime
-// //      - from seconds, minutes, hours, days, weeks, months, years, ...
-// //      - from ticks, ...
-// //      - planck time
-// //      - fortnight
-// // Frequency
-// //      - hertz
-// //      - cesium frequency
+// - Time
+//      - datetime
+//      - from seconds, minutes, hours, days, weeks, months, years, ...
+//      - from ticks, ...
+//      - fortnight

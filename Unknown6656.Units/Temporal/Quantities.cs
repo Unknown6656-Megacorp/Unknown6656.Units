@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Time;
+﻿namespace Unknown6656.Units.Temporal;
 
 
 [InverseQuantityRelationship<Time, Frequency, Seconds, Hertz, Scalar>]
