@@ -432,7 +432,6 @@ public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
 }
 
 
-
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, TBaseUnitB, TBaseUnitC, TScalar>
     : Attribute
