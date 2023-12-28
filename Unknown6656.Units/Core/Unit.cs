@@ -25,6 +25,7 @@ public enum UnitSystem
     MetricSI_OnlySubmultiple,
     MetricNonSI,
     Imperial,
+    Prefix,
 }
 
 public interface IUnit
@@ -78,12 +79,17 @@ public static partial class Unit
     };
 
 
-    public static string FormatImperial<TScalar>(TScalar scalar, string? unit_symbol, string? format, IFormatProvider? format_provider)
+    private static string FormatImperial<TScalar>(TScalar scalar, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitSystem system)
         where TScalar : INumber<TScalar>
     {
         string formatted = scalar?.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0";
 
-        return !string.IsNullOrWhiteSpace(unit_symbol) ? $"{formatted} {unit_symbol}" : formatted;
+        if (string.IsNullOrWhiteSpace(unit_symbol))
+            return formatted;
+        else if (system is UnitSystem.Prefix)
+            return $"{unit_symbol} {formatted}";
+        else
+            return $"{formatted} {unit_symbol}";
     }
 
     public static string Format<TScalar>(TScalar value, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitSystem system, SIUnitScale scale = SIUnitScale.Base_1000)
@@ -92,7 +98,7 @@ public static partial class Unit
         unit_symbol = unit_symbol?.Trim();
 
         if (unit_symbol is null || system is not (UnitSystem.MetricSI or UnitSystem.MetricSI_OnlyMultiple or UnitSystem.MetricSI_OnlySubmultiple))
-            return FormatImperial(value, unit_symbol, format, format_provider);
+            return FormatImperial(value, unit_symbol, format, format_provider, system);
 
         TScalar @base = TScalar.CreateChecked((int)scale);
         bool negative = value < TScalar.Zero;
@@ -121,7 +127,8 @@ public static partial class Unit
             value,
             (order < 0 ? "" : prefixes[order]) + (scale == SIUnitScale.Base_1024 ? "i" : "") + unit_symbol,
             format,
-            format_provider
+            format_provider,
+            system
         );
     }
 
@@ -431,7 +438,7 @@ public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
 }
 
 
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
 public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, TBaseUnitB, TBaseUnitC, TScalar>
     : Attribute
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
@@ -448,7 +455,7 @@ public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TQuantit
                      , IUnit
     where TScalar : INumber<TScalar>;
 
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
 public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>
     : MultiplicativeQuantityRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
@@ -461,7 +468,7 @@ public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TBaseUni
                      , IUnit
     where TScalar : INumber<TScalar>;
 
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
 public class InverseQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>
     : MultiplicativeQuantityRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
