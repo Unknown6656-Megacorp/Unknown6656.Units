@@ -1,6 +1,8 @@
 ﻿namespace Unknown6656.Units.Euclidean;
 
 
+public record Angle(Radians value) : Quantity<Angle, Radians, Scalar>(value);
+
 [MultiplicativeQuantityRelationship<Length, Area, Meters, SquareMeters, Scalar>]
 public partial record Length(Meters value) : Quantity<Length, Meters, Scalar>(value);
 
