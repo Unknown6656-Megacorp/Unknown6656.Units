@@ -73,6 +73,20 @@ public partial record Knots(Scalar Value)
 
 
 
+
+[KnownUnit<Speed, Mach, MetersPerSecond, Scalar>]
+public partial record Mach(Scalar Value)
+    : Speed.AffineUnit<Mach>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Mach, MetersPerSecond, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "Mach";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.Prefix;
+    public static Scalar ScalingFactor { get; } = (Scalar)340;
+}
+
+
 // TODO:
 // - speed
 //      - mach / speed of sound (per medium)

@@ -14,11 +14,11 @@ public partial record Hertz(Scalar Value)
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
-[KnownUnit<Frequency, Cesium133, Hertz, Scalar>]
-public partial record Cesium133(Scalar Value)
-    : Frequency.AffineUnit<Cesium133>(Value)
+[KnownUnit<Frequency, Cesium133Frequency, Hertz, Scalar>]
+public partial record Cesium133Frequency(Scalar Value)
+    : Frequency.AffineUnit<Cesium133Frequency>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Cesium133, Hertz, Scalar>
+    , IUnit<Cesium133Frequency, Hertz, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "Δνcₛ";
