@@ -25,11 +25,11 @@ public partial record Liters(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
-[KnownUnit<Volume, ImperialGallons, CubicMeters, Scalar>]
-public partial record ImperialGallons(Scalar Value)
-    : Volume.AffineUnit<ImperialGallons>(Value)
+[KnownUnit<Volume, Gallons, CubicMeters, Scalar>]
+public partial record Gallons(Scalar Value)
+    : Volume.AffineUnit<Gallons>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<ImperialGallons, CubicMeters, Scalar>
+    , IUnit<Gallons, CubicMeters, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "imp gal";
@@ -47,18 +47,6 @@ public partial record USGallons(Scalar Value)
     public static string UnitSymbol { get; } = "US gal";
     public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)264.17205235814842;
-}
-
-[KnownUnit<Volume, UKGallons, CubicMeters, Scalar>]
-public partial record UKGallons(Scalar Value)
-    : Volume.AffineUnit<UKGallons>(Value)
-    , ILinearUnit<Scalar>
-    , IUnit<UKGallons, CubicMeters, Scalar>
-    , IUnit
-{
-    public static string UnitSymbol { get; } = "UK gal";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)219.96915738094787;
 }
 
 [KnownUnit<Volume, USCups, CubicMeters, Scalar>]
