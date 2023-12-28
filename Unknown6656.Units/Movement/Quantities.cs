@@ -10,5 +10,8 @@ public partial record Speed(MetersPerSecond value) : Quantity<Speed, MetersPerSe
 [MultiplicativeQuantityRelationship<Acceleration, Time, Speed, MetersPerSecondSquared, Seconds, MetersPerSecond, Scalar>]
 public partial record Acceleration(MetersPerSecondSquared value) : Quantity<Acceleration, MetersPerSecondSquared, Scalar>(value);
 
+[MultiplicativeQuantityRelationship<VolumetricFlowRate, Time, Volume, CubicMetersPerSecond, Seconds, CubicMeters, Scalar>]
+public partial record VolumetricFlowRate(CubicMetersPerSecond value) : Quantity<VolumetricFlowRate, CubicMetersPerSecond, Scalar>(value);
+
+
 // TODO : mass flow rate
-// TODO : volumetric flow rate
