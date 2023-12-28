@@ -11,7 +11,7 @@ public partial record Hertz(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Hz";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
 [KnownUnit<Frequency, Cesium133, Hertz, Scalar>]
@@ -22,7 +22,7 @@ public partial record Cesium133(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Δνcₛ";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1.087827757077667e-10; // 9.192631770e9;
 }
 

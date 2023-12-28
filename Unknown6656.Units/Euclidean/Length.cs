@@ -10,7 +10,7 @@ public partial record Meters(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
 [KnownUnit<Length, Yards, Meters, Scalar>]
@@ -141,6 +141,6 @@ public partial record Plancks(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "P";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1.616255e-35;
 }

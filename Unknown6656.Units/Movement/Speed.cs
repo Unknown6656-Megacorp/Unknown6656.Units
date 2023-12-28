@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Movement;
+namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<Speed, MetersPerSecond, Scalar>]
@@ -8,7 +8,7 @@ public partial record MetersPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
 

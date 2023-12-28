@@ -20,8 +20,10 @@ namespace Unknown6656.Units;
 
 public enum UnitSystem
 {
-    Metric,
-    NonSI,
+    MetricSI,
+    MetricSI_OnlyMultiple,
+    MetricSI_OnlySubmultiple,
+    MetricNonSI,
     Imperial,
 }
 
@@ -84,11 +86,13 @@ public static partial class Unit
         return !string.IsNullOrWhiteSpace(unit_symbol) ? $"{formatted} {unit_symbol}" : formatted;
     }
 
-    public static string FormatMetricSIPrefix<TScalar>(TScalar value, string? unit_symbol, string? format, IFormatProvider? format_provider, SIUnitScale scale = SIUnitScale.Base_1000)
+    public static string Format<TScalar>(TScalar value, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitSystem system, SIUnitScale scale = SIUnitScale.Base_1000)
         where TScalar : INumber<TScalar>
     {
-        if (string.IsNullOrWhiteSpace(unit_symbol))
-            return FormatImperial(value, null, format, format_provider);
+        unit_symbol = unit_symbol?.Trim();
+
+        if (unit_symbol is null || system is not (UnitSystem.MetricSI or UnitSystem.MetricSI_OnlyMultiple or UnitSystem.MetricSI_OnlySubmultiple))
+            return FormatImperial(value, unit_symbol, format, format_provider);
 
         TScalar @base = TScalar.CreateChecked((int)scale);
         bool negative = value < TScalar.Zero;
@@ -99,15 +103,16 @@ public static partial class Unit
         bool submultiple = value < TScalar.One;
         IReadOnlyList<string> prefixes = submultiple ? MetricSIPrefixesSubmultiple : MetricSIPrefixesMultiple;
 
-        while (value != TScalar.Zero && (submultiple ? value < TScalar.One : value >= @base) && order < prefixes.Count - 1)
-        {
-            ++order;
+        if (system is UnitSystem.MetricSI || (submultiple ? system is UnitSystem.MetricSI_OnlySubmultiple : system is UnitSystem.MetricSI_OnlyMultiple))
+            while (value != TScalar.Zero && (submultiple ? value < TScalar.One : value >= @base) && order < prefixes.Count - 1)
+            {
+                ++order;
 
-            if (submultiple)
-                value *= @base;
-            else
-                value /= @base;
-        }
+                if (submultiple)
+                    value *= @base;
+                else
+                    value /= @base;
+            }
 
         if (negative)
             value = -value;
@@ -194,13 +199,7 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format, formatProvider, SIUnitScale.Base_1000);
 
-    public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale)
-    {
-        if (TUnit.UnitSystem is UnitSystem.Metric)
-            return Unit.FormatMetricSIPrefix(Value, TUnit.UnitSymbol, format, formatProvider, scale);
-        else
-            return Unit.FormatImperial(Value, TUnit.UnitSymbol, format, formatProvider);
-    }
+    public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale) => Unit.Format(Value, TUnit.UnitSymbol, format, formatProvider, TUnit.UnitSystem, scale);
 
     public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, provider, SIUnitScale.Base_1000);
 

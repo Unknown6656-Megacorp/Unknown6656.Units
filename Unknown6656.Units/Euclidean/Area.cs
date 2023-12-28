@@ -10,7 +10,7 @@ public partial record SquareMeters(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
 }
 
 [KnownUnit<Area, SquareFeet, SquareMeters, Scalar>]
@@ -45,7 +45,7 @@ public partial record Hectares(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ha";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0001;
 }
 
@@ -57,7 +57,7 @@ public partial record SquareKilometers(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "km²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-6;
 }
 
@@ -69,6 +69,6 @@ public partial record Barns(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "b";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e28;
 }

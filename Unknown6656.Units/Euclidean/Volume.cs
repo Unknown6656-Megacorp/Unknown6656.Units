@@ -9,8 +9,8 @@ public partial record CubicMeters(Scalar Value)
     , IBaseUnit<CubicMeters, Scalar>
     , IUnit
 {
-    public static string UnitSymbol { get; } = "m²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static string UnitSymbol { get; } = "m³";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
 }
 
 [KnownUnit<Volume, Liters, CubicMeters, Scalar>]
@@ -20,8 +20,8 @@ public partial record Liters(Scalar Value)
     , IUnit<Liters, CubicMeters, Scalar>
     , IUnit
 {
-    public static string UnitSymbol { get; } = "l";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
+    public static string UnitSymbol { get; } = "L";
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
@@ -81,7 +81,7 @@ public partial record MetricCups(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "cups";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)4000;
 }
 
@@ -105,7 +105,7 @@ public partial record Ge(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ge";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)10_000;
 }
 

@@ -11,7 +11,7 @@ public partial record Seconds(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Metric;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI_OnlySubmultiple;
 }
 
 [KnownUnit<Time, Minutes, Seconds, Scalar>]
@@ -22,7 +22,7 @@ public partial record Minutes(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "min";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1 / (Scalar)60;
 }
 
@@ -34,7 +34,7 @@ public partial record Hours(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "h";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)2.7777777777777777777777777777778e-4;
 }
 
@@ -47,7 +47,7 @@ public partial record PlanckTime(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "tₚ";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.NonSI;
+    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1.8550948324478e43;
 }
 #endif
