@@ -1,21 +1,21 @@
 ﻿namespace Unknown6656.Units.Movement;
 
 
-[KnownBaseUnit<Speed, MetersPerSecond, Scalar>]
-public partial record MetersPerSecond(Scalar Value)
-    : BaseUnit<Speed, MetersPerSecond, Scalar>(Value)
-    , IBaseUnit<MetersPerSecond, Scalar>
+[KnownBaseUnit<Speed, MeterPerSecond, Scalar>]
+public partial record MeterPerSecond(Scalar Value)
+    : BaseUnit<Speed, MeterPerSecond, Scalar>(Value)
+    , IBaseUnit<MeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "m/s";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
-[KnownUnit<Speed, KilometersPerHour, MetersPerSecond, Scalar>]
-public partial record KilometersPerHour(Scalar Value)
-    : Speed.AffineUnit<KilometersPerHour>(Value)
+[KnownUnit<Speed, KilometerPerHour, MeterPerSecond, Scalar>]
+public partial record KilometerPerHour(Scalar Value)
+    : Speed.AffineUnit<KilometerPerHour>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<KilometersPerHour, MetersPerSecond, Scalar>
+    , IUnit<KilometerPerHour, MeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "km/h";
@@ -23,11 +23,11 @@ public partial record KilometersPerHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3.6;
 }
 
-[KnownUnit<Speed, MetersPerHour, MetersPerSecond, Scalar>]
-public partial record MetersPerHour(Scalar Value)
-    : Speed.AffineUnit<MetersPerHour>(Value)
+[KnownUnit<Speed, MeterPerHour, MeterPerSecond, Scalar>]
+public partial record MeterPerHour(Scalar Value)
+    : Speed.AffineUnit<MeterPerHour>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<MetersPerHour, MetersPerSecond, Scalar>
+    , IUnit<MeterPerHour, MeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "m/h";
@@ -35,11 +35,11 @@ public partial record MetersPerHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3600;
 }
 
-[KnownUnit<Speed, MilesPerHour, MetersPerSecond, Scalar>]
-public partial record MilesPerHour(Scalar Value)
-    : Speed.AffineUnit<MilesPerHour>(Value)
+[KnownUnit<Speed, MilePerHour, MeterPerSecond, Scalar>]
+public partial record MilePerHour(Scalar Value)
+    : Speed.AffineUnit<MilePerHour>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<MilesPerHour, MetersPerSecond, Scalar>
+    , IUnit<MilePerHour, MeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "mi/h";
@@ -47,11 +47,11 @@ public partial record MilesPerHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)2.2369362920544025;
 }
 
-[KnownUnit<Speed, FeetPerSecond, MetersPerSecond, Scalar>]
-public partial record FeetPerSecond(Scalar Value)
-    : Speed.AffineUnit<FeetPerSecond>(Value)
+[KnownUnit<Speed, FootPerSecond, MeterPerSecond, Scalar>]
+public partial record FootPerSecond(Scalar Value)
+    : Speed.AffineUnit<FootPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<FeetPerSecond, MetersPerSecond, Scalar>
+    , IUnit<FootPerSecond, MeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "ft/s";
@@ -59,11 +59,11 @@ public partial record FeetPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123;
 }
 
-[KnownUnit<Speed, Knots, MetersPerSecond, Scalar>]
-public partial record Knots(Scalar Value)
-    : Speed.AffineUnit<Knots>(Value)
+[KnownUnit<Speed, Knot, MeterPerSecond, Scalar>]
+public partial record Knot(Scalar Value)
+    : Speed.AffineUnit<Knot>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Knots, MetersPerSecond, Scalar>
+    , IUnit<Knot, MeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "kn";
@@ -74,11 +74,11 @@ public partial record Knots(Scalar Value)
 
 
 
-[KnownUnit<Speed, Mach, MetersPerSecond, Scalar>]
+[KnownUnit<Speed, Mach, MeterPerSecond, Scalar>]
 public partial record Mach(Scalar Value)
     : Speed.AffineUnit<Mach>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Mach, MetersPerSecond, Scalar>
+    , IUnit<Mach, MeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "Mach";

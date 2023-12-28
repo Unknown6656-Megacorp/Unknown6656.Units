@@ -1,21 +1,21 @@
 ﻿namespace Unknown6656.Units.Matter;
 
 
-[KnownBaseUnit<Pressure, Pascals, Scalar>]
-public partial record Pascals(Scalar Value)
-    : BaseUnit<Pressure, Pascals, Scalar>(Value)
-    , IBaseUnit<Pascals, Scalar>
+[KnownBaseUnit<Pressure, Pascal, Scalar>]
+public partial record Pascal(Scalar Value)
+    : BaseUnit<Pressure, Pascal, Scalar>(Value)
+    , IBaseUnit<Pascal, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "Pa";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
-[KnownUnit<Pressure, Atmospheres, Pascals, Scalar>]
-public partial record Atmospheres(Scalar Value)
-    : Pressure.AffineUnit<Atmospheres>(Value)
+[KnownUnit<Pressure, Atmosphere, Pascal, Scalar>]
+public partial record Atmosphere(Scalar Value)
+    : Pressure.AffineUnit<Atmosphere>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Atmospheres, Pascals, Scalar>
+    , IUnit<Atmosphere, Pascal, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "atm";
@@ -23,11 +23,11 @@ public partial record Atmospheres(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)9.8692326671601e-6;
 }
 
-[KnownUnit<Pressure, Bars, Pascals, Scalar>]
-public partial record Bars(Scalar Value)
-    : Pressure.AffineUnit<Bars>(Value)
+[KnownUnit<Pressure, Bar, Pascal, Scalar>]
+public partial record Bar(Scalar Value)
+    : Pressure.AffineUnit<Bar>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Bars, Pascals, Scalar>
+    , IUnit<Bar, Pascal, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "bar";
@@ -35,11 +35,11 @@ public partial record Bars(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e-5;
 }
 
-[KnownUnit<Pressure, PoundsPerSquareInch, Pascals, Scalar>]
-public partial record PoundsPerSquareInch(Scalar Value)
-    : Pressure.AffineUnit<PoundsPerSquareInch>(Value)
+[KnownUnit<Pressure, PoundPerSquareInch, Pascal, Scalar>]
+public partial record PoundPerSquareInch(Scalar Value)
+    : Pressure.AffineUnit<PoundPerSquareInch>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<PoundsPerSquareInch, Pascals, Scalar>
+    , IUnit<PoundPerSquareInch, Pascal, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "psi";
@@ -47,11 +47,11 @@ public partial record PoundsPerSquareInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.00014503773773020923;
 }
 
-[KnownUnit<Pressure, Torrs, Pascals, Scalar>]
-public partial record Torrs(Scalar Value)
-    : Pressure.AffineUnit<Torrs>(Value)
+[KnownUnit<Pressure, Torr, Pascal, Scalar>]
+public partial record Torr(Scalar Value)
+    : Pressure.AffineUnit<Torr>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Torrs, Pascals, Scalar>
+    , IUnit<Torr, Pascal, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "Torr";

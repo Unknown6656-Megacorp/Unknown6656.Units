@@ -3,21 +3,21 @@
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
 
-[KnownBaseUnit<Area, SquareMeters, Scalar>]
-public partial record SquareMeters(Scalar Value)
-    : BaseUnit<Area, SquareMeters, Scalar>(Value)
-    , IBaseUnit<SquareMeters, Scalar>
+[KnownBaseUnit<Area, SquareMeter, Scalar>]
+public partial record SquareMeter(Scalar Value)
+    : BaseUnit<Area, SquareMeter, Scalar>(Value)
+    , IBaseUnit<SquareMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "m²";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
 }
 
-[KnownUnit<Area, SquareFeet, SquareMeters, Scalar>]
-public partial record SquareFeet(Scalar Value)
-    : Area.AffineUnit<SquareFeet>(Value)
+[KnownUnit<Area, SquareFoot, SquareMeter, Scalar>]
+public partial record SquareFoot(Scalar Value)
+    : Area.AffineUnit<SquareFoot>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<SquareFeet, SquareMeters, Scalar>
+    , IUnit<SquareFoot, SquareMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "ft²";
@@ -25,11 +25,11 @@ public partial record SquareFeet(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)10.763910416709722258073075107890473764;
 }
 
-[KnownUnit<Area, Acres, SquareMeters, Scalar>]
-public partial record Acres(Scalar Value)
-    : Area.AffineUnit<Acres>(Value)
+[KnownUnit<Area, Acre, SquareMeter, Scalar>]
+public partial record Acre(Scalar Value)
+    : Area.AffineUnit<Acre>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Acres, SquareMeters, Scalar>
+    , IUnit<Acre, SquareMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "ac";
@@ -37,11 +37,11 @@ public partial record Acres(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.000247105381467165348551;
 }
 
-[KnownUnit<Area, Hectares, SquareMeters, Scalar>]
-public partial record Hectares(Scalar Value)
-    : Area.AffineUnit<Hectares>(Value)
+[KnownUnit<Area, Hectare, SquareMeter, Scalar>]
+public partial record Hectare(Scalar Value)
+    : Area.AffineUnit<Hectare>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Hectares, SquareMeters, Scalar>
+    , IUnit<Hectare, SquareMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "ha";
@@ -49,11 +49,11 @@ public partial record Hectares(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.0001;
 }
 
-[KnownUnit<Area, SquareKilometers, SquareMeters, Scalar>]
-public partial record SquareKilometers(Scalar Value)
-    : Area.AffineUnit<SquareKilometers>(Value)
+[KnownUnit<Area, SquareKilometer, SquareMeter, Scalar>]
+public partial record SquareKilometer(Scalar Value)
+    : Area.AffineUnit<SquareKilometer>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<SquareKilometers, SquareMeters, Scalar>
+    , IUnit<SquareKilometer, SquareMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "km²";
@@ -61,11 +61,11 @@ public partial record SquareKilometers(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e-6;
 }
 
-[KnownUnit<Area, Barns, SquareMeters, Scalar>]
-public partial record Barns(Scalar Value)
-    : Area.AffineUnit<Barns>(Value)
+[KnownUnit<Area, Barn, SquareMeter, Scalar>]
+public partial record Barn(Scalar Value)
+    : Area.AffineUnit<Barn>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Barns, SquareMeters, Scalar>
+    , IUnit<Barn, SquareMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "b";

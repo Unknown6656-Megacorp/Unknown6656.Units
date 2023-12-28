@@ -1,12 +1,12 @@
 ﻿namespace Unknown6656.Units.Euclidean;
 
 
-public record Angle(Radians value) : Quantity<Angle, Radians, Scalar>(value);
+public partial record Angle(Radian value) : Quantity<Angle, Radian, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<Length, Area, Meters, SquareMeters, Scalar>]
-public partial record Length(Meters value) : Quantity<Length, Meters, Scalar>(value);
+[MultiplicativeQuantityRelationship<Length, Area, Meter, SquareMeter, Scalar>]
+public partial record Length(Meter value) : Quantity<Length, Meter, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<Area, Length, Volume, SquareMeters, Meters, CubicMeters, Scalar>]
-public partial record Area(SquareMeters value) : Quantity<Area, SquareMeters, Scalar>(value);
+[MultiplicativeQuantityRelationship<Area, Length, Volume, SquareMeter, Meter, CubicMeter, Scalar>]
+public partial record Area(SquareMeter value) : Quantity<Area, SquareMeter, Scalar>(value);
 
-public record Volume(CubicMeters value) : Quantity<Volume, CubicMeters, Scalar>(value);
+public partial record Volume(CubicMeter value) : Quantity<Volume, CubicMeter, Scalar>(value);

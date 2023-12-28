@@ -5,27 +5,27 @@ using Unknown6656.Units.Temporal;
 namespace Unknown6656.Units.Movement;
 
 
-[MultiplicativeQuantityRelationship<Speed, Time, Length, MetersPerSecond, Seconds, Meters, Scalar>]
-public partial record Speed(MetersPerSecond value) : Quantity<Speed, MetersPerSecond, Scalar>(value);
+[MultiplicativeQuantityRelationship<Speed, Time, Length, MeterPerSecond, Second, Meter, Scalar>]
+public partial record Speed(MeterPerSecond value) : Quantity<Speed, MeterPerSecond, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<Acceleration, Time, Speed, MetersPerSecondSquared, Seconds, MetersPerSecond, Scalar>]
-public partial record Acceleration(MetersPerSecondSquared value) : Quantity<Acceleration, MetersPerSecondSquared, Scalar>(value);
+[MultiplicativeQuantityRelationship<Acceleration, Time, Speed, MeterPerSecondSquared, Second, MeterPerSecond, Scalar>]
+public partial record Acceleration(MeterPerSecondSquared value) : Quantity<Acceleration, MeterPerSecondSquared, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<VolumetricFlowRate, Time, Volume, CubicMetersPerSecond, Seconds, CubicMeters, Scalar>]
-public partial record VolumetricFlowRate(CubicMetersPerSecond value) : Quantity<VolumetricFlowRate, CubicMetersPerSecond, Scalar>(value);
+[MultiplicativeQuantityRelationship<VolumetricFlowRate, Time, Volume, CubicMeterPerSecond, Second, CubicMeter, Scalar>]
+public partial record VolumetricFlowRate(CubicMeterPerSecond value) : Quantity<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(value);
 
 // TODO : mass flow rate
 
 
-[MultiplicativeQuantityRelationship<Force, Time, Impulse, Newtons, Seconds, NewtonSeconds, Scalar>]
-public partial record Impulse(NewtonSeconds value) : Quantity<Impulse, NewtonSeconds, Scalar>(value);
+[MultiplicativeQuantityRelationship<Force, Time, Impulse, Newton, Second, NewtonSecond, Scalar>]
+public partial record Impulse(NewtonSecond value) : Quantity<Impulse, NewtonSecond, Scalar>(value);
 
 // TODO : specific impulse
 
 
-[MultiplicativeQuantityRelationship<Mass, Acceleration, Force, Kilograms, MetersPerSecondSquared, Newtons, Scalar>]
-public partial record Force(Newtons value) : Quantity<Force, Newtons, Scalar>(value);
+[MultiplicativeQuantityRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]
+public partial record Force(Newton value) : Quantity<Force, Newton, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<Energy, Angle, Torque, Joules, Radians, NewtonMeters, Scalar>]
-[MultiplicativeQuantityRelationship<Force, Length, Torque, Newtons, Meters, NewtonMeters, Scalar>]
-public partial record Torque(NewtonMeters value) : Quantity<Torque, NewtonMeters, Scalar>(value);
+[MultiplicativeQuantityRelationship<Energy, Angle, Torque, Joule, Radian, NewtonMeter, Scalar>]
+[MultiplicativeQuantityRelationship<Force, Length, Torque, Newton, Meter, NewtonMeter, Scalar>]
+public partial record Torque(NewtonMeter value) : Quantity<Torque, NewtonMeter, Scalar>(value);

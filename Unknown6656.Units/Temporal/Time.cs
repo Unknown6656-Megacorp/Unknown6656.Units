@@ -4,21 +4,21 @@
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
 
-[KnownBaseUnit<Time, Seconds, Scalar>]
-public partial record Seconds(Scalar Value)
-    : BaseUnit<Time, Seconds, Scalar>(Value)
-    , IBaseUnit<Seconds, Scalar>
+[KnownBaseUnit<Time, Second, Scalar>]
+public partial record Second(Scalar Value)
+    : BaseUnit<Time, Second, Scalar>(Value)
+    , IBaseUnit<Second, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "s";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI_OnlySubmultiple;
 }
 
-[KnownUnit<Time, Minutes, Seconds, Scalar>]
-public partial record Minutes(Scalar Value)
-    : Time.AffineUnit<Minutes>(Value)
+[KnownUnit<Time, Minute, Second, Scalar>]
+public partial record Minute(Scalar Value)
+    : Time.AffineUnit<Minute>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Minutes, Seconds, Scalar>
+    , IUnit<Minute, Second, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "min";
@@ -26,11 +26,11 @@ public partial record Minutes(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1 / (Scalar)60;
 }
 
-[KnownUnit<Time, Hours, Seconds, Scalar>]
-public partial record Hours(Scalar Value)
-    : Time.AffineUnit<Hours>(Value)
+[KnownUnit<Time, Hour, Second, Scalar>]
+public partial record Hour(Scalar Value)
+    : Time.AffineUnit<Hour>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Hours, Seconds, Scalar>
+    , IUnit<Hour, Second, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "h";
@@ -39,11 +39,11 @@ public partial record Hours(Scalar Value)
 }
 
 #if !D128
-[KnownUnit<Time, PlanckTime, Seconds, Scalar>]
+[KnownUnit<Time, PlanckTime, Second, Scalar>]
 public partial record PlanckTime(Scalar Value)
     : Time.AffineUnit<PlanckTime>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<PlanckTime, Seconds, Scalar>
+    , IUnit<PlanckTime, Second, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "tₚ";

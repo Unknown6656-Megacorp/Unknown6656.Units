@@ -1,21 +1,21 @@
 ﻿namespace Unknown6656.Units.Movement;
 
 
-[KnownBaseUnit<Impulse, NewtonSeconds, Scalar>]
-public partial record NewtonSeconds(Scalar Value)
-    : BaseUnit<Impulse, NewtonSeconds, Scalar>(Value)
-    , IBaseUnit<NewtonSeconds, Scalar>
+[KnownBaseUnit<Impulse, NewtonSecond, Scalar>]
+public partial record NewtonSecond(Scalar Value)
+    : BaseUnit<Impulse, NewtonSecond, Scalar>(Value)
+    , IBaseUnit<NewtonSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "Ns";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
-[KnownUnit<Impulse, PoundSeconds, NewtonSeconds, Scalar>]
-public partial record PoundSeconds(Scalar Value)
-    : Impulse.AffineUnit<PoundSeconds>(Value)
+[KnownUnit<Impulse, PoundSecond, NewtonSecond, Scalar>]
+public partial record PoundSecond(Scalar Value)
+    : Impulse.AffineUnit<PoundSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<PoundSeconds, NewtonSeconds, Scalar>
+    , IUnit<PoundSecond, NewtonSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "lbf·s";
@@ -23,11 +23,11 @@ public partial record PoundSeconds(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.224808943099717;
 }
 
-[KnownUnit<Impulse, SlugFeetPerSecond, NewtonSeconds, Scalar>]
-public partial record SlugFeetPerSecond(Scalar Value)
-    : Impulse.AffineUnit<SlugFeetPerSecond>(Value)
+[KnownUnit<Impulse, SlugFootPerSecond, NewtonSecond, Scalar>]
+public partial record SlugFootPerSecond(Scalar Value)
+    : Impulse.AffineUnit<SlugFootPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<SlugFeetPerSecond, NewtonSeconds, Scalar>
+    , IUnit<SlugFootPerSecond, NewtonSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "slug·ft/s";

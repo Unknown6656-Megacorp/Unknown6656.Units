@@ -3,21 +3,21 @@
 namespace Unknown6656.Units.Euclidean;
 
 
-[KnownBaseUnit<Angle, Radians, Scalar>]
-public partial record Radians(Scalar Value)
-    : BaseUnit<Angle, Radians, Scalar>(Value)
-    , IBaseUnit<Radians, Scalar>
+[KnownBaseUnit<Angle, Radian, Scalar>]
+public partial record Radian(Scalar Value)
+    : BaseUnit<Angle, Radian, Scalar>(Value)
+    , IBaseUnit<Radian, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "rad";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
-[KnownUnit<Angle, Degrees, Radians, Scalar>]
-public partial record Degrees(Scalar Value)
-    : Angle.AffineUnit<Degrees>(Value)
+[KnownUnit<Angle, Degree, Radian, Scalar>]
+public partial record Degree(Scalar Value)
+    : Angle.AffineUnit<Degree>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Degrees, Radians, Scalar>
+    , IUnit<Degree, Radian, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "°";
@@ -25,11 +25,11 @@ public partial record Degrees(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)(180 / Math.PI);
 }
 
-[KnownUnit<Angle, Gradians, Radians, Scalar>]
-public partial record Gradians(Scalar Value)
-    : Angle.AffineUnit<Gradians>(Value)
+[KnownUnit<Angle, Gradian, Radian, Scalar>]
+public partial record Gradian(Scalar Value)
+    : Angle.AffineUnit<Gradian>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Gradians, Radians, Scalar>
+    , IUnit<Gradian, Radian, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "gon"; // ᵍ
@@ -37,11 +37,11 @@ public partial record Gradians(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)(200 / Math.PI);
 }
 
-[KnownUnit<Angle, ArcMinutes, Radians, Scalar>]
-public partial record ArcMinutes(Scalar Value)
-    : Angle.AffineUnit<ArcMinutes>(Value)
+[KnownUnit<Angle, ArcMinute, Radian, Scalar>]
+public partial record ArcMinute(Scalar Value)
+    : Angle.AffineUnit<ArcMinute>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<ArcMinutes, Radians, Scalar>
+    , IUnit<ArcMinute, Radian, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "'";
@@ -49,11 +49,11 @@ public partial record ArcMinutes(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3437.7467707849392526078892888463102199443283479938592929496146316;
 }
 
-[KnownUnit<Angle, ArcSeconds, Radians, Scalar>]
-public partial record ArcSeconds(Scalar Value)
-    : Angle.AffineUnit<ArcSeconds>(Value)
+[KnownUnit<Angle, ArcSecond, Radian, Scalar>]
+public partial record ArcSecond(Scalar Value)
+    : Angle.AffineUnit<ArcSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<ArcSeconds, Radians, Scalar>
+    , IUnit<ArcSecond, Radian, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "\"";
@@ -61,11 +61,11 @@ public partial record ArcSeconds(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)206264.80624709635515647335733077861319665970087963155757697687790;
 }
 
-[KnownUnit<Angle, Turns, Radians, Scalar>]
-public partial record Turns(Scalar Value)
-    : Angle.AffineUnit<Turns>(Value)
+[KnownUnit<Angle, Turn, Radian, Scalar>]
+public partial record Turn(Scalar Value)
+    : Angle.AffineUnit<Turn>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Turns, Radians, Scalar>
+    , IUnit<Turn, Radian, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "turns";

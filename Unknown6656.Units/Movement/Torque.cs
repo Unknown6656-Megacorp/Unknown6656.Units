@@ -1,21 +1,21 @@
 ﻿namespace Unknown6656.Units.Movement;
 
 
-[KnownBaseUnit<Torque, NewtonMeters, Scalar>]
-public partial record NewtonMeters(Scalar Value)
-    : BaseUnit<Torque, NewtonMeters, Scalar>(Value)
-    , IBaseUnit<NewtonMeters, Scalar>
+[KnownBaseUnit<Torque, NewtonMeter, Scalar>]
+public partial record NewtonMeter(Scalar Value)
+    : BaseUnit<Torque, NewtonMeter, Scalar>(Value)
+    , IBaseUnit<NewtonMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "Nm";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
-[KnownUnit<Torque, FootPounds, NewtonMeters, Scalar>]
-public partial record FootPounds(Scalar Value)
-    : Torque.AffineUnit<FootPounds>(Value)
+[KnownUnit<Torque, FootPound, NewtonMeter, Scalar>]
+public partial record FootPound(Scalar Value)
+    : Torque.AffineUnit<FootPound>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<FootPounds, NewtonMeters, Scalar>
+    , IUnit<FootPound, NewtonMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "lbft";
@@ -23,11 +23,11 @@ public partial record FootPounds(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.7375621492772656;
 }
 
-[KnownUnit<Torque, PoundInches, NewtonMeters, Scalar>]
-public partial record PoundInches(Scalar Value)
-    : Torque.AffineUnit<PoundInches>(Value)
+[KnownUnit<Torque, PoundInch, NewtonMeter, Scalar>]
+public partial record PoundInch(Scalar Value)
+    : Torque.AffineUnit<PoundInch>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<PoundInches, NewtonMeters, Scalar>
+    , IUnit<PoundInch, NewtonMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "lbin";
@@ -35,11 +35,11 @@ public partial record PoundInches(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)8.850745793490557;
 }
 
-[KnownUnit<Torque, OunceInches, NewtonMeters, Scalar>]
-public partial record OunceInches(Scalar Value)
-    : Torque.AffineUnit<OunceInches>(Value)
+[KnownUnit<Torque, OunceInch, NewtonMeter, Scalar>]
+public partial record OunceInch(Scalar Value)
+    : Torque.AffineUnit<OunceInch>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<OunceInches, NewtonMeters, Scalar>
+    , IUnit<OunceInch, NewtonMeter, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "ozin";

@@ -6,4 +6,4 @@ public partial record Mass(Grams value) : Quantity<Mass, Grams, Scalar>(value);
 
 public partial record VolumetricMassDensity(KilogramsPerCubicMeter value) : Quantity<VolumetricMassDensity, KilogramsPerCubicMeter, Scalar>(value);
 
-public partial record Pressure(Pascals value) : Quantity<Pressure, Pascals, Scalar>(value);
+public partial record Pressure(Pascal value) : Quantity<Pressure, Pascal, Scalar>(value);

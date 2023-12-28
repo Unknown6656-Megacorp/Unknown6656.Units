@@ -1,21 +1,21 @@
 ﻿namespace Unknown6656.Units.Movement;
 
 
-[KnownBaseUnit<Acceleration, MetersPerSecondSquared, Scalar>]
-public partial record MetersPerSecondSquared(Scalar Value)
-    : BaseUnit<Acceleration, MetersPerSecondSquared, Scalar>(Value)
-    , IBaseUnit<MetersPerSecondSquared, Scalar>
+[KnownBaseUnit<Acceleration, MeterPerSecondSquared, Scalar>]
+public partial record MeterPerSecondSquared(Scalar Value)
+    : BaseUnit<Acceleration, MeterPerSecondSquared, Scalar>(Value)
+    , IBaseUnit<MeterPerSecondSquared, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "m/s²";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
 }
 
-[KnownUnit<Acceleration, FeetPerSecondSquared, MetersPerSecondSquared, Scalar>]
-public partial record FeetPerSecondSquared(Scalar Value)
-    : Acceleration.AffineUnit<FeetPerSecondSquared>(Value)
+[KnownUnit<Acceleration, FootPerSecondSquared, MeterPerSecondSquared, Scalar>]
+public partial record FootPerSecondSquared(Scalar Value)
+    : Acceleration.AffineUnit<FootPerSecondSquared>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<FeetPerSecondSquared, MetersPerSecondSquared, Scalar>
+    , IUnit<FootPerSecondSquared, MeterPerSecondSquared, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "ft/s²";
@@ -23,11 +23,11 @@ public partial record FeetPerSecondSquared(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123;
 }
 
-[KnownUnit<Acceleration, Gals, MetersPerSecondSquared, Scalar>]
-public partial record Gals(Scalar Value)
-    : Acceleration.AffineUnit<Gals>(Value)
+[KnownUnit<Acceleration, Gal, MeterPerSecondSquared, Scalar>]
+public partial record Gal(Scalar Value)
+    : Acceleration.AffineUnit<Gal>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Gals, MetersPerSecondSquared, Scalar>
+    , IUnit<Gal, MeterPerSecondSquared, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "Gal";
@@ -35,11 +35,11 @@ public partial record Gals(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e-2;
 }
 
-[KnownUnit<Acceleration, G, MetersPerSecondSquared, Scalar>]
+[KnownUnit<Acceleration, G, MeterPerSecondSquared, Scalar>]
 public partial record G(Scalar Value)
     : Acceleration.AffineUnit<G>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<G, MetersPerSecondSquared, Scalar>
+    , IUnit<G, MeterPerSecondSquared, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "g₀";

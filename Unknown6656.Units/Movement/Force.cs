@@ -1,10 +1,10 @@
 ﻿namespace Unknown6656.Units.Movement;
 
 
-[KnownBaseUnit<Force, Newtons, Scalar>]
-public partial record Newtons(Scalar Value)
-    : BaseUnit<Force, Newtons, Scalar>(Value)
-    , IBaseUnit<Newtons, Scalar>
+[KnownBaseUnit<Force, Newton, Scalar>]
+public partial record Newton(Scalar Value)
+    : BaseUnit<Force, Newton, Scalar>(Value)
+    , IBaseUnit<Newton, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "N";

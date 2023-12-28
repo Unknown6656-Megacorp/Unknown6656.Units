@@ -1,21 +1,21 @@
 ﻿namespace Unknown6656.Units.Movement;
 
 
-[KnownBaseUnit<VolumetricFlowRate, CubicMetersPerSecond, Scalar>]
-public partial record CubicMetersPerSecond(Scalar Value)
-    : BaseUnit<VolumetricFlowRate, CubicMetersPerSecond, Scalar>(Value)
-    , IBaseUnit<CubicMetersPerSecond, Scalar>
+[KnownBaseUnit<VolumetricFlowRate, CubicMeterPerSecond, Scalar>]
+public partial record CubicMeterPerSecond(Scalar Value)
+    : BaseUnit<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(Value)
+    , IBaseUnit<CubicMeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "m³/s";
     public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
 }
 
-[KnownUnit<VolumetricFlowRate, LitersPerSecond, CubicMetersPerSecond, Scalar>]
-public partial record LitersPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<LitersPerSecond>(Value)
+[KnownUnit<VolumetricFlowRate, LiterPerSecond, CubicMeterPerSecond, Scalar>]
+public partial record LiterPerSecond(Scalar Value)
+    : VolumetricFlowRate.AffineUnit<LiterPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<LitersPerSecond, CubicMetersPerSecond, Scalar>
+    , IUnit<LiterPerSecond, CubicMeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "L/s";
@@ -23,11 +23,11 @@ public partial record LitersPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
-[KnownUnit<VolumetricFlowRate, GallonsPerSecond, CubicMetersPerSecond, Scalar>]
-public partial record GallonsPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<GallonsPerSecond>(Value)
+[KnownUnit<VolumetricFlowRate, GallonPerSecond, CubicMeterPerSecond, Scalar>]
+public partial record GallonPerSecond(Scalar Value)
+    : VolumetricFlowRate.AffineUnit<GallonPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<GallonsPerSecond, CubicMetersPerSecond, Scalar>
+    , IUnit<GallonPerSecond, CubicMeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "gal/s";
@@ -35,11 +35,11 @@ public partial record GallonsPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)219.96915738094787;
 }
 
-[KnownUnit<VolumetricFlowRate, USGallonsPerSecond, CubicMetersPerSecond, Scalar>]
-public partial record USGallonsPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<USGallonsPerSecond>(Value)
+[KnownUnit<VolumetricFlowRate, USGallonPerSecond, CubicMeterPerSecond, Scalar>]
+public partial record USGallonPerSecond(Scalar Value)
+    : VolumetricFlowRate.AffineUnit<USGallonPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<USGallonsPerSecond, CubicMetersPerSecond, Scalar>
+    , IUnit<USGallonPerSecond, CubicMeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "US gal/s";
@@ -47,11 +47,11 @@ public partial record USGallonsPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)264.17205235814842;
 }
 
-[KnownUnit<VolumetricFlowRate, BarrelsPerSecond, CubicMetersPerSecond, Scalar>]
-public partial record BarrelsPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<BarrelsPerSecond>(Value)
+[KnownUnit<VolumetricFlowRate, BarrelPerSecond, CubicMeterPerSecond, Scalar>]
+public partial record BarrelPerSecond(Scalar Value)
+    : VolumetricFlowRate.AffineUnit<BarrelPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<BarrelsPerSecond, CubicMetersPerSecond, Scalar>
+    , IUnit<BarrelPerSecond, CubicMeterPerSecond, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "bbl/s";
