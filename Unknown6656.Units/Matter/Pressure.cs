@@ -8,7 +8,7 @@ public partial record Pascal(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Pa";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
 [KnownUnit<Pressure, Atmosphere, Pascal, Scalar>]
@@ -19,7 +19,7 @@ public partial record Atmosphere(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "atm";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)9.8692326671601e-6;
 }
 
@@ -31,7 +31,7 @@ public partial record Bar(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "bar";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-5;
 }
 
@@ -43,7 +43,7 @@ public partial record PoundPerSquareInch(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "psi";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00014503773773020923;
 }
 
@@ -55,7 +55,7 @@ public partial record Torr(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Torr";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0075006168270417;
 }
 

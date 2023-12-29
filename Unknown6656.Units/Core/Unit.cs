@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Numerics;
@@ -18,7 +19,8 @@ namespace Unknown6656.Units;
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-public enum UnitSystem
+public enum UnitDisplay
+    : uint
 {
     MetricSI,
     MetricSI_OnlyMultiple,
@@ -31,7 +33,7 @@ public enum UnitSystem
 public interface IUnit
 {
     public static abstract string UnitSymbol { get; }
-    public static abstract UnitSystem UnitSystem { get; }
+    public static abstract UnitDisplay UnitDisplay { get; }
 }
 
 public interface IUnit<TUnit, TBaseUnit, TScalar>
@@ -60,6 +62,16 @@ public enum SIUnitScale
 
 public static partial class Unit
 {
+    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+    internal const UnitDisplay MetricSI_Shifted_k = (UnitDisplay)0xdead_0001;
+    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+    internal const UnitDisplay MetricSI_Shifted_M = (UnitDisplay)0xdead_0002;
+    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+    internal const UnitDisplay MetricSI_Shifted_m = (UnitDisplay)0xdead_0003;
+    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+    internal const UnitDisplay MetricSI_Shifted_μ = (UnitDisplay)0xdead_0004;
+
+
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
     public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
     public static NumberFormatInfo DefaultNumberFormat { get; set; } = new()
@@ -79,37 +91,64 @@ public static partial class Unit
     };
 
 
-    private static string FormatImperial<TScalar>(TScalar scalar, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitSystem system)
+    public static bool IsMetric(this UnitDisplay display) => display is UnitDisplay.MetricSI or UnitDisplay.MetricSI_OnlyMultiple or UnitDisplay.MetricSI_OnlySubmultiple
+                                                                     or UnitDisplay.MetricNonSI or MetricSI_Shifted_k or MetricSI_Shifted_M or MetricSI_Shifted_m or MetricSI_Shifted_μ;
+
+    public static bool IsSI(this UnitDisplay display) => display is UnitDisplay.MetricSI or UnitDisplay.MetricSI_OnlyMultiple or UnitDisplay.MetricSI_OnlySubmultiple
+                                                                 or MetricSI_Shifted_k or MetricSI_Shifted_M or MetricSI_Shifted_m or MetricSI_Shifted_μ;
+
+    private static string FormatImperial<TScalar>(TScalar scalar, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitDisplay display)
         where TScalar : INumber<TScalar>
     {
         string formatted = scalar?.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0";
 
         if (string.IsNullOrWhiteSpace(unit_symbol))
             return formatted;
-        else if (system is UnitSystem.Prefix)
+        else if (display is UnitDisplay.Prefix)
             return $"{unit_symbol} {formatted}";
         else
             return $"{formatted} {unit_symbol}";
     }
 
-    public static string Format<TScalar>(TScalar value, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitSystem system, SIUnitScale scale = SIUnitScale.Base_1000)
+    public static string Format<TScalar>(TScalar value, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitDisplay display, SIUnitScale scale = SIUnitScale.Base_1000)
         where TScalar : INumber<TScalar>
     {
         unit_symbol = unit_symbol?.Trim();
 
-        if (unit_symbol is null || system is not (UnitSystem.MetricSI or UnitSystem.MetricSI_OnlyMultiple or UnitSystem.MetricSI_OnlySubmultiple))
-            return FormatImperial(value, unit_symbol, format, format_provider, system);
+        if (unit_symbol is null || !display.IsSI())
+            return FormatImperial(value, unit_symbol, format, format_provider, display);
 
         TScalar @base = TScalar.CreateChecked((int)scale);
         bool negative = value < TScalar.Zero;
         int order = -1;
+
+        if (display is MetricSI_Shifted_k && unit_symbol is ['k' or 'K', ..string suffixk])
+        {
+            value *= @base;
+            unit_symbol = suffixk;
+        }
+        else if (display is MetricSI_Shifted_M && unit_symbol is ['M', ..string suffixM])
+        {
+            value *= @base * @base;
+            unit_symbol = suffixM;
+        }
+        else if (display is MetricSI_Shifted_m && unit_symbol is ['m', .. string suffixm])
+        {
+            value /= @base;
+            unit_symbol = suffixm;
+        }
+        else if (display is MetricSI_Shifted_μ && unit_symbol is ['μ' or 'u', ..string suffixμ])
+        {
+            value /= @base * @base;
+            unit_symbol = suffixμ;
+        }
 
         value = TScalar.Abs(value);
 
         bool submultiple = value < TScalar.One;
         IReadOnlyList<string> prefixes = submultiple ? MetricSIPrefixesSubmultiple : MetricSIPrefixesMultiple;
 
-        if (system is UnitSystem.MetricSI || (submultiple ? system is UnitSystem.MetricSI_OnlySubmultiple : system is UnitSystem.MetricSI_OnlyMultiple))
+        if (display is UnitDisplay.MetricSI || (submultiple ? display is UnitDisplay.MetricSI_OnlySubmultiple : display is UnitDisplay.MetricSI_OnlyMultiple))
             while (value != TScalar.Zero && (submultiple ? value < TScalar.One : value >= @base) && order < prefixes.Count - 1)
             {
                 ++order;
@@ -128,7 +167,7 @@ public static partial class Unit
             (order < 0 ? "" : prefixes[order]) + (scale == SIUnitScale.Base_1024 ? "i" : "") + unit_symbol,
             format,
             format_provider,
-            system
+            display
         );
     }
 
@@ -177,6 +216,10 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 {
     private static readonly Func<TScalar, TUnit> _constructor;
 
+    public static bool IsMetric => TUnit.UnitDisplay.IsMetric();
+
+    public static bool IsSI => TUnit.UnitDisplay.IsSI();
+
     public static TUnit Zero { get; }
 
     public static TUnit One { get; }
@@ -206,7 +249,7 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format, formatProvider, SIUnitScale.Base_1000);
 
-    public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale) => Unit.Format(Value, TUnit.UnitSymbol, format, formatProvider, TUnit.UnitSystem, scale);
+    public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale) => Unit.Format(Value, TUnit.UnitSymbol, format, formatProvider, TUnit.UnitDisplay, scale);
 
     public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, provider, SIUnitScale.Base_1000);
 
@@ -348,7 +391,7 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
     where TScalar : INumber<TScalar>
 {
     public static string UnitSymbol { get; } = TBaseUnit.UnitSymbol;
-    public static UnitSystem UnitSystem { get; } = TBaseUnit.UnitSystem;
+    public static UnitDisplay UnitDisplay { get; } = TBaseUnit.UnitDisplay;
 
     public new TBaseUnit Value;
 
@@ -467,6 +510,9 @@ public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TBaseUni
                      , IBaseUnit<TBaseUnitB, TScalar>
                      , IUnit
     where TScalar : INumber<TScalar>;
+
+// TODO : multiplicative relationship for non-base units
+// TODO : inverse relationship for non-base units
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
 public class InverseQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>

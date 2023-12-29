@@ -10,7 +10,7 @@ public partial record Radian(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "rad";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
 [KnownUnit<Angle, Degree, Radian, Scalar>]
@@ -21,7 +21,7 @@ public partial record Degree(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "°";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)(180 / Math.PI);
 }
 
@@ -33,7 +33,7 @@ public partial record Gradian(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "gon"; // ᵍ
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)(200 / Math.PI);
 }
 
@@ -45,7 +45,7 @@ public partial record ArcMinute(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "'";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)3437.7467707849392526078892888463102199443283479938592929496146316;
 }
 
@@ -57,7 +57,7 @@ public partial record ArcSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "\"";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)206264.80624709635515647335733077861319665970087963155757697687790;
 }
 
@@ -69,6 +69,6 @@ public partial record Turn(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "turns";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)0.1591549430918953357688837633725143620344596457404564487476673440;
 }

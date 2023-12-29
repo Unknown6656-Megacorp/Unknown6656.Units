@@ -8,7 +8,7 @@ public partial record Newton(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "N";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
 

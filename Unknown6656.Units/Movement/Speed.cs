@@ -8,7 +8,7 @@ public partial record MeterPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
 [KnownUnit<Speed, KilometerPerHour, MeterPerSecond, Scalar>]
@@ -19,7 +19,7 @@ public partial record KilometerPerHour(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "km/h";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)3.6;
 }
 
@@ -31,7 +31,7 @@ public partial record MeterPerHour(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m/h";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)3600;
 }
 
@@ -43,7 +43,7 @@ public partial record MilePerHour(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "mi/h";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)2.2369362920544025;
 }
 
@@ -55,7 +55,7 @@ public partial record FootPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ft/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123;
 }
 
@@ -67,7 +67,7 @@ public partial record Knot(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "kn";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)1.9438444924406046;
 }
 
@@ -82,7 +82,7 @@ public partial record Mach(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Mach";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Prefix;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Prefix;
     public static Scalar ScalingFactor { get; } = (Scalar)340;
 }
 

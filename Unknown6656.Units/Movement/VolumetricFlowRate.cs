@@ -8,7 +8,7 @@ public partial record CubicMeterPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m³/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
 }
 
 [KnownUnit<VolumetricFlowRate, LiterPerSecond, CubicMeterPerSecond, Scalar>]
@@ -19,7 +19,7 @@ public partial record LiterPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "L/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
@@ -31,7 +31,7 @@ public partial record GallonPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "gal/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)219.96915738094787;
 }
 
@@ -43,7 +43,7 @@ public partial record USGallonPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "US gal/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)264.17205235814842;
 }
 
@@ -55,10 +55,7 @@ public partial record BarrelPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "bbl/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)6.2898105697751;
 }
-
-
-
 

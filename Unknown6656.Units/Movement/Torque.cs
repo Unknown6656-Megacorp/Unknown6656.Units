@@ -8,7 +8,7 @@ public partial record NewtonMeter(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Nm";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
 [KnownUnit<Torque, FootPound, NewtonMeter, Scalar>]
@@ -19,7 +19,7 @@ public partial record FootPound(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "lbft";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.7375621492772656;
 }
 
@@ -31,7 +31,7 @@ public partial record PoundInch(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "lbin";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)8.850745793490557;
 }
 
@@ -43,6 +43,6 @@ public partial record OunceInch(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ozin";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)141.6119326958489;
 }

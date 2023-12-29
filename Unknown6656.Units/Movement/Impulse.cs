@@ -8,7 +8,7 @@ public partial record NewtonSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Ns";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
 [KnownUnit<Impulse, PoundSecond, NewtonSecond, Scalar>]
@@ -19,7 +19,7 @@ public partial record PoundSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "lbf·s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.224808943099717;
 }
 
@@ -31,7 +31,7 @@ public partial record SlugFootPerSecond(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "slug·ft/s";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.224735720691;
 }
 

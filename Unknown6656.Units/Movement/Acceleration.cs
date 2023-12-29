@@ -8,7 +8,7 @@ public partial record MeterPerSecondSquared(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m/s²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
 [KnownUnit<Acceleration, FootPerSecondSquared, MeterPerSecondSquared, Scalar>]
@@ -19,7 +19,7 @@ public partial record FootPerSecondSquared(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ft/s²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123;
 }
 
@@ -31,7 +31,7 @@ public partial record Gal(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Gal";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-2;
 }
 
@@ -43,6 +43,6 @@ public partial record G(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "g₀";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)9.80665;
 }

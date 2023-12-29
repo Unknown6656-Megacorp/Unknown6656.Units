@@ -10,7 +10,7 @@ public partial record SquareMeter(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
 }
 
 [KnownUnit<Area, SquareFoot, SquareMeter, Scalar>]
@@ -21,7 +21,7 @@ public partial record SquareFoot(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ft²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)10.763910416709722258073075107890473764;
 }
 
@@ -33,7 +33,7 @@ public partial record Acre(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ac";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.000247105381467165348551;
 }
 
@@ -45,7 +45,7 @@ public partial record Hectare(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ha";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0001;
 }
 
@@ -57,7 +57,7 @@ public partial record SquareKilometer(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "km²";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-6;
 }
 
@@ -69,6 +69,6 @@ public partial record Barn(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "b";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e28;
 }

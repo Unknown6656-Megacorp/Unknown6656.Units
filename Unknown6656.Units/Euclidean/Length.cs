@@ -10,7 +10,7 @@ public partial record Meter(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "m";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
 [KnownUnit<Length, Yard, Meter, Scalar>]
@@ -21,7 +21,7 @@ public partial record Yard(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "yd";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)1.0936132983;
 }
 
@@ -33,7 +33,7 @@ public partial record Foot(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ft";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123359580052493438320209973753;
 }
 
@@ -45,7 +45,7 @@ public partial record Inch(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "in";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)39.37007874015748031496062992125984251968504;
 }
 
@@ -57,7 +57,7 @@ public partial record Mile(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "mi";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.000621371192237333969617434184363523125;
 }
 
@@ -69,7 +69,7 @@ public partial record NauticalMile(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "nmi";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.000539956803455723542116630669546436285;
 }
 
@@ -81,7 +81,7 @@ public partial record League(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "lea";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.000179986803455723542116630669546436285;
 }
 
@@ -93,7 +93,7 @@ public partial record Fathom(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ftm";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.546806649168853893185;
 }
 
@@ -105,7 +105,7 @@ public partial record Rod(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "rd";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)5.029210058420116567036;
 }
 
@@ -117,7 +117,7 @@ public partial record Chain(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "ch";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.04970969537898686567036;
 }
 
@@ -129,7 +129,7 @@ public partial record Furlong(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "fur";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.Imperial;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.004970969537898686567036;
 }
 
@@ -141,6 +141,6 @@ public partial record Planck(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "P";
-    public static UnitSystem UnitSystem { get; } = UnitSystem.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1.616255e-35;
 }
