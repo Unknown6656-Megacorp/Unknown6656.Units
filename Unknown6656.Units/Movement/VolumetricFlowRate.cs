@@ -4,8 +4,6 @@
 [KnownBaseUnit<VolumetricFlowRate, CubicMeterPerSecond, Scalar>]
 public partial record CubicMeterPerSecond(Scalar Value)
     : BaseUnit<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(Value)
-    , IBaseUnit<CubicMeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "m³/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -15,8 +13,6 @@ public partial record CubicMeterPerSecond(Scalar Value)
 public partial record LiterPerSecond(Scalar Value)
     : VolumetricFlowRate.AffineUnit<LiterPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<LiterPerSecond, CubicMeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "L/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -27,8 +23,6 @@ public partial record LiterPerSecond(Scalar Value)
 public partial record GallonPerSecond(Scalar Value)
     : VolumetricFlowRate.AffineUnit<GallonPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<GallonPerSecond, CubicMeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "gal/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -39,8 +33,6 @@ public partial record GallonPerSecond(Scalar Value)
 public partial record USGallonPerSecond(Scalar Value)
     : VolumetricFlowRate.AffineUnit<USGallonPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<USGallonPerSecond, CubicMeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "US gal/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -51,8 +43,6 @@ public partial record USGallonPerSecond(Scalar Value)
 public partial record BarrelPerSecond(Scalar Value)
     : VolumetricFlowRate.AffineUnit<BarrelPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<BarrelPerSecond, CubicMeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "bbl/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;

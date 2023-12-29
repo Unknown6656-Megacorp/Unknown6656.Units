@@ -6,8 +6,6 @@
 [KnownBaseUnit<Length, Meter, Scalar>]
 public partial record Meter(Scalar Value)
     : BaseUnit<Length, Meter, Scalar>(Value)
-    , IBaseUnit<Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "m";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -17,8 +15,6 @@ public partial record Meter(Scalar Value)
 public partial record Yard(Scalar Value)
     : Length.AffineUnit<Yard>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Yard, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "yd";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -29,8 +25,6 @@ public partial record Yard(Scalar Value)
 public partial record Foot(Scalar Value)
     : Length.AffineUnit<Foot>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Foot, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "ft";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -41,8 +35,6 @@ public partial record Foot(Scalar Value)
 public partial record Inch(Scalar Value)
     : Length.AffineUnit<Inch>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Inch, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "in";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -53,8 +45,6 @@ public partial record Inch(Scalar Value)
 public partial record Mile(Scalar Value)
     : Length.AffineUnit<Mile>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Mile, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "mi";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -65,8 +55,6 @@ public partial record Mile(Scalar Value)
 public partial record NauticalMile(Scalar Value)
     : Length.AffineUnit<NauticalMile>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<NauticalMile, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "nmi";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -77,8 +65,6 @@ public partial record NauticalMile(Scalar Value)
 public partial record League(Scalar Value)
     : Length.AffineUnit<League>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<League, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "lea";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -89,8 +75,6 @@ public partial record League(Scalar Value)
 public partial record Fathom(Scalar Value)
     : Length.AffineUnit<Fathom>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Fathom, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "ftm";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -101,8 +85,6 @@ public partial record Fathom(Scalar Value)
 public partial record Rod(Scalar Value)
     : Length.AffineUnit<Rod>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Rod, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "rd";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -113,8 +95,6 @@ public partial record Rod(Scalar Value)
 public partial record Chain(Scalar Value)
     : Length.AffineUnit<Chain>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Chain, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "ch";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -125,8 +105,6 @@ public partial record Chain(Scalar Value)
 public partial record Furlong(Scalar Value)
     : Length.AffineUnit<Furlong>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Furlong, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "fur";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -137,8 +115,6 @@ public partial record Furlong(Scalar Value)
 public partial record Planck(Scalar Value)
     : Length.AffineUnit<Planck>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Planck, Meter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "P";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;

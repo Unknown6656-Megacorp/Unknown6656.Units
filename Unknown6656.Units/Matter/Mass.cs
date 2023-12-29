@@ -4,8 +4,6 @@
 [KnownBaseUnit<Mass, Kilogram, Scalar>]
 public partial record Kilogram(Scalar Value)
     : BaseUnit<Mass, Kilogram, Scalar>(Value)
-    , IBaseUnit<Kilogram, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "kg";
     public static UnitDisplay UnitDisplay { get; } = Unit.MetricSI_Shifted_k;
@@ -15,8 +13,6 @@ public partial record Kilogram(Scalar Value)
 public partial record Gram(Scalar Value)
     : Mass.AffineUnit<Gram>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Gram, Kilogram, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "g";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -27,8 +23,6 @@ public partial record Gram(Scalar Value)
 public partial record MetricTon(Scalar Value)
     : Mass.AffineUnit<MetricTon>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<MetricTon, Kilogram, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "t";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -39,8 +33,6 @@ public partial record MetricTon(Scalar Value)
 public partial record Dalton(Scalar Value)
     : Mass.AffineUnit<Dalton>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Dalton, Kilogram, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "Da";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
