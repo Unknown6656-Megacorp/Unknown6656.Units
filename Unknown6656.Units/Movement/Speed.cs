@@ -4,8 +4,6 @@
 [KnownBaseUnit<Speed, MeterPerSecond, Scalar>]
 public partial record MeterPerSecond(Scalar Value)
     : BaseUnit<Speed, MeterPerSecond, Scalar>(Value)
-    , IBaseUnit<MeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "m/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -15,8 +13,6 @@ public partial record MeterPerSecond(Scalar Value)
 public partial record KilometerPerHour(Scalar Value)
     : Speed.AffineUnit<KilometerPerHour>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<KilometerPerHour, MeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "km/h";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -27,8 +23,6 @@ public partial record KilometerPerHour(Scalar Value)
 public partial record MeterPerHour(Scalar Value)
     : Speed.AffineUnit<MeterPerHour>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<MeterPerHour, MeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "m/h";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -39,8 +33,6 @@ public partial record MeterPerHour(Scalar Value)
 public partial record MilePerHour(Scalar Value)
     : Speed.AffineUnit<MilePerHour>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<MilePerHour, MeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "mi/h";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -51,8 +43,6 @@ public partial record MilePerHour(Scalar Value)
 public partial record FootPerSecond(Scalar Value)
     : Speed.AffineUnit<FootPerSecond>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<FootPerSecond, MeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "ft/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -63,8 +53,6 @@ public partial record FootPerSecond(Scalar Value)
 public partial record Knot(Scalar Value)
     : Speed.AffineUnit<Knot>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Knot, MeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "kn";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -78,8 +66,6 @@ public partial record Knot(Scalar Value)
 public partial record Mach(Scalar Value)
     : Speed.AffineUnit<Mach>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Mach, MeterPerSecond, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "Mach";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Prefix;
