@@ -4,6 +4,8 @@
 [KnownBaseUnit<Impulse, NewtonSecond, Scalar>]
 public partial record NewtonSecond(Scalar Value)
     : BaseUnit<Impulse, NewtonSecond, Scalar>(Value)
+    , IBaseUnit<NewtonSecond, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "Ns";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -13,6 +15,8 @@ public partial record NewtonSecond(Scalar Value)
 public partial record PoundSecond(Scalar Value)
     : Impulse.AffineUnit<PoundSecond>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<PoundSecond, NewtonSecond, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "lbf·s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -23,6 +27,8 @@ public partial record PoundSecond(Scalar Value)
 public partial record SlugFootPerSecond(Scalar Value)
     : Impulse.AffineUnit<SlugFootPerSecond>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<SlugFootPerSecond, NewtonSecond, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "slug·ft/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;

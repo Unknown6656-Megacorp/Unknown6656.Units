@@ -6,6 +6,8 @@
 [KnownBaseUnit<Area, SquareMeter, Scalar>]
 public partial record SquareMeter(Scalar Value)
     : BaseUnit<Area, SquareMeter, Scalar>(Value)
+    , IBaseUnit<SquareMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "m²";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -15,6 +17,8 @@ public partial record SquareMeter(Scalar Value)
 public partial record SquareFoot(Scalar Value)
     : Area.AffineUnit<SquareFoot>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<SquareFoot, SquareMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "ft²";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -25,6 +29,8 @@ public partial record SquareFoot(Scalar Value)
 public partial record Acre(Scalar Value)
     : Area.AffineUnit<Acre>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<Acre, SquareMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "ac";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -35,6 +41,8 @@ public partial record Acre(Scalar Value)
 public partial record Hectare(Scalar Value)
     : Area.AffineUnit<Hectare>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<Hectare, SquareMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "ha";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -45,6 +53,8 @@ public partial record Hectare(Scalar Value)
 public partial record SquareKilometer(Scalar Value)
     : Area.AffineUnit<SquareKilometer>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<SquareKilometer, SquareMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "km²";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -55,6 +65,8 @@ public partial record SquareKilometer(Scalar Value)
 public partial record Barn(Scalar Value)
     : Area.AffineUnit<Barn>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<Barn, SquareMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "b";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;

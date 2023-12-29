@@ -4,6 +4,8 @@
 [KnownBaseUnit<Torque, NewtonMeter, Scalar>]
 public partial record NewtonMeter(Scalar Value)
     : BaseUnit<Torque, NewtonMeter, Scalar>(Value)
+    , IBaseUnit<NewtonMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "Nm";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -13,6 +15,8 @@ public partial record NewtonMeter(Scalar Value)
 public partial record FootPound(Scalar Value)
     : Torque.AffineUnit<FootPound>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<FootPound, NewtonMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "lbft";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -23,6 +27,8 @@ public partial record FootPound(Scalar Value)
 public partial record PoundInch(Scalar Value)
     : Torque.AffineUnit<PoundInch>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<PoundInch, NewtonMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "lbin";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -33,6 +39,8 @@ public partial record PoundInch(Scalar Value)
 public partial record OunceInch(Scalar Value)
     : Torque.AffineUnit<OunceInch>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<OunceInch, NewtonMeter, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "ozin";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;

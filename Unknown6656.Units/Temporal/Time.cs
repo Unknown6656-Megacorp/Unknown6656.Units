@@ -7,6 +7,8 @@
 [KnownBaseUnit<Time, Second, Scalar>]
 public partial record Second(Scalar Value)
     : BaseUnit<Time, Second, Scalar>(Value)
+    , IBaseUnit<Second, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_OnlySubmultiple;
@@ -16,6 +18,8 @@ public partial record Second(Scalar Value)
 public partial record Minute(Scalar Value)
     : Time.AffineUnit<Minute>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<Minute, Second, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "min";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -26,6 +30,8 @@ public partial record Minute(Scalar Value)
 public partial record Hour(Scalar Value)
     : Time.AffineUnit<Hour>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<Hour, Second, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "h";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -37,6 +43,8 @@ public partial record Hour(Scalar Value)
 public partial record PlanckTime(Scalar Value)
     : Time.AffineUnit<PlanckTime>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<PlanckTime, Second, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "tₚ";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;

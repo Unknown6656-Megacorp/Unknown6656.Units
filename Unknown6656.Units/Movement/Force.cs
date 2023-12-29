@@ -4,6 +4,8 @@
 [KnownBaseUnit<Force, Newton, Scalar>]
 public partial record Newton(Scalar Value)
     : BaseUnit<Force, Newton, Scalar>(Value)
+    , IBaseUnit<Newton, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "N";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;

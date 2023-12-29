@@ -6,6 +6,8 @@ namespace Unknown6656.Units.Euclidean;
 [KnownBaseUnit<Angle, Radian, Scalar>]
 public partial record Radian(Scalar Value)
     : BaseUnit<Angle, Radian, Scalar>(Value)
+    , IBaseUnit<Radian, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "rad";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -15,6 +17,8 @@ public partial record Radian(Scalar Value)
 public partial record Degree(Scalar Value)
     : Angle.AffineUnit<Degree>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<Degree, Radian, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "°";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -25,6 +29,8 @@ public partial record Degree(Scalar Value)
 public partial record Gradian(Scalar Value)
     : Angle.AffineUnit<Gradian>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<Gradian, Radian, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "gon"; // ᵍ
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -35,6 +41,8 @@ public partial record Gradian(Scalar Value)
 public partial record ArcMinute(Scalar Value)
     : Angle.AffineUnit<ArcMinute>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<ArcMinute, Radian, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "'";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -45,6 +53,8 @@ public partial record ArcMinute(Scalar Value)
 public partial record ArcSecond(Scalar Value)
     : Angle.AffineUnit<ArcSecond>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<ArcSecond, Radian, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "\"";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -55,6 +65,8 @@ public partial record ArcSecond(Scalar Value)
 public partial record Turn(Scalar Value)
     : Angle.AffineUnit<Turn>(Value)
     , ILinearUnit<Scalar>
+    , IUnit<Turn, Radian, Scalar>
+    , IUnit
 {
     public static string UnitSymbol { get; } = "turns";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
