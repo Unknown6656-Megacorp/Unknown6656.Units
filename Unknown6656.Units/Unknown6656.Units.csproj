@@ -10,10 +10,10 @@
     </PropertyGroup>
     <!--<Target Name="BuildOthers" BeforeTargets="DispatchToInnerBuilds" Condition="'$(Scalar)' == ''">-->
     <Target Name="BuildOthers" BeforeTargets="CoreBuild" Condition="'$(Scalar)' == ''">
-        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F16" />
-        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F32" />
-        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F64" />
-        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=D128" />
+        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F16"/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F32"/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=F64"/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=D128"/>
     </Target>
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>

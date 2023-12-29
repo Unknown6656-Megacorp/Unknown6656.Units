@@ -6,8 +6,6 @@
 [KnownBaseUnit<Volume, CubicMeter, Scalar>]
 public partial record CubicMeter(Scalar Value)
     : BaseUnit<Volume, CubicMeter, Scalar>(Value)
-    , IBaseUnit<CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "m³";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -17,8 +15,6 @@ public partial record CubicMeter(Scalar Value)
 public partial record Liter(Scalar Value)
     : Volume.AffineUnit<Liter>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Liter, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "L";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -29,8 +25,6 @@ public partial record Liter(Scalar Value)
 public partial record Gallon(Scalar Value)
     : Volume.AffineUnit<Gallon>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Gallon, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "imp gal";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -41,8 +35,6 @@ public partial record Gallon(Scalar Value)
 public partial record USGallon(Scalar Value)
     : Volume.AffineUnit<USGallon>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<USGallon, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "US gal";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -53,8 +45,6 @@ public partial record USGallon(Scalar Value)
 public partial record USCup(Scalar Value)
     : Volume.AffineUnit<USCup>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<USCup, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "US cups";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -65,8 +55,6 @@ public partial record USCup(Scalar Value)
 public partial record MetricCups(Scalar Value)
     : Volume.AffineUnit<MetricCups>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<MetricCups, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "cups";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -77,8 +65,6 @@ public partial record MetricCups(Scalar Value)
 public partial record Pint(Scalar Value)
     : Volume.AffineUnit<Pint>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Pint, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "pt";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -89,8 +75,6 @@ public partial record Pint(Scalar Value)
 public partial record Ge(Scalar Value)
     : Volume.AffineUnit<Ge>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Ge, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "ge";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
@@ -101,8 +85,6 @@ public partial record Ge(Scalar Value)
 public partial record Gō(Scalar Value)
     : Volume.AffineUnit<Gō>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Gō, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "gō";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -113,8 +95,6 @@ public partial record Gō(Scalar Value)
 public partial record USFluidOunce(Scalar Value)
     : Volume.AffineUnit<USFluidOunce>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<USFluidOunce, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "fl oz";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -125,8 +105,6 @@ public partial record USFluidOunce(Scalar Value)
 public partial record FluidOunce(Scalar Value)
     : Volume.AffineUnit<FluidOunce>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<FluidOunce, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "fl oz";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -137,8 +115,6 @@ public partial record FluidOunce(Scalar Value)
 public partial record Barrel(Scalar Value)
     : Volume.AffineUnit<Barrel>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Barrel, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "bbl";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -149,8 +125,6 @@ public partial record Barrel(Scalar Value)
 public partial record Quart(Scalar Value)
     : Volume.AffineUnit<Quart>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Quart, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "qt";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -161,8 +135,6 @@ public partial record Quart(Scalar Value)
 public partial record CubicFoot(Scalar Value)
     : Volume.AffineUnit<CubicFoot>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<CubicFoot, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "ft³";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -173,8 +145,6 @@ public partial record CubicFoot(Scalar Value)
 public partial record CubicInch(Scalar Value)
     : Volume.AffineUnit<CubicInch>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<CubicInch, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "in³";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -185,8 +155,6 @@ public partial record CubicInch(Scalar Value)
 public partial record Teaspoon(Scalar Value)
     : Volume.AffineUnit<Teaspoon>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Teaspoon, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "tsp";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -197,8 +165,6 @@ public partial record Teaspoon(Scalar Value)
 public partial record Tablespoon(Scalar Value)
     : Volume.AffineUnit<Tablespoon>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Tablespoon, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "tbsp";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -209,8 +175,6 @@ public partial record Tablespoon(Scalar Value)
 public partial record Drop(Scalar Value)
     : Volume.AffineUnit<Drop>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Drop, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "gtt";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -221,8 +185,6 @@ public partial record Drop(Scalar Value)
 public partial record Peck(Scalar Value)
     : Volume.AffineUnit<Peck>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Peck, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "pk";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -233,8 +195,6 @@ public partial record Peck(Scalar Value)
 public partial record USPeck(Scalar Value)
     : Volume.AffineUnit<USPeck>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<USPeck, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "pk";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -245,8 +205,6 @@ public partial record USPeck(Scalar Value)
 public partial record Bushel(Scalar Value)
     : Volume.AffineUnit<Bushel>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Bushel, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "bsh";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -257,8 +215,6 @@ public partial record Bushel(Scalar Value)
 public partial record USBushel(Scalar Value)
     : Volume.AffineUnit<USBushel>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<USBushel, CubicMeter, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "US bsh";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;

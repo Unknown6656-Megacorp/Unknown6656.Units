@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
@@ -16,11 +16,11 @@ namespace Unknown6656.Units.Internals;
 public sealed class QuantityDependencyGenerator
     : IIncrementalGenerator
 {
-    public const string Identifier_DisableEmittingIUnitInterfaces = "Unknown6656.Units.Generator.DisableEmittingIUnitInterfaces";
-    public const string Identifier_MultiplicativeQuantityRelationship = "Unknown6656.Units.Generator.MultiplicativeQuantityRelationship";
-    public const string Identifier_InverseQuantityRelationship = "Unknown6656.Units.Generator.InverseQuantityRelationship";
-    public const string Identifier_KnownBaseUnit = "Unknown6656.Units.Generator.KnownBaseUnit";
-    public const string Identifier_KnownUnit = "Unknown6656.Units.Generator.KnownUnit";
+    public const string Identifier_DisableEmittingIUnitInterfaces = "Unknown6656.Units.DisableEmittingIUnitInterfaces";
+    public const string Identifier_MultiplicativeQuantityRelationship = "Unknown6656.Units.MultiplicativeQuantityRelationship";
+    public const string Identifier_InverseQuantityRelationship = "Unknown6656.Units.InverseQuantityRelationship";
+    public const string Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
+    public const string Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
     public const string Identifier_ExtensionClass = "Unknown6656.Units.Unit";
 
 

@@ -7,8 +7,6 @@
 [KnownBaseUnit<Frequency, Hertz, Scalar>]
 public partial record Hertz(Scalar Value)
     : BaseUnit<Frequency, Hertz, Scalar>(Value)
-    , IBaseUnit<Hertz, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "Hz";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
@@ -18,8 +16,6 @@ public partial record Hertz(Scalar Value)
 public partial record Cesium133Frequency(Scalar Value)
     : Frequency.AffineUnit<Cesium133Frequency>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Cesium133Frequency, Hertz, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "Δνcₛ";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
