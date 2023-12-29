@@ -4,6 +4,9 @@ using System;
 namespace Unknown6656.Units;
 
 
+[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false, Inherited = true)]
+public sealed class DisableEmittingIUnitInterfaces : Attribute;
+
 /// <summary>
 /// Defines the following relationship between two quantities:
 /// <code>
@@ -106,7 +109,23 @@ public class InverseQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBa
 
 
 
-
+/// <summary>
+/// <b>
+///     DO NOT FORGET TO REMOVE THE FOLLOWING TYPE ANNOTATIONS WHEN USING THIS ATTRIBUTE!
+/// </b>
+/// <code>
+///     [<see cref="KnownUnit{TQuantity, TUnit, TBaseUnit, TScalar}"/>]
+///     <see langword="public record"/> ....
+///         : ....
+///         , <see cref="IUnit{TUnit, TBaseUnit, TScalar}"/> // &lt;-- this one<br/>
+///         , <see cref="IUnit"/>                            // &lt;-- and this one
+/// </code>
+/// <para/>
+/// Alternatively, use the following attribute on the assembly:
+/// <code>
+///     [<see langword="assembly"/>: <see cref="DisableEmittingIUnitInterfaces"/>]
+/// </code>
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>
     : Attribute
@@ -119,6 +138,23 @@ public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>
                     , IUnit
     where TScalar : INumber<TScalar>;
 
+/// <summary>
+/// <b>
+///     DO NOT FORGET TO REMOVE THE FOLLOWING TYPE ANNOTATIONS WHEN USING THIS ATTRIBUTE!
+/// </b>
+/// <code>
+///     [<see cref="KnownBaseUnit{TQuantity, TBaseUnit, TScalar}"/>]
+///     <see langword="public record"/> ....
+///         : ....
+///         , <see cref="IBaseUnit{TBaseUnit, TScalar}"/> // &lt;-- this one<br/>
+///         , <see cref="IUnit"/>                         // &lt;-- and this one
+/// </code>
+/// <para/>
+/// Alternatively, use the following attribute on the assembly:
+/// <code>
+///     [<see langword="assembly"/>: <see cref="DisableEmittingIUnitInterfaces"/>]
+/// </code>
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 public class KnownBaseUnit<TQuantity, TBaseUnit, TScalar>
     : KnownUnit<TQuantity, TBaseUnit, TBaseUnit, TScalar>

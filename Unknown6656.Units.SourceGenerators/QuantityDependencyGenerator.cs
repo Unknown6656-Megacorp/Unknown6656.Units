@@ -16,11 +16,13 @@ namespace Unknown6656.Units.Internals;
 public sealed class QuantityDependencyGenerator
     : IIncrementalGenerator
 {
-    public const string Identifier_MultiplicativeQuantityRelationship = "Unknown6656.Units.MultiplicativeQuantityRelationship";
-    public const string Identifier_InverseQuantityRelationship = "Unknown6656.Units.InverseQuantityRelationship";
-    public const string Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
-    public const string Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
+    public const string Identifier_DisableEmittingIUnitInterfaces = "Unknown6656.Units.Generator.DisableEmittingIUnitInterfaces";
+    public const string Identifier_MultiplicativeQuantityRelationship = "Unknown6656.Units.Generator.MultiplicativeQuantityRelationship";
+    public const string Identifier_InverseQuantityRelationship = "Unknown6656.Units.Generator.InverseQuantityRelationship";
+    public const string Identifier_KnownBaseUnit = "Unknown6656.Units.Generator.KnownBaseUnit";
+    public const string Identifier_KnownUnit = "Unknown6656.Units.Generator.KnownUnit";
     public const string Identifier_ExtensionClass = "Unknown6656.Units.Unit";
+
 
     #region DIAGNOSTIC ERRORS
 
@@ -68,6 +70,12 @@ public sealed class QuantityDependencyGenerator
         IncrementalValuesProvider<GenericAttributeClassUsage> quantity_inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseQuantityRelationship);
         IncrementalValuesProvider<GenericAttributeClassUsage> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
         IncrementalValuesProvider<GenericAttributeClassUsage> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
+        IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
+                                                                                   .CreateSyntaxProvider(
+                                                                                       predicate: static (s, _) => s is AttributeListSyntax { Attributes.Count: > 0 },
+                                                                                       transform: (ctx, _) => HasDisableEmittingIUnitInterfacesDefined(ctx)
+                                                                                   )
+                                                                                   .Where(static x => x);
 
         // which idiot decided to name this stuff "left" and "right"? and not to provide an extension method for combining 3 or more IncrementalValueProvider<>?
         var combined = context.CompilationProvider.Combine(quantity_multiplicative_dependencies.Collect())
@@ -76,7 +84,9 @@ public sealed class QuantityDependencyGenerator
                                                   .Combine(known_base_units.Collect())
                                                   .Select(static (t, _) => (t.Left.compilation, t.Left.mul_dependencies, t.Left.inv_dependencies, base_units: t.Right))
                                                   .Combine(known_units.Collect())
-                                                  .Select(static (t, _) => (t.Left.compilation, t.Left.mul_dependencies, t.Left.inv_dependencies, t.Left.base_units, units: t.Right));
+                                                  .Select(static (t, _) => (t.Left.compilation, t.Left.mul_dependencies, t.Left.inv_dependencies, t.Left.base_units, units: t.Right))
+                                                  .Combine(disable_emitting_iunit_interfaces.Collect())
+                                                  .Select(static (t, _) => (t.Left.compilation, t.Left.mul_dependencies, t.Left.inv_dependencies, t.Left.base_units, t.Left.units, disable: t.Right.Contains(true)));
 
         context.RegisterSourceOutput(combined, (spc, source) => Execute(
             context,
@@ -85,7 +95,8 @@ public sealed class QuantityDependencyGenerator
             source.mul_dependencies,
             source.inv_dependencies,
             source.base_units,
-            source.units
+            source.units,
+            source.disable
         ));
     }
 
@@ -99,6 +110,21 @@ public sealed class QuantityDependencyGenerator
     private static string GetNamespace(string identifier) => identifier.LastIndexOf('.') is int i and >= 0 ? identifier.Substring(0, i) : "";
 
     private static string GetTypeName(string identifier) => identifier.LastIndexOf('.') is int i and >= 0 ? identifier.Substring(i + 1) : identifier;
+
+    private static bool HasDisableEmittingIUnitInterfacesDefined(GeneratorSyntaxContext context)
+    {
+        if (context.Node is AttributeListSyntax { Target.Identifier: { } identifier, Attributes: { } attributes } && identifier.IsKind(SyntaxKind.AssemblyKeyword))
+            foreach (AttributeSyntax attribute in attributes)
+                if (context.SemanticModel.GetSymbolInfo(attribute).Symbol is ISymbol { ContainingType: ITypeSymbol attr_type })
+                {
+                    string attr_name = attr_type.ToDisplayString();
+
+                    if (attr_name == Identifier_DisableEmittingIUnitInterfaces)
+                        return true;
+                }
+
+        return false;
+    }
 
     private static GenericAttributeClassUsage? GetGenericAttributeClassUsage(GeneratorSyntaxContext context, string attribute_name)
     {
@@ -129,7 +155,8 @@ public sealed class QuantityDependencyGenerator
         ImmutableArray<GenericAttributeClassUsage> quantity_multiplicative_dependencies,
         ImmutableArray<GenericAttributeClassUsage> quantity_inverse_dependencies,
         ImmutableArray<GenericAttributeClassUsage> known_base_units,
-        ImmutableArray<GenericAttributeClassUsage> known_units
+        ImmutableArray<GenericAttributeClassUsage> known_units,
+        bool disable_emitting_iunit_interfaces
     )
     {
         CancellationToken ct = production_context.CancellationToken;
@@ -195,12 +222,13 @@ public sealed class QuantityDependencyGenerator
 
             foreach (string unit in units)
             {
+                string interfaces = disable_emitting_iunit_interfaces ? "" :
+                    $": IUnit, {(unit == kvp.Value.base_unit ? $"IBaseUnit<{unit}, {unit_scalar_mapper[unit]}>" : $"IUnit<{unit}, {kvp.Value.base_unit}, {unit_scalar_mapper[unit]}>")}";
+
                 sb.AppendLine($$""""
                 namespace {{GetNamespace(unit)}}
                 {
-                    partial record {{GetTypeName(unit)}}
-                        : IUnit
-                        , {{(unit == kvp.Value.base_unit ? $"IBaseUnit<{unit}, {unit_scalar_mapper[unit]}>" : $"IUnit<{unit}, {kvp.Value.base_unit}, {unit_scalar_mapper[unit]}>")}}
+                    partial record {{GetTypeName(unit)}} {{interfaces}}
                     {
                 """");
 
