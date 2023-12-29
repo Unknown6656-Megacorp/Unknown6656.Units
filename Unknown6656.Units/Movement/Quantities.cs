@@ -1,6 +1,7 @@
 ﻿using Unknown6656.Units.Euclidean;
-using Unknown6656.Units.Matter;
 using Unknown6656.Units.Temporal;
+using Unknown6656.Units.Matter;
+using Unknown6656.Units.Energy;
 
 namespace Unknown6656.Units.Movement;
 
@@ -26,6 +27,6 @@ public partial record Impulse(NewtonSecond value) : Quantity<Impulse, NewtonSeco
 [MultiplicativeQuantityRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]
 public partial record Force(Newton value) : Quantity<Force, Newton, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<Energy, Angle, Torque, Joule, Radian, NewtonMeter, Scalar>]
+[MultiplicativeQuantityRelationship<KineticEnergy, Angle, Torque, Joule, Radian, NewtonMeter, Scalar>]
 [MultiplicativeQuantityRelationship<Force, Length, Torque, Newton, Meter, NewtonMeter, Scalar>]
 public partial record Torque(NewtonMeter value) : Quantity<Torque, NewtonMeter, Scalar>(value);

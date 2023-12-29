@@ -24,7 +24,7 @@ public partial record SlugFootPerSecond(Scalar Value)
     : Impulse.AffineUnit<SlugFootPerSecond>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "slug·ft/s";
+    public static string UnitSymbol { get; } = "sl·ft/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.224735720691;
 }

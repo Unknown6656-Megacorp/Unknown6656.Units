@@ -24,7 +24,5 @@ public partial record PoundForce(Scalar Value)
 
 // TODO:
 // - force
-//      - N, kN, ...
-//      - lbf
 //      - from N, kN, lbf, ...
 
