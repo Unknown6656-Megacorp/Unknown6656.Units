@@ -15,6 +15,21 @@ public partial record Acceleration(MeterPerSecondSquared value) : Quantity<Accel
 [MultiplicativeQuantityRelationship<VolumetricFlowRate, Time, Volume, CubicMeterPerSecond, Second, CubicMeter, Scalar>]
 public partial record VolumetricFlowRate(CubicMeterPerSecond value) : Quantity<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(value);
 
+
+// Pa*s = kg / (m*s)
+// Pa*s = N*s / m^2
+// Pa*s = J*s / m^3     [todo: verify]
+[MultiplicativeQuantityRelationship<Pressure, Time, DynamicViscosity, Pascal, Second, PascalSecond, Scalar>]
+[MultiplicativeQuantityRelationship<VolumetricFlowRate, DynamicViscosity, Torque, CubicMeterPerSecond, PascalSecond, NewtonMeter, Scalar>]
+public partial record DynamicViscosity(PascalSecond value) : Quantity<DynamicViscosity, PascalSecond, Scalar>(value);
+
+// TODO : kinematic viscosity
+// = m^2/s
+// = Nm*s / kg
+// = J*s / kg
+public partial record KinematicViscosity(SquareMeterPerSecond value) : Quantity<KinematicViscosity, SquareMeterPerSecond, Scalar>(value);
+
+
 // TODO : mass flow rate
 
 
