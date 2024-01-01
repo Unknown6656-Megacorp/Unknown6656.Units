@@ -9,7 +9,8 @@ namespace Unknown6656.Units.Energy;
 public partial record Temperature(Kelvin value)
     : Quantity<Temperature, Kelvin, Scalar>(value)
 {
-
+    public static Kelvin AbsoluteZero { get; } = new((Scalar)0);
+    public static Kelvin AbsoluteHot { get; } = new((Scalar)1.416808338416e32);
 }
 
 // TODO : implement shit like  E = 1/2 * m * v^2
