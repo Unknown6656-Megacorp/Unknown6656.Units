@@ -209,3 +209,13 @@ public partial record Erg(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e7;
 }
+
+[KnownUnit<KineticEnergy, AtomicUnitOfAction, Joule, Scalar>]
+public partial record AtomicUnitOfAction(Scalar Value)
+    : KineticEnergy.AffineUnit<AtomicUnitOfAction>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "au";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static Scalar ScalingFactor { get; } = (Scalar)9.48252280015712160978948344222556782484430076863054012601590e33;
+}
