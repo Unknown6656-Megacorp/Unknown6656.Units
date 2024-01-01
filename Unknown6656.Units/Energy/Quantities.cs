@@ -1,3 +1,4 @@
+﻿using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Matter;
 using Unknown6656.Units.Movement;
@@ -17,9 +18,11 @@ public partial record Temperature(Kelvin value)
 // TODO : implement gravitational energy    E = - g1 * g2 * m1 * m2 / r     or    E = m * g * h
 [MultiplicativeQuantityRelationship<Force, Length, KineticEnergy, Newton, Meter, Joule, Scalar>]
 [MultiplicativeQuantityRelationship<Pressure, Volume, KineticEnergy, Pascal, CubicMeter, Joule, Scalar>]
+[MultiplicativeQuantityRelationship<ElectricalPotential, ElectricalCharge, KineticEnergy, Volt, Coulomb, Joule, Scalar>]
 public partial record KineticEnergy(Joule value) : Quantity<KineticEnergy, Joule, Scalar>(value);
 
 // TODO : W = kg * (m/s)^2 / s
 // TODO : W = A^2 * Ω
+[MultiplicativeQuantityRelationship<ElectricalPotential, ElectricalCurrent, Power, Volt, Ampere, Watt, Scalar>]
 [MultiplicativeQuantityRelationship<Power, Time, KineticEnergy, Watt, Second, Joule, Scalar>]
 public partial record Power(Watt value) : Quantity<Power, Watt, Scalar>(value);

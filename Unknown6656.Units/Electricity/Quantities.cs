@@ -1,4 +1,16 @@
-﻿namespace Unknown6656.Units;
+﻿using Unknown6656.Units.Energy;
+
+namespace Unknown6656.Units.Electricity;
+
+
+public partial record ElectricalCurrent(Ampere value) : Quantity<ElectricalCurrent, Ampere, Scalar>(value);
+public partial record ElectricalCharge(Coulomb value) : Quantity<ElectricalCharge, Coulomb, Scalar>(value);
+public partial record ElectricalPotential(Volt value) : Quantity<ElectricalPotential, Volt, Scalar>(value);
+public partial record ElectricalResistance(Ohm value) : Quantity<ElectricalResistance, Ohm, Scalar>(value);
+public partial record Electrical(Ampere value) : Quantity<Electrical, Ampere, Scalar>(value);
+public partial record Electrical(Ampere value) : Quantity<Electrical, Ampere, Scalar>(value);
+public partial record Electrical(Ampere value) : Quantity<Electrical, Ampere, Scalar>(value);
+
 
 // TODO:
 // - electrical current

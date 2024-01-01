@@ -209,4 +209,3 @@ public partial record Erg(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e7;
 }
-

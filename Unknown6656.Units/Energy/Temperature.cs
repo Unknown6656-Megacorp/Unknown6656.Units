@@ -116,8 +116,3 @@ public partial record Wedgwood(Scalar Value)
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; } = (Scalar)537.7777777777778;
 }
-
-
-// TODO:
-// - temperature
-//      - from °C, °F, K, °R, ...
