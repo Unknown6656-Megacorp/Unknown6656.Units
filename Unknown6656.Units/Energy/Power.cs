@@ -39,4 +39,43 @@ public partial record UKHorsepower(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.001341022089595027;
 }
 
+[KnownUnit<Power, Lusec, Watt, Scalar>]
+public partial record Lusec(Scalar Value)
+    : Power.AffineUnit<Lusec>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "lusec";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)7501.8754688672168042010502625656414103525881470367591897974493623;
+}
+
+[KnownUnit<Power, Poncelet, Watt, Scalar>]
+public partial record Poncelet(Scalar Value)
+    : Power.AffineUnit<Poncelet>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "p";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.001359621617303904;
+}
+
+[KnownUnit<Power, TonAirConditioningEquivalent, Watt, Scalar>]
+public partial record TonAirConditioningEquivalent(Scalar Value)
+    : Power.AffineUnit<TonAirConditioningEquivalent>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "t AC";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.00028434513626109;
+}
+
+[KnownUnit<Power, TonRefrigerationEquivalent, Watt, Scalar>]
+public partial record TonRefrigerationEquivalent(Scalar Value)
+    : Power.AffineUnit<TonRefrigerationEquivalent>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "t ice";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.00028434513626109;
+}
 
