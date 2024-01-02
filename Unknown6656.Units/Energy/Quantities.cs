@@ -21,8 +21,13 @@ public partial record Temperature(Kelvin value)
 [MultiplicativeQuantityRelationship<ElectricalPotential, ElectricalCharge, KineticEnergy, Volt, Coulomb, Joule, Scalar>]
 public partial record KineticEnergy(Joule value) : Quantity<KineticEnergy, Joule, Scalar>(value);
 
+public partial record SpecificEnergy(JoulePerKilogram value) : Quantity<SpecificEnergy, JoulePerKilogram, Scalar>(value);
+
 // TODO : W = kg * (m/s)^2 / s
 // TODO : W = A^2 * Ω
 [MultiplicativeQuantityRelationship<ElectricalPotential, ElectricalCurrent, Power, Volt, Ampere, Watt, Scalar>]
 [MultiplicativeQuantityRelationship<Power, Time, KineticEnergy, Watt, Second, Joule, Scalar>]
 public partial record Power(Watt value) : Quantity<Power, Watt, Scalar>(value);
+
+
+// TODO : specific heat capacity https://en.wikipedia.org/wiki/Specific_heat_capacity
