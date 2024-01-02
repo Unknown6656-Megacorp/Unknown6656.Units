@@ -21,8 +21,27 @@ public partial record PoundForce(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.2248089430997105;
 }
 
+[KnownUnit<Force, Dyne, Newton, Scalar>]
+public partial record Dyne(Scalar Value)
+    : Force.AffineUnit<Dyne>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Dyne, Newton, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "dyn";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e5;
+}
 
-// TODO:
-// - force
-//      - from N, kN, lbf, ...
+[KnownUnit<Force, Sthène, Newton, Scalar>]
+public partial record Sthène(Scalar Value)
+    : Force.AffineUnit<Sthène>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Sthène, Newton, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "sn";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
+}
 

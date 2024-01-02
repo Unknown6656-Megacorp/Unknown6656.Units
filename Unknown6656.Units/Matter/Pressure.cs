@@ -131,9 +131,14 @@ public partial record AtmosphereTechnical(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)9.80665e-6;
 }
 
-
-
-// TODO:
-// - pressure
-//      - from Pa, atm, bar, psi, ...
-
+[KnownUnit<Pressure, Barye, Pascal, Scalar>]
+public partial record Barye(Scalar Value)
+    : Pressure.AffineUnit<Barye>(Value)
+    , ILinearUnit<Scalar>
+    , IUnit<Barye, Pascal, Scalar>
+    , IUnit
+{
+    public static string UnitSymbol { get; } = "Ba";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static Scalar ScalingFactor { get; } = (Scalar)10d;
+}
