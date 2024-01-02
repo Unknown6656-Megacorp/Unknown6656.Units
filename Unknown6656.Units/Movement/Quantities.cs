@@ -1,4 +1,4 @@
-﻿using Unknown6656.Units.Euclidean;
+using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 using Unknown6656.Units.Energy;
@@ -29,15 +29,13 @@ public partial record DynamicViscosity(PascalSecond value) : Quantity<DynamicVis
 // = J*s / kg
 public partial record KinematicViscosity(SquareMeterPerSecond value) : Quantity<KinematicViscosity, SquareMeterPerSecond, Scalar>(value);
 
-
-// TODO : mass flow rate
-
+[MultiplicativeQuantityRelationship<MassFlowRate, Time, Mass, KilogramPerSecond, Second, Kilogram, Scalar>]
+public partial record MassFlowRate(KilogramPerSecond value) : Quantity<MassFlowRate, KilogramPerSecond, Scalar>(value);
 
 [MultiplicativeQuantityRelationship<Force, Time, Impulse, Newton, Second, NewtonSecond, Scalar>]
 public partial record Impulse(NewtonSecond value) : Quantity<Impulse, NewtonSecond, Scalar>(value);
 
 // TODO : specific impulse
-
 
 [MultiplicativeQuantityRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]
 public partial record Force(Newton value) : Quantity<Force, Newton, Scalar>(value);
