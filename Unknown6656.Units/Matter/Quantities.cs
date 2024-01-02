@@ -3,6 +3,7 @@ using Unknown6656.Units.Movement;
 
 namespace Unknown6656.Units.Matter;
 
+
 public partial record Amount(Mol value) : Quantity<Amount, Mol, Scalar>(value);
 
 public partial record Mass(Kilogram value)
@@ -22,7 +23,6 @@ public partial record Mass(Kilogram value)
 
     // TODO : atomic masses for entire perdiodic system
 }
-
 
 [MultiplicativeQuantityRelationship<MolarMass, Amount, Mass, GramPerMol, Mol, Kilogram, Scalar>((Scalar)1e-3)]
 public partial record MolarMass(GramPerMol value) : Quantity<MolarMass, GramPerMol, Scalar>(value);

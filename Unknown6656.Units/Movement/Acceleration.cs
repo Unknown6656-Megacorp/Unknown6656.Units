@@ -25,7 +25,7 @@ public partial record Gal(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Gal";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-2;
 }
 
