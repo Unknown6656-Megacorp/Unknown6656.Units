@@ -15,18 +15,15 @@ public partial record Acceleration(MeterPerSecondSquared value) : Quantity<Accel
 [MultiplicativeQuantityRelationship<VolumetricFlowRate, Time, Volume, CubicMeterPerSecond, Second, CubicMeter, Scalar>]
 public partial record VolumetricFlowRate(CubicMeterPerSecond value) : Quantity<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(value);
 
-
-// Pa*s = kg / (m*s)
-// Pa*s = N*s / m^2
 // Pa*s = J*s / m^3     [todo: verify]
 [MultiplicativeQuantityRelationship<Pressure, Time, DynamicViscosity, Pascal, Second, PascalSecond, Scalar>]
 [MultiplicativeQuantityRelationship<VolumetricFlowRate, DynamicViscosity, Torque, CubicMeterPerSecond, PascalSecond, NewtonMeter, Scalar>]
+[MultiplicativeQuantityRelationship<MassFlowRate, Length, DynamicViscosity, KilogramPerSecond, Meter, PascalSecond, Scalar>]
 public partial record DynamicViscosity(PascalSecond value) : Quantity<DynamicViscosity, PascalSecond, Scalar>(value);
 
-// TODO : kinematic viscosity
-// = m^2/s
-// = Nm*s / kg
-// = J*s / kg
+// TODO: = m^2/s
+// TODO: = J*s / kg
+[MultiplicativeQuantityRelationship<KinematicViscosity, MassFlowRate, Torque, SquareMeterPerSecond, KilogramPerSecond, NewtonMeter, Scalar>]
 public partial record KinematicViscosity(SquareMeterPerSecond value) : Quantity<KinematicViscosity, SquareMeterPerSecond, Scalar>(value);
 
 [MultiplicativeQuantityRelationship<MassFlowRate, Time, Mass, KilogramPerSecond, Second, Kilogram, Scalar>]
@@ -43,3 +40,11 @@ public partial record Force(Newton value) : Quantity<Force, Newton, Scalar>(valu
 [MultiplicativeQuantityRelationship<KineticEnergy, Angle, Torque, Joule, Radian, NewtonMeter, Scalar>]
 [MultiplicativeQuantityRelationship<Force, Length, Torque, Newton, Meter, NewtonMeter, Scalar>]
 public partial record Torque(NewtonMeter value) : Quantity<Torque, NewtonMeter, Scalar>(value);
+
+
+// TODO : implement all viscosity formulas from https://en.wikipedia.org/wiki/Viscosity
+// TODO : surface tension https://en.wikipedia.org/wiki/Surface_tension
+// TODO : drag force https://en.wikipedia.org/wiki/Drag_(physics)
+// TODO : lift force https://en.wikipedia.org/wiki/Lift_(force)
+// TODO : buoyancy https://en.wikipedia.org/wiki/Buoyancy
+// TODO : friction https://en.wikipedia.org/wiki/Friction
