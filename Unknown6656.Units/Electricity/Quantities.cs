@@ -1,31 +1,58 @@
-﻿using Unknown6656.Units.Energy;
+﻿using Unknown6656.Units.Temporal;
+using Unknown6656.Units.Energy;
 
 namespace Unknown6656.Units.Electricity;
 
 
-public partial record ElectricalCurrent(Ampere value) : Quantity<ElectricalCurrent, Ampere, Scalar>(value);
-public partial record ElectricalCharge(Coulomb value) : Quantity<ElectricalCharge, Coulomb, Scalar>(value);
-public partial record ElectricalPotential(Volt value) : Quantity<ElectricalPotential, Volt, Scalar>(value);
-public partial record ElectricalResistance(Ohm value) : Quantity<ElectricalResistance, Ohm, Scalar>(value);
-public partial record Electrical(Ampere value) : Quantity<Electrical, Ampere, Scalar>(value);
-public partial record Electrical(Ampere value) : Quantity<Electrical, Ampere, Scalar>(value);
-public partial record Electrical(Ampere value) : Quantity<Electrical, Ampere, Scalar>(value);
+public partial record Current(Ampere value) : Quantity<Current, Ampere, Scalar>(value);
+
+[MultiplicativeQuantityRelationship<Current, Time, Charge, Ampere, Second, Coulomb, Scalar>]
+public partial record Charge(Coulomb value) : Quantity<Charge, Coulomb, Scalar>(value);
+
+// V = kg * m^2 / s^3 / A
+// V = kg * m/s * m/s^2 / A
+
+// TODO : W = A^2 * Ω
+[MultiplicativeQuantityRelationship<Potential, Current, Power, Volt, Ampere, Watt, Scalar>]
+[MultiplicativeQuantityRelationship<Potential, Charge, KineticEnergy, Volt, Coulomb, Joule, Scalar>]
+public partial record Potential(Volt value) : Quantity<Potential, Volt, Scalar>(value);
+
+// Ω = kg * m^2 / s^3 / A^2
+// J = Ω * A * C
+// J = Ω * A^2 * s
+// J * Hz = Ω * A^2
+[MultiplicativeQuantityRelationship<Resistance, Current, Potential, Ohm, Ampere, Volt, Scalar>]
+public partial record Resistance(Ohm value) : Quantity<Resistance, Ohm, Scalar>(value);
+
+// F = s^4 * A^2 / kg / m^2
+// F = s^2 * C^2 / kg / m^2
+// F = A * s / V
+// F = W * s / V^2
+// F = J / V^2
+// F = siemens / hertz
+// F = s^2 / henry
+[MultiplicativeQuantityRelationship<Capacitance, Resistance, Time, Farad, Ohm, Second, Scalar>]
+[MultiplicativeQuantityRelationship<Capacitance, Potential, Charge, Farad, Volt, Coulomb, Scalar>]
+public partial record Capacitance(Farad value) : Quantity<Capacitance, Farad, Scalar>(value);
+
+[InverseQuantityRelationship<Capacitance, Elastance, Farad, InverseFarad, Scalar>]
+[MultiplicativeQuantityRelationship<Elastance, Time, Resistance, InverseFarad, Second, Ohm, Scalar>]
+[MultiplicativeQuantityRelationship<Elastance, Charge, Potential, InverseFarad, Coulomb, Volt, Scalar>]
+[MultiplicativeQuantityRelationship<Resistance, Frequency, Elastance, Ohm, Hertz, InverseFarad, Scalar>]
+public partial record Elastance(InverseFarad value) : Quantity<Elastance, InverseFarad, Scalar>(value);
+
+// F^-1 * s * S = 1
+[InverseQuantityRelationship<Resistance, Conductance, Ohm, Siemens, Scalar>]
+[MultiplicativeQuantityRelationship<Potential, Conductance, Current, Volt, Siemens, Ampere, Scalar>]
+[MultiplicativeQuantityRelationship<Time, Conductance, Capacitance, Second, Siemens, Farad, Scalar>]
+[MultiplicativeQuantityRelationship<Elastance, Conductance, Frequency, InverseFarad, Siemens, Hertz, Scalar>]
+public partial record Conductance(Siemens value) : Quantity<Conductance, Siemens, Scalar>(value);
+
+
+
 
 
 // TODO:
-// - electrical current
-//      - A
-// - electrical charge
-//      - C
-//      - Elementary charge e
-// - electrical potential
-//      - V
-// - electrical resistance
-//      - Ω
-// - electrical conductance
-//      - S
-// - electrical capacitance
-//      - F
 // - electrical inductance
 //      - H
 // - electrostatic units
