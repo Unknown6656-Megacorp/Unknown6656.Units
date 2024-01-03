@@ -1,4 +1,4 @@
-using Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 using Unknown6656.Units.Energy;
@@ -12,8 +12,15 @@ public partial record Speed(MeterPerSecond value) : Quantity<Speed, MeterPerSeco
 [MultiplicativeQuantityRelationship<Acceleration, Time, Speed, MeterPerSecondSquared, Second, MeterPerSecond, Scalar>]
 public partial record Acceleration(MeterPerSecondSquared value) : Quantity<Acceleration, MeterPerSecondSquared, Scalar>(value);
 
+[MultiplicativeQuantityRelationship<Jerk, Time, Acceleration, MeterPerSecondCubed, Second, MeterPerSecondSquared, Scalar>]
+public partial record Jerk(MeterPerSecondCubed value) : Quantity<Jerk, MeterPerSecondCubed, Scalar>(value);
+
 [MultiplicativeQuantityRelationship<VolumetricFlowRate, Time, Volume, CubicMeterPerSecond, Second, CubicMeter, Scalar>]
 public partial record VolumetricFlowRate(CubicMeterPerSecond value) : Quantity<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(value);
+
+// TODO : mass flux https://en.wikipedia.org/wiki/Mass_flux
+// kg / m^2 / s
+
 
 // Pa*s = J*s / m^3     [todo: verify]
 [MultiplicativeQuantityRelationship<Pressure, Time, DynamicViscosity, Pascal, Second, PascalSecond, Scalar>]
@@ -21,8 +28,9 @@ public partial record VolumetricFlowRate(CubicMeterPerSecond value) : Quantity<V
 [MultiplicativeQuantityRelationship<MassFlowRate, Length, DynamicViscosity, KilogramPerSecond, Meter, PascalSecond, Scalar>]
 public partial record DynamicViscosity(PascalSecond value) : Quantity<DynamicViscosity, PascalSecond, Scalar>(value);
 
-// TODO: = m^2/s
-// TODO: = J*s / kg
+// TODO: kvis = J*s / kg
+[MultiplicativeQuantityRelationship<KinematicViscosity, Time, Area, SquareMeterPerSecond, Second, SquareMeter, Scalar>]
+[MultiplicativeQuantityRelationship<SpecificEnergy, Time, KinematicViscosity, JoulePerKilogram, Second, SquareMeterPerSecond, Scalar>] // TODO : verify this.
 [MultiplicativeQuantityRelationship<KinematicViscosity, MassFlowRate, Torque, SquareMeterPerSecond, KilogramPerSecond, NewtonMeter, Scalar>]
 public partial record KinematicViscosity(SquareMeterPerSecond value) : Quantity<KinematicViscosity, SquareMeterPerSecond, Scalar>(value);
 

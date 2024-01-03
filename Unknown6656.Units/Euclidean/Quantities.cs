@@ -1,4 +1,7 @@
-﻿namespace Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Movement;
+using Unknown6656.Units.Temporal;
+
+namespace Unknown6656.Units.Euclidean;
 
 
 public partial record Angle(Radian value)
@@ -19,6 +22,9 @@ public partial record Area(SquareMeter value) : Quantity<Area, SquareMeter, Scal
 public partial record Volume(CubicMeter value) : Quantity<Volume, CubicMeter, Scalar>(value);
 
 [InverseQuantityRelationship<LinearWavenumber, Length, ReciprocalMeter, Meter, Scalar>]
+[MultiplicativeQuantityRelationship<LinearWavenumber, Area, Length, ReciprocalMeter, SquareMeter, Meter, Scalar>]
+[MultiplicativeQuantityRelationship<LinearWavenumber, Volume, Area, ReciprocalMeter, CubicMeter, SquareMeter, Scalar>]
+[MultiplicativeQuantityRelationship<LinearWavenumber, Speed, Frequency, ReciprocalMeter, MeterPerSecond, Hertz, Scalar>]
 public partial record LinearWavenumber(ReciprocalMeter value) : Quantity<LinearWavenumber, ReciprocalMeter, Scalar>(value);
 
 // TODO : angular wavenumber
