@@ -1,0 +1,16 @@
+﻿namespace Unknown6656.Units.Electricity;
+
+
+[KnownBaseUnit<Capacitance, Farad, Scalar>]
+public partial record Farad(Scalar Value)
+    : BaseUnit<Capacitance, Farad, Scalar>(Value)
+{
+    public static string UnitSymbol { get; } = "F";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+}
+
+
+
+
+
+
