@@ -42,6 +42,7 @@ public partial record Impulse(NewtonSecond value) : Quantity<Impulse, NewtonSeco
 
 // TODO : specific impulse
 
+[MultiplicativeQuantityRelationship<Force, Length, KineticEnergy, Newton, Meter, Joule, Scalar>]
 [MultiplicativeQuantityRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]
 public partial record Force(Newton value) : Quantity<Force, Newton, Scalar>(value);
 
