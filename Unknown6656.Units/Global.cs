@@ -9,3 +9,7 @@ global using Scalar = decimal;
 #else
 global using Scalar = double;
 #endif
+
+#if USE_DIACRITICS
+// TODO
+#endif

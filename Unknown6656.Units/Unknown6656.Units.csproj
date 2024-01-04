@@ -6,7 +6,11 @@
         <!--<Scalar>F32</Scalar>-->
         <Scalar>F64</Scalar>
         <!--<Scalar>D128</Scalar>-->
-        <DefineConstants>$(DefineConstants);$(Scalar)</DefineConstants>
+        <DefineConstants>
+            $(DefineConstants);
+            $(Scalar);
+            USE_DIACRITICS;
+        </DefineConstants>
     </PropertyGroup>
     <!--<Target Name="BuildOthers" BeforeTargets="DispatchToInnerBuilds" Condition="'$(Scalar)' == ''">-->
     <Target Name="BuildOthers" BeforeTargets="CoreBuild" Condition="'$(Scalar)' == ''">

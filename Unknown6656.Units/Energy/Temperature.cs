@@ -1,4 +1,9 @@
-﻿namespace Unknown6656.Units.Energy;
+﻿#if !USE_DIACRITICS
+global using Rømer = Unknown6656.Units.Energy.Romer;
+global using Réaumur = Unknown6656.Units.Energy.Reaumur;
+#endif
+
+namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<Temperature, Kelvin, Scalar>]
@@ -58,7 +63,11 @@ public partial record Rankine(Scalar Value)
 }
 
 [KnownUnit<Temperature, Rømer, Kelvin, Scalar>]
+#if USE_DIACRITICS
 public partial record Rømer(Scalar Value)
+#else
+public partial record Romer(Scalar Value)
+#endif
     : Temperature.AffineUnit<Rømer>(Value)
     , IAffineUnit<Scalar>
 {
@@ -70,7 +79,11 @@ public partial record Rømer(Scalar Value)
 }
 
 [KnownUnit<Temperature, Réaumur, Kelvin, Scalar>]
+#if USE_DIACRITICS
 public partial record Réaumur(Scalar Value)
+#else
+public partial record Reaumur(Scalar Value)
+#endif
     : Temperature.AffineUnit<Réaumur>(Value)
     , IAffineUnit<Scalar>
 {
@@ -117,9 +130,9 @@ public partial record Wedgwood(Scalar Value)
     public static Scalar PostScalingOffset { get; } = (Scalar)537.7777777777778;
 }
 
-[KnownUnit<Temperature, Newton, Kelvin, Scalar>]
-public partial record Newton(Scalar Value)
-    : Temperature.AffineUnit<Newton>(Value)
+[KnownUnit<Temperature, DegreesNewton, Kelvin, Scalar>]
+public partial record DegreesNewton(Scalar Value)
+    : Temperature.AffineUnit<DegreesNewton>(Value)
     , IAffineUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°N";
