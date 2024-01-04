@@ -116,3 +116,15 @@ public partial record Wedgwood(Scalar Value)
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; } = (Scalar)537.7777777777778;
 }
+
+[KnownUnit<Temperature, Newton, Kelvin, Scalar>]
+public partial record Newton(Scalar Value)
+    : Temperature.AffineUnit<Newton>(Value)
+    , IAffineUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "°N";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.33; // <-- TODO: 0.303 or 0.308 ????
+    public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
+    public static Scalar PostScalingOffset { get; } = (Scalar)0;
+}
