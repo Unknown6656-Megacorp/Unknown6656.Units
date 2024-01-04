@@ -9,8 +9,3 @@ public partial record Farad(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
 }
 
-
-
-
-
-

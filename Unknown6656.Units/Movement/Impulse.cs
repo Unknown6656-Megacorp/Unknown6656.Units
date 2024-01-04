@@ -28,4 +28,3 @@ public partial record SlugFootPerSecond(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.224735720691;
 }
-

@@ -24,7 +24,7 @@ public partial record BarrelOfOilEquivalent(Scalar Value)
     : KineticEnergy.AffineUnit<BarrelOfOilEquivalent>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "boe";
+    public static string UnitSymbol { get; } = "BOE";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
     public static Scalar ScalingFactor { get; } = (Scalar)1.6345576344368079364703676277037381286982683757949997966610e-10;
 }
@@ -187,7 +187,7 @@ public partial record WattHour(Scalar Value)
 {
     public static string UnitSymbol { get; } = "Wh";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
-    public static Scalar ScalingFactor { get; } = (Scalar)3.6e3;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.00028;
 }
 
 [KnownUnit<KineticEnergy, WattSecond, Joule, Scalar>]

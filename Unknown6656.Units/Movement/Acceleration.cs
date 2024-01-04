@@ -26,7 +26,7 @@ public partial record Gal(Scalar Value)
 {
     public static string UnitSymbol { get; } = "Gal";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
-    public static Scalar ScalingFactor { get; } = (Scalar)1e-2;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e2;
 }
 
 [KnownUnit<Acceleration, G, MeterPerSecondSquared, Scalar>]
@@ -36,5 +36,5 @@ public partial record G(Scalar Value)
 {
     public static string UnitSymbol { get; } = "g₀";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
-    public static Scalar ScalingFactor { get; } = (Scalar)9.80665;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.1019716212977928242570092743189570342573661749934993091422657074;
 }
