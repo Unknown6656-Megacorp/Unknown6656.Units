@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Unknown6656.Units.Temporal;
+
 namespace Unknown6656.Units.Euclidean;
 
 
@@ -59,4 +61,19 @@ public partial record Turn(Scalar Value)
     public static string UnitSymbol { get; } = "turns";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.1591549430918953357688837633725143620344596457404564487476673440;
+}
+
+[KnownUnit<Angle, HourAngle, Radian, Scalar>]
+public partial record HourAngle(Scalar Value)
+    : Angle.AffineUnit<HourAngle>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "h";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)(12 / Math.PI);
+
+
+    public static explicit operator Hour(HourAngle angle) => new(angle.Value);
+
+    public static explicit operator HourAngle(Hour hour) => new(hour.Value);
 }
