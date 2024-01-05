@@ -99,6 +99,8 @@ public static partial class Unit
                                                                      or UnitDisplay.MetricSI_Shifted_m
                                                                      or UnitDisplay.MetricSI_Shifted_μ;
 
+    public static bool IsImperial(this UnitDisplay display) => display is UnitDisplay.Imperial or UnitDisplay.ImperialWithSIPrefixes;
+
     public static bool IsSI(this UnitDisplay display) => display is UnitDisplay.MetricUseSIPrefixes
                                                                  or UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples
                                                                  or UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples
@@ -246,6 +248,8 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     public static bool IsMetric => TUnit.UnitDisplay.IsMetric();
 
     public static bool IsSI => TUnit.UnitDisplay.IsSI();
+
+    public static bool IsImperial => TUnit.UnitDisplay.IsImperial();
 
     public static TUnit Zero { get; }
 
