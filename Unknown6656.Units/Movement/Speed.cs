@@ -59,6 +59,15 @@ public partial record Knot(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.9438444924406046;
 }
 
+[KnownUnit<Speed, SpeedOfLightVacuum, MeterPerSecond, Scalar>]
+public partial record SpeedOfLightVacuum(Scalar Value)
+    : Speed.AffineUnit<SpeedOfLightVacuum>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "c₀";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)3.3356409519815204957557671447491851179258151984597290969e-9;
+}
 
 
 
@@ -79,3 +88,5 @@ public partial record Mach(Scalar Value)
 //      - speed of light (per medium)
 // - propagation speed of waves
 //      - in different media
+// - length contraction / lorentz factor
+// - time dilation
