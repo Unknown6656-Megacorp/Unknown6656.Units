@@ -211,6 +211,23 @@ public static partial class Unit
         }
         else if (TScalar.TryParse(value, provider, out scalar))
             return true;
+
+        NumberFormatInfo parser = provider?.GetFormat(typeof(NumberFormatInfo)) as NumberFormatInfo ?? CultureInfo.CurrentCulture.NumberFormat;
+
+        value = value.Trim()
+                     .Replace("'", "")
+                     .Replace(" ", "")
+                     .Replace(parser.CurrencyGroupSeparator, "")
+                     .Replace(parser.NumberGroupSeparator, "")
+                     .Replace(parser.PercentGroupSeparator, "")
+                     .Replace(parser.CurrencyDecimalSeparator, ".")
+                     .Replace(parser.NumberDecimalSeparator, ".")
+                     .Replace(parser.PercentDecimalSeparator, ".");
+
+        parser = new();
+
+        if (TScalar.TryParse(value, parser, out scalar))
+            return true;
         else
         {
 #warning TODO : parse prefixes (e.g. "1.5 kV" -> 1500 V, "200 MiB" -> 209'715'200 B)
