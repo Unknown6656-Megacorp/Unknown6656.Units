@@ -6,7 +6,7 @@ public partial record Kilogram(Scalar Value)
     : BaseUnit<Mass, Kilogram, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "kg";
-    public static UnitDisplay UnitDisplay { get; } = Unit.MetricSI_Shifted_k;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 
 [KnownUnit<Mass, Gram, Kilogram, Scalar>]
@@ -15,7 +15,7 @@ public partial record Gram(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "g";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
@@ -25,7 +25,7 @@ public partial record MetricTon(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
 }
 
@@ -35,7 +35,7 @@ public partial record Dalton(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Da";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)6.022173643e+26;
 }
 
@@ -125,7 +125,7 @@ public partial record Carat(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ct";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5e3;
 }
 
@@ -135,7 +135,7 @@ public partial record PlanckMass(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "mₚ";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)4.59467132297156563388720245813872525405673487755159606404846e7;
 }
 
@@ -145,7 +145,7 @@ public partial record SolarMass(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "M☉";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5.0289921396852856718984948226525921939984007804995800791563e-31;
 }
 
@@ -155,7 +155,7 @@ public partial record ElectronVoltMassEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "eV/c²";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5.60958864983476645299741629583157968944023663372081019062242e35;
 }
 

@@ -6,5 +6,5 @@ public partial record Mol(Scalar Value)
     : BaseUnit<Amount, Mol, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "mol";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }

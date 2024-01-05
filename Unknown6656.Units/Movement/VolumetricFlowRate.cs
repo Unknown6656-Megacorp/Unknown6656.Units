@@ -6,7 +6,7 @@ public partial record CubicMeterPerSecond(Scalar Value)
     : BaseUnit<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m³/s";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
 [KnownUnit<VolumetricFlowRate, LiterPerSecond, CubicMeterPerSecond, Scalar>]
@@ -15,7 +15,7 @@ public partial record LiterPerSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "L/s";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 

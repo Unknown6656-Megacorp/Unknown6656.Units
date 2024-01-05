@@ -8,7 +8,7 @@ public partial record CubicMeter(Scalar Value)
     : BaseUnit<Volume, CubicMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m³";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
 [KnownUnit<Volume, Liter, CubicMeter, Scalar>]
@@ -17,7 +17,7 @@ public partial record Liter(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "L";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
@@ -57,7 +57,7 @@ public partial record MetricCups(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "cups";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)4000;
 }
 
@@ -77,7 +77,7 @@ public partial record Ge(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ge";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)10_000;
 }
 

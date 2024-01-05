@@ -6,7 +6,7 @@ public partial record KilogramPerSecond(Scalar Value)
     : BaseUnit<MassFlowRate, KilogramPerSecond, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "kg/s";
-    public static UnitDisplay UnitDisplay { get; } = Unit.MetricSI_Shifted_k;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 
 [KnownUnit<MassFlowRate, MetricTonPerSecond, KilogramPerSecond, Scalar>]
@@ -15,7 +15,7 @@ public partial record MetricTonPerSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
 }
 
@@ -45,7 +45,7 @@ public partial record PlanckMassPerPlanckTime(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "mₚ/tₚ";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)2.4767851446758066576843206023376418356223089642890698915169e10-36;
 }
 
@@ -55,7 +55,7 @@ public partial record KilogramPerMinute(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "kg/min";
-    public static UnitDisplay UnitDisplay { get; } = Unit.MetricSI_Shifted_k;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
     public static Scalar ScalingFactor { get; } = (Scalar)60;
 }
 
@@ -65,6 +65,6 @@ public partial record KilogramPerHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "kg/h";
-    public static UnitDisplay UnitDisplay { get; } = Unit.MetricSI_Shifted_k;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
     public static Scalar ScalingFactor { get; } = (Scalar)3.6e3;
 }

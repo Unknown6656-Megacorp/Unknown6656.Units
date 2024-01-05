@@ -8,7 +8,7 @@ public partial record SquareMeter(Scalar Value)
     : BaseUnit<Area, SquareMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m²";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
 [KnownUnit<Area, SquareFoot, SquareMeter, Scalar>]
@@ -37,7 +37,7 @@ public partial record Hectare(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ha";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0001;
 }
 
@@ -47,7 +47,7 @@ public partial record SquareKilometer(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "km²";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-6;
 }
 
@@ -57,6 +57,6 @@ public partial record Barn(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "b";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e28;
 }

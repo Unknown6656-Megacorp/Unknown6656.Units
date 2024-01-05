@@ -11,7 +11,7 @@ public partial record Kelvin(Scalar Value)
     : BaseUnit<Temperature, Kelvin, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "K";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Temperature, PlanckTemperature, Kelvin, Scalar>]
@@ -20,7 +20,7 @@ public partial record PlanckTemperature(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Tₚ";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.416808338416e32;
 }
 
@@ -30,7 +30,7 @@ public partial record Celsius(Scalar Value)
     , IAffineUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°C";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1;
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; }
@@ -70,7 +70,7 @@ public partial record Romer(Scalar Value)
     , IAffineUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°Rø";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.525;
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; } = (Scalar)7.5;
@@ -86,7 +86,7 @@ public partial record Reaumur(Scalar Value)
     , IAffineUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°Ré";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.8;
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; }
@@ -98,7 +98,7 @@ public partial record Delisle(Scalar Value)
     , IAffineUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°De";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.5;
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; } = (Scalar)(-100.0);
@@ -110,7 +110,7 @@ public partial record Leiden(Scalar Value)
     , IAffineUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°L";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1d;
     public static Scalar PreScalingOffset { get; } = (Scalar)20.15;
     public static Scalar PostScalingOffset { get; }
@@ -122,7 +122,7 @@ public partial record Wedgwood(Scalar Value)
     , IAffineUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°We";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 
 #warning TODO: fix the following conversion!
     public static Scalar ScalingFactor { get; } = (Scalar)0.5555555555555556;
@@ -136,7 +136,7 @@ public partial record DegreesNewton(Scalar Value)
     , IAffineUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°N";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.33; // <-- TODO: 0.303 or 0.308 ????
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; } = (Scalar)0;

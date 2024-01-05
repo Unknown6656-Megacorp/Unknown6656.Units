@@ -6,7 +6,7 @@ public partial record NewtonMeter(Scalar Value)
     : BaseUnit<Torque, NewtonMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "Nm";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Torque, FootPound, NewtonMeter, Scalar>]

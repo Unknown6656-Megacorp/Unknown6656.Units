@@ -9,7 +9,7 @@ public partial record Second(Scalar Value)
     : BaseUnit<Time, Second, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "s";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_OnlySubmultiple;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples;
 }
 
 [KnownUnit<Time, Minute, Second, Scalar>]
@@ -18,7 +18,7 @@ public partial record Minute(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "min";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1 / (Scalar)60;
 }
 
@@ -28,7 +28,7 @@ public partial record Hour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "h";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)2.7777777777777777777777777777778e-4;
 }
 
@@ -39,7 +39,7 @@ public partial record PlanckTime(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "tₚ";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.8550948324478e43;
 }
 #endif

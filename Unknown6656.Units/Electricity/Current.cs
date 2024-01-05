@@ -15,7 +15,7 @@ public partial record Ampere(Scalar Value)
     : BaseUnit<Current, Ampère, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "A";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Current, Abampère, Ampère, Scalar>]
@@ -28,7 +28,7 @@ public partial record Abampere(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "abA";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar).1;
 }
 
@@ -38,6 +38,6 @@ public partial record Biot(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Bi";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar).1;
 }

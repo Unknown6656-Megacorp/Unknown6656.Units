@@ -22,12 +22,21 @@ namespace Unknown6656.Units;
 public enum UnitDisplay
     : uint
 {
-    MetricSI,
-    MetricSI_OnlyMultiple,
-    MetricSI_OnlySubmultiple,
-    MetricNonSI,
+    MetricUseSIPrefixes,
+    MetricUseSIPrefixesOnlyOnMultiples,
+    MetricUseSIPrefixesOnlyOnSubmultiples,
+    MetricNoSIPrefixes,
+    MetricSI_Shifted_k,
+    MetricSI_Shifted_M,
+    MetricSI_Shifted_m,
+    MetricSI_Shifted_μ,
+
     Imperial,
-    Prefix,
+    ImperialWithSIPrefixes,
+
+    PrefixedUnitNotation,
+    UseFormatStrings,
+    UseInverseFormatStrings,
 }
 
 public interface IUnit
@@ -62,20 +71,6 @@ public enum SIUnitScale
 
 public static partial class Unit
 {
-    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
-    internal const UnitDisplay MetricSI_Shifted_k = (UnitDisplay)0xdead_0001;
-    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
-    internal const UnitDisplay MetricSI_Shifted_M = (UnitDisplay)0xdead_0002;
-    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
-    internal const UnitDisplay MetricSI_Shifted_m = (UnitDisplay)0xdead_0003;
-    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
-    internal const UnitDisplay MetricSI_Shifted_μ = (UnitDisplay)0xdead_0004;
-    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
-    internal const UnitDisplay MetricSI_Formatted = (UnitDisplay)0xdead_0005;
-    [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
-    internal const UnitDisplay MetricSI_InverseFormatted = (UnitDisplay)0xdead_0006;
-
-
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
     public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
     public static NumberFormatInfo DefaultNumberFormat { get; set; } = new()
@@ -95,13 +90,25 @@ public static partial class Unit
     };
 
 
-    public static bool IsMetric(this UnitDisplay display) => display is UnitDisplay.MetricSI or UnitDisplay.MetricSI_OnlyMultiple or UnitDisplay.MetricSI_OnlySubmultiple
-                                                                     or UnitDisplay.MetricNonSI or MetricSI_Shifted_k or MetricSI_Shifted_M or MetricSI_Shifted_m or MetricSI_Shifted_μ
-                                                                     or MetricSI_Formatted or MetricSI_InverseFormatted;
+    public static bool IsMetric(this UnitDisplay display) => display is UnitDisplay.MetricUseSIPrefixes
+                                                                     or UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples
+                                                                     or UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples
+                                                                     or UnitDisplay.MetricNoSIPrefixes
+                                                                     or UnitDisplay.MetricSI_Shifted_k
+                                                                     or UnitDisplay.MetricSI_Shifted_M
+                                                                     or UnitDisplay.MetricSI_Shifted_m
+                                                                     or UnitDisplay.MetricSI_Shifted_μ;
 
-    public static bool IsSI(this UnitDisplay display) => display is UnitDisplay.MetricSI or UnitDisplay.MetricSI_OnlyMultiple or UnitDisplay.MetricSI_OnlySubmultiple
-                                                                 or MetricSI_Shifted_k or MetricSI_Shifted_M or MetricSI_Shifted_m or MetricSI_Shifted_μ
-                                                                 or MetricSI_Formatted or MetricSI_InverseFormatted;
+    public static bool IsSI(this UnitDisplay display) => display is UnitDisplay.MetricUseSIPrefixes
+                                                                 or UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples
+                                                                 or UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples
+                                                                 or UnitDisplay.MetricSI_Shifted_k
+                                                                 or UnitDisplay.MetricSI_Shifted_M
+                                                                 or UnitDisplay.MetricSI_Shifted_m
+                                                                 or UnitDisplay.MetricSI_Shifted_μ
+                                                                 or UnitDisplay.UseFormatStrings
+                                                                 or UnitDisplay.UseInverseFormatStrings
+                                                                 or UnitDisplay.ImperialWithSIPrefixes;
 
     private static string FormatImperial<TScalar>(TScalar scalar, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitDisplay display)
         where TScalar : INumber<TScalar>
@@ -110,9 +117,9 @@ public static partial class Unit
 
         if (string.IsNullOrWhiteSpace(unit_symbol))
             return formatted;
-        else if (display is UnitDisplay.Prefix)
+        else if (display is UnitDisplay.PrefixedUnitNotation)
             return $"{unit_symbol} {formatted}";
-        else if (display is MetricSI_Formatted or MetricSI_InverseFormatted)
+        else if (display is UnitDisplay.UseFormatStrings or UnitDisplay.UseInverseFormatStrings)
             return string.Format(format_provider, unit_symbol, formatted);
         else
             return $"{formatted} {unit_symbol}";
@@ -133,40 +140,42 @@ public static partial class Unit
 
         value = TScalar.Abs(value);
 
-        if (display is MetricSI_Shifted_k && unit_symbol is ['k' or 'K', ..string suffixk])
+        if (display is UnitDisplay.MetricSI_Shifted_k && unit_symbol is ['k' or 'K', ..string suffixk])
         {
             value *= @base;
             unit_symbol = suffixk;
-            display = UnitDisplay.MetricSI;
+            display = UnitDisplay.MetricUseSIPrefixes;
         }
-        else if (display is MetricSI_Shifted_M && unit_symbol is ['M', ..string suffixM])
+        else if (display is UnitDisplay.MetricSI_Shifted_M && unit_symbol is ['M', ..string suffixM])
         {
             value *= @base * @base;
             unit_symbol = suffixM;
-            display = UnitDisplay.MetricSI;
+            display = UnitDisplay.MetricUseSIPrefixes;
         }
-        else if (display is MetricSI_Shifted_m && unit_symbol is ['m', .. string suffixm])
+        else if (display is UnitDisplay.MetricSI_Shifted_m && unit_symbol is ['m', .. string suffixm])
         {
             value /= @base;
             unit_symbol = suffixm;
-            display = UnitDisplay.MetricSI;
+            display = UnitDisplay.MetricUseSIPrefixes;
         }
-        else if (display is MetricSI_Shifted_μ && unit_symbol is ['μ' or 'u', ..string suffixμ])
+        else if (display is UnitDisplay.MetricSI_Shifted_μ && unit_symbol is ['μ' or 'u', ..string suffixμ])
         {
             value /= @base * @base;
             unit_symbol = suffixμ;
-            display = UnitDisplay.MetricSI;
+            display = UnitDisplay.MetricUseSIPrefixes;
         }
-        else if (display is MetricSI_Formatted or MetricSI_InverseFormatted)
+        else if (display is UnitDisplay.UseFormatStrings or UnitDisplay.UseInverseFormatStrings)
         {
-            inverse_formatted = display is MetricSI_InverseFormatted;
-            display = UnitDisplay.MetricSI;
+            inverse_formatted = display is UnitDisplay.UseInverseFormatStrings;
+            display = UnitDisplay.MetricUseSIPrefixes;
         }
 
         bool submultiple = value < TScalar.One;
         IReadOnlyList<string> prefixes = (inverse_formatted ?? false) ^ submultiple ? MetricSIPrefixesSubmultiple : MetricSIPrefixesMultiple;
 
-        if (display is UnitDisplay.MetricSI || (submultiple ? display is UnitDisplay.MetricSI_OnlySubmultiple : display is UnitDisplay.MetricSI_OnlyMultiple))
+        if (display is UnitDisplay.MetricUseSIPrefixes or UnitDisplay.ImperialWithSIPrefixes
+            || (submultiple ? display is UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples
+                            : display is UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples))
             while (value != TScalar.Zero && (submultiple ? value < TScalar.One : value >= @base) && order < prefixes.Count - 1)
             {
                 ++order;
@@ -185,7 +194,7 @@ public static partial class Unit
             (order < 0 ? "" : prefixes[order]) + (scale == SIUnitScale.Base_1024 ? "i" : "") + unit_symbol,
             format,
             format_provider,
-            inverse_formatted is null ? display : MetricSI_Formatted
+            inverse_formatted is null ? display : UnitDisplay.UseFormatStrings
         );
     }
 

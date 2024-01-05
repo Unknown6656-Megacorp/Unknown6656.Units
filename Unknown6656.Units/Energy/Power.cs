@@ -6,7 +6,7 @@ public partial record Watt(Scalar Value)
     : BaseUnit<Power, Watt, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "W";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Power, MetricHorsepower, Watt, Scalar>]
@@ -15,7 +15,7 @@ public partial record MetricHorsepower(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "hp";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0013596216;
 }
 

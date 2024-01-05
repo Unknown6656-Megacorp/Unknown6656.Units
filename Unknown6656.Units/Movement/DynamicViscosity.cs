@@ -6,7 +6,7 @@ public partial record PascalSecond(Scalar Value)
     : BaseUnit<DynamicViscosity, PascalSecond, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "Pa·s";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<DynamicViscosity, Poise, PascalSecond, Scalar>]
@@ -15,7 +15,7 @@ public partial record Poise(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "P";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)10;
 }
 

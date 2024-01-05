@@ -6,7 +6,7 @@ public partial record MeterPerSecond(Scalar Value)
     : BaseUnit<Speed, MeterPerSecond, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m/s";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Speed, KilometerPerHour, MeterPerSecond, Scalar>]
@@ -15,7 +15,7 @@ public partial record KilometerPerHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "km/h";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)3.6;
 }
 
@@ -25,7 +25,7 @@ public partial record MeterPerHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "m/h";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)3600;
 }
 
@@ -68,7 +68,7 @@ public partial record Mach(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Mach";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Prefix;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.PrefixedUnitNotation;
     public static Scalar ScalingFactor { get; } = (Scalar)340;
 }
 

@@ -6,7 +6,7 @@ public partial record MeterPerSecondCubed(Scalar Value)
     : BaseUnit<Jerk, MeterPerSecondCubed, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m/s³";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Jerk, FootPerSecondCubed, MeterPerSecondCubed, Scalar>]

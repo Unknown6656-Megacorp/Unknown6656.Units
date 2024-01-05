@@ -8,7 +8,7 @@ public partial record Pascal(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Pa";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Pressure, Atmosphere, Pascal, Scalar>]
@@ -19,7 +19,7 @@ public partial record Atmosphere(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "atm";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)9.8692326671601e-6;
 }
 
@@ -31,7 +31,7 @@ public partial record Bar(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "bar";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-5;
 }
 
@@ -55,7 +55,7 @@ public partial record Torr(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Torr";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0075006168270417;
 }
 
@@ -79,7 +79,7 @@ public partial record MillimeterMercury(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "mmHg";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0075006168270417;
 }
 
@@ -103,7 +103,7 @@ public partial record MillimeterWater(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "mmH₂O";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.10197162129779;
 }
 
@@ -127,7 +127,7 @@ public partial record AtmosphereTechnical(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "at";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)9.80665e-6;
 }
 
@@ -139,6 +139,6 @@ public partial record Barye(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "Ba";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)10d;
 }

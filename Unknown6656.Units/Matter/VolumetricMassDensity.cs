@@ -6,7 +6,7 @@ public partial record KilogramPerCubicMeter(Scalar Value)
     : BaseUnit<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "kg/m³";
-    public static UnitDisplay UnitDisplay { get; } = Unit.MetricSI_Shifted_k;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 
 [KnownUnit<VolumetricMassDensity, GramPerCubicMeter, KilogramPerCubicMeter, Scalar>]
@@ -15,7 +15,7 @@ public partial record GramPerCubicMeter(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "g/m³";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
@@ -25,7 +25,7 @@ public partial record GramPerLiter(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "g/L";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1;
 }
 

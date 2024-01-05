@@ -15,5 +15,5 @@ public partial record Siemens(Scalar Value)
     }
 
     public static string UnitSymbol => _omega_unit_symbol ? "℧" : "S";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }

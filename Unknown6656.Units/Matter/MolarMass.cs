@@ -6,5 +6,5 @@ public partial record GramPerMol(Scalar Value)
     : BaseUnit<MolarMass, GramPerMol, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "g/mol";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }

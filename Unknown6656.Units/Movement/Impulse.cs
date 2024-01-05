@@ -6,7 +6,7 @@ public partial record NewtonSecond(Scalar Value)
     : BaseUnit<Impulse, NewtonSecond, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "Ns";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Impulse, PoundSecond, NewtonSecond, Scalar>]

@@ -6,7 +6,7 @@ public partial record Newton(Scalar Value)
     : BaseUnit<Force, Newton, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "N";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Force, PoundForce, Newton, Scalar>]
@@ -29,7 +29,7 @@ public partial record Dyne(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "dyn";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e5;
 }
 
@@ -41,7 +41,7 @@ public partial record Sthène(Scalar Value)
     , IUnit
 {
     public static string UnitSymbol { get; } = "sn";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
 }
 

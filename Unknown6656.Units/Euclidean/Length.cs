@@ -8,7 +8,7 @@ public partial record Meter(Scalar Value)
     : BaseUnit<Length, Meter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Length, Yard, Meter, Scalar>]
@@ -117,6 +117,6 @@ public partial record Planck(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "P";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNonSI;
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.616255e-35;
 }
