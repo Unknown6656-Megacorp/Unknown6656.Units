@@ -54,7 +54,7 @@ public partial record Torr(Scalar Value)
     , IUnit<Torr, Pascal, Scalar>
     , IUnit
 {
-    public static string UnitSymbol { get; } = "Torr";
+    public static string UnitSymbol { get; } = "torr";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0075006168270417;
 }

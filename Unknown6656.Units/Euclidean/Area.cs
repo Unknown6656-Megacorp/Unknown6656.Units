@@ -28,7 +28,7 @@ public partial record Acre(Scalar Value)
 {
     public static string UnitSymbol { get; } = "ac";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)0.000247105381467165348551;
+    public static Scalar ScalingFactor { get; } = (Scalar)2.47105381467165348551e-4;
 }
 
 [KnownUnit<Area, Hectare, SquareMeter, Scalar>]
@@ -38,7 +38,7 @@ public partial record Hectare(Scalar Value)
 {
     public static string UnitSymbol { get; } = "ha";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)0.0001;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e-4;
 }
 
 [KnownUnit<Area, SquareKilometer, SquareMeter, Scalar>]

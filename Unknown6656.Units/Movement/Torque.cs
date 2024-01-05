@@ -14,7 +14,7 @@ public partial record FootPound(Scalar Value)
     : Torque.AffineUnit<FootPound>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "lbft";
+    public static string UnitSymbol { get; } = "lb·ft";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.7375621492772656;
 }
@@ -24,7 +24,7 @@ public partial record PoundInch(Scalar Value)
     : Torque.AffineUnit<PoundInch>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "lbin";
+    public static string UnitSymbol { get; } = "lb·in";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)8.850745793490557;
 }
@@ -34,7 +34,7 @@ public partial record OunceInch(Scalar Value)
     : Torque.AffineUnit<OunceInch>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "ozin";
+    public static string UnitSymbol { get; } = "oz·in";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)141.6119326958489;
 }

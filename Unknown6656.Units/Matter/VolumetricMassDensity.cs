@@ -48,10 +48,3 @@ public partial record PoundPerCubicFoot(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)16.018463;
 }
-
-
-
-
-// TODO:
-// - density
-//      - from kg/m^3, g/cm^3, lb/ft^3, lb/in^3, ...

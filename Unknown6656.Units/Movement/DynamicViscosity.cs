@@ -24,7 +24,7 @@ public partial record PoundPerFootHour(Scalar Value)
     : DynamicViscosity.AffineUnit<PoundPerFootHour>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "lb/ft·h";
+    public static string UnitSymbol { get; } = "lb/(ft·h)";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)2419.0883117531746717979948626934303921235955375010178616457740451;
 }
@@ -34,7 +34,7 @@ public partial record PoundPerFootSecond(Scalar Value)
     : DynamicViscosity.AffineUnit<PoundPerFootSecond>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "lb/ft·s";
+    public static string UnitSymbol { get; } = "lb/(ft·s)";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.6719689496587741673632744778129292201665945419994032915727030085;
 }

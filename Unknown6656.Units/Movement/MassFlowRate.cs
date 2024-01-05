@@ -14,7 +14,7 @@ public partial record MetricTonPerSecond(Scalar Value)
     : MassFlowRate.AffineUnit<MetricTonPerSecond>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "t";
+    public static string UnitSymbol { get; } = "t/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
 }
@@ -24,7 +24,7 @@ public partial record PoundPerSecond(Scalar Value)
     : MassFlowRate.AffineUnit<PoundPerSecond>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "lb";
+    public static string UnitSymbol { get; } = "lb/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)2.2046226218487757;
 }
@@ -34,7 +34,7 @@ public partial record OuncePerSecond(Scalar Value)
     : MassFlowRate.AffineUnit<OuncePerSecond>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "oz";
+    public static string UnitSymbol { get; } = "oz/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)35.27396194958041;
 }
