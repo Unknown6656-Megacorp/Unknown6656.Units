@@ -452,9 +452,9 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
 
     public sealed override TBaseUnit ToBaseUnit() => Value;
 
-    public static implicit operator Quantity<TQuantity, TBaseUnit, TScalar>(TScalar value) => new(value);
+    public static explicit operator Quantity<TQuantity, TBaseUnit, TScalar>(TScalar value) => new(value);
 
-    public static implicit operator TScalar(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => quantity.Value.Value;
+    public static explicit operator TScalar(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => quantity.Value.Value;
 
 
     public abstract record Unit<TUnit>(TScalar Value)
