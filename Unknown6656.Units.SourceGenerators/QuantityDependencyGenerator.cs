@@ -8,6 +8,7 @@ using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
+using System.Diagnostics;
 
 namespace Unknown6656.Units.Internals;
 
@@ -98,10 +99,10 @@ public sealed class QuantityDependencyGenerator
     {
         //Debugger.Launch();
 
-        IncrementalValuesProvider<GenericAttributeClassUsage> quantity_multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeQuantityRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage> quantity_inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseQuantityRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
-        IncrementalValuesProvider<GenericAttributeClassUsage> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
+        IncrementalValuesProvider<GenericAttributeClassUsage[]> quantity_multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeQuantityRelationship);
+        IncrementalValuesProvider<GenericAttributeClassUsage[]> quantity_inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseQuantityRelationship);
+        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
+        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
         IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
                                                                                    .CreateSyntaxProvider(
                                                                                        predicate: static (s, _) => s is AttributeListSyntax { Attributes.Count: > 0 },
@@ -124,20 +125,19 @@ public sealed class QuantityDependencyGenerator
             context,
             spc,
             source.compilation,
-            source.mul_dependencies,
-            source.inv_dependencies,
-            source.base_units,
-            source.units,
+            [..source.mul_dependencies.SelectMany(x => x)],
+            [..source.inv_dependencies.SelectMany(x => x)],
+            [..source.base_units.SelectMany(x => x)],
+            [..source.units.SelectMany(x => x)],
             source.disable
         ));
     }
 
-    private static IncrementalValuesProvider<GenericAttributeClassUsage> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, string attribute_name) => context.SyntaxProvider
+    private static IncrementalValuesProvider<GenericAttributeClassUsage[]> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, string attribute_name) => context.SyntaxProvider
         .CreateSyntaxProvider(
             predicate: static (s, _) => s is TypeDeclarationSyntax { AttributeLists.Count: > 0 },
-            transform: (ctx, _) => GetGenericAttributeClassUsage(ctx, attribute_name)
-        )
-        .Where(static m => m is not null)!;
+            transform: (ctx, _) => GetGenericAttributeClassUsage(ctx, attribute_name).ToArray()
+        );
 
     private static bool HasDisableEmittingIUnitInterfacesDefined(GeneratorSyntaxContext context)
     {
@@ -154,7 +154,7 @@ public sealed class QuantityDependencyGenerator
         return false;
     }
 
-    private static GenericAttributeClassUsage? GetGenericAttributeClassUsage(GeneratorSyntaxContext context, string attribute_name)
+    private static IEnumerable<GenericAttributeClassUsage> GetGenericAttributeClassUsage(GeneratorSyntaxContext context, string attribute_name)
     {
         if (context.Node is TypeDeclarationSyntax node)
         {
@@ -169,21 +169,19 @@ public sealed class QuantityDependencyGenerator
                                 string[] generic_arguments = raw_generic_arguments.Select(genarg => context.SemanticModel.GetSymbolInfo(genarg).Symbol?.ToDisplayString() ?? genarg.ToString())
                                                                                   .ToArray();
 
-                                return new(context.SemanticModel, @namespace, attribute.GetLocation(), node, generic_arguments, attribute.ArgumentList?.Arguments.ToArray() ?? []);
+                                yield return new(context.SemanticModel, @namespace, attribute.GetLocation(), node, generic_arguments, attribute.ArgumentList?.Arguments.ToArray() ?? []);
                             }
         }
-
-        return null;
     }
 
     private static void Execute(
         IncrementalGeneratorInitializationContext incremental_context,
         SourceProductionContext production_context,
         Compilation compilation,
-        ImmutableArray<GenericAttributeClassUsage> quantity_multiplicative_dependencies,
-        ImmutableArray<GenericAttributeClassUsage> quantity_inverse_dependencies,
-        ImmutableArray<GenericAttributeClassUsage> known_base_units,
-        ImmutableArray<GenericAttributeClassUsage> known_units,
+        GenericAttributeClassUsage[] quantity_multiplicative_dependencies,
+        GenericAttributeClassUsage[] quantity_inverse_dependencies,
+        GenericAttributeClassUsage[] known_base_units,
+        GenericAttributeClassUsage[] known_units,
         bool disable_emitting_interfaces
     )
 #if OLD_CODEBASE
@@ -502,10 +500,10 @@ public sealed class QuantityDependencyGenerator
         IncrementalGeneratorInitializationContext incremental_context,
         SourceProductionContext production_context,
         Compilation compilation,
-        ImmutableArray<GenericAttributeClassUsage> quantity_multiplicative_dependencies,
-        ImmutableArray<GenericAttributeClassUsage> quantity_inverse_dependencies,
-        ImmutableArray<GenericAttributeClassUsage> known_base_units,
-        ImmutableArray<GenericAttributeClassUsage> known_units,
+        GenericAttributeClassUsage[] quantity_multiplicative_dependencies,
+        GenericAttributeClassUsage[] quantity_inverse_dependencies,
+        GenericAttributeClassUsage[] known_base_units,
+        GenericAttributeClassUsage[] known_units,
         out Dictionary<Identifier, QuantityInformation> quantity_infos,
         out Dictionary<Identifier, UnitInformation> unit_infos,
         out List<StaticCreationMethod> static_infos
@@ -655,25 +653,25 @@ public sealed class QuantityDependencyGenerator
                     continue;
 
                 quantity_infos[t_quantity_in1].BinaryOperators.AddRange([
-                    new BinaryOperator(t_quantity_in1, t_quantity_in2, scaling, t_quantity_out, OperatorType.Multiply),
-                    new BinaryOperator(t_quantity_out, t_quantity_in1, scaling, t_quantity_in2, OperatorType.Divide),
+                    new BinaryOperator(usage.AttributeLocation, t_quantity_in1, t_quantity_in2, scaling, t_quantity_out, OperatorType.Multiply),
+                    new BinaryOperator(usage.AttributeLocation, t_quantity_out, t_quantity_in1, scaling, t_quantity_in2, OperatorType.Divide),
                 ]);
 
                 unit_infos[t_baseunit_in1].BinaryOperators.AddRange([
-                    new BinaryOperator(t_baseunit_in1, t_baseunit_in2, scaling, t_baseunit_out, OperatorType.Multiply),
-                    new BinaryOperator(t_baseunit_out, t_baseunit_in1, scaling, t_baseunit_in2, OperatorType.Divide),
+                    new BinaryOperator(usage.AttributeLocation, t_baseunit_in1, t_baseunit_in2, scaling, t_baseunit_out, OperatorType.Multiply),
+                    new BinaryOperator(usage.AttributeLocation, t_baseunit_out, t_baseunit_in1, scaling, t_baseunit_in2, OperatorType.Divide),
                 ]);
 
                 if (t_quantity_in1 != t_quantity_in2)
                     quantity_infos[t_quantity_in2].BinaryOperators.AddRange([
-                        new BinaryOperator(t_quantity_in2, t_quantity_in1, scaling, t_quantity_out, OperatorType.Multiply),
-                        new BinaryOperator(t_quantity_out, t_quantity_in2, scaling, t_quantity_in1, OperatorType.Divide),
+                        new BinaryOperator(usage.AttributeLocation, t_quantity_in2, t_quantity_in1, scaling, t_quantity_out, OperatorType.Multiply),
+                        new BinaryOperator(usage.AttributeLocation, t_quantity_out, t_quantity_in2, scaling, t_quantity_in1, OperatorType.Divide),
                     ]);
 
                 if (t_baseunit_in1 != t_baseunit_in2)
                     unit_infos[t_baseunit_in2].BinaryOperators.AddRange([
-                        new BinaryOperator(t_baseunit_in2, t_baseunit_in1, scaling, t_baseunit_out, OperatorType.Multiply),
-                        new BinaryOperator(t_baseunit_out, t_baseunit_in2, scaling, t_baseunit_in1, OperatorType.Divide),
+                        new BinaryOperator(usage.AttributeLocation, t_baseunit_in2, t_baseunit_in1, scaling, t_baseunit_out, OperatorType.Multiply),
+                        new BinaryOperator(usage.AttributeLocation, t_baseunit_out, t_baseunit_in2, scaling, t_baseunit_in1, OperatorType.Divide),
                     ]);
             }
 
@@ -698,18 +696,18 @@ public sealed class QuantityDependencyGenerator
                            t_scalar = usage.GenericAttributeArguments[4];
 
                 quantity_infos[t_quantity_1].BinaryOperators.AddRange([
-                    new BinaryOperator(t_quantity_1, t_quantity_2, scaling, t_scalar, OperatorType.Multiply) { IsScalar = (false, false, true) },
-                    new BinaryOperator(t_scalar, t_quantity_1, scaling, t_quantity_2, OperatorType.Divide) { IsScalar = (true, false, false) },
+                    new BinaryOperator(usage.AttributeLocation, t_quantity_1, t_quantity_2, scaling, t_scalar, OperatorType.Multiply) { IsScalar = (false, false, true) },
+                    new BinaryOperator(usage.AttributeLocation, t_scalar, t_quantity_1, scaling, t_quantity_2, OperatorType.Divide) { IsScalar = (true, false, false) },
                 ]);
                 quantity_infos[t_quantity_2].BinaryOperators.AddRange([
-                    new BinaryOperator(t_scalar, t_quantity_2, scaling, t_quantity_1, OperatorType.Divide) { IsScalar = (true, false, false) },
+                    new BinaryOperator(usage.AttributeLocation, t_scalar, t_quantity_2, scaling, t_quantity_1, OperatorType.Divide) { IsScalar = (true, false, false) },
                 ]);
                 unit_infos[t_baseunit_1].BinaryOperators.AddRange([
-                    new BinaryOperator(t_baseunit_1, t_baseunit_2, scaling, t_scalar, OperatorType.Multiply) { IsScalar = (false, false, true) },
-                    new BinaryOperator(t_scalar, t_baseunit_1, scaling, t_baseunit_2, OperatorType.Divide) { IsScalar = (true, false, false) },
+                    new BinaryOperator(usage.AttributeLocation, t_baseunit_1, t_baseunit_2, scaling, t_scalar, OperatorType.Multiply) { IsScalar = (false, false, true) },
+                    new BinaryOperator(usage.AttributeLocation, t_scalar, t_baseunit_1, scaling, t_baseunit_2, OperatorType.Divide) { IsScalar = (true, false, false) },
                 ]);
                 unit_infos[t_baseunit_2].BinaryOperators.AddRange([
-                    new BinaryOperator(t_scalar, t_baseunit_2, scaling, t_baseunit_1, OperatorType.Divide) { IsScalar = (true, false, false) },
+                    new BinaryOperator(usage.AttributeLocation, t_scalar, t_baseunit_2, scaling, t_baseunit_1, OperatorType.Divide) { IsScalar = (true, false, false) },
                 ]);
             }
     }
@@ -737,9 +735,13 @@ public sealed class QuantityDependencyGenerator
         """);
 
         foreach (StaticCreationMethod static_info in static_infos)
-            sb.AppendLine($"        public static {static_info.Result} {static_info.Result.Name}(this {static_info.Scalar} value) => new(value);");
+            sb.AppendLine($"""
+        // TODO : #line ... "..."
+                public static {static_info.Result} {static_info.Result.Name}(this {static_info.Scalar} value) => new(value);
+        """);
 
         sb.AppendLine($$"""
+        #line default
             }
         }
         """);
@@ -767,7 +769,12 @@ public sealed class QuantityDependencyGenerator
             if (scaling is { })
                 scaling = $"{op} ({scaling})";
 
-            sb.AppendLine($"        public static {@operator.Result} operator {op}({@operator.Operand1} {name1}, {@operator.Operand2} {name2}) => {(@operator.IsScalar.result ? "" : "new")}({operand1} {op} {operand2} {scaling});");
+            FileLinePositionSpan position = @operator.Location.GetLineSpan();
+
+            sb.AppendLine($"""
+            //#line {position.StartLinePosition.Line + 1} "{@operator.Location.SourceTree?.FilePath}"
+                    public static {@operator.Result} operator {op}({@operator.Operand1} {name1}, {@operator.Operand2} {name2}) => {(@operator.IsScalar.result ? "" : "new")}({operand1} {op} {operand2} {scaling});
+            """);
         }
 
 
@@ -791,6 +798,7 @@ public sealed class QuantityDependencyGenerator
                 AppendOp(@operator);
 
             sb.AppendLine($$"""
+            #line default
                 }
             }
             """);
@@ -823,6 +831,7 @@ public sealed class QuantityDependencyGenerator
                 AppendOp(@operator);
 
             sb.AppendLine($$"""
+            #line default
                 }
             }
             """);
@@ -885,7 +894,7 @@ public sealed record CastOperator(Identifier Operand, Identifier Result, bool Im
 
 public sealed record StaticCreationMethod(Identifier Scalar, Identifier Result);
 
-public sealed record BinaryOperator(Identifier Operand1, Identifier Operand2, string? ScalingFactor, Identifier Result, OperatorType Type)
+public sealed record BinaryOperator(Location Location, Identifier Operand1, Identifier Operand2, string? ScalingFactor, Identifier Result, OperatorType Type)
 {
     public (bool op1, bool op2, bool result) IsScalar { get; set; } = (false, false, false);
 }

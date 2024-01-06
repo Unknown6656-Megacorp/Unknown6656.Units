@@ -51,8 +51,9 @@ public partial record Impulse(NewtonSecond value) : Quantity<Impulse, NewtonSeco
 [MultiplicativeQuantityRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]
 public partial record Force(Newton value) : Quantity<Force, Newton, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<KineticEnergy, Angle, Torque, Joule, Radian, NewtonMeter, Scalar>]
 [MultiplicativeQuantityRelationship<Force, Length, Torque, Newton, Meter, NewtonMeter, Scalar>]
+[MultiplicativeQuantityRelationship<KineticEnergy, Angle, Torque, Joule, Radian, NewtonMeter, Scalar>]
+[MultiplicativeQuantityRelationship<Volume, Pressure, Torque, CubicMeter, Pascal, NewtonMeter, Scalar>]
 public partial record Torque(NewtonMeter value) : Quantity<Torque, NewtonMeter, Scalar>(value);
 
 

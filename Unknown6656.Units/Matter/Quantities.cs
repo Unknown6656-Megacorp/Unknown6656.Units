@@ -31,5 +31,4 @@ public partial record MolarMass(GramPerMol value) : Quantity<MolarMass, GramPerM
 public partial record VolumetricMassDensity(KilogramPerCubicMeter value) : Quantity<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>(value);
 
 [MultiplicativeQuantityRelationship<Force, Area, Pressure, Newton, SquareMeter, Pascal, Scalar>]
-[MultiplicativeQuantityRelationship<Volume, Pressure, Torque, CubicMeter, Pascal, NewtonMeter, Scalar>]
 public partial record Pressure(Pascal value) : Quantity<Pressure, Pascal, Scalar>(value);
