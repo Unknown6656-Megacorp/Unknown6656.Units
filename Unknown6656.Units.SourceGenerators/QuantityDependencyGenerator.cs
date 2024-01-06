@@ -18,8 +18,9 @@ public sealed class QuantityDependencyGenerator
     : IIncrementalGenerator
 {
     public const string Identifier_DisableEmittingIUnitInterfaces = "Unknown6656.Units.DisableEmittingIUnitInterfaces";
-    public const string Identifier_MultiplicativeQuantityRelationship = "Unknown6656.Units.MultiplicativeQuantityRelationship";
-    public const string Identifier_InverseQuantityRelationship = "Unknown6656.Units.InverseQuantityRelationship";
+    public const string Identifier_MultiplicativeRelationship = "Unknown6656.Units.MultiplicativeRelationship";
+    public const string Identifier_InverseRelationship = "Unknown6656.Units.InverseRelationship";
+    public const string Identifier_IdentityRelationship = "Unknown6656.Units.IdentityRelationship";
     public const string Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
     public const string Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
     public static readonly Identifier Identifier_ExtensionClass = "Unknown6656.Units.Unit";

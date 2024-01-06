@@ -26,7 +26,7 @@ public sealed class DisableEmittingIUnitInterfaces : Attribute;
 /// </code>
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, TBaseUnitB, TBaseUnitC, TScalar>(TScalar? x = default)
+public class MultiplicativeRelationship<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, TBaseUnitB, TBaseUnitC, TScalar>(TScalar? x = default)
     : Attribute
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
@@ -59,8 +59,8 @@ public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TQuantit
 /// </code>
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
-    : MultiplicativeQuantityRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
+public class MultiplicativeRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
+    : MultiplicativeRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
     where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
@@ -88,8 +88,8 @@ public class MultiplicativeQuantityRelationship<TQuantityA, TQuantityB, TBaseUni
 /// </code>
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-public class InverseQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
-    : MultiplicativeQuantityRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
+public class InverseRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
+    : MultiplicativeRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
     where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
@@ -100,6 +100,34 @@ public class InverseQuantityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBa
                      , IUnit
     where TScalar : INumber<TScalar>;
 
+/// <summary>
+/// Defines the following relationship between two quantities:
+/// <code>
+///     <typeparamref name="TQuantityA"/> = <typeparamref name="TQuantityB"/>
+///     <br/>
+///     <typeparamref name="TBaseUnitA"/> = <typeparamref name="TBaseUnitB"/>
+/// </code>
+/// If a value is provided for <paramref name="x"/>, the relationship is defined as follows:
+/// <code>
+///     <typeparamref name="TBaseUnitA"/> * <paramref name="x"/> = <typeparamref name="TBaseUnitB"/>
+/// </code>
+/// This naturally implies
+/// <code>
+///     <typeparamref name="TBaseUnitB"/> / <paramref name="x"/> = <typeparamref name="TBaseUnitA"/>
+/// </code>
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+public class IdentityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
+    : MultiplicativeRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
+    where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
+    where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
+    where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
+                     , IBaseUnit<TBaseUnitA, TScalar>
+                     , IUnit
+    where TBaseUnitB : BaseUnit<TQuantityB, TBaseUnitB, TScalar>
+                     , IBaseUnit<TBaseUnitB, TScalar>
+                     , IUnit
+    where TScalar : INumber<TScalar>;
 
 
 

@@ -13,18 +13,18 @@ public partial record Angle(Radian value)
     public static Degree West { get; } = new((Scalar)270);
 }
 
-[MultiplicativeQuantityRelationship<Length, Area, Meter, SquareMeter, Scalar>]
+[MultiplicativeRelationship<Length, Area, Meter, SquareMeter, Scalar>]
 public partial record Length(Meter value) : Quantity<Length, Meter, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<Area, Length, Volume, SquareMeter, Meter, CubicMeter, Scalar>]
+[MultiplicativeRelationship<Area, Length, Volume, SquareMeter, Meter, CubicMeter, Scalar>]
 public partial record Area(SquareMeter value) : Quantity<Area, SquareMeter, Scalar>(value);
 
 public partial record Volume(CubicMeter value) : Quantity<Volume, CubicMeter, Scalar>(value);
 
-[InverseQuantityRelationship<LinearWavenumber, Length, ReciprocalMeter, Meter, Scalar>]
-[MultiplicativeQuantityRelationship<LinearWavenumber, Area, Length, ReciprocalMeter, SquareMeter, Meter, Scalar>]
-[MultiplicativeQuantityRelationship<LinearWavenumber, Volume, Area, ReciprocalMeter, CubicMeter, SquareMeter, Scalar>]
-[MultiplicativeQuantityRelationship<LinearWavenumber, Speed, Frequency, ReciprocalMeter, MeterPerSecond, Hertz, Scalar>]
+[InverseRelationship<LinearWavenumber, Length, ReciprocalMeter, Meter, Scalar>]
+[MultiplicativeRelationship<LinearWavenumber, Area, Length, ReciprocalMeter, SquareMeter, Meter, Scalar>]
+[MultiplicativeRelationship<LinearWavenumber, Volume, Area, ReciprocalMeter, CubicMeter, SquareMeter, Scalar>]
+[MultiplicativeRelationship<LinearWavenumber, Speed, Frequency, ReciprocalMeter, MeterPerSecond, Hertz, Scalar>]
 public partial record LinearWavenumber(ReciprocalMeter value) : Quantity<LinearWavenumber, ReciprocalMeter, Scalar>(value);
 
 // TODO : angular wavenumber

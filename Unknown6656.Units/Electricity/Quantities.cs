@@ -6,22 +6,22 @@ namespace Unknown6656.Units.Electricity;
 
 public partial record Current(Ampère value) : Quantity<Current, Ampère, Scalar>(value);
 
-[MultiplicativeQuantityRelationship<Current, Time, Charge, Ampère, Second, Coulomb, Scalar>]
+[MultiplicativeRelationship<Current, Time, Charge, Ampère, Second, Coulomb, Scalar>]
 public partial record Charge(Coulomb value) : Quantity<Charge, Coulomb, Scalar>(value);
 
 // V = kg * m^2 / s^3 / A
 // V = kg * m/s * m/s^2 / A
 
 // TODO : W = A^2 * Ω
-[MultiplicativeQuantityRelationship<Potential, Current, Power, Volt, Ampère, Watt, Scalar>]
-[MultiplicativeQuantityRelationship<Potential, Charge, KineticEnergy, Volt, Coulomb, Joule, Scalar>]
+[MultiplicativeRelationship<Potential, Current, Power, Volt, Ampère, Watt, Scalar>]
+[MultiplicativeRelationship<Potential, Charge, KineticEnergy, Volt, Coulomb, Joule, Scalar>]
 public partial record Potential(Volt value) : Quantity<Potential, Volt, Scalar>(value);
 
 // Ω = kg * m^2 / s^3 / A^2
 // J = Ω * A * C
 // J = Ω * A^2 * s
 // J * Hz = Ω * A^2
-[MultiplicativeQuantityRelationship<Resistance, Current, Potential, Ohm, Ampère, Volt, Scalar>]
+[MultiplicativeRelationship<Resistance, Current, Potential, Ohm, Ampère, Volt, Scalar>]
 public partial record Resistance(Ohm value) : Quantity<Resistance, Ohm, Scalar>(value);
 
 // F = s^4 * A^2 / kg / m^2
@@ -31,21 +31,21 @@ public partial record Resistance(Ohm value) : Quantity<Resistance, Ohm, Scalar>(
 // F = J / V^2
 // F = siemens / hertz
 // F = s^2 / henry
-[MultiplicativeQuantityRelationship<Capacitance, Resistance, Time, Farad, Ohm, Second, Scalar>]
-[MultiplicativeQuantityRelationship<Capacitance, Potential, Charge, Farad, Volt, Coulomb, Scalar>]
+[MultiplicativeRelationship<Capacitance, Resistance, Time, Farad, Ohm, Second, Scalar>]
+[MultiplicativeRelationship<Capacitance, Potential, Charge, Farad, Volt, Coulomb, Scalar>]
 public partial record Capacitance(Farad value) : Quantity<Capacitance, Farad, Scalar>(value);
 
-[InverseQuantityRelationship<Capacitance, Elastance, Farad, InverseFarad, Scalar>]
-[MultiplicativeQuantityRelationship<Elastance, Time, Resistance, InverseFarad, Second, Ohm, Scalar>]
-[MultiplicativeQuantityRelationship<Elastance, Charge, Potential, InverseFarad, Coulomb, Volt, Scalar>]
-[MultiplicativeQuantityRelationship<Resistance, Frequency, Elastance, Ohm, Hertz, InverseFarad, Scalar>]
+[InverseRelationship<Capacitance, Elastance, Farad, InverseFarad, Scalar>]
+[MultiplicativeRelationship<Elastance, Time, Resistance, InverseFarad, Second, Ohm, Scalar>]
+[MultiplicativeRelationship<Elastance, Charge, Potential, InverseFarad, Coulomb, Volt, Scalar>]
+[MultiplicativeRelationship<Resistance, Frequency, Elastance, Ohm, Hertz, InverseFarad, Scalar>]
 public partial record Elastance(InverseFarad value) : Quantity<Elastance, InverseFarad, Scalar>(value);
 
 // F^-1 * s * S = 1
-[InverseQuantityRelationship<Resistance, Conductance, Ohm, Siemens, Scalar>]
-[MultiplicativeQuantityRelationship<Potential, Conductance, Current, Volt, Siemens, Ampère, Scalar>]
-[MultiplicativeQuantityRelationship<Time, Conductance, Capacitance, Second, Siemens, Farad, Scalar>]
-[MultiplicativeQuantityRelationship<Elastance, Conductance, Frequency, InverseFarad, Siemens, Hertz, Scalar>]
+[InverseRelationship<Resistance, Conductance, Ohm, Siemens, Scalar>]
+[MultiplicativeRelationship<Potential, Conductance, Current, Volt, Siemens, Ampère, Scalar>]
+[MultiplicativeRelationship<Time, Conductance, Capacitance, Second, Siemens, Farad, Scalar>]
+[MultiplicativeRelationship<Elastance, Conductance, Frequency, InverseFarad, Siemens, Hertz, Scalar>]
 public partial record Conductance(Siemens value) : Quantity<Conductance, Siemens, Scalar>(value);
 
 

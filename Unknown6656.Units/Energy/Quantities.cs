@@ -15,14 +15,14 @@ public partial record Temperature(Kelvin value)
 
 // TODO : implement shit like  E = 1/2 * m * v^2
 // TODO : implement gravitational energy    E = - g1 * g2 * m1 * m2 / r     or    E = m * g * h
-[MultiplicativeQuantityRelationship<Pressure, Volume, KineticEnergy, Pascal, CubicMeter, Joule, Scalar>]
+[MultiplicativeRelationship<Pressure, Volume, KineticEnergy, Pascal, CubicMeter, Joule, Scalar>]
 public partial record KineticEnergy(Joule value) : Quantity<KineticEnergy, Joule, Scalar>(value);
 
 public partial record SpecificEnergy(JoulePerKilogram value) : Quantity<SpecificEnergy, JoulePerKilogram, Scalar>(value);
 
 // TODO : W = kg * (m/s)^2 / s
 //          = kg * m^2 / s^3
-[MultiplicativeQuantityRelationship<Power, Time, KineticEnergy, Watt, Second, Joule, Scalar>]
+[MultiplicativeRelationship<Power, Time, KineticEnergy, Watt, Second, Joule, Scalar>]
 public partial record Power(Watt value) : Quantity<Power, Watt, Scalar>(value);
 
 
