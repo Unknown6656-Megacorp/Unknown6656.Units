@@ -7,7 +7,12 @@ namespace Unknown6656.Units.Movement;
 
 
 [MultiplicativeQuantityRelationship<Speed, Time, Length, MeterPerSecond, Second, Meter, Scalar>]
-public partial record Speed(MeterPerSecond value) : Quantity<Speed, MeterPerSecond, Scalar>(value);
+[MultiplicativeQuantityRelationship<Length, Frequency, Speed, Meter, Hertz, MeterPerSecond, Scalar>]
+public partial record Speed(MeterPerSecond value)
+    : Quantity<Speed, MeterPerSecond, Scalar>(value)
+{
+    public static SpeedOfLightVacuum C0 { get; } = new(1);
+}
 
 [MultiplicativeQuantityRelationship<Acceleration, Time, Speed, MeterPerSecondSquared, Second, MeterPerSecond, Scalar>]
 public partial record Acceleration(MeterPerSecondSquared value) : Quantity<Acceleration, MeterPerSecondSquared, Scalar>(value);
