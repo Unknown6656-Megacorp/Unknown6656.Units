@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Unknown6656.Units.Internals;
 
@@ -100,8 +101,9 @@ public sealed class QuantityDependencyGenerator
     {
         //Debugger.Launch();
 
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> quantity_multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeQuantityRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> quantity_inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseQuantityRelationship);
+        IncrementalValuesProvider<GenericAttributeClassUsage[]> multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeRelationship);
+        IncrementalValuesProvider<GenericAttributeClassUsage[]> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
+        IncrementalValuesProvider<GenericAttributeClassUsage[]> identity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_IdentityRelationship);
         IncrementalValuesProvider<GenericAttributeClassUsage[]> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
         IncrementalValuesProvider<GenericAttributeClassUsage[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
         IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
@@ -112,24 +114,27 @@ public sealed class QuantityDependencyGenerator
                                                                                    .Where(static x => x);
 
         // which idiot decided to name this stuff "left" and "right"? and not to provide an extension method for combining 3 or more IncrementalValueProvider<>?
-        var combined = context.CompilationProvider.Combine(quantity_multiplicative_dependencies.Collect())
-                                                  .Combine(quantity_inverse_dependencies.Collect())
-                                                  .Select(static (t, _) => (compilation: t.Left.Left, mul_dependencies: t.Left.Right, inv_dependencies: t.Right))
+        var combined = context.CompilationProvider.Combine(multiplicative_dependencies.Collect())
+                                                  .Combine(inverse_dependencies.Collect())
+                                                  .Select(static (t, _) => (comp: t.Left.Left, mul: t.Left.Right, inv: t.Right))
+                                                  .Combine(identity_dependencies.Collect())
+                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, id: t.Right))
                                                   .Combine(known_base_units.Collect())
-                                                  .Select(static (t, _) => (t.Left.compilation, t.Left.mul_dependencies, t.Left.inv_dependencies, base_units: t.Right))
+                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, base_units: t.Right))
                                                   .Combine(known_units.Collect())
-                                                  .Select(static (t, _) => (t.Left.compilation, t.Left.mul_dependencies, t.Left.inv_dependencies, t.Left.base_units, units: t.Right))
+                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, units: t.Right))
                                                   .Combine(disable_emitting_iunit_interfaces.Collect())
-                                                  .Select(static (t, _) => (t.Left.compilation, t.Left.mul_dependencies, t.Left.inv_dependencies, t.Left.base_units, t.Left.units, disable: t.Right.Contains(true)));
+                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, disable: t.Right.Contains(true)));
 
         context.RegisterSourceOutput(combined, (spc, source) => Execute(
             context,
             spc,
-            source.compilation,
-            [..source.mul_dependencies.SelectMany(x => x)],
-            [..source.inv_dependencies.SelectMany(x => x)],
-            [..source.base_units.SelectMany(x => x)],
-            [..source.units.SelectMany(x => x)],
+            source.comp,
+            [.. source.mul.SelectMany(x => x)],
+            [.. source.inv.SelectMany(x => x)],
+            [.. source.id.SelectMany(x => x)],
+            [.. source.base_units.SelectMany(x => x)],
+            [.. source.units.SelectMany(x => x)],
             source.disable
         ));
     }
@@ -179,8 +184,9 @@ public sealed class QuantityDependencyGenerator
         IncrementalGeneratorInitializationContext incremental_context,
         SourceProductionContext production_context,
         Compilation compilation,
-        GenericAttributeClassUsage[] quantity_multiplicative_dependencies,
-        GenericAttributeClassUsage[] quantity_inverse_dependencies,
+        GenericAttributeClassUsage[] multiplicative_relationships,
+        GenericAttributeClassUsage[] inverse_relationships,
+        GenericAttributeClassUsage[] identity_relationships,
         GenericAttributeClassUsage[] known_base_units,
         GenericAttributeClassUsage[] known_units,
         bool disable_emitting_interfaces
@@ -484,8 +490,9 @@ public sealed class QuantityDependencyGenerator
             incremental_context,
             production_context,
             compilation,
-            quantity_multiplicative_dependencies,
-            quantity_inverse_dependencies,
+            multiplicative_relationships,
+            inverse_relationships,
+            identity_relationships,
             known_base_units,
             known_units,
             out Dictionary<Identifier, QuantityInformation> quantity_infos,
@@ -501,8 +508,9 @@ public sealed class QuantityDependencyGenerator
         IncrementalGeneratorInitializationContext incremental_context,
         SourceProductionContext production_context,
         Compilation compilation,
-        GenericAttributeClassUsage[] quantity_multiplicative_dependencies,
-        GenericAttributeClassUsage[] quantity_inverse_dependencies,
+        GenericAttributeClassUsage[] multiplicative_relationships,
+        GenericAttributeClassUsage[] inverse_relationships,
+        GenericAttributeClassUsage[] identity_relationships,
         GenericAttributeClassUsage[] known_base_units,
         GenericAttributeClassUsage[] known_units,
         out Dictionary<Identifier, QuantityInformation> quantity_infos,
@@ -595,8 +603,8 @@ public sealed class QuantityDependencyGenerator
 
                 for (int j = i + 1; j < units.Count; ++j)
                 {
-                    unit_info.Casts.Add(new(units[j], unit, true));
-                    unit_info.Casts.Add(new(unit, units[j], true));
+                    unit_info.Casts.Add(new(units[j], unit));
+                    unit_info.Casts.Add(new(unit, units[j]));
                 }
             }
 
@@ -608,11 +616,12 @@ public sealed class QuantityDependencyGenerator
                    where i.Value.Quantity == quantity
                    select i.Key
                 ],
+                [],
                 []
             );
         }
 
-        foreach (GenericAttributeClassUsage usage in quantity_multiplicative_dependencies)
+        foreach (GenericAttributeClassUsage usage in multiplicative_relationships)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
             else if (usage.TargetType is not RecordDeclarationSyntax record)
@@ -676,7 +685,7 @@ public sealed class QuantityDependencyGenerator
                     ]);
             }
 
-        foreach (GenericAttributeClassUsage usage in quantity_inverse_dependencies)
+        foreach (GenericAttributeClassUsage usage in inverse_relationships)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
             else if (usage.TargetType is not RecordDeclarationSyntax record)
@@ -710,6 +719,39 @@ public sealed class QuantityDependencyGenerator
                 unit_infos[t_baseunit_2].BinaryOperators.AddRange([
                     new BinaryOperator(usage.AttributeLocation, t_scalar, t_baseunit_2, scaling, t_baseunit_1, OperatorType.Divide) { IsScalar = (true, false, false) },
                 ]);
+            }
+
+        foreach (GenericAttributeClassUsage usage in identity_relationships)
+            if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
+            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
+            else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
+            else if (!usage.GenericAttributeArguments.Contains(target_name))
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_quantity_as_attribute_argument, usage.AttributeLocation, [target_name]));
+            else if (usage.GenericAttributeArguments[0] == usage.GenericAttributeArguments[1])
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_quantities_must_be_different, usage.AttributeLocation, [usage.GenericAttributeArguments[0]]));
+            else
+            {
+                string? invscaling = null,
+                        scaling = usage.AttributeArguments.FirstOrDefault()?.ToString();
+                Identifier t_quantity_1 = usage.GenericAttributeArguments[0],
+                           t_quantity_2 = usage.GenericAttributeArguments[1],
+                           t_baseunit_1 = usage.GenericAttributeArguments[2],
+                           t_baseunit_2 = usage.GenericAttributeArguments[3],
+                           t_scalar = usage.GenericAttributeArguments[4];
+
+                if (scaling is { } s)
+                {
+                    scaling = $"* ({s})";
+                    invscaling = $"/ ({s})";
+                }
+
+                quantity_infos[t_quantity_1].Casts.Add(new(t_quantity_1, t_quantity_2, scaling));
+                quantity_infos[t_quantity_2].Casts.Add(new(t_quantity_2, t_quantity_1, invscaling));
+                unit_infos[t_baseunit_1].Casts.Add(new(t_baseunit_1, t_baseunit_2, scaling));
+                unit_infos[t_baseunit_2].Casts.Add(new(t_baseunit_2, t_baseunit_1, invscaling));
             }
     }
 
@@ -748,10 +790,10 @@ public sealed class QuantityDependencyGenerator
         """);
 
 
-        void Append(CastOperator cast)
-        {
-            sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromBaseUnit(unit.ToBaseUnit());");
-        }
+        void Append(CastOperator cast) => sb.AppendLine($"""
+        //#line {-1} "{null}"
+                public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromBaseUnit(unit.ToBaseUnit());
+        """);
 
         void AppendOp(BinaryOperator @operator)
         {
@@ -792,8 +834,8 @@ public sealed class QuantityDependencyGenerator
                 {
             """);
 
-            //foreach (CastOperator cast in quantity_info.Casts)
-            //    Append(cast);
+            foreach (CastOperator cast in quantity_info.Casts)
+                Append(cast);
 
             foreach (BinaryOperator @operator in quantity_info.BinaryOperators)
                 AppendOp(@operator);
@@ -891,7 +933,7 @@ public enum OperatorType
 
 public sealed record PropertyInfo(string Name, Identifier Result);
 
-public sealed record CastOperator(Identifier Operand, Identifier Result, bool Implicit = true);
+public sealed record CastOperator(Identifier Operand, Identifier Result, string? Scaling = null, bool Implicit = true);
 
 public sealed record StaticCreationMethod(Identifier Scalar, Identifier Result);
 
@@ -904,8 +946,8 @@ public sealed record QuantityInformation(
     Identifier Name,
     Identifier BaseUnit,
     List<Identifier> KnownUnits,
-    List<BinaryOperator> BinaryOperators //,
-    //List<CastOperator> Casts
+    List<BinaryOperator> BinaryOperators,
+    List<CastOperator> Casts
 );
 
 public sealed record UnitInformation(
