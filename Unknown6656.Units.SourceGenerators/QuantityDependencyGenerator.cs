@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 using System.Diagnostics;
-using System.Xml.Linq;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Unknown6656.Units.Internals;
 
@@ -18,13 +18,14 @@ namespace Unknown6656.Units.Internals;
 public sealed class QuantityDependencyGenerator
     : IIncrementalGenerator
 {
-    public const string Identifier_DisableEmittingIUnitInterfaces = "Unknown6656.Units.DisableEmittingIUnitInterfaces";
-    public const string Identifier_MultiplicativeRelationship = "Unknown6656.Units.MultiplicativeRelationship";
-    public const string Identifier_InverseRelationship = "Unknown6656.Units.InverseRelationship";
-    public const string Identifier_IdentityRelationship = "Unknown6656.Units.IdentityRelationship";
-    public const string Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
-    public const string Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
+    public static readonly Identifier Identifier_DisableEmittingIUnitInterfaces = "Unknown6656.Units.DisableEmittingIUnitInterfaces";
+    public static readonly Identifier Identifier_MultiplicativeRelationship = "Unknown6656.Units.MultiplicativeRelationship";
+    public static readonly Identifier Identifier_InverseRelationship = "Unknown6656.Units.InverseRelationship";
+    public static readonly Identifier Identifier_IdentityRelationship = "Unknown6656.Units.IdentityRelationship";
+    public static readonly Identifier Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
+    public static readonly Identifier Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
     public static readonly Identifier Identifier_ExtensionClass = "Unknown6656.Units.Unit";
+    public const bool EMIT_LINE_NUMBERS = true; // TODO : make this an attribute
 
 
     #region DIAGNOSTIC ERRORS
@@ -139,7 +140,7 @@ public sealed class QuantityDependencyGenerator
         ));
     }
 
-    private static IncrementalValuesProvider<GenericAttributeClassUsage[]> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, string attribute_name) => context.SyntaxProvider
+    private static IncrementalValuesProvider<GenericAttributeClassUsage[]> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, Identifier attribute_name) => context.SyntaxProvider
         .CreateSyntaxProvider(
             predicate: static (s, _) => s is TypeDeclarationSyntax { AttributeLists.Count: > 0 },
             transform: (ctx, _) => GetGenericAttributeClassUsage(ctx, attribute_name).ToArray()
@@ -160,7 +161,7 @@ public sealed class QuantityDependencyGenerator
         return false;
     }
 
-    private static IEnumerable<GenericAttributeClassUsage> GetGenericAttributeClassUsage(GeneratorSyntaxContext context, string attribute_name)
+    private static IEnumerable<GenericAttributeClassUsage> GetGenericAttributeClassUsage(GeneratorSyntaxContext context, Identifier attribute_name)
     {
         if (context.Node is TypeDeclarationSyntax node)
         {
@@ -521,6 +522,7 @@ public sealed class QuantityDependencyGenerator
         CancellationToken ct = production_context.CancellationToken;
         Dictionary<string, (List<string> units, string? base_unit)> known_units_dict = [];
         Dictionary<string, string> unit_scalar_mapper = [];
+        Dictionary<string, Location> locations = [];
 
         foreach (GenericAttributeClassUsage usage in known_units)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
@@ -540,6 +542,7 @@ public sealed class QuantityDependencyGenerator
                 else
                     entry.units.Add(target_name);
 
+                locations[target_name] = usage.TargetType.GetLocation();
                 known_units_dict[quantity] = entry;
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
             }
@@ -562,6 +565,7 @@ public sealed class QuantityDependencyGenerator
                 else
                     entry.base_unit = target_name;
 
+                locations[target_name] = usage.TargetType.GetLocation();
                 known_units_dict[quantity] = entry;
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
             }
@@ -571,7 +575,7 @@ public sealed class QuantityDependencyGenerator
         static_infos = [..from usage in known_units.Concat(known_base_units)
                           let target_name = usage.TargetSymbol?.ToDisplayString()
                           where target_name is { }
-                          select new StaticCreationMethod(unit_scalar_mapper[target_name], target_name)];
+                          select new StaticCreationMethod(usage.TargetType.GetLocation(), unit_scalar_mapper[target_name], target_name)];
 
         foreach (var kvp in known_units_dict)
         {
@@ -589,9 +593,9 @@ public sealed class QuantityDependencyGenerator
 
                 foreach (string target_unit in units)
                     if (target_unit != unit)
-                        properties.Add(new(new Identifier(target_unit).Name, target_unit));
+                        properties.Add(new(locations[target_unit], new Identifier(target_unit).Name, target_unit));
 
-                UnitInformation unit_info = new(unit, unit == kvp.Value.base_unit, unit_scalar_mapper[unit], quantity, kvp.Value.base_unit, properties, [], []);
+                UnitInformation unit_info = new(locations[unit], unit, unit == kvp.Value.base_unit, unit_scalar_mapper[unit], quantity, kvp.Value.base_unit, properties, [], []);
 
                 unit_infos[unit_info.Name] = unit_info;
             }
@@ -609,6 +613,7 @@ public sealed class QuantityDependencyGenerator
             }
 
             quantity_infos[quantity] = new(
+                Location.None,
                 quantity,
                 kvp.Value.base_unit,
                 [..from i in unit_infos
@@ -661,6 +666,8 @@ public sealed class QuantityDependencyGenerator
 
                 if (error)
                     continue;
+                else if (!locations.ContainsKey(target_name))
+                    locations[target_name] = usage.TargetType.GetLocation();
 
                 quantity_infos[t_quantity_in1].BinaryOperators.AddRange([
                     new BinaryOperator(usage.AttributeLocation, t_quantity_in1, t_quantity_in2, scaling, t_quantity_out, OperatorType.Multiply),
@@ -698,6 +705,9 @@ public sealed class QuantityDependencyGenerator
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_quantities_must_be_different, usage.AttributeLocation, [usage.GenericAttributeArguments[0]]));
             else
             {
+                if (!locations.ContainsKey(target_name))
+                    locations[target_name] = usage.TargetType.GetLocation();
+
                 string? scaling = usage.AttributeArguments.FirstOrDefault()?.ToString();
                 Identifier t_quantity_1 = usage.GenericAttributeArguments[0],
                            t_quantity_2 = usage.GenericAttributeArguments[1],
@@ -734,6 +744,9 @@ public sealed class QuantityDependencyGenerator
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_quantities_must_be_different, usage.AttributeLocation, [usage.GenericAttributeArguments[0]]));
             else
             {
+                if (!locations.ContainsKey(target_name))
+                    locations[target_name] = usage.TargetType.GetLocation();
+
                 string? invscaling = null,
                         scaling = usage.AttributeArguments.FirstOrDefault()?.ToString();
                 Identifier t_quantity_1 = usage.GenericAttributeArguments[0],
@@ -778,10 +791,7 @@ public sealed class QuantityDependencyGenerator
         """);
 
         foreach (StaticCreationMethod static_info in static_infos)
-            sb.AppendLine($"""
-        // TODO : #line ... "..."
-                public static {static_info.Result} {static_info.Result.Name}(this {static_info.Scalar} value) => new(value);
-        """);
+            AppendStatic(static_info);
 
         sb.AppendLine($$"""
         #line default
@@ -790,10 +800,37 @@ public sealed class QuantityDependencyGenerator
         """);
 
 
-        void Append(CastOperator cast) => sb.AppendLine($"""
-        //#line {-1} "{null}"
-                public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromBaseUnit(unit.ToBaseUnit());
-        """);
+        void AppendStatic(StaticCreationMethod @static)
+        {
+            if (EMIT_LINE_NUMBERS)
+            {
+                FileLinePositionSpan location = @static.Location.GetLineSpan();
+
+                sb.AppendLine($"#line {location.StartLinePosition.Line + 1} \"{location.Path}\"");
+            }
+
+            sb.AppendLine($"        public static {@static.Result} {@static.Result.Name}(this {@static.Scalar} value) => new(value);");
+        }
+
+        void AppendProperty(PropertyInfo property)
+        {
+            if (EMIT_LINE_NUMBERS)
+            {
+                FileLinePositionSpan location = property.Location.GetLineSpan();
+
+                sb.AppendLine($"#line {location.StartLinePosition.Line + 1} \"{location.Path}\"");
+            }
+
+            sb.AppendLine($"        public {property.Result} {property.Name} => ({property.Result})this;");
+        }
+
+        void AppendCast(CastOperator cast)
+        {
+            if (EMIT_LINE_NUMBERS)
+                sb.AppendLine($"//#line {+1} \"...\" ");
+
+            sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromBaseUnit(unit.ToBaseUnit());");
+        }
 
         void AppendOp(BinaryOperator @operator)
         {
@@ -812,12 +849,14 @@ public sealed class QuantityDependencyGenerator
             if (scaling is { })
                 scaling = $"{op} ({scaling})";
 
-            FileLinePositionSpan position = @operator.Location.GetLineSpan();
+            if (EMIT_LINE_NUMBERS)
+            {
+                FileLinePositionSpan location = @operator.Location.GetLineSpan();
 
-            sb.AppendLine($"""
-            //#line {position.StartLinePosition.Line + 1} "{@operator.Location.SourceTree?.FilePath}"
-                    public static {@operator.Result} operator {op}({@operator.Operand1} {name1}, {@operator.Operand2} {name2}) => {(@operator.IsScalar.result ? "" : "new")}({operand1} {op} {operand2} {scaling});
-            """);
+                sb.AppendLine($"#line {location.StartLinePosition.Line + 1} \"{@operator.Location.SourceTree?.FilePath}\"");
+            }
+
+            sb.AppendLine($"        public static {@operator.Result} operator {op}({@operator.Operand1} {name1}, {@operator.Operand2} {name2}) => {(@operator.IsScalar.result ? "" : "new")}({operand1} {op} {operand2} {scaling});");
         }
 
 
@@ -825,17 +864,20 @@ public sealed class QuantityDependencyGenerator
         {
             Identifier name = kvp.Key;
             QuantityInformation quantity_info = kvp.Value;
+            FileLinePositionSpan location = quantity_info.Location.GetLineSpan();
 
-            sb.AppendLine($$"""
+            sb.AppendLine($$""""
 
             namespace {{name.Namespace}}
             {
+            {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
                 public partial record {{name.Name}}
+            #line default
                 {
-            """);
+            """");
 
             foreach (CastOperator cast in quantity_info.Casts)
-                Append(cast);
+                AppendCast(cast);
 
             foreach (BinaryOperator @operator in quantity_info.BinaryOperators)
                 AppendOp(@operator);
@@ -851,24 +893,27 @@ public sealed class QuantityDependencyGenerator
         {
             Identifier name = kvp.Key;
             UnitInformation unit_info = kvp.Value;
+            FileLinePositionSpan location = unit_info.Location.GetLineSpan();
             string interfaces = disable_emitting_interfaces ? "" :
                 $":\n        IUnit, {(unit_info.IsBaseUnit ? $"IBaseUnit<{name}, {unit_info.Scalar}>" : $"IUnit<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>")}";
 
-            sb.AppendLine($$"""
+            sb.AppendLine($$""""
 
             namespace {{name.Namespace}}
             {
+            {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
                 public partial record {{name.Name}} {{interfaces}}
+            {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
                 {
-            """);
+                    public static implicit operator {{name}}({{unit_info.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
+            #line default
+            """");
 
             foreach (PropertyInfo property in unit_info.Properties)
-                sb.AppendLine($"        public {property.Result} {property.Name} => ({property.Result})this;");
-
-            sb.AppendLine($"        public static implicit operator {name}({unit_info.Quantity} quantity) => {name}.FromBaseUnit(quantity.Value);");
+                AppendProperty(property);
 
             foreach (CastOperator cast in unit_info.Casts)
-                Append(cast);
+                AppendCast(cast);
 
             foreach (BinaryOperator @operator in unit_info.BinaryOperators)
                 AppendOp(@operator);
@@ -883,28 +928,6 @@ public sealed class QuantityDependencyGenerator
         production_context.AddSource($"{typeof(QuantityDependencyGenerator)}.g.cs", sb.ToString());
     }
 }
-
-/*
- * quantity:
- *      - base unit                             unit
- *      - known units                           unit[]
- *      - conversion to each unit               quantity -> unit
- *      - multiplicative relationship           (op mul: quantity * quantity -> quantity)[]
- *                                              (op div: quantity * quantity -> quantity)[]
- *      - inverse relationship                  (op div: scalar * quantity -> quantity)?
- *                                              (op mul: quantity * quantity -> scalar)?
- * unit:
- *      - implicit conversion to quantity       op impl: unit -> quantity
- *      - implicit conversion from quantity     op impl: quantity -> unit
- *      - implicit conversion to other units    (op impl: unit -> unit)[]
- *      - implicit conversion from other units  (op impl: unit <- unit)[]
- *      - multiplicative relationship           (op mul: unit * unit -> unit)[]
- *                                              (op div: unit * unit -> unit)[]
- *      - inverse relationship                  (op div: scalar * unit -> unit)?
- *                                              (op mul: unit * unit -> scalar)?
- * module:
- *      - static extension methods for scalar
- */
 
 public sealed record Identifier(string Namespace, string Name)
 {
@@ -931,11 +954,11 @@ public enum OperatorType
     Divide,
 }
 
-public sealed record PropertyInfo(string Name, Identifier Result);
+public sealed record PropertyInfo(Location Location, string Name, Identifier Result);
 
 public sealed record CastOperator(Identifier Operand, Identifier Result, string? Scaling = null, bool Implicit = true);
 
-public sealed record StaticCreationMethod(Identifier Scalar, Identifier Result);
+public sealed record StaticCreationMethod(Location Location, Identifier Scalar, Identifier Result);
 
 public sealed record BinaryOperator(Location Location, Identifier Operand1, Identifier Operand2, string? ScalingFactor, Identifier Result, OperatorType Type)
 {
@@ -943,6 +966,7 @@ public sealed record BinaryOperator(Location Location, Identifier Operand1, Iden
 }
 
 public sealed record QuantityInformation(
+    Location Location,
     Identifier Name,
     Identifier BaseUnit,
     List<Identifier> KnownUnits,
@@ -951,6 +975,7 @@ public sealed record QuantityInformation(
 );
 
 public sealed record UnitInformation(
+    Location Location,
     Identifier Name,
     bool IsBaseUnit,
     Identifier Scalar,
