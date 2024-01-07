@@ -3,7 +3,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Numerics;
@@ -115,7 +114,10 @@ public static partial class Unit
     private static string FormatImperial<TScalar>(TScalar scalar, string? unit_symbol, string? format, IFormatProvider? format_provider, UnitDisplay display)
         where TScalar : INumber<TScalar>
     {
-        string formatted = scalar?.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0";
+        string formatted = TScalar.IsNaN(scalar) ? "[NaN]"
+                         : TScalar.IsPositiveInfinity(scalar) ? "∞"
+                         : TScalar.IsNegativeInfinity(scalar) ? "-∞"
+                         : scalar?.ToString(format ?? "N", format_provider ?? DefaultNumberFormat) ?? "0";
 
         if (string.IsNullOrWhiteSpace(unit_symbol))
             return formatted;
@@ -178,7 +180,7 @@ public static partial class Unit
         if (display is UnitDisplay.MetricUseSIPrefixes or UnitDisplay.ImperialWithSIPrefixes
             || (submultiple ? display is UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples
                             : display is UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples))
-            while (value != TScalar.Zero && (submultiple ? value < TScalar.One : value >= @base) && order < prefixes.Count - 1)
+            while (TScalar.IsFinite(value) && value != TScalar.Zero && (submultiple ? value < TScalar.One : value >= @base) && order < prefixes.Count - 1)
             {
                 ++order;
 
