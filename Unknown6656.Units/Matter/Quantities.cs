@@ -27,6 +27,12 @@ public partial record Mass(Kilogram value)
 [MultiplicativeRelationship<MolarMass, Amount, Mass, GramPerMol, Mol, Kilogram, Scalar>((Scalar)1e-3)]
 public partial record MolarMass(GramPerMol value) : Quantity<MolarMass, GramPerMol, Scalar>(value);
 
+// TODO : conversion to force
+[MultiplicativeRelationship<AreaMassDensity, Area, Mass, KilogramPerSquareMeter, SquareMeter, Kilogram, Scalar>]
+[MultiplicativeRelationship<AreaMassDensity, Length, VolumetricMassDensity, KilogramPerSquareMeter, Meter, KilogramPerCubicMeter, Scalar>]
+public partial record AreaMassDensity(KilogramPerSquareMeter value) : Quantity<AreaMassDensity, KilogramPerSquareMeter, Scalar>(value);
+
+// TODO : conversion to force
 [MultiplicativeRelationship<VolumetricMassDensity, Volume, Mass, KilogramPerCubicMeter, CubicMeter, Kilogram, Scalar>]
 public partial record VolumetricMassDensity(KilogramPerCubicMeter value) : Quantity<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>(value);
 
