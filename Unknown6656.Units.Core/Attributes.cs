@@ -136,7 +136,6 @@ public class IdentityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB
 
 
 
-
 /// <summary>
 /// <b>
 ///     DO NOT FORGET TO REMOVE THE FOLLOWING TYPE ANNOTATIONS WHEN USING THIS ATTRIBUTE!
