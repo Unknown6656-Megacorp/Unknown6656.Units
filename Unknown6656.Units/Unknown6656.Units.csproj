@@ -76,6 +76,7 @@
         <AssemblyVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</AssemblyVersion>
     </PropertyGroup>
     <ItemGroup>
+        <ProjectReference Include="..\Unknown6656.Units.Core\Unknown6656.Units.Core.csproj" />
         <ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj" OutputItemType="Analyzer" />
         <!--<ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj"/>-->
     </ItemGroup>
