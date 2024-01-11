@@ -13,8 +13,6 @@ public partial record Newton(Scalar Value)
 public partial record PoundForce(Scalar Value)
     : Force.AffineUnit<PoundForce>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<PoundForce, Newton, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "lbf";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -25,8 +23,6 @@ public partial record PoundForce(Scalar Value)
 public partial record Dyne(Scalar Value)
     : Force.AffineUnit<Dyne>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Dyne, Newton, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "dyn";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
@@ -37,8 +33,6 @@ public partial record Dyne(Scalar Value)
 public partial record Sthène(Scalar Value)
     : Force.AffineUnit<Sthène>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Sthène, Newton, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "sn";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
