@@ -48,7 +48,7 @@ public partial record MassFlowRate(KilogramPerSecond value) : Quantity<MassFlowR
 [MultiplicativeRelationship<Force, Time, Impulse, Newton, Second, NewtonSecond, Scalar>]
 public partial record Impulse(NewtonSecond value) : Quantity<Impulse, NewtonSecond, Scalar>(value);
 
-// TODO : specific impulse
+// public partial record SpecificImpulse(Second value) : Quantity<SpecificImpulse, Second, Scalar>(value);
 
 [MultiplicativeRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]
 public partial record Force(Newton value) : Quantity<Force, Newton, Scalar>(value);
