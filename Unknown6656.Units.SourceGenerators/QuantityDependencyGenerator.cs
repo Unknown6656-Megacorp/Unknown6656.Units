@@ -8,8 +8,6 @@ using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Unknown6656.Units.Internals;
 
@@ -25,6 +23,9 @@ public sealed class QuantityDependencyGenerator
     public static readonly Identifier Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
     public static readonly Identifier Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
     public static readonly Identifier Identifier_ExtensionClass = "Unknown6656.Units.Unit";
+    public static readonly Identifier Identifier_IBaseUnit = "Unknown6656.Units.IBaseUnit";
+    public static readonly Identifier Identifier_IUnit = "Unknown6656.Units.IUnit";
+
     public const bool EMIT_LINE_NUMBERS = true; // TODO : make this an attribute
 
 
@@ -90,6 +91,14 @@ public sealed class QuantityDependencyGenerator
         "U6656_008",
         "The quantity used as operator result must not be one of the operands",
         "The quantity '{0}' used as operator result must not be one of the operands",
+        "Unknown6656.Units",
+        DiagnosticSeverity.Error,
+        true
+    );
+    private static readonly DiagnosticDescriptor _diagnostic_implicit_interface = new(
+        "U6656_009",
+        "The unit type already implements this interface through the source generator. This statement must therefore be removed to avoid runtime errors. Alternatively, the usage of '[assembly: DisableEmittingIUnitInterfaces]' can be used.",
+        "The unit type '{0}' already implements the interface '{1}' through the source generator. This statement must therefore be removed to avoid runtime errors. Alternatively, the usage of '[assembly: DisableEmittingIUnitInterfaces]' can be used.",
         "Unknown6656.Units",
         DiagnosticSeverity.Error,
         true
@@ -491,6 +500,7 @@ public sealed class QuantityDependencyGenerator
             incremental_context,
             production_context,
             compilation,
+            disable_emitting_interfaces,
             multiplicative_relationships,
             inverse_relationships,
             identity_relationships,
@@ -509,6 +519,7 @@ public sealed class QuantityDependencyGenerator
         IncrementalGeneratorInitializationContext incremental_context,
         SourceProductionContext production_context,
         Compilation compilation,
+        bool disable_emitting_interfaces,
         GenericAttributeClassUsage[] multiplicative_relationships,
         GenericAttributeClassUsage[] inverse_relationships,
         GenericAttributeClassUsage[] identity_relationships,
@@ -535,6 +546,20 @@ public sealed class QuantityDependencyGenerator
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [target_name]));
             else
             {
+                bool error = false;
+
+                if (!disable_emitting_interfaces && record.BaseList?.Types is { } base_interfaces)
+                    foreach (BaseTypeSyntax base_interface in base_interfaces)
+                        if (usage.SemanticModel.GetDeclaredSymbol(base_interface)?.ToDisplayString() is string base_interface_name
+                            && (base_interface_name.StartsWith(Identifier_IBaseUnit) || base_interface_name.StartsWith(Identifier_IUnit)))
+                        {
+                            production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_implicit_interface, base_interface.GetLocation(), [target_name, base_interface_name]));
+                            error = true;
+                        }
+
+                if (error)
+                    continue;
+
                 string quantity = usage.GenericAttributeArguments[0].ToString();
 
                 if (!known_units_dict.TryGetValue(quantity, out var entry))
@@ -558,6 +583,20 @@ public sealed class QuantityDependencyGenerator
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [target_name]));
             else
             {
+                bool error = false;
+
+                if (!disable_emitting_interfaces && record.BaseList?.Types is { } base_interfaces)
+                    foreach (BaseTypeSyntax base_interface in base_interfaces)
+                        if (usage.SemanticModel.GetDeclaredSymbol(base_interface)?.ToDisplayString() is string base_interface_name
+                            && (base_interface_name.StartsWith(Identifier_IBaseUnit) || base_interface_name.StartsWith(Identifier_IUnit)))
+                        {
+                            production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_implicit_interface, base_interface.GetLocation(), [target_name, base_interface_name]));
+                            error = true;
+                        }
+
+                if (error)
+                    continue;
+
                 string quantity = usage.GenericAttributeArguments[0].ToString();
 
                 if (!known_units_dict.TryGetValue(quantity, out var entry))
@@ -895,7 +934,7 @@ public sealed class QuantityDependencyGenerator
             UnitInformation unit_info = kvp.Value;
             FileLinePositionSpan location = unit_info.Location.GetLineSpan();
             string interfaces = disable_emitting_interfaces ? "" :
-                $":\n        IUnit, {(unit_info.IsBaseUnit ? $"IBaseUnit<{name}, {unit_info.Scalar}>" : $"IUnit<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>")}";
+                $":\n        {Identifier_IUnit}, {(unit_info.IsBaseUnit ? $"{Identifier_IBaseUnit}<{name}, {unit_info.Scalar}>" : $"{Identifier_IUnit}<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>")}";
 
             sb.AppendLine($$""""
 
@@ -944,6 +983,8 @@ public sealed record Identifier(string Namespace, string Name)
     private static string GetNamespace(string identifier) => identifier.LastIndexOf('.') is int i and >= 0 ? identifier.Substring(0, i) : "";
 
     private static string GetTypeName(string identifier) => identifier.LastIndexOf('.') is int i and >= 0 ? identifier.Substring(i + 1) : identifier;
+
+    public static implicit operator string(Identifier identifier) => identifier.ToString();
 
     public static implicit operator Identifier(string? identifier) => new(identifier);
 }
