@@ -15,8 +15,6 @@ public partial record Pascal(Scalar Value)
 public partial record Atmosphere(Scalar Value)
     : Pressure.AffineUnit<Atmosphere>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Atmosphere, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "atm";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
@@ -27,20 +25,16 @@ public partial record Atmosphere(Scalar Value)
 public partial record Bar(Scalar Value)
     : Pressure.AffineUnit<Bar>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Bar, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "bar";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-5;
 }
 
-[KnownUnit<Pressure, PoundPerSquareInch, Pascal, Scalar>]
-public partial record PoundPerSquareInch(Scalar Value)
-    : Pressure.AffineUnit<PoundPerSquareInch>(Value)
+[KnownUnit<Pressure, PoundForcePerSquareInch, Pascal, Scalar>]
+public partial record PoundForcePerSquareInch(Scalar Value)
+    : Pressure.AffineUnit<PoundForcePerSquareInch>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<PoundPerSquareInch, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "psi";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -59,11 +53,11 @@ public partial record Torr(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.0075006168270417;
 }
 
-[KnownUnit<Pressure, KilopoundPerSquareInch, Pascal, Scalar>]
-public partial record KilopoundPerSquareInch(Scalar Value)
-    : Pressure.AffineUnit<KilopoundPerSquareInch>(Value)
+[KnownUnit<Pressure, KilopoundForcePerSquareInch, Pascal, Scalar>]
+public partial record KilopoundForcePerSquareInch(Scalar Value)
+    : Pressure.AffineUnit<KilopoundForcePerSquareInch>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<KilopoundPerSquareInch, Pascal, Scalar>
+    , IUnit<KilopoundForcePerSquareInch, Pascal, Scalar>
     , IUnit
 {
     public static string UnitSymbol { get; } = "ksi";
