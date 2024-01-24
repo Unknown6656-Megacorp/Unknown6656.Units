@@ -1,11 +1,14 @@
 ﻿// #define IGNORE_CS0695
 #define IMPLICT_SCALAR_TO_UNIT
+#define SI_PREFIX_IGNORE_CASE
+
 
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Numerics;
+using System.Linq;
 using System;
 
 namespace Unknown6656.Units;
@@ -42,6 +45,7 @@ public interface IUnit
 {
     public static abstract string UnitSymbol { get; }
     public static abstract UnitDisplay UnitDisplay { get; }
+    public static virtual string[] AlternativeUnitSymbols { get; } = [];
 }
 
 public interface IUnit<TUnit, TBaseUnit, TScalar>
@@ -195,7 +199,7 @@ public static partial class Unit
 
         return FormatImperial(
             value,
-            (order < 0 ? "" : prefixes[order]) + (scale == SIUnitScale.Base_1024 ? "i" : "") + unit_symbol,
+            (order < 0 ? "" : prefixes[order] + (scale == SIUnitScale.Base_1024 ? "i" : "")) + unit_symbol,
             format,
             format_provider,
             inverse_formatted is null ? display : UnitDisplay.UseFormatStrings
@@ -204,9 +208,71 @@ public static partial class Unit
 
     public static bool TryParse<TScalar, TUnit>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
         where TScalar : INumber<TScalar>
-        where TUnit : IUnit => TryParse(value, TUnit.UnitSymbol, TUnit.UnitDisplay, provider, out scalar);
+        where TUnit : IUnit => TryParse(value, [TUnit.UnitSymbol, ..TUnit.AlternativeUnitSymbols], TUnit.UnitDisplay, provider, out scalar);
 
-    private static bool TryParse<TScalar>(string? value, string unit_symbol, UnitDisplay display, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
+    private static int GetExponent(char si_prefix) => si_prefix switch
+    {
+        'y' => -24,
+        'z' => -21,
+#if SI_PREFIX_IGNORE_CASE
+        'a' or 'A' => -18,
+        'f' or 'F' => -15,
+#else
+        'a' => -18,
+        'f' => -15,
+#endif
+        'p' => -12,
+#if SI_PREFIX_IGNORE_CASE
+        'n' or 'N' => -9,
+        'μ' or 'u' or 'U' => -6,
+#else
+        'n' => -9,
+        'μ' or 'u' => -6,
+#endif
+        'm' => -3,
+        // 'da' => 1,
+#if SI_PREFIX_IGNORE_CASE
+        'c' or 'C' => -2,
+        'd' or 'D' => -1,
+        'h' or 'H' => 2,
+        'k' or 'K' => 3,
+#else
+        'c' => -2,
+        'd' => -1,
+        'h' => 2,
+        'k' => 3,
+#endif
+        'M' => 6,
+#if SI_PREFIX_IGNORE_CASE
+        'G' or 'g' => 9,
+#else
+        'G' => 9,
+#endif
+        'T' => 12,
+        'P' => 15,
+#if SI_PREFIX_IGNORE_CASE
+        'E' or 'e' => 18,
+#else
+        'E' => 18,
+#endif
+        'Z' => 21,
+        'Y' => 24,
+        _ => throw new ArgumentOutOfRangeException(nameof(si_prefix), si_prefix, $"The SI prefix '{si_prefix}' is not supported or defined."),
+
+    };
+
+    private static string NormalizeUnitSymbol(string unit_symbol)
+    {
+        unit_symbol = unit_symbol.Trim()
+                                 .Replace("·", "")
+                                 .Replace("²", "^2")
+                                 .Replace("³", "^3")
+                                 .Replace("⁻¹", "^-1");
+
+        return unit_symbol;
+    }
+
+    private static bool TryParse<TScalar>(string? value, IEnumerable<string> unit_symbols, UnitDisplay display, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
         where TScalar : INumber<TScalar>
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -219,9 +285,10 @@ public static partial class Unit
             return true;
 
         NumberFormatInfo parser = provider?.GetFormat(typeof(NumberFormatInfo)) as NumberFormatInfo ?? CultureInfo.CurrentCulture.NumberFormat;
+        SIUnitScale scale = SIUnitScale.Base_1000;
+        int exponent = 0;
 
-        value = value.Trim()
-                     .Replace("'", "")
+        value = value.Replace("'", "")
                      .Replace(" ", "")
                      .Replace(parser.CurrencyGroupSeparator, "")
                      .Replace(parser.NumberGroupSeparator, "")
@@ -229,21 +296,46 @@ public static partial class Unit
                      .Replace(parser.CurrencyDecimalSeparator, ".")
                      .Replace(parser.NumberDecimalSeparator, ".")
                      .Replace(parser.PercentDecimalSeparator, ".");
+        value = NormalizeUnitSymbol(value);
+
+        foreach (string unit_symbol in (from sym in unit_symbols select NormalizeUnitSymbol(sym.ToLowerInvariant())).Distinct())
+            if (value.EndsWith(unit_symbol, StringComparison.OrdinalIgnoreCase))
+            {
+                value = value[..^unit_symbol.Length].Trim();
+
+                if (value.EndsWith("i", StringComparison.OrdinalIgnoreCase))
+                {
+                    scale = SIUnitScale.Base_1024;
+                    value = value[..^1];
+                }
+
+                if (value.Length > 1 && value[^1] is char prefix && char.IsLetter(prefix))
+                {
+                    exponent = GetExponent(prefix);
+                    value = value[..^1];
+                }
+
+                break;
+            }
 
         parser = new();
 
-        if (TScalar.TryParse(value, parser, out scalar))
-            return true;
-        else
+        bool success = TScalar.TryParse(value, parser, out scalar);
+
+        if (success && exponent != 0)
         {
-            
+            double factor = Math.Pow(scale switch
+            {
+                SIUnitScale.Base_1024 => 1024,
+                SIUnitScale.Base_1000 => 1000,
+                _ => throw new NotImplementedException("[TODO]"),
+            }, exponent);
 
-
-
-#warning TODO : parse prefixes (e.g. "1.5 kV" -> 1500 V, "200 MiB" -> 209'715'200 B)
+            scalar ??= TScalar.Zero;
+            scalar *= (TScalar)Convert.ChangeType(factor, typeof(TScalar));
         }
 
-        return false;
+        return success;
     }
 }
 
@@ -480,10 +572,10 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
     {
         bool success;
 
-        if (BaseUnit<TQuantity, TBaseUnit, TScalar>.TryParse(s, provider, out TBaseUnit? @base))
-            (success, result) = (true, FromBaseUnit(@base));
-        else if (TQuantity.TryParse(s, provider, out TQuantity? quantity))
+        if (TQuantity.TryParse(s, provider, out TQuantity? quantity))
             (success, result) = (true, quantity);
+        else if(BaseUnit<TQuantity, TBaseUnit, TScalar>.TryParse(s, provider, out TBaseUnit? @base))
+            (success, result) = (true, FromBaseUnit(@base));
         else
             (success, result) = (false, null);
 
@@ -495,8 +587,6 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
     public static explicit operator Quantity<TQuantity, TBaseUnit, TScalar>(TScalar value) => new(value);
 
     public static explicit operator TScalar(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => quantity.Value.Value;
-
-    public static implicit operator string(Quantity<TQuantity, TBaseUnit, TScalar> unit) => unit.ToString();
 
     public static implicit operator Quantity<TQuantity, TBaseUnit, TScalar>(string s) => Parse(s, null);
 
@@ -510,6 +600,8 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
         public static implicit operator TQuantity(Unit<TUnit> unit) => new Quantity<TQuantity, TBaseUnit, TScalar>(unit.ToBaseUnit());
 
         public static implicit operator Unit<TUnit>(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => TUnit.FromBaseUnit(quantity.Value);
+
+        public static implicit operator Unit<TUnit>(string s) => Parse(s, null);
     }
 
     public abstract record AffineUnit<TUnit>(TScalar Value)
@@ -550,6 +642,8 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
                 return (TUnit)value;
             }
         }
+
+        public static implicit operator AffineUnit<TUnit>(string s) => Parse(s, null);
     }
 
     public abstract record ArbitraryUnit<TUnit>(TScalar Value)
@@ -576,6 +670,8 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
             else
                 return FromScalar(TUnit.FromBaseUnit(base_unit.Value));
         }
+
+        public static implicit operator ArbitraryUnit<TUnit>(string s) => Parse(s, null);
     }
 }
 
@@ -595,4 +691,6 @@ public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
     public static TScalar ScalingFactor { get; } = TScalar.One;
     public static TScalar PreScalingOffset { get; } = TScalar.Zero;
     public static TScalar PostScalingOffset { get; } = TScalar.Zero;
+
+    public static implicit operator BaseUnit<TQuantity, TBaseUnit, TScalar>(string s) => Parse(s, null);
 }
