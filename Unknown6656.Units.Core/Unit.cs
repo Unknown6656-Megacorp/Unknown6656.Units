@@ -202,7 +202,11 @@ public static partial class Unit
         );
     }
 
-    public static bool TryParse<TScalar>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar, SIUnitScale scale = SIUnitScale.Base_1000)
+    public static bool TryParse<TScalar, TUnit>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
+        where TScalar : INumber<TScalar>
+        where TUnit : IUnit => TryParse(value, TUnit.UnitSymbol, TUnit.UnitDisplay, provider, out scalar);
+
+    private static bool TryParse<TScalar>(string? value, string unit_symbol, UnitDisplay display, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
         where TScalar : INumber<TScalar>
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -232,6 +236,10 @@ public static partial class Unit
             return true;
         else
         {
+            
+
+
+
 #warning TODO : parse prefixes (e.g. "1.5 kV" -> 1500 V, "200 MiB" -> 209'715'200 B)
         }
 
@@ -301,28 +309,19 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale) => Unit.Format(Value, TUnit.UnitSymbol, format, formatProvider, TUnit.UnitDisplay, scale);
 
-    public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, provider, SIUnitScale.Base_1000);
+    public static TUnit Parse(string s, IFormatProvider? provider) =>
+        TryParse(s, provider, out TUnit? result) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TUnit)} or {typeof(TScalar)}.");
 
-    public static TUnit Parse(string s, IFormatProvider? provider, SIUnitScale scale) =>
-        TryParse(s, provider, out TUnit? result, scale) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TUnit)} or {typeof(TScalar)}.");
-
-    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) =>
-        TryParse(s, provider, out result, SIUnitScale.Base_1000);
-
-    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result, SIUnitScale scale)
+    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
     {
-        if (Unit.TryParse(s, provider, out TScalar? scalar, scale))
-        {
-            result = FromScalar(scalar);
+        bool success;
 
-            return true;
-        }
+        if (Unit.TryParse<TScalar, TUnit>(s, provider, out TScalar? scalar))
+            (success, result) = (true, FromScalar(scalar));
         else
-        {
-            result = null;
+            (success, result) = (false, null);
 
-            return false;
-        }
+        return success;
     }
 
     #endregion
@@ -347,6 +346,10 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     public static implicit operator TUnit(AbstractUnit<TUnit, TBaseUnit, TScalar> unit) => unit as TUnit ?? FromScalar(unit.Value);
 
     public static explicit operator TScalar(AbstractUnit<TUnit, TBaseUnit, TScalar> unit) => unit.Value;
+
+    public static implicit operator string(AbstractUnit<TUnit, TBaseUnit, TScalar> unit) => unit.ToString();
+
+    public static implicit operator AbstractUnit<TUnit, TBaseUnit, TScalar>(string s) => Parse(s, null);
 
     #endregion
     #region ARITHMETIC OPERATORS
@@ -435,12 +438,19 @@ public interface IArbitraryUnit<TScalar>
 
 internal interface IQuantity;
 
+public interface IQuantity<TQuantity>
+    where TQuantity : IQuantity<TQuantity>
+{
+    public static abstract bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TQuantity? result);
+}
+
 public record Quantity<TQuantity, TBaseUnit, TScalar>
     : AbstractUnit<TQuantity, TBaseUnit, TScalar>
     , IUnit<TQuantity, TBaseUnit, TScalar>
     , IUnit
     , IQuantity
     where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
+                    , IQuantity<TQuantity>
     where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>
                     , IBaseUnit<TBaseUnit, TScalar>
                     , IUnit<TBaseUnit, TBaseUnit, TScalar>
@@ -462,11 +472,33 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
 
     public sealed override TBaseUnit ToBaseUnit() => Value;
 
+
+    public static new TQuantity Parse(string s, IFormatProvider? provider) =>
+        TryParse(s, provider, out TQuantity? result) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TQuantity)}.");
+
+    public static new bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TQuantity? result)
+    {
+        bool success;
+
+        if (BaseUnit<TQuantity, TBaseUnit, TScalar>.TryParse(s, provider, out TBaseUnit? @base))
+            (success, result) = (true, FromBaseUnit(@base));
+        else if (TQuantity.TryParse(s, provider, out TQuantity? quantity))
+            (success, result) = (true, quantity);
+        else
+            (success, result) = (false, null);
+
+        return success;
+    }
+
     public static TQuantity FromBaseUnit(TBaseUnit base_unit) => throw new NotImplementedException(); // TODO
 
     public static explicit operator Quantity<TQuantity, TBaseUnit, TScalar>(TScalar value) => new(value);
 
     public static explicit operator TScalar(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => quantity.Value.Value;
+
+    public static implicit operator string(Quantity<TQuantity, TBaseUnit, TScalar> unit) => unit.ToString();
+
+    public static implicit operator Quantity<TQuantity, TBaseUnit, TScalar>(string s) => Parse(s, null);
 
 
     public abstract record Unit<TUnit>(TScalar Value)
@@ -552,6 +584,7 @@ public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
     , IAffineUnit<TScalar>
     , IUnit<TBaseUnit, TBaseUnit, TScalar>
     where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
+                    , IQuantity<TQuantity>
     where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>
                     , IBaseUnit<TBaseUnit, TScalar>
                     , IUnit<TBaseUnit, TBaseUnit, TScalar>

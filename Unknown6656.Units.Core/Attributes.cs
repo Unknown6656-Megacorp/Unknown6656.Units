@@ -29,8 +29,11 @@ public sealed class DisableEmittingIUnitInterfaces : Attribute;
 public class MultiplicativeRelationship<TQuantityA, TQuantityB, TQuantityC, TBaseUnitA, TBaseUnitB, TBaseUnitC, TScalar>(TScalar? x = default)
     : Attribute
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
+                     , IQuantity<TQuantityA>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
+                     , IQuantity<TQuantityB>
     where TQuantityC : Quantity<TQuantityC, TBaseUnitC, TScalar>
+                     , IQuantity<TQuantityC>
     where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
                      , IBaseUnit<TBaseUnitA, TScalar>
                      , IUnit
@@ -62,7 +65,9 @@ public class MultiplicativeRelationship<TQuantityA, TQuantityB, TQuantityC, TBas
 public class MultiplicativeRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
     : MultiplicativeRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
+                     , IQuantity<TQuantityA>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
+                     , IQuantity<TQuantityB>
     where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
                      , IBaseUnit<TBaseUnitA, TScalar>
                      , IUnit
@@ -91,7 +96,9 @@ public class MultiplicativeRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBas
 public class InverseRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
     : MultiplicativeRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
+                     , IQuantity<TQuantityA>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
+                     , IQuantity<TQuantityB>
     where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
                      , IBaseUnit<TBaseUnitA, TScalar>
                      , IUnit
@@ -120,7 +127,9 @@ public class InverseRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB,
 public class IdentityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
     : MultiplicativeRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
+                     , IQuantity<TQuantityA>
     where TQuantityB : Quantity<TQuantityB, TBaseUnitB, TScalar>
+                     , IQuantity<TQuantityB>
     where TBaseUnitA : BaseUnit<TQuantityA, TBaseUnitA, TScalar>
                      , IBaseUnit<TBaseUnitA, TScalar>
                      , IUnit
@@ -130,10 +139,8 @@ public class IdentityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB
     where TScalar : INumber<TScalar>;
 
 
-
 // TODO : multiplicative relationship for non-base units
 // TODO : inverse relationship for non-base units
-
 
 
 /// <summary>
@@ -157,6 +164,7 @@ public class IdentityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB
 public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>
     : Attribute
     where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
+                    , IQuantity<TQuantity>
     where TUnit : Quantity<TQuantity, TBaseUnit, TScalar>.Unit<TUnit>
                 , IUnit<TUnit, TBaseUnit, TScalar>
                 , IUnit
@@ -186,6 +194,7 @@ public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>
 public class KnownBaseUnit<TQuantity, TBaseUnit, TScalar>
     : KnownUnit<TQuantity, TBaseUnit, TBaseUnit, TScalar>
     where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
+                    , IQuantity<TQuantity>
     where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>
                     , IBaseUnit<TBaseUnit, TScalar>
                     , IUnit
