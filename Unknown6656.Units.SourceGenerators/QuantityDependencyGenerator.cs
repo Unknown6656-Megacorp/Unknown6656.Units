@@ -978,6 +978,8 @@ public sealed class QuantityDependencyGenerator
 
                         return success;
                     }
+
+                    public static implicit operator {{name}}(string s) => Parse(s, null);
                 }
             }
             """);
@@ -1014,6 +1016,7 @@ public sealed class QuantityDependencyGenerator
 
             sb.AppendLine($$"""
             #line default
+                    public static implicit operator {{name}}(string s) => Parse(s, null);
                 }
             }
             """);
