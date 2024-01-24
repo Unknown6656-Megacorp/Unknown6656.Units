@@ -425,6 +425,14 @@ public interface ILinearUnit<TScalar>
     static TScalar IAffineUnit<TScalar>.PostScalingOffset { get; } = TScalar.Zero;
 }
 
+public interface IArbitraryUnit<TScalar>
+    where TScalar : INumber<TScalar>
+{
+    public static abstract TScalar FromBaseUnit(TScalar value);
+
+    public TScalar ToBaseUnit(TScalar value);
+}
+
 internal interface IQuantity;
 
 public record Quantity<TQuantity, TBaseUnit, TScalar>
@@ -453,6 +461,8 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
         : base(value.Value) => Value = value;
 
     public sealed override TBaseUnit ToBaseUnit() => Value;
+
+    public static TQuantity FromBaseUnit(TBaseUnit base_unit) => throw new NotImplementedException(); // TODO
 
     public static explicit operator Quantity<TQuantity, TBaseUnit, TScalar>(TScalar value) => new(value);
 
@@ -510,7 +520,31 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
         }
     }
 
-    public static TQuantity FromBaseUnit(TBaseUnit base_unit) => throw new NotImplementedException();
+    public abstract record ArbitraryUnit<TUnit>(TScalar Value)
+        : Unit<TUnit>(Value)
+        where TUnit : ArbitraryUnit<TUnit>
+                    , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IArbitraryUnit<TScalar>
+                    , IUnit
+    {
+        public abstract TScalar ToBaseUnit(TScalar value);
+
+        public override TBaseUnit ToBaseUnit()
+        {
+            if (this is TBaseUnit base_unit)
+                return base_unit;
+            else
+                return BaseUnit<TQuantity, TBaseUnit, TScalar>.FromScalar(ToBaseUnit(Value));
+        }
+
+        public static TUnit FromBaseUnit(TBaseUnit base_unit)
+        {
+            if (base_unit is TUnit unit)
+                return unit;
+            else
+                return FromScalar(TUnit.FromBaseUnit(base_unit.Value));
+        }
+    }
 }
 
 public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
