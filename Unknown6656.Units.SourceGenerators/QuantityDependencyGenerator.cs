@@ -109,7 +109,7 @@ public sealed class QuantityDependencyGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        //Debugger.Launch();
+        //System.Diagnostics.Debugger.Launch();
 
         IncrementalValuesProvider<GenericAttributeClassUsage[]> multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeRelationship);
         IncrementalValuesProvider<GenericAttributeClassUsage[]> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
@@ -530,6 +530,21 @@ public sealed class QuantityDependencyGenerator
         out List<StaticCreationMethod> static_infos
     )
     {
+        Dictionary<SyntaxTree, SemanticModel> models = compilation.SyntaxTrees.ToDictionary(t => t, t => compilation.GetSemanticModel(t));
+
+        ISymbol? ResolveSymbol(SyntaxNode node)
+        {
+            if (models.TryGetValue(node.SyntaxTree, out SemanticModel? m) && m.GetDeclaredSymbol(node) is ISymbol sym)
+                return sym;
+
+            foreach (SemanticModel model in models.Values)
+                if (model.GetDeclaredSymbol(node) is ISymbol symbol)
+                    return symbol;
+
+            return null;
+        }
+
+
         CancellationToken ct = production_context.CancellationToken;
         Dictionary<string, (List<string> units, string? base_unit)> known_units_dict = [];
         Dictionary<string, string> unit_scalar_mapper = [];
@@ -548,14 +563,21 @@ public sealed class QuantityDependencyGenerator
             {
                 bool error = false;
 
-                if (!disable_emitting_interfaces && record.BaseList?.Types is { } base_interfaces)
-                    foreach (BaseTypeSyntax base_interface in base_interfaces)
-                        if (usage.SemanticModel.GetDeclaredSymbol(base_interface)?.ToDisplayString() is string base_interface_name
-                            && (base_interface_name.StartsWith(Identifier_IBaseUnit) || base_interface_name.StartsWith(Identifier_IUnit)))
+                if (!disable_emitting_interfaces)
+                    foreach (SimpleBaseTypeSyntax base_interface in record.BaseList?.Types.OfType<SimpleBaseTypeSyntax>() ?? [])
+                    {
+                        string? base_interface_name = (ResolveSymbol(base_interface) ?? ResolveSymbol(base_interface.Type))?.ToDisplayString();
+
+                        base_interface_name ??= base_interface.Type.ToString();
+
+                        if (base_interface_name.StartsWith(Identifier_IBaseUnit) || base_interface_name.StartsWith(Identifier_IUnit) ||
+                            base_interface_name.StartsWith(Identifier_IBaseUnit.Name) || base_interface_name.StartsWith(Identifier_IUnit.Name))
                         {
                             production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_implicit_interface, base_interface.GetLocation(), [target_name, base_interface_name]));
+
                             error = true;
                         }
+                    }
 
                 if (error)
                     continue;
@@ -614,7 +636,12 @@ public sealed class QuantityDependencyGenerator
         static_infos = [..from usage in known_units.Concat(known_base_units)
                           let target_name = usage.TargetSymbol?.ToDisplayString()
                           where target_name is { }
-                          select new StaticCreationMethod(usage.TargetType.GetLocation(), unit_scalar_mapper[target_name], target_name)];
+                          where unit_scalar_mapper.ContainsKey(target_name)
+                          select new StaticCreationMethod(
+                              usage.TargetType.GetLocation(),
+                              unit_scalar_mapper[target_name],
+                              target_name
+                        )];
 
         foreach (var kvp in known_units_dict)
         {
