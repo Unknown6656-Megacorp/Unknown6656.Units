@@ -26,6 +26,11 @@ public partial record Jerk(MeterPerSecondCubed value) : Quantity<Jerk, MeterPerS
 [MultiplicativeRelationship<Volume, Frequency, VolumetricFlowRate, CubicMeter, Hertz, CubicMeterPerSecond, Scalar>]
 public partial record VolumetricFlowRate(CubicMeterPerSecond value) : Quantity<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(value);
 
+// TODO : angular momentum
+// TODO : angular velocity
+
+//public partial record MomentOfInertia(KilogramSquareMeter value) : Quantity<MomentOfInerta, KilogramSquareMeter, Scalar>(value);
+
 // TODO : mass flux https://en.wikipedia.org/wiki/Mass_flux
 // kg / m^2 / s
 
