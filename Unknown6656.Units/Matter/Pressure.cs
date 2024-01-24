@@ -45,8 +45,6 @@ public partial record PoundForcePerSquareInch(Scalar Value)
 public partial record Torr(Scalar Value)
     : Pressure.AffineUnit<Torr>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Torr, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "torr";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
@@ -57,8 +55,6 @@ public partial record Torr(Scalar Value)
 public partial record KilopoundForcePerSquareInch(Scalar Value)
     : Pressure.AffineUnit<KilopoundForcePerSquareInch>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<KilopoundForcePerSquareInch, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "ksi";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -69,8 +65,6 @@ public partial record KilopoundForcePerSquareInch(Scalar Value)
 public partial record MillimeterMercury(Scalar Value)
     : Pressure.AffineUnit<MillimeterMercury>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<MillimeterMercury, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "mmHg";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
@@ -81,8 +75,6 @@ public partial record MillimeterMercury(Scalar Value)
 public partial record InchMercury(Scalar Value)
     : Pressure.AffineUnit<InchMercury>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<InchMercury, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "inHg";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -93,8 +85,6 @@ public partial record InchMercury(Scalar Value)
 public partial record MillimeterWater(Scalar Value)
     : Pressure.AffineUnit<MillimeterWater>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<MillimeterWater, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "mmH₂O";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
@@ -105,8 +95,6 @@ public partial record MillimeterWater(Scalar Value)
 public partial record InchWater(Scalar Value)
     : Pressure.AffineUnit<InchWater>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<InchWater, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "inH₂O";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -117,8 +105,6 @@ public partial record InchWater(Scalar Value)
 public partial record AtmosphereTechnical(Scalar Value)
     : Pressure.AffineUnit<AtmosphereTechnical>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<AtmosphereTechnical, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "at";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
@@ -129,8 +115,6 @@ public partial record AtmosphereTechnical(Scalar Value)
 public partial record Barye(Scalar Value)
     : Pressure.AffineUnit<Barye>(Value)
     , ILinearUnit<Scalar>
-    , IUnit<Barye, Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "Ba";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
