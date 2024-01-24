@@ -53,4 +53,7 @@
         <PackageVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</PackageVersion>
         <AssemblyVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</AssemblyVersion>
     </PropertyGroup>
+    <ItemGroup>
+        <None Include="unknown6656-logo-1024.png" Pack="true" PackagePath=""/>
+    </ItemGroup>
 </Project>

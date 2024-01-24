@@ -6,11 +6,7 @@
         <!--<Scalar>F32</Scalar>-->
         <Scalar>F64</Scalar>
         <!--<Scalar>D128</Scalar>-->
-        <DefineConstants>
-            $(DefineConstants);
-            $(Scalar);
-            USE_DIACRITICS;
-        </DefineConstants>
+        <DefineConstants>$(DefineConstants);$(Scalar);USE_DIACRITICS;</DefineConstants>
     </PropertyGroup>
     <!--<Target Name="BuildOthers" BeforeTargets="DispatchToInnerBuilds" Condition="'$(Scalar)' == ''">-->
     <Target Name="BuildOthers" BeforeTargets="CoreBuild" Condition="'$(Scalar)' == ''">
@@ -81,10 +77,7 @@
         <!--<ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj"/>-->
     </ItemGroup>
     <ItemGroup>
-        <None Include="unknown6656-logo-1024.png">
-            <Pack>True</Pack>
-            <PackagePath></PackagePath>
-        </None>
+        <None Include="unknown6656-logo-1024.png" Pack="true" PackagePath=""/>
     </ItemGroup>
     <ItemGroup>
         <Compile Remove="old\**" />
