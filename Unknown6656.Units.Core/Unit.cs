@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Numerics;
 using System.Linq;
+using System.Text;
 using System;
 
 namespace Unknown6656.Units;
@@ -74,6 +75,99 @@ public enum SIUnitScale
 
 public static partial class Unit
 {
+    private static readonly Dictionary<string, string> _DIACRITICS_MAPPING = new Dictionary<string, string>()
+    {
+        ["äæǽ"] = "ae",
+        ["öœ"] = "oe",
+        ["ü"] = "ue",
+        ["Ä"] = "Ae",
+        ["Ü"] = "Ue",
+        ["Ö"] = "Oe",
+        ["ÀÁÂÃÄÅǺĀĂĄǍΑΆẢẠẦẪẨẬẰẮẴẲẶА"] = "A",
+        ["àáâãåǻāăąǎªαάảạầấẫẩậằắẵẳặа"] = "a",
+        ["Б"] = "B",
+        ["б"] = "b",
+        ["ÇĆĈĊČ"] = "C",
+        ["çćĉċč"] = "c",
+        ["Д"] = "D",
+        ["д"] = "d",
+        ["ÐĎĐΔ"] = "Dj",
+        ["ðďđδ"] = "dj",
+        ["ÈÉÊËĒĔĖĘĚΕΈẼẺẸỀẾỄỂỆЕЭ"] = "E",
+        ["èéêëēĕėęěέεẽẻẹềếễểệеэ"] = "e",
+        ["Ф"] = "F",
+        ["ф"] = "f",
+        ["ĜĞĠĢΓГҐ"] = "G",
+        ["ĝğġģγгґ"] = "g",
+        ["ĤĦ"] = "H",
+        ["ĥħ"] = "h",
+        ["ÌÍÎÏĨĪĬǏĮİΗΉΊΙΪỈỊИЫ"] = "I",
+        ["ìíîïĩīĭǐįıηήίιϊỉịиыї"] = "i",
+        ["Ĵ"] = "J",
+        ["ĵ"] = "j",
+        ["ĶΚК"] = "K",
+        ["ķκк"] = "k",
+        ["ĹĻĽĿŁΛЛ"] = "L",
+        ["ĺļľŀłλл"] = "l",
+        ["М"] = "M",
+        ["м"] = "m",
+        ["ÑŃŅŇΝН"] = "N",
+        ["ñńņňŉνн"] = "n",
+        ["ÒÓÔÕŌŎǑŐƠØǾΟΌΩΏỎỌỒỐỖỔỘỜỚỠỞỢО"] = "O",
+        ["òóôõōŏǒőơøǿºοόωώỏọồốỗổộờớỡởợо"] = "o",
+        ["П"] = "P",
+        ["п"] = "p",
+        ["ŔŖŘΡР"] = "R",
+        ["ŕŗřρр"] = "r",
+        ["ŚŜŞȘŠΣС"] = "S",
+        ["śŝşșšſσςс"] = "s",
+        ["ȚŢŤŦτТ"] = "T",
+        ["țţťŧт"] = "t",
+        ["ÙÚÛŨŪŬŮŰŲƯǓǕǗǙǛŨỦỤỪỨỮỬỰУ"] = "U",
+        ["ùúûũūŭůűųưǔǖǘǚǜυύϋủụừứữửựу"] = "u",
+        ["ÝŸŶΥΎΫỲỸỶỴЙ"] = "Y",
+        ["ýÿŷỳỹỷỵй"] = "y",
+        ["В"] = "V",
+        ["в"] = "v",
+        ["Ŵ"] = "W",
+        ["ŵ"] = "w",
+        ["ŹŻŽΖЗ"] = "Z",
+        ["źżžζз"] = "z",
+        ["ÆǼ"] = "AE",
+        ["ß"] = "ss",
+        ["Ĳ"] = "IJ",
+        ["ĳ"] = "ij",
+        ["Œ"] = "OE",
+        ["ƒ"] = "f",
+        ["ξ"] = "ks",
+        ["π"] = "p",
+        ["β"] = "v",
+        ["μ"] = "m",
+        ["ψ"] = "ps",
+        ["Ё"] = "Yo",
+        ["ё"] = "yo",
+        ["Є"] = "Ye",
+        ["є"] = "ye",
+        ["Ї"] = "Yi",
+        ["Ж"] = "Zh",
+        ["ж"] = "zh",
+        ["Х"] = "Kh",
+        ["х"] = "kh",
+        ["Ц"] = "Ts",
+        ["ц"] = "ts",
+        ["Ч"] = "Ch",
+        ["ч"] = "ch",
+        ["Ш"] = "Sh",
+        ["ш"] = "sh",
+        ["Щ"] = "Shch",
+        ["щ"] = "shch",
+        ["ЪъЬь"] = "",
+        ["Ю"] = "Yu",
+        ["ю"] = "yu",
+        ["Я"] = "Ya",
+        ["я"] = "ya",
+    };
+
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
     public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
     public static NumberFormatInfo DefaultNumberFormat { get; set; } = new()
@@ -208,7 +302,7 @@ public static partial class Unit
 
     public static bool TryParse<TScalar, TUnit>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
         where TScalar : INumber<TScalar>
-        where TUnit : IUnit => TryParse(value, [TUnit.UnitSymbol, ..TUnit.AlternativeUnitSymbols], TUnit.UnitDisplay, provider, out scalar);
+        where TUnit : IUnit => TryParse(value, [TUnit.UnitSymbol, typeof(TUnit).Name, ..TUnit.AlternativeUnitSymbols], TUnit.UnitDisplay, provider, out scalar);
 
     private static int GetExponent(char si_prefix) => si_prefix switch
     {
@@ -261,13 +355,40 @@ public static partial class Unit
 
     };
 
+    private static string RemoveDiacritics(this string input)
+    {
+        string normalized = input.Normalize(NormalizationForm.FormD);
+        StringBuilder sb = new(normalized.Length);
+
+        foreach (char c in input)
+            if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+            {
+                bool found = false;
+
+                foreach ((string key, string value) in _DIACRITICS_MAPPING)
+                    if (key.Contains(c))
+                    {
+                        sb.Append(value);
+                        found = true;
+
+                        break;
+                    }
+
+                if (!found)
+                    sb.Append(c);
+            }
+
+        return sb.ToString().Normalize(NormalizationForm.FormC);
+    }
+
     private static string NormalizeUnitSymbol(string unit_symbol)
     {
         unit_symbol = unit_symbol.Trim()
                                  .Replace("·", "")
                                  .Replace("²", "^2")
                                  .Replace("³", "^3")
-                                 .Replace("⁻¹", "^-1");
+                                 .Replace("⁻¹", "^-1")
+                                 .RemoveDiacritics();
 
         return unit_symbol;
     }
@@ -297,8 +418,9 @@ public static partial class Unit
                      .Replace(parser.NumberDecimalSeparator, ".")
                      .Replace(parser.PercentDecimalSeparator, ".");
         value = NormalizeUnitSymbol(value);
+        unit_symbols = (from sym in unit_symbols select NormalizeUnitSymbol(sym.ToLowerInvariant())).Distinct();
 
-        foreach (string unit_symbol in (from sym in unit_symbols select NormalizeUnitSymbol(sym.ToLowerInvariant())).Distinct())
+        foreach (string unit_symbol in unit_symbols)
             if (value.EndsWith(unit_symbol, StringComparison.OrdinalIgnoreCase))
             {
                 value = value[..^unit_symbol.Length].Trim();
@@ -693,4 +815,13 @@ public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
     public static TScalar PostScalingOffset { get; } = TScalar.Zero;
 
     public static implicit operator BaseUnit<TQuantity, TBaseUnit, TScalar>(string s) => Parse(s, null);
+}
+
+
+
+
+
+
+public static class Strings
+{
 }
