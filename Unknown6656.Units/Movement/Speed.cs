@@ -1,4 +1,4 @@
-namespace Unknown6656.Units.Movement;
+﻿namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<Speed, MeterPerSecond, Scalar>]
@@ -84,7 +84,7 @@ public partial record Mach(Scalar Value)
     public static string UnitSymbol { get; } = "Mach";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ma"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.PrefixedUnitNotation;
-    public static Scalar ScalingFactor { get; } = (Scalar)340;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.0029411764705882;
 }
 
 
