@@ -688,6 +688,10 @@ public sealed class QuantityDependencyGenerator
                    where i.Value.Quantity == quantity
                    select i.Key
                 ],
+                [..from i in unit_infos
+                   where i.Value.Quantity == quantity
+                   select new PropertyInfo(i.Value.Location, i.Key.Name, i.Key)
+                ],
                 [],
                 []
             );
@@ -950,6 +954,9 @@ public sealed class QuantityDependencyGenerator
                 {
             """");
 
+            foreach (PropertyInfo property in quantity_info.Properties)
+                AppendProperty(property);
+
             foreach (CastOperator cast in quantity_info.Casts)
                 AppendCast(cast);
 
@@ -1069,6 +1076,7 @@ public sealed record QuantityInformation(
     Identifier Name,
     Identifier BaseUnit,
     List<Identifier> KnownUnits,
+    List<PropertyInfo> Properties,
     List<BinaryOperator> BinaryOperators,
     List<CastOperator> Casts
 );
