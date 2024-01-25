@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Movement;
+namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<Speed, MeterPerSecond, Scalar>]
@@ -6,6 +6,7 @@ public partial record MeterPerSecond(Scalar Value)
     : BaseUnit<Speed, MeterPerSecond, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m/s";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["mps"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
@@ -15,6 +16,7 @@ public partial record KilometerPerHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "km/h";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kph", "kphr", "km/hr"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)3.6;
 }
@@ -25,6 +27,7 @@ public partial record MeterPerHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "m/h";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["m/hr"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)3600;
 }
@@ -35,6 +38,7 @@ public partial record MilePerHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "mi/h";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["mph", "miph", "miphr", "mi/hr"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)2.2369362920544025;
 }
@@ -45,6 +49,7 @@ public partial record FootPerSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ft/s";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ftps", "fps"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123;
 }
@@ -55,6 +60,7 @@ public partial record Knot(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "kn";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kt", "nm/h", "nm/hr"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)1.9438444924406046;
 }
@@ -65,11 +71,10 @@ public partial record SpeedOfLightVacuum(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "c₀";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["c"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)3.3356409519815204957557671447491851179258151984597290969e-9;
 }
-
-
 
 [KnownUnit<Speed, Mach, MeterPerSecond, Scalar>]
 public partial record Mach(Scalar Value)
@@ -77,6 +82,7 @@ public partial record Mach(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Mach";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ma"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.PrefixedUnitNotation;
     public static Scalar ScalingFactor { get; } = (Scalar)340;
 }
