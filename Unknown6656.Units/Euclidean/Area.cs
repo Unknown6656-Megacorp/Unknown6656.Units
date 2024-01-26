@@ -8,6 +8,7 @@ public partial record SquareMeter(Scalar Value)
     : BaseUnit<Area, SquareMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m²";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
@@ -17,6 +18,7 @@ public partial record SquareFoot(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ft²";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["foot^2", "feet^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)10.763910416709722258073075107890473764;
 }
@@ -37,6 +39,7 @@ public partial record Hectare(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ha";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["hectar", "hektar"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-4;
 }
@@ -47,6 +50,7 @@ public partial record SquareKilometer(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "km²";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilometer^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-6;
 }
