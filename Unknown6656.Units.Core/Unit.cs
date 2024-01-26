@@ -4,6 +4,7 @@
 
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -168,6 +169,18 @@ public static partial class Unit
         ["я"] = "ya",
     };
     private static readonly Dictionary<Type, string[]> _cached_alternative_unit_symbols = [];
+    private static readonly Regex _REGEX_NUMBER = new("""
+    ^
+    (?<sign>[+\-])?
+    \s*
+    (?<value>
+        (?<const>pi|tau|e|phi|zero|one|nan|\[nan\]|(p(os(itive)?)?|n(eg(ative)?)?)?inf(inity|ty)?)
+       |(?<number>(\d+(\s*\.\s*\d*)?|\.\s*\d+)((e|x\s*10\s*\^)\s*[+\-]?\s*\d+)?)
+    )
+    \s*
+    (?<unit>.*$)
+    """, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.NonBacktracking);
+
 
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
     public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
@@ -332,58 +345,58 @@ public static partial class Unit
         );
     }
 
-    private static int GetExponent(char si_prefix) => si_prefix switch
+    private static int? GetExponent(string si_prefix) => si_prefix switch
     {
-        'q' => -30,
-        'r' => -27,
-        'y' => -24,
-        'z' => -21,
+        "q" => -30,
+        "r" => -27,
+        "y" => -24,
+        "z" => -21,
 #if SI_PREFIX_IGNORE_CASE
-        'a' or 'A' => -18,
-        'f' or 'F' => -15,
+        "a" or "A" => -18,
+        "f" or "F" => -15,
 #else
-        'a' => -18,
-        'f' => -15,
+        "a" => -18,
+        "f" => -15,
 #endif
-        'p' => -12,
+        "p" => -12,
 #if SI_PREFIX_IGNORE_CASE
-        'n' or 'N' => -9,
-        'μ' or 'u' or 'U' => -6,
+        "n" or "N" => -9,
+        "μ" or "u" or "U" => -6,
 #else
-        'n' => -9,
-        'μ' or 'u' => -6,
+        "n" => -9,
+        "μ" or "u" => -6,
 #endif
-        'm' => -3,
-        // 'da' => 1,
+        "m" => -3,
+        "da" => 1,
 #if SI_PREFIX_IGNORE_CASE
-        'c' or 'C' => -2,
-        'd' or 'D' => -1,
-        'h' or 'H' => 2,
-        'k' or 'K' => 3,
+        "c" or "C" => -2,
+        "d" or "D" => -1,
+        "h" or "H" => 2,
+        "k" or "K" => 3,
 #else
-        'c' => -2,
-        'd' => -1,
-        'h' => 2,
-        'k' => 3,
+        "c" => -2,
+        "d" => -1,
+        "h" => 2,
+        "k" => 3,
 #endif
-        'M' => 6,
+        "M" => 6,
 #if SI_PREFIX_IGNORE_CASE
-        'G' or 'g' => 9,
+        "G" or "g" => 9,
 #else
-        'G' => 9,
+        "G" => 9,
 #endif
-        'T' => 12,
-        'P' => 15,
+        "T" => 12,
+        "P" => 15,
 #if SI_PREFIX_IGNORE_CASE
-        'E' or 'e' => 18,
+        "E" or "e" => 18,
 #else
-        'E' => 18,
+        "E" => 18,
 #endif
-        'Z' => 21,
-        'Y' => 24,
-        'R' => 27,
-        'Q' => 30,
-        _ => throw new ArgumentOutOfRangeException(nameof(si_prefix), si_prefix, $"The SI prefix '{si_prefix}' is not supported or defined."),
+        "Z" => 21,
+        "Y" => 24,
+        "R" => 27,
+        "Q" => 30,
+        _ => null,
     };
 
     private static string RemoveDiacritics(this string input)
@@ -412,13 +425,32 @@ public static partial class Unit
         return sb.ToString().Normalize(NormalizationForm.FormC);
     }
 
-    private static string NormalizeUnitSymbol(string unit_symbol, bool ignore_si_prefix)
+    private static string NormalizeString(this string input)
     {
-        unit_symbol = new([.. from c in unit_symbol
+        input = new([.. from c in input
                               where !char.IsWhiteSpace(c)
                               where c != '·'
-                              select c]);
+                              select c switch
+                              {
+                                  '\u05BE' or '\u1806' or '\u2010' or '\u2011' or '\u2012' or '\u2013' or '\u2014' or '\u2015' or
+                                  '\u2053' or '\u207B' or '\u208B' or '\u2212' or '\u23AF' or '\u23E4' or '\u2500' or '\u2501' or
+                                  '\u2796' or '\u2E3A' or '\u2E3B' or '\uFE58' or '\uFE63' or '\uFF0D' => '-',
+                                  '\u02D6' or '\uFE62' or '\uFF0B' or '\u208A' or '\u207A' => '+',
+                                  char ch => ch,
+                              }]);
 
+        return input.Replace("\U00010110", "-")
+                    .Replace("\U000110BE", "-")
+        //          .Replace("\U00011052", "-") // BUG, see https://github.com/dotnet/runtime/issues/97544
+                    .Replace("π", "pi")
+                    .Replace("τ", "tau")
+                    .Replace("φ", "phi")
+                    .Replace("∞", "infinity")
+                    .RemoveDiacritics();
+    }
+
+    private static string NormalizeUnitSymbol(this string unit_symbol, bool ignore_si_prefix)
+    {
         if (!ignore_si_prefix)
             foreach ((string name, string prefix) in MetricSIMapping)
                 unit_symbol = unit_symbol.Replace(name, prefix, StringComparison.OrdinalIgnoreCase);
@@ -429,9 +461,9 @@ public static partial class Unit
                                  .Replace("⁻²", "^-2")
                                  .Replace("⁻³", "^-3")
                                  .Replace("/", "per")
+                                 .Replace(".", "")
                                  .Replace("degrees", "°", StringComparison.OrdinalIgnoreCase)
-                                 .Replace("degree", "°", StringComparison.OrdinalIgnoreCase)
-                                 .RemoveDiacritics();
+                                 .Replace("degree", "°", StringComparison.OrdinalIgnoreCase);
 
         return unit_symbol;
     }
@@ -445,17 +477,30 @@ public static partial class Unit
         if (!_cached_alternative_unit_symbols.TryGetValue(type, out string[]? unit_symbols))
         {
             bool ignore_si_prefix = TUnit.UnitDisplay.IgnoreSIPrefixForParsing();
-
-            unit_symbols = [
+            List<string> symbols = [
                 TUnit.UnitSymbol,
+                ..TUnit.AlternativeUnitSymbols,
                 type.Name,
-                type.Name + 's', // plural form
-                ..TUnit.AlternativeUnitSymbols
             ];
-            unit_symbols = unit_symbols.Select(s => NormalizeUnitSymbol(s.ToLowerInvariant(), ignore_si_prefix))
-                                       .Distinct()
-                                       .OrderByDescending(s => s.Length)
-                                       .ToArray();
+
+            if (!type.Name.EndsWith("s", StringComparison.OrdinalIgnoreCase))
+                symbols.Add(type.Name + 's');
+
+            foreach (string alt in TUnit.AlternativeUnitSymbols)
+            {
+                if (alt is [.., _, char c and (not 's' or 'S')] && char.IsLetter(c))
+                    symbols.Add(alt + 's');
+
+                if (!alt.EndsWith('.'))
+                    symbols.Add(alt + '.');
+            }
+
+            unit_symbols = symbols.Select(s => s.ToLowerInvariant()
+                                                .NormalizeString()
+                                                .NormalizeUnitSymbol(ignore_si_prefix))
+                                  .Distinct()
+                                  .OrderByDescending(s => s.Length)
+                                  .ToArray();
             _cached_alternative_unit_symbols[type] = unit_symbols;
         }
 
@@ -475,98 +520,100 @@ public static partial class Unit
             return true;
 
         NumberFormatInfo parser = provider?.GetFormat(typeof(NumberFormatInfo)) as NumberFormatInfo ?? CultureInfo.CurrentCulture.NumberFormat;
+        bool ignore_si_prefix = display.IgnoreSIPrefixForParsing();
         SIUnitScale scale = SIUnitScale.Base_1000;
-        int exponent = 0;
-        int sign = 1;
+        bool success = false;
 
         value = value.Replace("'", "")
-                     .Replace(" ", "")
                      .Replace(parser.CurrencyGroupSeparator, "")
                      .Replace(parser.NumberGroupSeparator, "")
                      .Replace(parser.PercentGroupSeparator, "")
                      .Replace(parser.CurrencyDecimalSeparator, ".")
                      .Replace(parser.NumberDecimalSeparator, ".")
-                     .Replace(parser.PercentDecimalSeparator, ".");
-        value = NormalizeUnitSymbol(value, display.IgnoreSIPrefixForParsing());
+                     .Replace(parser.PercentDecimalSeparator, ".")
+                     .NormalizeString()
+                     .RemoveDiacritics();
 
-        foreach (string unit_symbol in unit_symbols)
-            if (value.EndsWith(unit_symbol, StringComparison.OrdinalIgnoreCase))
-            {
-                value = value[..^unit_symbol.Length].Trim();
+        if (_REGEX_NUMBER.Match(value) is { Success: true, Groups: { } groups })
+        {
+            string @const = groups["const"].Value;
+            string number = groups["number"].Value;
+            bool negative = groups["sign"].Value == "-";
+            string unit = groups["unit"].Value;
+            int exponent = 0;
 
-                if (value.EndsWith("i", StringComparison.OrdinalIgnoreCase))
+            unit = NormalizeUnitSymbol(unit, ignore_si_prefix);
+
+            foreach (string unit_symbol in unit_symbols)
+                if (unit.EndsWith(unit_symbol, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    scale = SIUnitScale.Base_1024;
-                    value = value[..^1];
+                    string consumed_unit = unit[..^unit_symbol.Length].Trim();
+
+                    if (!ignore_si_prefix)
+                    {
+                        if (consumed_unit.EndsWith("i", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            scale = SIUnitScale.Base_1024;
+                            consumed_unit = consumed_unit[..^1];
+                        }
+
+                        if (consumed_unit.Length >= 1 && GetExponent(consumed_unit) is int exp)
+                        {
+                            exponent = exp;
+                            consumed_unit = "";
+                        }
+                    }
+
+                    if (success = consumed_unit.Length == 0)
+                        break;
                 }
 
-                if (value.Length > 1 && value[^1] is char prefix && char.IsLetter(prefix))
+            if (success)
+            {
+                success = TScalar.TryParse(number, new NumberFormatInfo(), out scalar);
+                scalar ??= TScalar.Zero;
+
+                if (@const.ToLowerInvariant() switch
                 {
-                    exponent = GetExponent(prefix);
-                    value = value[..^1];
+                    "[nan]" or "nan" => double.NaN,
+                    "pi" => double.Pi,
+                    "tau" => double.Tau,
+                    "e" => double.E,
+                    "zero" => 0,
+                    "one" => 1,
+                    "phi" => 1.618033988749894848204586834,
+                    "inf" or "pinf" or "infty" or "pinfty" or "posinf" or "posinfty" or "positiveinfinity" or "infinity" or "pinfinity" or "posinfinity" => double.PositiveInfinity,
+                    "ninf" or "ninfty" or "neginf" or "neginfty" or "negativeinfinity" or "ninfinity" or "neginfinity" => double.NegativeInfinity,
+                    _ => null as double?
+                } is double d)
+                {
+                    scalar = (TScalar)Convert.ChangeType(d, typeof(TScalar));
+                    success = true;
                 }
 
-                break;
+                if (success && exponent != 0)
+                {
+                    double factor;
+
+                    if (scale is SIUnitScale.Base_1024)
+                    {
+                        if (exponent % 3 == 0)
+                            factor = Math.Pow(1024, exponent / 3);
+                        else
+                            factor = Math.Pow(10.079368399158985318137684858225826804562011717612063840655800897, exponent); // = 1024^(1/3)
+                    }
+                    else if (scale is SIUnitScale.Base_1000)
+                        factor = Math.Pow(10, exponent);
+                    else
+                        throw new NotImplementedException($"The SI unit scale {scale} is currently not supported.");
+
+                    scalar *= (TScalar)Convert.ChangeType(factor, typeof(TScalar));
+                }
+
+                if (negative)
+                    scalar = -scalar;
             }
-
-        if (value is ['-' or '\u05BE' or '\u1806' or '\u2010' or '\u2011' or '\u2012' or '\u2013' or '\u2014' or '\u2015' or
-                      '\u2053' or '\u207B' or '\u208B' or '\u2212' or '\u23AF' or '\u23E4' or '\u2500' or '\u2501' or '\u2796' or
-                      '\u2E3A' or '\u2E3B' or '\uFE58' or '\uFE63' or '\uFF0D', .. { Length: > 0 } rest])
-        {
-            sign = -1;
-            value = rest;
         }
-        else if (value.StartsWith("\U00010110") || value.StartsWith("\U00011052") || value.StartsWith("\U000110BE"))
-        {
-            sign = -1;
-            value = value[2..];
-        }
-        else if (value is ['+' or '\u02D6' or '\uFE62' or '\uFF0B' or '\u208A' or '\u207A', .. { Length: > 0 } rest2])
-        {
-            sign = 1;
-            value = rest2;
-        }
-
-        bool success = TScalar.TryParse(value, new NumberFormatInfo(), out scalar);
-
-        scalar ??= TScalar.Zero;
-
-        if (success && exponent != 0)
-        {
-            double factor;
-
-            if (scale is SIUnitScale.Base_1024)
-            {
-                if (exponent % 3 == 0)
-                    factor = Math.Pow(1024, exponent / 3);
-                else
-                    factor = Math.Pow(10.079368399158985318137684858225826804562011717612063840655800897, exponent); // = 1024^(1/3)
-            }
-            else if (scale is SIUnitScale.Base_1000)
-                factor = Math.Pow(10, exponent);
-            else
-                throw new NotImplementedException($"The SI unit scale {scale} is currently not supported.");
-
-            scalar *= (TScalar)Convert.ChangeType(factor, typeof(TScalar));
-        }
-        else if (value.ToLowerInvariant() switch
-        {
-            "[nan]" or "nan" => double.NaN,
-            "pi" or "π" => double.Pi,
-            "tau" or "τ" => double.Tau,
-            "e" => double.E,
-            "phi" or "φ" or "\u03C6" or "\u03D5" => 1.618033988749894848204586834,
-            "inf" or "pinf" or "infty" or "pinfty" or "posinf" or "posinfty" or "positiveinfinity" or "infinity" or "pinfinity" or "posinfinity" or "∞" => double.PositiveInfinity,
-            "ninf" or "ninfty" or "neginf" or "neginfty" or "negativeinfinity" or "ninfinity" or "neginfinity" => double.NegativeInfinity,
-            _ => null as double?
-        } is double d)
-        {
-            scalar = (TScalar)Convert.ChangeType(d, typeof(TScalar));
-            success = true;
-        }
-
-        if (sign < 0)
-            scalar = -scalar;
 
         return success;
     }
