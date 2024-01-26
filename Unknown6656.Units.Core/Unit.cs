@@ -433,7 +433,7 @@ public static partial class Unit
 
     private static string NormalizeUnitSymbol(string unit_symbol)
     {
-        foreach((string name, string prefix) in MetricSIMapping)
+        foreach ((string name, string prefix) in MetricSIMapping)
             unit_symbol = unit_symbol.Replace(name, prefix, StringComparison.OrdinalIgnoreCase);
 
         unit_symbol = unit_symbol.Trim()
@@ -441,6 +441,7 @@ public static partial class Unit
                                  .Replace("²", "^2")
                                  .Replace("³", "^3")
                                  .Replace("⁻¹", "^-1")
+                                 .Replace("/", "per")
                                  .RemoveDiacritics();
 
         return unit_symbol;
