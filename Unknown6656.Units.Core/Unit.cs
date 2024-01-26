@@ -75,7 +75,7 @@ public enum SIUnitScale
 
 public static partial class Unit
 {
-    private static readonly Dictionary<string, string> _DIACRITICS_MAPPING = new Dictionary<string, string>()
+    private static readonly Dictionary<string, string> _DIACRITICS_MAPPING = new()
     {
         ["äæǽ"] = "ae",
         ["öœ"] = "oe",
@@ -167,9 +167,37 @@ public static partial class Unit
         ["Я"] = "Ya",
         ["я"] = "ya",
     };
+    private static readonly Dictionary<Type, string[]> _cached_alternative_unit_symbols = [];
 
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
     public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
+    public static IReadOnlyDictionary<string, string> MetricSIMapping { get; } = new Dictionary<string, string>
+    {
+        ["quecto"] = "q",
+        ["ronto"] = "r",
+        ["yocto"] = "y",
+        ["zepto"] = "z",
+        ["atto"] = "a",
+        ["femto"] = "f",
+        ["pico"] = "p",
+        ["nano"] = "n",
+        ["micro"] = "μ",
+        ["milli"] = "m",
+        ["centi"] = "c",
+        ["deci"] = "d",
+        ["deca"] = "da",
+        ["hecto"] = "h",
+        ["kilo"] = "k",
+        ["mega"] = "M",
+        ["giga"] = "G",
+        ["tera"] = "T",
+        ["peta"] = "P",
+        ["exa"] = "E",
+        ["zetta"] = "Z",
+        ["yotta"] = "Y",
+        ["ronna"] = "R",
+        ["quetta"] = "Q",
+    };
     public static NumberFormatInfo DefaultNumberFormat { get; set; } = new()
     {
         CurrencyDecimalSeparator = ".",
@@ -302,10 +330,31 @@ public static partial class Unit
 
     public static bool TryParse<TScalar, TUnit>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
         where TScalar : INumber<TScalar>
-        where TUnit : IUnit => TryParse(value, [TUnit.UnitSymbol, typeof(TUnit).Name, ..TUnit.AlternativeUnitSymbols], TUnit.UnitDisplay, provider, out scalar);
+        where TUnit : IUnit
+    {
+        Type type = typeof(TUnit);
+
+        if (!_cached_alternative_unit_symbols.TryGetValue(type, out string[]? unit_symbols))
+        {
+            unit_symbols = [
+                TUnit.UnitSymbol,
+                type.Name,
+                type.Name + 's', // plural form
+                ..TUnit.AlternativeUnitSymbols
+            ];
+            unit_symbols = unit_symbols.Select(s => NormalizeUnitSymbol(s.ToLowerInvariant()))
+                                       .Distinct()
+                                       .ToArray();
+            _cached_alternative_unit_symbols[type] = unit_symbols;
+        }
+
+        return TryParse(value, unit_symbols, TUnit.UnitDisplay, provider, out scalar);
+    }
 
     private static int GetExponent(char si_prefix) => si_prefix switch
     {
+        'q' => -30,
+        'r' => -27,
         'y' => -24,
         'z' => -21,
 #if SI_PREFIX_IGNORE_CASE
@@ -351,8 +400,9 @@ public static partial class Unit
 #endif
         'Z' => 21,
         'Y' => 24,
+        'R' => 27,
+        'Q' => 30,
         _ => throw new ArgumentOutOfRangeException(nameof(si_prefix), si_prefix, $"The SI prefix '{si_prefix}' is not supported or defined."),
-
     };
 
     private static string RemoveDiacritics(this string input)
@@ -383,6 +433,9 @@ public static partial class Unit
 
     private static string NormalizeUnitSymbol(string unit_symbol)
     {
+        foreach((string name, string prefix) in MetricSIMapping)
+            unit_symbol = unit_symbol.Replace(name, prefix, StringComparison.OrdinalIgnoreCase);
+
         unit_symbol = unit_symbol.Trim()
                                  .Replace("·", "")
                                  .Replace("²", "^2")
@@ -418,7 +471,6 @@ public static partial class Unit
                      .Replace(parser.NumberDecimalSeparator, ".")
                      .Replace(parser.PercentDecimalSeparator, ".");
         value = NormalizeUnitSymbol(value);
-        unit_symbols = (from sym in unit_symbols select NormalizeUnitSymbol(sym.ToLowerInvariant())).Distinct();
 
         foreach (string unit_symbol in unit_symbols)
             if (value.EndsWith(unit_symbol, StringComparison.OrdinalIgnoreCase))
@@ -446,12 +498,19 @@ public static partial class Unit
 
         if (success && exponent != 0)
         {
-            double factor = Math.Pow(scale switch
+            double factor;
+
+            if (scale is SIUnitScale.Base_1024)
             {
-                SIUnitScale.Base_1024 => 1024,
-                SIUnitScale.Base_1000 => 1000,
-                _ => throw new NotImplementedException("[TODO]"),
-            }, exponent);
+                if (exponent % 3 == 0)
+                    factor = Math.Pow(1024, exponent / 3);
+                else
+                    factor = Math.Pow(10.079368399158985318137684858225826804562011717612063840655800897, exponent); // = 1024^(1/3)
+            }
+            else if (scale is SIUnitScale.Base_1000)
+                factor = Math.Pow(10, exponent);
+            else
+                throw new NotImplementedException($"The SI uinit scale {scale} is currently not supported.");
 
             scalar ??= TScalar.Zero;
             scalar *= (TScalar)Convert.ChangeType(factor, typeof(TScalar));
@@ -815,13 +874,4 @@ public abstract record BaseUnit<TQuantity, TBaseUnit, TScalar>(TScalar Value)
     public static TScalar PostScalingOffset { get; } = TScalar.Zero;
 
     public static implicit operator BaseUnit<TQuantity, TBaseUnit, TScalar>(string s) => Parse(s, null);
-}
-
-
-
-
-
-
-public static class Strings
-{
 }
