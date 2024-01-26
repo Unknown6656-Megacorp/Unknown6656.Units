@@ -15,6 +15,7 @@ public partial record TonTNTEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t TNT";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton TNT", "tons TNT", "ton of TNT", "tons of TNT"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples;
     public static Scalar ScalingFactor { get; } = (Scalar)2.3900573613766730401529636711281070745697896749521988527724e-10;
 }
@@ -25,6 +26,7 @@ public partial record BarrelOfOilEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "BOE";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["barrel oil equivalent"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.6345576344368079364703676277037381286982683757949997966610e-10;
 }
@@ -35,6 +37,7 @@ public partial record BritishThermalUnit(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "BTU";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["british TU"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00094781707774915;
 }
@@ -65,6 +68,7 @@ public partial record CelsiusHeatUnit(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "CHU";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["celsius HU"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0005265650668407317777848805802642281309214842536926048141251772;
     
@@ -76,6 +80,7 @@ public partial record CubicCentimeterAtmosphere(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "cm³ atm";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["cm³ atmosphere"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)9.8692326671601283000246730816679003207500616827041697508018751542;
 }
@@ -86,6 +91,7 @@ public partial record CubicCentimeterNaturalGas(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "cm³ NG";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["cm³ natural gas", "cm³ LNG"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0268393373959122031527620341044158663699466053012642829388485032;
 }
@@ -96,6 +102,7 @@ public partial record CubicFootAtmosphere(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ft³ atm";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ft³ atmosphere"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0003485286624375878633154503859265001424333055087486547255862562;
 }
@@ -106,6 +113,7 @@ public partial record CubicFootNaturalGas(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ft³ NG";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ft³ natural gas", "ft³ LNG"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)9.4781712031331720001278504447561063565867165664668866542531e-7;
 }
@@ -126,6 +134,7 @@ public partial record Hartree(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Eₕ";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["E", "Eh"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)2.29371265835792193303093025645542490568253548832225011376814e17;
 }
@@ -136,6 +145,7 @@ public partial record LiterAtmosphere(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "L atm";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["liters atm", "liters atmosphere"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)9.8692326671601283000246730816679003207500616827041697508018751542e-4;
 }
@@ -166,6 +176,7 @@ public partial record TonCoalEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t coal";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["tons coal", "ton coal", "tons of coal", "ton of coal"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples;
     public static Scalar ScalingFactor { get; } = (Scalar)2.930710746e-10;
 }
@@ -176,6 +187,7 @@ public partial record TonOilEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t oil";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["tons oil", "ton oil", "tons of oil", "ton of oil"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples;
     public static Scalar ScalingFactor { get; } = (Scalar)2.388458966275e-10;
 }
@@ -186,6 +198,7 @@ public partial record WattHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Wh";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["whr"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00028;
 }

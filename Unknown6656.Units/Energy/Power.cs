@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Energy;
+namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<Power, Watt, Scalar>]
@@ -15,6 +15,7 @@ public partial record MetricHorsepower(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "hp";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ps", "cv", "hl", "pk", "ks", "ch"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0013596216;
 }
@@ -24,17 +25,24 @@ public partial record BoilerHorsepower(Scalar Value)
     : Power.AffineUnit<BoilerHorsepower>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "hp";
+    public static string UnitSymbol { get; } = "BHP";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["hp"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0001019419950048422447627300066262296753147459095774504307049288;
 }
+
+// TODO : Hydraulic horsepower
+// TODO : Drawbar power
+// TODO : Nominal horsepower
+
 
 [KnownUnit<Power, UKHorsepower, Watt, Scalar>]
 public partial record UKHorsepower(Scalar Value)
     : Power.AffineUnit<UKHorsepower>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "hp";
+    public static string UnitSymbol { get; } = "UK hp";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["hp UK", "hp"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.001341022089595027;
 }
@@ -65,6 +73,7 @@ public partial record TonAirConditioningEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t AC";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["tons AC", "ton AC"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00028434513626109;
 }
@@ -75,6 +84,7 @@ public partial record TonRefrigerationEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t ice";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["tons of ice", "ton of ice", "tons ice", "ton ice"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00028434513626109;
 }
