@@ -488,11 +488,11 @@ public static partial class Unit
 
             foreach (string alt in TUnit.AlternativeUnitSymbols)
             {
+#warning TODO : word splitting and plural
+
                 if (alt is [.., _, char c and (not 's' or 'S')] && char.IsLetter(c))
                     symbols.Add(alt + 's');
 
-                if (!alt.EndsWith('.'))
-                    symbols.Add(alt + '.');
             }
 
             unit_symbols = symbols.Select(s => s.ToLowerInvariant()
@@ -582,8 +582,8 @@ public static partial class Unit
                     "zero" => 0,
                     "one" => 1,
                     "phi" => 1.618033988749894848204586834,
-                    "inf" or "pinf" or "infty" or "pinfty" or "posinf" or "posinfty" or "positiveinfinity" or "infinity" or "pinfinity" or "posinfinity" => double.PositiveInfinity,
-                    "ninf" or "ninfty" or "neginf" or "neginfty" or "negativeinfinity" or "ninfinity" or "neginfinity" => double.NegativeInfinity,
+                    string s when s.StartsWith("n") && (s.EndsWith("inf") || s.EndsWith("ty")) => double.NegativeInfinity,
+                    string s when s.EndsWith("inf") || s.EndsWith("ty") => double.PositiveInfinity,
                     _ => null as double?
                 } is double d)
                 {
