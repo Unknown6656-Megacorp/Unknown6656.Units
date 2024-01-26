@@ -226,6 +226,10 @@ public static partial class Unit
 
     public static bool IsImperial(this UnitDisplay display) => display is UnitDisplay.Imperial or UnitDisplay.ImperialWithSIPrefixes;
 
+    private static bool IgnoreSIPrefixForParsing(this UnitDisplay display) => display is UnitDisplay.MetricNoSIPrefixes
+                                                                                      or UnitDisplay.UseFormatStrings
+                                                                                      or UnitDisplay.UseInverseFormatStrings;
+
     public static bool IsSI(this UnitDisplay display) => display is UnitDisplay.MetricUseSIPrefixes
                                                                  or UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples
                                                                  or UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples
@@ -336,14 +340,17 @@ public static partial class Unit
 
         if (!_cached_alternative_unit_symbols.TryGetValue(type, out string[]? unit_symbols))
         {
+            bool ignore_si_prefix = TUnit.UnitDisplay.IgnoreSIPrefixForParsing();
+
             unit_symbols = [
                 TUnit.UnitSymbol,
                 type.Name,
                 type.Name + 's', // plural form
                 ..TUnit.AlternativeUnitSymbols
             ];
-            unit_symbols = unit_symbols.Select(s => NormalizeUnitSymbol(s.ToLowerInvariant()))
+            unit_symbols = unit_symbols.Select(s => NormalizeUnitSymbol(s.ToLowerInvariant(), ignore_si_prefix))
                                        .Distinct()
+                                       .OrderByDescending(s => s.Length)
                                        .ToArray();
             _cached_alternative_unit_symbols[type] = unit_symbols;
         }
@@ -431,17 +438,25 @@ public static partial class Unit
         return sb.ToString().Normalize(NormalizationForm.FormC);
     }
 
-    private static string NormalizeUnitSymbol(string unit_symbol)
+    private static string NormalizeUnitSymbol(string unit_symbol, bool ignore_si_prefix)
     {
-        foreach ((string name, string prefix) in MetricSIMapping)
-            unit_symbol = unit_symbol.Replace(name, prefix, StringComparison.OrdinalIgnoreCase);
+        unit_symbol = new([.. from c in unit_symbol
+                              where !char.IsWhiteSpace(c)
+                              where c != '·'
+                              select c]);
 
-        unit_symbol = unit_symbol.Trim()
-                                 .Replace("·", "")
-                                 .Replace("²", "^2")
+        if (!ignore_si_prefix)
+            foreach ((string name, string prefix) in MetricSIMapping)
+                unit_symbol = unit_symbol.Replace(name, prefix, StringComparison.OrdinalIgnoreCase);
+
+        unit_symbol = unit_symbol.Replace("²", "^2")
                                  .Replace("³", "^3")
                                  .Replace("⁻¹", "^-1")
+                                 .Replace("⁻²", "^-2")
+                                 .Replace("⁻³", "^-3")
                                  .Replace("/", "per")
+                                 .Replace("degrees", "°", StringComparison.OrdinalIgnoreCase)
+                                 .Replace("degree", "°", StringComparison.OrdinalIgnoreCase)
                                  .RemoveDiacritics();
 
         return unit_symbol;
@@ -471,7 +486,7 @@ public static partial class Unit
                      .Replace(parser.CurrencyDecimalSeparator, ".")
                      .Replace(parser.NumberDecimalSeparator, ".")
                      .Replace(parser.PercentDecimalSeparator, ".");
-        value = NormalizeUnitSymbol(value);
+        value = NormalizeUnitSymbol(value, display.IgnoreSIPrefixForParsing());
 
         foreach (string unit_symbol in unit_symbols)
             if (value.EndsWith(unit_symbol, StringComparison.OrdinalIgnoreCase))
