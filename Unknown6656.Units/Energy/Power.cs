@@ -1,4 +1,4 @@
-namespace Unknown6656.Units.Energy;
+﻿namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<Power, Watt, Scalar>]
@@ -18,6 +18,16 @@ public partial record MetricHorsepower(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ps", "cv", "hl", "pk", "ks", "ch"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0013596216;
+}
+
+[KnownUnit<Power, ElectricalHorsepower, Watt, Scalar>]
+public partial record ElectricalHorsepower(Scalar Value)
+    : Power.AffineUnit<ElectricalHorsepower>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "hp";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.0013404825737265415549597855227882037533512064343163538873994638;
 }
 
 [KnownUnit<Power, BoilerHorsepower, Watt, Scalar>]
