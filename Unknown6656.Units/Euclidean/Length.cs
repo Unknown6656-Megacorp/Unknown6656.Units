@@ -27,6 +27,7 @@ public partial record Foot(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ft";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["feet"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123359580052493438320209973753;
 }
@@ -37,6 +38,7 @@ public partial record Inch(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "in";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["inches"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)39.37007874015748031496062992125984251968504;
 }
@@ -57,6 +59,7 @@ public partial record NauticalMile(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "nmi";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["nautical mi"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.000539956803455723542116630669546436285;
 }
@@ -117,6 +120,7 @@ public partial record Planck(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "P";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["planck length"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.616255e-35;
 }

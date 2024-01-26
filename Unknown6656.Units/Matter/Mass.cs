@@ -6,6 +6,7 @@ public partial record Kilogram(Scalar Value)
     : BaseUnit<Mass, Kilogram, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "kg";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilo"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 

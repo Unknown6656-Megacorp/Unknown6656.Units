@@ -6,6 +6,7 @@ public partial record ReciprocalMeter(Scalar Value)
     : BaseUnit<LinearWavenumber, ReciprocalMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "{0}m¯¹";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["m^-1", "reciprocal m"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.UseInverseFormatStrings;
 }
 
@@ -15,6 +16,7 @@ public partial record Kayser(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "cm¯¹";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["cm^-1", "reciprocal cm", "reciprocal centimeter", "centimeter^-1"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static double ScalingFactor { get; } = (Scalar)1e-2;
 }

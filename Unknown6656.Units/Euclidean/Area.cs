@@ -8,7 +8,7 @@ public partial record SquareMeter(Scalar Value)
     : BaseUnit<Area, SquareMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m²";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^2"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^2", "meters^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
@@ -50,7 +50,7 @@ public partial record SquareKilometer(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "km²";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilometer^2"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilometer^2", "kilometers^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-6;
 }

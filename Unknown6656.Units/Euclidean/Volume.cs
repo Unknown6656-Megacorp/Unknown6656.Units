@@ -8,6 +8,7 @@ public partial record CubicMeter(Scalar Value)
     : BaseUnit<Volume, CubicMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m³";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^3", "meters^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
@@ -27,6 +28,7 @@ public partial record Gallon(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "imp gal";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["imperial gal", "imp gallon", "gallon imp", "gal imp", "gallons imp", "gals imp"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)219.96915738094787;
 }
@@ -37,6 +39,7 @@ public partial record USGallon(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "US gal";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["gal us", "gallon us", "gals us", "gallons us"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)264.17205235814842;
 }
@@ -46,7 +49,8 @@ public partial record USCup(Scalar Value)
     : Volume.AffineUnit<USCup>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "US cups";
+    public static string UnitSymbol { get; } = "US cup";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["cup us", "cups us"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)4226.75283773037465;
 }
@@ -56,7 +60,7 @@ public partial record MetricCups(Scalar Value)
     : Volume.AffineUnit<MetricCups>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "cups";
+    public static string UnitSymbol { get; } = "cup";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)4000;
 }
@@ -96,7 +100,8 @@ public partial record USFluidOunce(Scalar Value)
     : Volume.AffineUnit<USFluidOunce>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "fl oz";
+    public static string UnitSymbol { get; } = "US fl oz";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["US fluid oz", "fl oz US", "fluid oz US", "fluid ounces US", "fl ounces US", "fl ounce US"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)33814.022701843;
 }
@@ -107,6 +112,7 @@ public partial record FluidOunce(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "fl oz";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["fluid oz", "fl ounce"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)35195.079727854;
 }
@@ -117,6 +123,7 @@ public partial record Barrel(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "bbl";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["US bbl", "US barrel", "bbl US", "barrel US", "barrels US"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)6.2898105697751;
 }
@@ -137,6 +144,7 @@ public partial record CubicFoot(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ft³";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["foot^3", "feet^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)35.31466672148859025;
 }
@@ -147,6 +155,7 @@ public partial record CubicInch(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "in³";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["inch^3", "inches^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)61023.744094732284;
 }
@@ -157,6 +166,7 @@ public partial record Teaspoon(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "tsp";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["teasp"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)202884.13621106095;
 }
@@ -167,6 +177,7 @@ public partial record Tablespoon(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "tbsp";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["tablesp"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)67628.04540368698;
 }
@@ -196,7 +207,8 @@ public partial record USPeck(Scalar Value)
     : Volume.AffineUnit<USPeck>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "pk";
+    public static string UnitSymbol { get; } = "US pk";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["pk US", "peck US", "pecks US"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)113.510373033607;
 }
@@ -217,13 +229,7 @@ public partial record USBushel(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "US bsh";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["bsh US", "bushel US", "bushels US"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)35.23907016688;
 }
-
-
-
-// TODO:
-//  - volumes
-//      - from KM³, CM³, MM³, ...
-//      - from inches³, feet³, yards³, ...
