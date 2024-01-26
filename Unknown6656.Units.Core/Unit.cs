@@ -332,32 +332,6 @@ public static partial class Unit
         );
     }
 
-    public static bool TryParse<TScalar, TUnit>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
-        where TScalar : INumber<TScalar>
-        where TUnit : IUnit
-    {
-        Type type = typeof(TUnit);
-
-        if (!_cached_alternative_unit_symbols.TryGetValue(type, out string[]? unit_symbols))
-        {
-            bool ignore_si_prefix = TUnit.UnitDisplay.IgnoreSIPrefixForParsing();
-
-            unit_symbols = [
-                TUnit.UnitSymbol,
-                type.Name,
-                type.Name + 's', // plural form
-                ..TUnit.AlternativeUnitSymbols
-            ];
-            unit_symbols = unit_symbols.Select(s => NormalizeUnitSymbol(s.ToLowerInvariant(), ignore_si_prefix))
-                                       .Distinct()
-                                       .OrderByDescending(s => s.Length)
-                                       .ToArray();
-            _cached_alternative_unit_symbols[type] = unit_symbols;
-        }
-
-        return TryParse(value, unit_symbols, TUnit.UnitDisplay, provider, out scalar);
-    }
-
     private static int GetExponent(char si_prefix) => si_prefix switch
     {
         'q' => -30,
@@ -462,6 +436,32 @@ public static partial class Unit
         return unit_symbol;
     }
 
+    public static bool TryParse<TScalar, TUnit>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
+        where TScalar : INumber<TScalar>
+        where TUnit : IUnit
+    {
+        Type type = typeof(TUnit);
+
+        if (!_cached_alternative_unit_symbols.TryGetValue(type, out string[]? unit_symbols))
+        {
+            bool ignore_si_prefix = TUnit.UnitDisplay.IgnoreSIPrefixForParsing();
+
+            unit_symbols = [
+                TUnit.UnitSymbol,
+                type.Name,
+                type.Name + 's', // plural form
+                ..TUnit.AlternativeUnitSymbols
+            ];
+            unit_symbols = unit_symbols.Select(s => NormalizeUnitSymbol(s.ToLowerInvariant(), ignore_si_prefix))
+                                       .Distinct()
+                                       .OrderByDescending(s => s.Length)
+                                       .ToArray();
+            _cached_alternative_unit_symbols[type] = unit_symbols;
+        }
+
+        return TryParse(value, unit_symbols, TUnit.UnitDisplay, provider, out scalar);
+    }
+
     private static bool TryParse<TScalar>(string? value, IEnumerable<string> unit_symbols, UnitDisplay display, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
         where TScalar : INumber<TScalar>
     {
@@ -477,6 +477,7 @@ public static partial class Unit
         NumberFormatInfo parser = provider?.GetFormat(typeof(NumberFormatInfo)) as NumberFormatInfo ?? CultureInfo.CurrentCulture.NumberFormat;
         SIUnitScale scale = SIUnitScale.Base_1000;
         int exponent = 0;
+        int sign = 1;
 
         value = value.Replace("'", "")
                      .Replace(" ", "")
@@ -508,9 +509,27 @@ public static partial class Unit
                 break;
             }
 
-        parser = new();
+        if (value is ['-' or '\u05BE' or '\u1806' or '\u2010' or '\u2011' or '\u2012' or '\u2013' or '\u2014' or '\u2015' or
+                      '\u2053' or '\u207B' or '\u208B' or '\u2212' or '\u23AF' or '\u23E4' or '\u2500' or '\u2501' or '\u2796' or
+                      '\u2E3A' or '\u2E3B' or '\uFE58' or '\uFE63' or '\uFF0D', .. { Length: > 0 } rest])
+        {
+            sign = -1;
+            value = rest;
+        }
+        else if (value.StartsWith("\U00010110") || value.StartsWith("\U00011052") || value.StartsWith("\U000110BE"))
+        {
+            sign = -1;
+            value = value[2..];
+        }
+        else if (value is ['+' or '\u02D6' or '\uFE62' or '\uFF0B' or '\u208A' or '\u207A', .. { Length: > 0 } rest2])
+        {
+            sign = 1;
+            value = rest2;
+        }
 
-        bool success = TScalar.TryParse(value, parser, out scalar);
+        bool success = TScalar.TryParse(value, new NumberFormatInfo(), out scalar);
+
+        scalar ??= TScalar.Zero;
 
         if (success && exponent != 0)
         {
@@ -526,11 +545,28 @@ public static partial class Unit
             else if (scale is SIUnitScale.Base_1000)
                 factor = Math.Pow(10, exponent);
             else
-                throw new NotImplementedException($"The SI uinit scale {scale} is currently not supported.");
+                throw new NotImplementedException($"The SI unit scale {scale} is currently not supported.");
 
-            scalar ??= TScalar.Zero;
             scalar *= (TScalar)Convert.ChangeType(factor, typeof(TScalar));
         }
+        else if (value.ToLowerInvariant() switch
+        {
+            "[nan]" or "nan" => double.NaN,
+            "pi" or "π" => double.Pi,
+            "tau" or "τ" => double.Tau,
+            "e" => double.E,
+            "phi" or "φ" or "\u03C6" or "\u03D5" => 1.618033988749894848204586834,
+            "inf" or "pinf" or "infty" or "pinfty" or "posinf" or "posinfty" or "positiveinfinity" or "infinity" or "pinfinity" or "posinfinity" or "∞" => double.PositiveInfinity,
+            "ninf" or "ninfty" or "neginf" or "neginfty" or "negativeinfinity" or "ninfinity" or "neginfinity" => double.NegativeInfinity,
+            _ => null as double?
+        } is double d)
+        {
+            scalar = (TScalar)Convert.ChangeType(d, typeof(TScalar));
+            success = true;
+        }
+
+        if (sign < 0)
+            scalar = -scalar;
 
         return success;
     }
