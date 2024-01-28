@@ -37,6 +37,7 @@ public partial record PoundForcePerSquareInch(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "psi";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["pound/in^2", "pound/inch^2", "lb/in^2", "lb/inch^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00014503773773020923;
 }

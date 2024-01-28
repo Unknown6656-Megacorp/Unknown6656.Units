@@ -19,6 +19,7 @@ public partial record Degree(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "°";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["deg"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)(180 / Math.PI);
 }
@@ -40,7 +41,7 @@ public partial record ArcMinute(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "'";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["arc'"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["arc'", "arc min"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)3437.7467707849392526078892888463102199443283479938592929496146316;
 }
@@ -51,7 +52,7 @@ public partial record ArcSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "\"";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["arc\""];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["arc\"", "arc sec"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)206264.80624709635515647335733077861319665970087963155757697687790;
 }
