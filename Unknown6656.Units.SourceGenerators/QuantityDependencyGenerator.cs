@@ -936,97 +936,113 @@ public sealed class QuantityDependencyGenerator
         }
 
 
-        foreach (var kvp in quantity_infos)
+        foreach (IGrouping<string, KeyValuePair<Identifier, QuantityInformation>> group in quantity_infos.GroupBy(info => info.Value.Name.Namespace))
         {
-            Identifier name = kvp.Key;
-            QuantityInformation quantity_info = kvp.Value;
-            FileLinePositionSpan location = quantity_info.Location.GetLineSpan();
-            string interfaces = disable_emitting_interfaces ? "" :
-                $":\n        {Identifier_IQuantity}<{name}>";
-
             sb.AppendLine($$""""
 
-            namespace {{name.Namespace}}
+            namespace {{group.Key}}
             {
-            {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
-                public partial record {{name.Name}} {{interfaces}}
-            #line default
-                {
             """");
 
-            foreach (PropertyInfo property in quantity_info.Properties)
-                AppendProperty(property);
+            foreach (KeyValuePair<Identifier, QuantityInformation> kvp in group)
+            {
+                Identifier name = kvp.Key;
+                QuantityInformation quantity_info = kvp.Value;
+                FileLinePositionSpan location = quantity_info.Location.GetLineSpan();
+                string interfaces = disable_emitting_interfaces ? "" :
+                    $"\n        : {Identifier_IQuantity}<{name}>";
 
-            foreach (CastOperator cast in quantity_info.Casts)
-                AppendCast(cast);
+                sb.AppendLine($$""""
 
-            foreach (BinaryOperator @operator in quantity_info.BinaryOperators)
-                AppendOp(@operator);
-
-            sb.AppendLine($$"""
-            #line default
-                    public static new bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out {{name}}? result)
+                {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
+                    public partial record {{name.Name}} {{interfaces}}
+                #line default
                     {
-                        bool success = false;
+                """");
 
-                        if ({{quantity_info.BaseUnit}}.TryParse(s, provider, out {{quantity_info.BaseUnit}}? @base))
-                            (success, result) = (true, @base);
-            """);
+                foreach (PropertyInfo property in quantity_info.Properties)
+                    AppendProperty(property);
 
-            foreach (Identifier unit in quantity_info.KnownUnits)
-                sb.AppendLine($"""
-                        else if ({unit}.TryParse(s, provider, out {unit}? __{unit.GetHashCode():x8}))
-                            (success, result) = (true, __{unit.GetHashCode():x8});
-            """);
+                foreach (CastOperator cast in quantity_info.Casts)
+                    AppendCast(cast);
 
-            sb.AppendLine($$"""
-                        else
-                            result = null;
+                foreach (BinaryOperator @operator in quantity_info.BinaryOperators)
+                    AppendOp(@operator);
 
-                        return success;
+                sb.AppendLine($$"""
+                #line default
+                        public static new bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out {{name}}? result)
+                        {
+                            bool success = false;
+
+                            if ({{quantity_info.BaseUnit}}.TryParse(s, provider, out {{quantity_info.BaseUnit}}? @base))
+                                (success, result) = (true, @base);
+                """);
+
+                foreach (Identifier unit in quantity_info.KnownUnits)
+                    sb.AppendLine($"""
+                            else if ({unit}.TryParse(s, provider, out {unit}? __{unit.GetHashCode():x8}))
+                                (success, result) = (true, __{unit.GetHashCode():x8});
+                """);
+
+                sb.AppendLine($$"""
+                            else
+                                result = null;
+
+                            return success;
+                        }
+
+                        public static implicit operator {{name}}(string s) => Parse(s, null);
                     }
-
-                    public static implicit operator {{name}}(string s) => Parse(s, null);
-                }
+                """);
             }
-            """);
+
+            sb.AppendLine("}");
         }
 
-        foreach (var kvp in unit_infos)
+        foreach (IGrouping<string, KeyValuePair<Identifier, UnitInformation>> group in unit_infos.GroupBy(info => info.Value.Name.Namespace))
         {
-            Identifier name = kvp.Key;
-            UnitInformation unit_info = kvp.Value;
-            FileLinePositionSpan location = unit_info.Location.GetLineSpan();
-            string interfaces = disable_emitting_interfaces ? "" :
-                $":\n        {Identifier_IUnit}, {(unit_info.IsBaseUnit ? $"{Identifier_IBaseUnit}<{name}, {unit_info.Scalar}>" : $"{Identifier_IUnit}<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>")}";
-
             sb.AppendLine($$""""
 
-            namespace {{name.Namespace}}
+            namespace {{group.Key}}
             {
-            {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
-                public partial record {{name.Name}} {{interfaces}}
-            {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
-                {
-                    public static implicit operator {{name}}({{unit_info.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
-            #line default
             """");
 
-            foreach (PropertyInfo property in unit_info.Properties)
-                AppendProperty(property);
+            foreach (KeyValuePair<Identifier, UnitInformation> kvp in group)
+            {
+                Identifier name = kvp.Key;
+                UnitInformation unit_info = kvp.Value;
+                FileLinePositionSpan location = unit_info.Location.GetLineSpan();
+                string interfaces = disable_emitting_interfaces ? "" :
+                    $"\n        : {Identifier_IUnit}, {(unit_info.IsBaseUnit ? $"{Identifier_IBaseUnit}<{name}, {unit_info.Scalar}>" : $"{Identifier_IUnit}<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>")}";
 
-            foreach (CastOperator cast in unit_info.Casts)
-                AppendCast(cast);
+                sb.AppendLine($$""""
 
-            foreach (BinaryOperator @operator in unit_info.BinaryOperators)
-                AppendOp(@operator);
+                {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
+                    public partial record {{name.Name}} {{interfaces}}
+                {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
+                    {
+                        public static implicit operator {{name}}({{unit_info.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
+                #line default
+                """");
 
-            sb.AppendLine($$"""
-            #line default
-                    public static implicit operator {{name}}(string s) => Parse(s, null);
-                }
+                foreach (PropertyInfo property in unit_info.Properties)
+                    AppendProperty(property);
+
+                foreach (CastOperator cast in unit_info.Casts)
+                    AppendCast(cast);
+
+                foreach (BinaryOperator @operator in unit_info.BinaryOperators)
+                    AppendOp(@operator);
+
+                sb.AppendLine($$"""
+                #line default
+                        public static implicit operator {{name}}(string s) => Parse(s, null);
+                    }
+                """);
             }
-            """);
+
+            sb.AppendLine("}");
         }
 
         production_context.AddSource($"{typeof(QuantityDependencyGenerator)}.g.cs", sb.ToString());
