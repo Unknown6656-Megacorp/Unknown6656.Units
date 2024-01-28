@@ -464,7 +464,10 @@ public static partial class Unit
                                  .Replace("/", "per")
                                  .Replace(".", "")
                                  .Replace("degrees", "°", StringComparison.OrdinalIgnoreCase)
-                                 .Replace("degree", "°", StringComparison.OrdinalIgnoreCase);
+                                 .Replace("degree", "°", StringComparison.OrdinalIgnoreCase)
+                                 .Replace("inchs", "inches", StringComparison.OrdinalIgnoreCase)
+                                 .Replace("feets", "feet", StringComparison.OrdinalIgnoreCase)
+                                 .Replace("foots", "feet", StringComparison.OrdinalIgnoreCase);
 
         return unit_symbol;
     }
