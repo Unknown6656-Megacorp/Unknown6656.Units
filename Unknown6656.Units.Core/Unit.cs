@@ -169,7 +169,7 @@ public static partial class Unit
         ["я"] = "ya",
     };
     private static readonly Dictionary<Type, string[]> _cached_alternative_unit_symbols = [];
-    private static readonly Regex _REGEX_NUMBER = new("""
+    private static readonly Regex _REGEX_FORMATTED_NUMBER = new("""
     ^
     (?<sign>[+\-])?
     \s*
@@ -180,6 +180,7 @@ public static partial class Unit
     \s*
     (?<unit>.*$)
     """, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.NonBacktracking);
+    private static readonly Regex _REGEX_WORD_TOKENS = new(@"[\p{Ll}\p{Lt}\p{Lu}\p{Lo}\p{Lm}\p{Nd}]*[\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Lm}]", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.NonBacktracking);
 
 
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
@@ -483,16 +484,33 @@ public static partial class Unit
                 type.Name,
             ];
 
-            if (!type.Name.EndsWith("s", StringComparison.OrdinalIgnoreCase))
-                symbols.Add(type.Name + 's');
-
-            foreach (string alt in TUnit.AlternativeUnitSymbols)
+            foreach (string alt in TUnit.AlternativeUnitSymbols.Prepend(type.Name))
             {
-#warning TODO : word splitting and plural
+                IEnumerable<string> variants = [];
+                int last_index = 0;
 
-                if (alt is [.., _, char c and (not 's' or 'S')] && char.IsLetter(c))
-                    symbols.Add(alt + 's');
+                foreach (Match m in _REGEX_WORD_TOKENS.Matches(alt))
+                {
+                    string prev = alt[last_index..m.Index];
+                    string match = m.Value;
 
+                    last_index = m.Index + m.Length;
+
+                    if (match.EndsWith("s", StringComparison.InvariantCultureIgnoreCase))
+                        variants = variants.Any() ? variants.Select(v => v + prev + match) : [prev + match];
+                    else
+                        variants = variants.Any() ? variants.SelectMany(v => new[] { v + prev + match, v + prev + match + 's' })
+                                                  : [prev + match, prev + match + 's'];
+                }
+
+                if (last_index < alt.Length)
+                {
+                    string prev = alt[last_index..];
+
+                    variants = variants.Select(v => v + prev).DefaultIfEmpty(prev);
+                }
+
+                symbols.AddRange(variants);
             }
 
             unit_symbols = symbols.Select(s => s.ToLowerInvariant()
@@ -534,7 +552,7 @@ public static partial class Unit
                      .NormalizeString()
                      .RemoveDiacritics();
 
-        if (_REGEX_NUMBER.Match(value) is { Success: true, Groups: { } groups })
+        if (_REGEX_FORMATTED_NUMBER.Match(value) is { Success: true, Groups: { } groups })
         {
             string @const = groups["const"].Value;
             string number = groups["number"].Value;
