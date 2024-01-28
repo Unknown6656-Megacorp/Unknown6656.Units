@@ -26,6 +26,7 @@ public partial record MetricTon(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton", "m ton"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
 }
@@ -65,7 +66,8 @@ public partial record UKTon(Scalar Value)
     : Mass.AffineUnit<UKTon>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "US t";
+    public static string UnitSymbol { get; } = "l.t.";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["long ton", "long t", "l ton","UK t"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)9.842065276110606e-4;
 }
@@ -76,6 +78,7 @@ public partial record USTon(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "s.t.";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["US t", "s ton", "short ton", "short t"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)1.1023113109243879e-3;
 }
@@ -106,6 +109,7 @@ public partial record UKStone(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "UK st";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["stone"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.1574730444177697;
 }
@@ -136,6 +140,7 @@ public partial record PlanckMass(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "mₚ";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["m planck", "m p"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)4.59467132297156563388720245813872525405673487755159606404846e7;
 }
@@ -146,6 +151,7 @@ public partial record SolarMass(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "M☉";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["mass sun", "sun mass", "sun masses", "solar masses", "sun"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5.0289921396852856718984948226525921939984007804995800791563e-31;
 }
@@ -156,11 +162,7 @@ public partial record ElectronVoltMassEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "eV/c²";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["eV", "electron volt"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5.60958864983476645299741629583157968944023663372081019062242e35;
 }
-
-
-// TODO:
-// - mass
-//      - from g, kg, mg, lb, oz, stone, ton, ...

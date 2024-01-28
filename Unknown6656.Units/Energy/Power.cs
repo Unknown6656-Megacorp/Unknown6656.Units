@@ -1,4 +1,4 @@
-namespace Unknown6656.Units.Energy;
+﻿namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<Power, Watt, Scalar>]
