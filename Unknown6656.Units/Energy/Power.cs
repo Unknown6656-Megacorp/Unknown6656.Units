@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Energy;
+namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<Power, Watt, Scalar>]
@@ -45,7 +45,6 @@ public partial record BoilerHorsepower(Scalar Value)
 // TODO : Drawbar power
 // TODO : Nominal horsepower
 
-
 [KnownUnit<Power, UKHorsepower, Watt, Scalar>]
 public partial record UKHorsepower(Scalar Value)
     : Power.AffineUnit<UKHorsepower>(Value)
@@ -83,7 +82,7 @@ public partial record TonAirConditioningEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t AC";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["tons AC", "ton AC"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["AC ton", "ton AC"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00028434513626109;
 }
@@ -94,8 +93,7 @@ public partial record TonRefrigerationEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t ice";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["tons of ice", "ton of ice", "tons ice", "ton ice"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton of ice", "ton ice"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00028434513626109;
 }
-
