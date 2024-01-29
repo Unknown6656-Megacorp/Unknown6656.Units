@@ -169,6 +169,71 @@ public static partial class Unit
         ["я"] = "ya",
     };
     private static readonly Dictionary<Type, string[]> _cached_alternative_unit_symbols = [];
+    private static readonly (string key, string value)[] _normalization_replacements = new[]
+    {
+        ("¹", "^1"),
+        ("²", "^2"),
+        ("³", "^3"),
+        ("⁴", "^4"),
+        ("⁵", "^5"),
+        ("⁶", "^6"),
+        ("⁷", "^7"),
+        ("⁸", "^8"),
+        ("⁹", "^9"),
+        ("⁻¹", "^-1"),
+        ("⁻²", "^-2"),
+        ("⁻³", "^-3"),
+        ("⁻⁴", "^-4"),
+        ("⁻⁵", "^-5"),
+        ("⁻⁶", "^-6"),
+        ("⁻⁷", "^-7"),
+        ("⁻⁸", "^-8"),
+        ("⁻⁹", "^-9"),
+        ("₀", "_0"),
+        ("₁", "_1"),
+        ("₂", "_2"),
+        ("₃", "_3"),
+        ("₄", "_4"),
+        ("₅", "_5"),
+        ("₆", "_6"),
+        ("₇", "_7"),
+        ("₈", "_8"),
+        ("₉", "_9"),
+        ("ₐ", "_a"),
+        ("ₑ", "_e"),
+        ("ₒ", "_o"),
+        ("ₓ", "_x"),
+        ("ₔ", "_e"),
+        ("ₕ", "_h"),
+        ("ₖ", "_k"),
+        ("ₗ", "_l"),
+        ("ₘ", "_m"),
+        ("ₙ", "_n"),
+        ("ₚ", "_p"),
+        ("ₛ", "_s"),
+        ("ₜ", "_t"),
+        ("/", "per"),
+        (".", ""),
+        ("·", "*"),
+        ("*", ""), // <-- TODO : verify whether that makes sense.
+        ("(", ""), // <-- TODO : verify whether that makes sense.
+        (")", ""), // <-- TODO : verify whether that makes sense.
+        ("squared", "^2"),
+        ("cubed", "^3"),
+        ("degrees", "°"),
+        ("degree", "°"),
+        ("inchs", "inches"),
+        ("feets", "feet"),
+        ("foots", "feet"),
+        ("feet", "foot"),
+        ("metre", "meter"),
+        ("litre", "liter"),
+        
+        /*
+        ₊₋₌₍₎ ⁰ ⁺⁻⁼⁽⁾ ⁿⁱ
+         */
+
+    };
     private static readonly Regex _REGEX_FORMATTED_NUMBER = new("""
     ^
     (?<sign>[+\-])?
@@ -181,7 +246,7 @@ public static partial class Unit
     (?<unit>.*$)
     """, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.NonBacktracking);
     private static readonly Regex _REGEX_WORD_TOKENS = new(@"[\p{Ll}\p{Lt}\p{Lu}\p{Lo}\p{Lm}\p{Nd}]*[\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Lm}]", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.NonBacktracking);
-
+    private static readonly Regex _REGEX_SUBSCRIPT = new(@"(_[\p{Ll}\p{Lt}\p{Lu}\p{Lo}\p{Lm}\p{Nd}])+", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.NonBacktracking);
 
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
     public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
@@ -456,18 +521,14 @@ public static partial class Unit
             foreach ((string name, string prefix) in MetricSIMapping)
                 unit_symbol = unit_symbol.Replace(name, prefix, StringComparison.OrdinalIgnoreCase);
 
-        unit_symbol = unit_symbol.Replace("²", "^2")
-                                 .Replace("³", "^3")
-                                 .Replace("⁻¹", "^-1")
-                                 .Replace("⁻²", "^-2")
-                                 .Replace("⁻³", "^-3")
-                                 .Replace("/", "per")
-                                 .Replace(".", "")
-                                 .Replace("degrees", "°", StringComparison.OrdinalIgnoreCase)
-                                 .Replace("degree", "°", StringComparison.OrdinalIgnoreCase)
-                                 .Replace("inchs", "inches", StringComparison.OrdinalIgnoreCase)
-                                 .Replace("feets", "feet", StringComparison.OrdinalIgnoreCase)
-                                 .Replace("foots", "feet", StringComparison.OrdinalIgnoreCase);
+        foreach ((string key, string value) in _normalization_replacements)
+            unit_symbol = unit_symbol.Replace(key, value, StringComparison.OrdinalIgnoreCase);
+
+        unit_symbol = _REGEX_SUBSCRIPT.Replace(unit_symbol, match => new([..match.Value
+                                                                                 .Where(c => c != '_')
+                                                                                 .OrderBy(c => c)
+                                                                                 .Distinct()
+                                                                                 .Prepend('_')]));
 
         return unit_symbol;
     }
@@ -487,7 +548,7 @@ public static partial class Unit
                 type.Name,
             ];
 
-            foreach (string alt in TUnit.AlternativeUnitSymbols.Prepend(type.Name))
+            foreach (string alt in symbols.ToArray()/* shallow copy */)
             {
                 IEnumerable<string> variants = [];
                 int last_index = 0;
