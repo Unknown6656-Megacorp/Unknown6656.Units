@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Movement;
+namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<DynamicViscosity, PascalSecond, Scalar>]
@@ -6,6 +6,7 @@ public partial record PascalSecond(Scalar Value)
     : BaseUnit<DynamicViscosity, PascalSecond, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "Pa·s";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["pascal*s", "pa*second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 

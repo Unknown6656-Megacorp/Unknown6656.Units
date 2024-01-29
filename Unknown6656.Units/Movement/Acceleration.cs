@@ -6,6 +6,7 @@ public partial record MeterPerSecondSquared(Scalar Value)
     : BaseUnit<Acceleration, MeterPerSecondSquared, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "m/s²";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter/s^2", "m/second^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
@@ -15,6 +16,7 @@ public partial record FootPerSecondSquared(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ft/s²";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["feet/s^2", "ft/second^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123;
 }

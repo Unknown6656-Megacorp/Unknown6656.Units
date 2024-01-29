@@ -15,6 +15,7 @@ public partial record PoundForce(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lbf";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["lb", "pound"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.2248089430997105;
 }

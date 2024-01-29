@@ -6,6 +6,7 @@ public partial record KilogramPerCubicMeter(Scalar Value)
     : BaseUnit<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "kg/m³";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilogram/meter^3", "kilogram/m^3", "kg/meter^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 
@@ -15,6 +16,7 @@ public partial record GramPerCubicMeter(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "g/m³";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["gram/meter^3", "gram/m^3", "g/meter^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
@@ -25,6 +27,7 @@ public partial record GramPerLiter(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "g/L";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["g/liter", "gram/L"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1;
 }
@@ -35,6 +38,7 @@ public partial record PoundPerCubicInch(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lb/in³";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["pound/in^3", "pound/inch^3", "lb/inch^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)3.6127292e-5;
 }
@@ -45,6 +49,7 @@ public partial record PoundPerCubicFoot(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lb/ft³";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["pound/ft^3", "pound/foot^3", "lb/foot^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)16.018463;
 }
