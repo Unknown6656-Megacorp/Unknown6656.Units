@@ -41,9 +41,9 @@ public partial record BoilerHorsepower(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.0001019419950048422447627300066262296753147459095774504307049288;
 }
 
-// TODO : Hydraulic horsepower
-// TODO : Drawbar power
-// TODO : Nominal horsepower
+#warning TODO : Hydraulic horsepower
+#warning TODO : Drawbar power
+#warning TODO : Nominal horsepower
 
 [KnownUnit<Power, UKHorsepower, Watt, Scalar>]
 public partial record UKHorsepower(Scalar Value)

@@ -1,4 +1,8 @@
-﻿namespace Unknown6656.Units.Movement;
+﻿#if !USE_DIACRITICS
+global using Sthène = Unknown6656.Units.Electricity.Sthene;
+#endif
+
+namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<Force, Newton, Scalar>]
@@ -15,7 +19,7 @@ public partial record PoundForce(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lbf";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["lb", "pound"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["lb", "pound", "lb force", "pound f"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.2248089430997105;
 }
@@ -31,7 +35,11 @@ public partial record Dyne(Scalar Value)
 }
 
 [KnownUnit<Force, Sthène, Newton, Scalar>]
+#if USE_DIACRITICS
 public partial record Sthène(Scalar Value)
+#else
+public partial record Sthene(Scalar Value)
+#endif
     : Force.AffineUnit<Sthène>(Value)
     , ILinearUnit<Scalar>
 {

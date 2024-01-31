@@ -37,7 +37,7 @@ public partial record G(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "g₀";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["g"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["g0"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.1019716212977928242570092743189570342573661749934993091422657074;
 }

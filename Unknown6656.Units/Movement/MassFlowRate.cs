@@ -1,4 +1,6 @@
-﻿namespace Unknown6656.Units.Movement;
+﻿using Unknown6656.Units.Matter;
+
+namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<MassFlowRate, KilogramPerSecond, Scalar>]
@@ -16,7 +18,7 @@ public partial record MetricTonPerSecond(Scalar Value)
 {
     public static string UnitSymbol { get; } = "t/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
+    public static Scalar ScalingFactor { get; } = MetricTon.ScalingFactor;
 }
 
 [KnownUnit<MassFlowRate, PoundPerSecond, KilogramPerSecond, Scalar>]
@@ -26,7 +28,7 @@ public partial record PoundPerSecond(Scalar Value)
 {
     public static string UnitSymbol { get; } = "lb/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)2.2046226218487757;
+    public static Scalar ScalingFactor { get; } = Pound.ScalingFactor;
 }
 
 [KnownUnit<MassFlowRate, OuncePerSecond, KilogramPerSecond, Scalar>]
@@ -36,7 +38,7 @@ public partial record OuncePerSecond(Scalar Value)
 {
     public static string UnitSymbol { get; } = "oz/s";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)35.27396194958041;
+    public static Scalar ScalingFactor { get; } = Ounce.ScalingFactor;
 }
 
 [KnownUnit<MassFlowRate, PlanckMassPerPlanckTime, KilogramPerSecond, Scalar>]
@@ -56,7 +58,7 @@ public partial record KilogramPerMinute(Scalar Value)
 {
     public static string UnitSymbol { get; } = "kg/min";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
-    public static Scalar ScalingFactor { get; } = (Scalar)60;
+    public static Scalar ScalingFactor { get; } = (Scalar)60.0;
 }
 
 [KnownUnit<MassFlowRate, KilogramPerHour, KilogramPerSecond, Scalar>]

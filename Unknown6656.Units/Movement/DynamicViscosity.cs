@@ -1,4 +1,4 @@
-namespace Unknown6656.Units.Movement;
+﻿namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<DynamicViscosity, PascalSecond, Scalar>]
@@ -26,6 +26,7 @@ public partial record PoundPerFootHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lb/(ft·h)";
+#warning TODO : static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)2419.0883117531746717979948626934303921235955375010178616457740451;
 }
@@ -36,6 +37,7 @@ public partial record PoundPerFootSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lb/(ft·s)";
+#warning TODO : static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.6719689496587741673632744778129292201665945419994032915727030085;
 }
@@ -46,6 +48,7 @@ public partial record PoundForceSecondPerSquareFoot(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lbf·s/ft²";
+#warning TODO : static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0208854342331504945325150491558934224155020579943155272083681678;
 }
@@ -56,6 +59,7 @@ public partial record PoundForceSecondPerSquareInch(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lbf·s/in²";
+#warning TODO : static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0001450377438972831094699929236084752515570889590452571424924765;
 }

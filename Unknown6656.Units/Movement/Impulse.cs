@@ -6,6 +6,7 @@ public partial record NewtonSecond(Scalar Value)
     : BaseUnit<Impulse, NewtonSecond, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "N·s";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["newton s", "N second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
@@ -15,6 +16,7 @@ public partial record KilogramMeterPerSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "kg·m/s";
+#warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
     public static Scalar ScalingFactor { get; } = (Scalar)1;
 }
@@ -25,6 +27,7 @@ public partial record KilogramKilometerPerHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "kg·km/h";
+#warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
     public static Scalar ScalingFactor { get; } = (Scalar)3.6;
 }
@@ -35,6 +38,7 @@ public partial record PoundFootPerSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lb·ft/s";
+#warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)7.2330138512098932361330729835111;
 }
@@ -45,6 +49,7 @@ public partial record PoundMilePerHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lb·mi/h";
+#warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)7.3390298295748105473483674240075;
 }
@@ -55,6 +60,7 @@ public partial record PoundSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lbf·s";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["lb s", "lbf second", "lbf s", "pound second", "pound s", "pound force second", "pound force s", "pound f second", "lb force second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.224808943099717;
 }
@@ -65,6 +71,7 @@ public partial record SlugFootPerSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "sl·ft/s";
+#warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.224735720691;
 }
