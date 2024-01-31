@@ -1,4 +1,6 @@
-﻿namespace Unknown6656.Units.Movement;
+﻿using Unknown6656.Units.Euclidean;
+
+namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<Speed, MeterPerSecond, Scalar>]
@@ -29,7 +31,7 @@ public partial record MeterPerHour(Scalar Value)
     public static string UnitSymbol { get; } = "m/h";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["m/hr"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)3600;
+    public static Scalar ScalingFactor { get; } = (Scalar)3600.0;
 }
 
 [KnownUnit<Speed, MilePerHour, MeterPerSecond, Scalar>]
@@ -51,7 +53,7 @@ public partial record FootPerSecond(Scalar Value)
     public static string UnitSymbol { get; } = "ft/s";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ftps", "fps"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)3.280839895013123;
+    public static Scalar ScalingFactor { get; } = Foot.ScalingFactor;
 }
 
 [KnownUnit<Speed, Knot, MeterPerSecond, Scalar>]

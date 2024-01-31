@@ -26,7 +26,7 @@ public partial record MetricTon(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton", "m ton"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
 }

@@ -23,6 +23,7 @@ public partial record AmpereHour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Ah";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ampere h", "ampere hr", "Ahr", "a hour"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)2.777777777777777777777777777777777777777777777777777777777777e-4;
 }
@@ -32,7 +33,8 @@ public partial record ElementaryCharge(Scalar Value)
     : Charge.AffineUnit<ElementaryCharge>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "e";
+    public static string UnitSymbol { get; } = "e⁻";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["e", "e charge"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)6.24150907446076260777624098093044589988696589617097112152741e18;
 }

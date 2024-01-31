@@ -148,6 +148,7 @@ public partial record DegreesNewton(Scalar Value)
     public static string UnitSymbol { get; } = "°N";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["N"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+#warning TODO: verify the following conversion!
     public static Scalar ScalingFactor { get; } = (Scalar)0.33; // <-- TODO: 0.303 or 0.308 ????
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; } = (Scalar)0;
