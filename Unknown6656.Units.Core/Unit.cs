@@ -222,6 +222,31 @@ public static partial class Unit
         ("cubed", "^3"),
         ("degrees", "°"),
         ("degree", "°"),
+        ("α", "alpha"),
+        ("β", "beta"),
+        ("γ", "gamma"),
+        ("δ", "delta"),
+        ("ε", "epsilon"),
+        ("ζ", "zeta"),
+        ("η", "eta"),
+        ("θ", "theta"),
+        ("ι", "iota"),
+        ("κ", "kappa"),
+        ("lamda", "lambda"),
+        ("λ", "lambda"),
+        ("μ", "mu"),
+        ("ν", "nu"),
+        ("ξ", "xi"),
+        ("ο", "omicron"),
+        ("π", "pi"),
+        ("ρ", "rho"),
+        ("σ", "sigma"),
+        ("τ", "tau"),
+        ("υ", "upsilon"),
+        ("φ", "phi"),
+        ("χ", "chi"),
+        ("ψ", "psi"),
+        ("ω", "omega"),
         ("inchs", "inches"),
         ("feets", "feet"),
         ("foots", "feet"),
@@ -232,7 +257,6 @@ public static partial class Unit
         /*
         ₊₋₌₍₎ ⁰ ⁺⁻⁼⁽⁾ ⁿⁱ
          */
-
     };
     private static readonly Regex _REGEX_FORMATTED_NUMBER = new("""
     ^
