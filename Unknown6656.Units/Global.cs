@@ -1,4 +1,10 @@
-﻿#if F16
+﻿#if USE_PURE_ASCII && USE_DIACRITICS
+    #warning The preprocessor flags 'USE_DIACRITICS' and 'USE_PURE_ASCII' are mutually exclusive. 'USE_PURE_ASCII' will take precedence.
+
+    #undef USE_DIACRITICS
+#endif
+
+#if F16
 global using Scalar = System.Half;
 #elif F32
 global using Scalar = float;
@@ -8,8 +14,4 @@ global using Scalar = double;
 global using Scalar = decimal;
 #else
 global using Scalar = double;
-#endif
-
-#if USE_DIACRITICS
-// TODO
 #endif
