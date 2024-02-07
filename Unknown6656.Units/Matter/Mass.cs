@@ -139,7 +139,11 @@ public partial record PlanckMass(Scalar Value)
     : Mass.AffineUnit<PlanckMass>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "mp";
+#else
     public static string UnitSymbol { get; } = "mₚ";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["m planck", "m p"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)4.59467132297156563388720245813872525405673487755159606404846e7;
@@ -150,7 +154,11 @@ public partial record SolarMass(Scalar Value)
     : Mass.AffineUnit<SolarMass>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "MS";
+#else
     public static string UnitSymbol { get; } = "M☉";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["mass sun", "sun mass", "sun masses", "solar masses", "sun"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5.0289921396852856718984948226525921939984007804995800791563e-31;
@@ -161,7 +169,11 @@ public partial record ElectronVoltMassEquivalent(Scalar Value)
     : Mass.AffineUnit<ElectronVoltMassEquivalent>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "eV/c^2";
+#else
     public static string UnitSymbol { get; } = "eV/c²";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["eV", "electron volt"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5.60958864983476645299741629583157968944023663372081019062242e35;

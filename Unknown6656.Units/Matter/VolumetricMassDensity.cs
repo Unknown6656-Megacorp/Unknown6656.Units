@@ -1,4 +1,4 @@
-using Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Euclidean;
 
 namespace Unknown6656.Units.Matter;
 
@@ -7,7 +7,11 @@ namespace Unknown6656.Units.Matter;
 public partial record KilogramPerCubicMeter(Scalar Value)
     : BaseUnit<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>(Value)
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "kg/m^3";
+#else
     public static string UnitSymbol { get; } = "kg/m³";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilogram/meter^3", "kilogram/m^3", "kg/meter^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }

@@ -1,4 +1,4 @@
-namespace Unknown6656.Units.Matter;
+﻿namespace Unknown6656.Units.Matter;
 
 
 [KnownBaseUnit<Pressure, Pascal, Scalar>]
@@ -68,7 +68,7 @@ public partial record MillimeterMercury(Scalar Value)
     : Pressure.AffineUnit<MillimeterMercury>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "mmHg";
+    public static string UnitSymbol { get; } = "mm Hg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["millimeter Hg", "mm mercury", "mm quecksilber", "millimeter quecksilber"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0075006168270417;
@@ -79,7 +79,7 @@ public partial record InchMercury(Scalar Value)
     : Pressure.AffineUnit<InchMercury>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "inHg";
+    public static string UnitSymbol { get; } = "in Hg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["inch Hg", "in mercury", "in quecksilber", "inch quecksilber"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00029529983071445;
@@ -90,7 +90,11 @@ public partial record MillimeterWater(Scalar Value)
     : Pressure.AffineUnit<MillimeterWater>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "mmH₂O";
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "mm H2O";
+#else
+    public static string UnitSymbol { get; } = "mm H₂O";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["millimeter H₂O", "mm H₂O", "mm H2O", "millimeter H2O"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.10197162129779;
@@ -101,7 +105,11 @@ public partial record InchWater(Scalar Value)
     : Pressure.AffineUnit<InchWater>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "in H2O";
+#else
     public static string UnitSymbol { get; } = "inH₂O";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["inch H₂O", "in H₂O", "inch H2O", "in H2O"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0040146307866177;
