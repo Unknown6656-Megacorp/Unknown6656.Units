@@ -94,23 +94,3 @@ public partial record Conductance(Siemens value)
 //      - statS
 //      - statF
 //      - statH
-// - magnetic flux / magnetic flux linkage
-//      - Wb
-// - magnetic flux density
-//      - T
-// - magnetic field strength
-//      - A/m
-// - magnetic dipole moment / magnetic dipole
-//      - A·m^2
-// - magnetic vector potential
-//      - A
-// - magnetic scalar potential
-//      - V
-// - magnetic pole strength / magnetic charge / magnetic circuit
-//      - A·m
-// - magnetic susceptibility
-//      - dimensionless
-// - magnetic permeability
-//      - H/m
-// - magnetic reluctance
-//      - A/V

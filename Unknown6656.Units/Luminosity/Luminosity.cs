@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units;
+﻿namespace Unknown6656.Units.Luminosity;
 
 
 // TODO:
