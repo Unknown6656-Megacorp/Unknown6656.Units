@@ -154,7 +154,7 @@ public partial record CubicFoot(Scalar Value)
 #endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["foot^3", "feet^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)35.31466672148859025;
+    public static Scalar ScalingFactor { get; } = Foot.ScalingFactor * SquareFoot.ScalingFactor;
 }
 
 [KnownUnit<Volume, CubicInch, CubicMeter, Scalar>]
@@ -169,7 +169,7 @@ public partial record CubicInch(Scalar Value)
 #endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["inch^3", "inches^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)61023.744094732284;
+    public static Scalar ScalingFactor { get; } = Inch.ScalingFactor * SquareInch.ScalingFactor;
 }
 
 [KnownUnit<Volume, Teaspoon, CubicMeter, Scalar>]

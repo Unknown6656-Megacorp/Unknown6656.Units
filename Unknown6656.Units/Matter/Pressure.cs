@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Matter;
+namespace Unknown6656.Units.Matter;
 
 
 [KnownBaseUnit<Pressure, Pascal, Scalar>]
@@ -60,7 +60,7 @@ public partial record KilopoundForcePerSquareInch(Scalar Value)
     public static string UnitSymbol { get; } = "ksi";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilolb/in^2", "kilolb/square in", "kilolb/square inch", "kilopound/inch^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)0.14503773773020923;
+    public static Scalar ScalingFactor { get; } = PoundForcePerSquareInch.ScalingFactor * 1e3;
 }
 
 [KnownUnit<Pressure, MillimeterMercury, Pascal, Scalar>]

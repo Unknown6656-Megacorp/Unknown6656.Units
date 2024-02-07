@@ -26,9 +26,24 @@ public partial record SquareFoot(Scalar Value)
 #else
     public static string UnitSymbol { get; } = "ft²";
 #endif
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["foot^2", "feet^2"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["foot^2", "feet^2", "sq ft", "square ft"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)10.763910416709722258073075107890473764;
+    public static Scalar ScalingFactor { get; } = Foot.ScalingFactor * Foot.ScalingFactor;
+}
+
+[KnownUnit<Area, SquareInch, SquareMeter, Scalar>]
+public partial record SquareInch(Scalar Value)
+    : Area.AffineUnit<SquareInch>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "in^2";
+#else
+    public static string UnitSymbol { get; } = "in²";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["inch^2", "sq in", "sq inch"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = Inch.ScalingFactor * Inch.ScalingFactor;
 }
 
 [KnownUnit<Area, Acre, SquareMeter, Scalar>]
