@@ -18,7 +18,11 @@ public partial record Degree(Scalar Value)
     : Angle.AffineUnit<Degree>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "deg";
+#else
     public static string UnitSymbol { get; } = "°";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["deg"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)(180 / Math.PI);

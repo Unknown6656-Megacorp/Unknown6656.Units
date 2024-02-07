@@ -5,6 +5,9 @@
 public partial record Siemens(Scalar Value)
     : BaseUnit<Conductance, Siemens, Scalar>(Value)
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "S";
+#else
     private static volatile bool _omega_unit_symbol = false;
 
 
@@ -15,6 +18,7 @@ public partial record Siemens(Scalar Value)
     }
 
     public static string UnitSymbol => _omega_unit_symbol ? "℧" : "S";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["mho"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }

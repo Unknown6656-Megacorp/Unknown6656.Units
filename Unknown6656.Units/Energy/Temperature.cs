@@ -20,7 +20,11 @@ public partial record PlanckTemperature(Scalar Value)
     : Temperature.AffineUnit<PlanckTemperature>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "Tp";
+#else
     public static string UnitSymbol { get; } = "Tₚ";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["Tp"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.416808338416e32;
@@ -74,7 +78,11 @@ public partial record Romer(Scalar Value)
     : Temperature.AffineUnit<Rømer>(Value)
     , IAffineUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "°Ro";
+#else
     public static string UnitSymbol { get; } = "°Rø";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["Rø", "°" + nameof(Rømer)];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.525;
@@ -91,7 +99,11 @@ public partial record Reaumur(Scalar Value)
     : Temperature.AffineUnit<Réaumur>(Value)
     , IAffineUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "°Re";
+#else
     public static string UnitSymbol { get; } = "°Ré";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["Ré", "°" + nameof(Réaumur)];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.8;

@@ -7,7 +7,11 @@
 public partial record CubicMeter(Scalar Value)
     : BaseUnit<Volume, CubicMeter, Scalar>(Value)
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "m^3";
+#else
     public static string UnitSymbol { get; } = "m³";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
@@ -143,7 +147,11 @@ public partial record CubicFoot(Scalar Value)
     : Volume.AffineUnit<CubicFoot>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "ft^3";
+#else
     public static string UnitSymbol { get; } = "ft³";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["foot^3", "feet^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)35.31466672148859025;
@@ -154,7 +162,11 @@ public partial record CubicInch(Scalar Value)
     : Volume.AffineUnit<CubicInch>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "in^3";
+#else
     public static string UnitSymbol { get; } = "in³";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["inch^3", "inches^3"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)61023.744094732284;

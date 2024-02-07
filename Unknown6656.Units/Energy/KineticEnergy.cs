@@ -90,7 +90,11 @@ public partial record CubicCentimeterNaturalGas(Scalar Value)
     : KineticEnergy.AffineUnit<CubicCentimeterNaturalGas>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "cm^3 NG";
+#else
     public static string UnitSymbol { get; } = "cm³ NG";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["cm³ natural gas", "cm³ LNG"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0268393373959122031527620341044158663699466053012642829388485032;
@@ -101,7 +105,11 @@ public partial record CubicFootAtmosphere(Scalar Value)
     : KineticEnergy.AffineUnit<CubicFootAtmosphere>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "ft^3 atm";
+#else
     public static string UnitSymbol { get; } = "ft³ atm";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ft³ atmosphere"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0003485286624375878633154503859265001424333055087486547255862562;
@@ -112,7 +120,11 @@ public partial record CubicFootNaturalGas(Scalar Value)
     : KineticEnergy.AffineUnit<CubicFootNaturalGas>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "ft^3 NG";
+#else
     public static string UnitSymbol { get; } = "ft³ NG";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ft³ natural gas", "ft³ LNG"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)9.4781712031331720001278504447561063565867165664668866542531e-7;
@@ -133,7 +145,11 @@ public partial record Hartree(Scalar Value)
     : KineticEnergy.AffineUnit<Hartree>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "Eh";
+#else
     public static string UnitSymbol { get; } = "Eₕ";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["E", "Eh"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)2.29371265835792193303093025645542490568253548832225011376814e17;

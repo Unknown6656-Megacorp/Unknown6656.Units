@@ -33,7 +33,11 @@ public partial record ElementaryCharge(Scalar Value)
     : Charge.AffineUnit<ElementaryCharge>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "e";
+#else
     public static string UnitSymbol { get; } = "e⁻";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["e", "e charge"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)6.24150907446076260777624098093044589988696589617097112152741e18;
