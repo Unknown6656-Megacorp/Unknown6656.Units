@@ -4,11 +4,16 @@ using Unknown6656.Units.Movement;
 namespace Unknown6656.Units.Matter;
 
 
-public partial record Amount(Mol value) : Quantity<Amount, Mol, Scalar>(value);
+public partial record Amount(Mol value)
+    : Quantity<Amount, Mol, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "n";
+}
 
 public partial record Mass(Kilogram value)
     : Quantity<Mass, Kilogram, Scalar>(value)
 {
+    public static string QuantitySymbol { get; } = "m";
     public static ElectronVoltMassEquivalent MassOfElectronNeutrino { get; } = new(0.120);
     public static ElectronVoltMassEquivalent MassOfMuonNeutrino { get; } = new(0.170);
     public static ElectronVoltMassEquivalent MassOfTauNeutrino { get; } = new(15.5);
@@ -25,16 +30,40 @@ public partial record Mass(Kilogram value)
 }
 
 [MultiplicativeRelationship<MolarMass, Amount, Mass, GramPerMol, Mol, Kilogram, Scalar>((Scalar)1e-3)]
-public partial record MolarMass(GramPerMol value) : Quantity<MolarMass, GramPerMol, Scalar>(value);
+public partial record MolarMass(GramPerMol value)
+    : Quantity<MolarMass, GramPerMol, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "M";
+}
 
 // TODO : conversion to force
 [MultiplicativeRelationship<AreaMassDensity, Area, Mass, KilogramPerSquareMeter, SquareMeter, Kilogram, Scalar>]
 [MultiplicativeRelationship<AreaMassDensity, Length, VolumetricMassDensity, KilogramPerSquareMeter, Meter, KilogramPerCubicMeter, Scalar>]
-public partial record AreaMassDensity(KilogramPerSquareMeter value) : Quantity<AreaMassDensity, KilogramPerSquareMeter, Scalar>(value);
+public partial record AreaMassDensity(KilogramPerSquareMeter value)
+    : Quantity<AreaMassDensity, KilogramPerSquareMeter, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "DA";
+#else
+    public static string QuantitySymbol { get; } = "ρᴀ";
+#endif
+}
 
 // TODO : conversion to force
 [MultiplicativeRelationship<VolumetricMassDensity, Volume, Mass, KilogramPerCubicMeter, CubicMeter, Kilogram, Scalar>]
-public partial record VolumetricMassDensity(KilogramPerCubicMeter value) : Quantity<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>(value);
+public partial record VolumetricMassDensity(KilogramPerCubicMeter value)
+    : Quantity<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "D";
+#else
+    public static string QuantitySymbol { get; } = "ρ";
+#endif
+}
 
 [MultiplicativeRelationship<Force, Area, Pressure, Newton, SquareMeter, Pascal, Scalar>]
-public partial record Pressure(Pascal value) : Quantity<Pressure, Pascal, Scalar>(value);
+public partial record Pressure(Pascal value)
+    : Quantity<Pressure, Pascal, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "p";
+}
