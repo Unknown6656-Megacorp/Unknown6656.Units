@@ -45,6 +45,8 @@ public record CompositeQuantity<TQuantity1, TQuantity2, TBaseUnit1, TBaseUnit2, 
                      , IUnit
     where TScalar : INumber<TScalar>
 {
+    public static string QuantitySymbol { get; } = $"{TQuantity1.QuantitySymbol} / {TQuantity2.QuantitySymbol}";
+
 
     public CompositeQuantity(TBaseUnit1 dividend, TBaseUnit2 divisor)
         : this(new CompositeBaseUnit(dividend, divisor))

@@ -919,6 +919,8 @@ internal interface IQuantity;
 public interface IQuantity<TQuantity>
     where TQuantity : IQuantity<TQuantity>
 {
+    public static abstract string QuantitySymbol { get; }
+
     public static abstract bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TQuantity? result);
 }
 
