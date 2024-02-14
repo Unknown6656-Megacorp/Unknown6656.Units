@@ -106,4 +106,5 @@ public partial record LuminousEfficacy(LumenPerWatt value)
 // (https://en.wikipedia.org/wiki/Luminous_intensity)
 // TODO:
 //  - radiance
+//  - irradiance
 //  - luma

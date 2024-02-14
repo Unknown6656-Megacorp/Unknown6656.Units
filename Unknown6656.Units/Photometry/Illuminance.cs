@@ -1,2 +1,31 @@
 ﻿namespace Unknown6656.Units.Photometry;
 
+
+[KnownBaseUnit<Illuminance, Lux, Scalar>]
+public partial record Lux(Scalar Value)
+    : BaseUnit<Illuminance, Lux, Scalar>(Value)
+{
+    public static string UnitSymbol { get; } = "lx";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+}
+
+[KnownUnit<Illuminance, FootCandle, Lux, Scalar>]
+public partial record FootCandle(Scalar Value)
+    : Illuminance.AffineUnit<FootCandle>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "fc";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ftc", "ft candle", "foot c"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.0929030400000000026612187291648000762309298431731979596441330692;
+}
+
+[KnownUnit<Illuminance, Phot, Lux, Scalar>]
+public partial record Phot(Scalar Value)
+    : Illuminance.AffineUnit<Phot>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "ph";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e-4;
+}
