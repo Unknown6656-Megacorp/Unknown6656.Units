@@ -7,7 +7,11 @@ namespace Unknown6656.Units.Movement;
 public partial record CubicMeterPerSecond(Scalar Value)
     : BaseUnit<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(Value)
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "m^3/s";
+#else
     public static string UnitSymbol { get; } = "m³/s";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["cubic meter/second", "cubic m/s", "cubic meter/s", "meter^3/s", "meter^3/second", "m^3/second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
@@ -28,7 +32,11 @@ public partial record CubicFootPerSecond(Scalar Value)
     : VolumetricFlowRate.AffineUnit<CubicFootPerSecond>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "ft^3/s";
+#else
     public static string UnitSymbol { get; } = "ft³/s";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["cubic feet/second", "cubic ft/s", "cubic feet/s", "feet^3/s", "feet^3/second", "ft^3/second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor;
@@ -39,7 +47,11 @@ public partial record CubicInchPerSecond(Scalar Value)
     : VolumetricFlowRate.AffineUnit<CubicInchPerSecond>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "in^3/s";
+#else
     public static string UnitSymbol { get; } = "in³/s";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["cubic inch/second", "cubic in/s", "cubic inch/s", "inch^3/s", "inch^3/second", "in^3/second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = CubicInch.ScalingFactor;
