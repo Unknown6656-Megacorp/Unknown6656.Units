@@ -24,22 +24,35 @@ public partial record MagneticFlux(Weber value)
 #endif
 }
 
+// magnetic induction
+// T = N*s/C/m
+// T = kg/A/s^2
+// T = V*s/m^2
+// T = Wb/m^2
+// T = N/A/m
+// T = J/A/m^2
 public partial record MagneticFluxDensity(Tesla value)
     : Quantity<MagneticFluxDensity, Tesla, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "B";
 }
 
+[MultiplicativeRelationship<MagneticFieldStrength, Length, Current, AmpèrePerMeter, Meter, Ampère, Scalar>]
+public partial record MagneticFieldStrength(AmpèrePerMeter value)
+    : Quantity<MagneticFieldStrength, AmpèrePerMeter, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "H";
+}
+
+
+
 /*
 TODO:
     - magnetic moment
-    - magnetic flux density
     - magnetic field strength
     - magnetic dipole moment
     - vacuum permeability constant
     - lorentz force
-// - magnetic field strength
-//      - A/m
 // - magnetic dipole moment / magnetic dipole
 //      - A·m^2
 // - magnetic vector potential
