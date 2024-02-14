@@ -45,6 +45,9 @@ public partial record Luminance(CandelaPerSquareMeter value)
 #else
     public static string QuantitySymbol { get; } = "Lᵥ";
 #endif
+
+    public static CandelaPerSquareMeter Sun { get; } = new(1.6e9);
+    public static FootLambert OpenGateScreenLuminance { get; } = new(16);
 }
 
 [MultiplicativeRelationship<Illuminance, Area, LuminousFlux, Lux, SquareMeter, Lumen, Scalar>]
@@ -101,4 +104,6 @@ public partial record LuminousEfficacy(LumenPerWatt value)
 
 
 // (https://en.wikipedia.org/wiki/Luminous_intensity)
-
+// TODO:
+//  - radiance
+//  - luma
