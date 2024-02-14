@@ -1,4 +1,4 @@
-using Unknown6656.Units.Matter;
+﻿using Unknown6656.Units.Matter;
 
 namespace Unknown6656.Units.Movement;
 
@@ -43,7 +43,7 @@ public partial record KilogramKilometerPerHour(Scalar Value)
 #endif
 #warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
-    public static Scalar ScalingFactor { get; } = (Scalar)3.6;
+    public static Scalar ScalingFactor { get; } = KilometerPerHour.ScalingFactor;
 }
 
 [KnownUnit<Impulse, PoundFootPerSecond, NewtonSecond, Scalar>]
@@ -51,10 +51,14 @@ public partial record PoundFootPerSecond(Scalar Value)
     : Impulse.AffineUnit<PoundFootPerSecond>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "lb*ft/s";
+#else
     public static string UnitSymbol { get; } = "lb·ft/s";
+#endif
 #warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)7.2330138512098932361330729835111;
+    public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / FootPerSecond.ScalingFactor;
 }
 
 [KnownUnit<Impulse, PoundMilePerHour, NewtonSecond, Scalar>]
@@ -62,10 +66,14 @@ public partial record PoundMilePerHour(Scalar Value)
     : Impulse.AffineUnit<PoundMilePerHour>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "lb*mi/h";
+#else
     public static string UnitSymbol { get; } = "lb·mi/h";
+#endif
 #warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)7.3390298295748105473483674240075;
+    public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / MilePerHour.ScalingFactor;
 }
 
 [KnownUnit<Impulse, PoundSecond, NewtonSecond, Scalar>]
@@ -73,7 +81,11 @@ public partial record PoundSecond(Scalar Value)
     : Impulse.AffineUnit<PoundSecond>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "lbf*s";
+#else
     public static string UnitSymbol { get; } = "lbf·s";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["lb s", "lbf second", "lbf s", "pound second", "pound s", "pound force second", "pound force s", "pound f second", "lb force second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.224808943099717;
