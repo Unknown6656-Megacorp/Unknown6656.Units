@@ -169,8 +169,7 @@ public static partial class Unit
         ["я"] = "ya",
     };
     private static readonly Dictionary<Type, string[]> _cached_alternative_unit_symbols = [];
-    private static readonly (string key, string value)[] _normalization_replacements = new[]
-    {
+    private static readonly (string key, string value)[] _normalization_replacements = [
         ("¹", "^1"),
         ("²", "^2"),
         ("³", "^3"),
@@ -257,7 +256,7 @@ public static partial class Unit
         /*
         ₊₋₌₍₎ ⁰ ⁺⁻⁼⁽⁾ ⁿⁱ
          */
-    };
+    ];
     private static readonly Regex _REGEX_FORMATTED_NUMBER = new("""
     ^
     (?<sign>[+\-])?
@@ -273,7 +272,13 @@ public static partial class Unit
     private static readonly Regex _REGEX_SUBSCRIPT = new(@"(_[\p{Ll}\p{Lt}\p{Lu}\p{Lo}\p{Lm}\p{Nd}])+", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.NonBacktracking);
 
     public static IReadOnlyList<string> MetricSIPrefixesMultiple { get; } = ["k", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"];
-    public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m", "μ", "n", "p", "f", "a", "z", "y", "r", "q"];
+    public static IReadOnlyList<string> MetricSIPrefixesSubmultiple { get; } = ["m",
+#if USE_PURE_ASCII
+        "u",
+#else
+        "μ",
+#endif
+        "n", "p", "f", "a", "z", "y", "r", "q"];
     public static IReadOnlyDictionary<string, string> MetricSIMapping { get; } = new Dictionary<string, string>
     {
         ["quecto"] = "q",
@@ -284,7 +289,11 @@ public static partial class Unit
         ["femto"] = "f",
         ["pico"] = "p",
         ["nano"] = "n",
+#if USE_PURE_ASCII
+        ["micro"] = "u",
+#else
         ["micro"] = "μ",
+#endif
         ["milli"] = "m",
         ["centi"] = "c",
         ["deci"] = "d",
