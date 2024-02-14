@@ -76,6 +76,17 @@ public partial record Conductance(Siemens value)
     public static string QuantitySymbol { get; } = "G";
 }
 
+// H = kg⋅m^2⋅s^−2⋅A^−2
+// H = V⋅s/A
+// H = J / A^2
+// H = Nm / A^2
+// H = Wb (magn.flux) / A
+[MultiplicativeRelationship<Resistance, Time, Inductance, Ohm, Second, Henry, Scalar>]
+public partial record Inductance(Henry value)
+    : Quantity<Inductance, Henry, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "L";
+}
 
 
 
@@ -83,8 +94,6 @@ public partial record Conductance(Siemens value)
 // TODO:
 // - resistivity
 // - permittivity
-// - electrical inductance
-//      - H
 // - electrostatic units
 //      - esu
 //      - statC

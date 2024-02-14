@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Unknown6656.Units.Electricity;
-using Unknown6656.Units.Energy;
+﻿using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Movement;
 using Unknown6656.Units.Temporal;
+using Unknown6656.Units.Energy;
 
 namespace Unknown6656.Units.Magnetism;
 
@@ -44,8 +38,6 @@ TODO:
     - magnetic dipole moment
     - vacuum permeability constant
     - lorentz force
-// - magnetic flux density
-//      - T
 // - magnetic field strength
 //      - A/m
 // - magnetic dipole moment / magnetic dipole
