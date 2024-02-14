@@ -7,7 +7,7 @@ namespace Unknown6656.Units.Euclidean;
 public partial record Angle(Radian value)
     : Quantity<Angle, Radian, Scalar>(value)
 {
-    public static string QuantitySymbol { get; } = "";
+    public static string QuantitySymbol { get; } = "∠";
     public static Degree North { get; } = new(0);
     public static Degree East { get; } = new(90);
     public static Degree South { get; } = new(180);
@@ -15,6 +15,13 @@ public partial record Angle(Radian value)
     public static Degree CivilTwilight { get; } = new(6);
     public static Degree NauticalTwilight { get; } = new(12);
     public static Degree AstronomicalTwilight { get; } = new(18);
+}
+
+[MultiplicativeRelationship<Angle, SolidAngle, Radian, Steradian, Scalar>]
+public partial record SolidAngle(Steradian value)
+    : Quantity<SolidAngle, Steradian, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "Ω";
 }
 
 [MultiplicativeRelationship<Length, Area, Meter, SquareMeter, Scalar>]
