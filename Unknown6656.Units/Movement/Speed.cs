@@ -72,7 +72,11 @@ public partial record SpeedOfLightVacuum(Scalar Value)
     : Speed.AffineUnit<SpeedOfLightVacuum>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "c0";
+#else
     public static string UnitSymbol { get; } = "c₀";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["c"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)3.3356409519815204957557671447491851179258151984597290969e-9;

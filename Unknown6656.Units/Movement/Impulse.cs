@@ -1,11 +1,17 @@
-﻿namespace Unknown6656.Units.Movement;
+using Unknown6656.Units.Matter;
+
+namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<Impulse, NewtonSecond, Scalar>]
 public partial record NewtonSecond(Scalar Value)
     : BaseUnit<Impulse, NewtonSecond, Scalar>(Value)
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "N*s";
+#else
     public static string UnitSymbol { get; } = "N·s";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["newton s", "N second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
@@ -15,7 +21,11 @@ public partial record KilogramMeterPerSecond(Scalar Value)
     : Impulse.AffineUnit<KilogramMeterPerSecond>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "kg*m/s";
+#else
     public static string UnitSymbol { get; } = "kg·m/s";
+#endif
 #warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
     public static Scalar ScalingFactor { get; } = (Scalar)1;
@@ -26,7 +36,11 @@ public partial record KilogramKilometerPerHour(Scalar Value)
     : Impulse.AffineUnit<KilogramKilometerPerHour>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "kg*km/h";
+#else
     public static string UnitSymbol { get; } = "kg·km/h";
+#endif
 #warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
     public static Scalar ScalingFactor { get; } = (Scalar)3.6;
@@ -70,7 +84,11 @@ public partial record SlugFootPerSecond(Scalar Value)
     : Impulse.AffineUnit<SlugFootPerSecond>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "sl*ft/s";
+#else
     public static string UnitSymbol { get; } = "sl·ft/s";
+#endif
 #warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.224735720691;

@@ -33,8 +33,13 @@ public partial record Gradian(Scalar Value)
     : Angle.AffineUnit<Gradian>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "gon"; // ᵍ
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "gon";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ᵍ"];
+#else
+    public static string UnitSymbol { get; } = "ᵍ";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["gon"];
+#endif
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)(200 / Math.PI);
 }

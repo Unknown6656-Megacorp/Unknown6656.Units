@@ -5,7 +5,11 @@
 public partial record PascalSecond(Scalar Value)
     : BaseUnit<DynamicViscosity, PascalSecond, Scalar>(Value)
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "Pa*s";
+#else
     public static string UnitSymbol { get; } = "Pa·s";
+#endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["pascal*s", "pa*second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }

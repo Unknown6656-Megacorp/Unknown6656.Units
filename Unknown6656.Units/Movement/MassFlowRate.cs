@@ -50,8 +50,12 @@ public partial record PlanckMassPerPlanckTime(Scalar Value)
     : MassFlowRate.AffineUnit<PlanckMassPerPlanckTime>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "mp/tp";
+#else
     public static string UnitSymbol { get; } = "mₚ/tₚ";
-#warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = [];
+#endif
+#warning TODO    static string[] IUnit.AlternativeUnitSymbols { get; } = ["m/t", ];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)2.4767851446758066576843206023376418356223089642890698915169e10-36;
 }
