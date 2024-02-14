@@ -28,7 +28,7 @@ public partial record MagneticFlux(Weber value)
 // T = N*s/C/m
 // T = kg/A/s^2
 // T = V*s/m^2
-// T = Wb/m^2
+// T = V/m/(m/s)
 // T = N/A/m
 // T = J/A/m^2
 public partial record MagneticFluxDensity(Tesla value)

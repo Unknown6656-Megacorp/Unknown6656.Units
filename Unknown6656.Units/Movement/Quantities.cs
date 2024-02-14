@@ -98,10 +98,11 @@ public partial record Impulse(NewtonSecond value)
     public static string QuantitySymbol { get; } = "J";
 }
 
-// public partial record SpecificImpulse(Second value)
-//      : Quantity<SpecificImpulse, Second, Scalar>(value)
+// [IdentityRelationship<SpecificImpulse ,Time, ..., Second, Scalar>]
+// public partial record SpecificImpulse(... value)
+//      : Quantity<SpecificImpulse, ..., Scalar>(value)
 // {
-//     public static string QuantitySymbol { get; } = ;
+//     public static string QuantitySymbol { get; } = "I_sp";
 // }
 
 [MultiplicativeRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]

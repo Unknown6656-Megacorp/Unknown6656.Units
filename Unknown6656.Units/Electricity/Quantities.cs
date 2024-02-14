@@ -80,7 +80,6 @@ public partial record Conductance(Siemens value)
 // H = V⋅s/A
 // H = J / A^2
 // H = Nm / A^2
-// H = Wb (magn.flux) / A
 [MultiplicativeRelationship<Resistance, Time, Inductance, Ohm, Second, Henry, Scalar>]
 public partial record Inductance(Henry value)
     : Quantity<Inductance, Henry, Scalar>(value)

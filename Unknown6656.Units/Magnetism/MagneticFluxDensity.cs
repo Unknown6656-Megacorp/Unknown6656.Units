@@ -18,3 +18,17 @@ public partial record Gauss(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e4;
 }
+
+[KnownUnit<MagneticFluxDensity, Gamma, Tesla, Scalar>]
+public partial record Gamma(Scalar Value)
+    : MagneticFluxDensity.AffineUnit<Gamma>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "gamma";
+#else
+    public static string UnitSymbol { get; } = "γ";
+#endif
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e9;
+}
