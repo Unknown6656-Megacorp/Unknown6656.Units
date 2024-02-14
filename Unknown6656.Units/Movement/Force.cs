@@ -24,6 +24,17 @@ public partial record PoundForce(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.2248089430997105;
 }
 
+[KnownUnit<Force, OunceForce, Newton, Scalar>]
+public partial record OunceForce(Scalar Value)
+    : Force.AffineUnit<OunceForce>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "ozf";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["oz", "ounce", "oz force", "ounce f"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = PoundForce.ScalingFactor * 16;
+}
+
 [KnownUnit<Force, Dyne, Newton, Scalar>]
 public partial record Dyne(Scalar Value)
     : Force.AffineUnit<Dyne>(Value)

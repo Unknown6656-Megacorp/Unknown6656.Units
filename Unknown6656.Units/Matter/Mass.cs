@@ -58,7 +58,7 @@ public partial record Ounce(Scalar Value)
 {
     public static string UnitSymbol { get; } = "oz";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = (Scalar)35.27396194958041;
+    public static Scalar ScalingFactor { get; } = Pound.ScalingFactor * 16;
 }
 
 [KnownUnit<Mass, UKTon, Kilogram, Scalar>]
