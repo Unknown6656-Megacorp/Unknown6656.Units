@@ -1,7 +1,7 @@
-﻿using Unknown6656.Units.Energy;
-using Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Movement;
 using Unknown6656.Units.Temporal;
+using Unknown6656.Units.Energy;
 
 namespace Unknown6656.Units.Photometry;
 
@@ -27,6 +27,7 @@ public partial record LuminousEnergy(LumenSecond value)
 #endif
 }
 
+[MultiplicativeRelationship<LuminousIntensity, SolidAngle, LuminousFlux, Candela, Steradian, Lumen, Scalar>]
 public partial record LuminousFlux(Lumen value)
     : Quantity<LuminousFlux, Lumen, Scalar>(value)
 {
@@ -37,6 +38,7 @@ public partial record LuminousFlux(Lumen value)
 #endif
 }
 
+[MultiplicativeRelationship<Luminance, SolidAngle, LuminousExitance, CandelaPerSquareMeter, Steradian, LumenPerSquareMeter, Scalar>]
 [MultiplicativeRelationship<Luminance, Area, LuminousIntensity, CandelaPerSquareMeter, SquareMeter, Candela, Scalar>]
 public partial record Luminance(CandelaPerSquareMeter value)
     : Quantity<Luminance, CandelaPerSquareMeter, Scalar>(value)
@@ -112,6 +114,14 @@ public partial record LuminousEfficacy(LumenPerWatt value)
     : Quantity<LuminousEfficacy, LumenPerWatt, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "K";
+
+    public static LumenPerWatt TungstenLight2800K { get; } = new(15);
+    public static LumenPerWatt IdealBlackBody4000K { get; } = new(30);
+    public static LumenPerWatt IdealBlackBody7000K { get; } = new(95);
+    public static LumenPerWatt IdealWhiteSource5800K { get; } = new(251);
+    public static LumenPerWatt Ideal555nmMonochromaticSource { get; } = new(683.002);
+
+    // TODO : add more https://en.wikipedia.org/wiki/Luminous_efficacy
 }
 
 
