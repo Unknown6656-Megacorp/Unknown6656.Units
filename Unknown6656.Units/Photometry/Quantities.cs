@@ -1,5 +1,6 @@
 ﻿using Unknown6656.Units.Energy;
 using Unknown6656.Units.Euclidean;
+using Unknown6656.Units.Movement;
 using Unknown6656.Units.Temporal;
 
 namespace Unknown6656.Units.Photometry;
@@ -59,6 +60,16 @@ public partial record Illuminance(Lux value)
 #else
     public static string QuantitySymbol { get; } = "Eᵥ";
 #endif
+
+    public static Lux MoonlessOvercastNightSky { get; } = new(.0001);
+    public static Lux MoonlessClearNightSky { get; } = new(.002);
+    public static Lux FullMoonClearNight { get; } = new(.25);
+    public static Lux CivilTwilightClearSky { get; } = new(3.4);
+    public static Lux DarkOvercastDay { get; } = new(100);
+    public static Lux OvercastDay { get; } = new(1000);
+    public static Lux SunriseOrSunsetOnClearDay { get; } = new(400);
+    public static Lux DirectSunlightOnClearDay { get; } = new(100_000);
+    public static Lux FullDaylight { get; } = new(20_000);
 }
 
 [IdentityRelationship<Illuminance, LuminousExitance, Lux, LumenPerSquareMeter, Scalar>]
@@ -85,6 +96,7 @@ public partial record LuminousExposure(LuxSecond value)
 }
 
 [MultiplicativeRelationship<LuminousEnergyDensity, Volume, LuminousEnergy, LumenSecondPerCubicMeter, CubicMeter, LumenSecond, Scalar>]
+[MultiplicativeRelationship<LuminousEnergyDensity, VolumetricFlowRate, LuminousFlux, LumenSecondPerCubicMeter, CubicMeterPerSecond, Lumen, Scalar>]
 public partial record LuminousEnergyDensity(LumenSecondPerCubicMeter value)
     : Quantity<LuminousEnergyDensity, LumenSecondPerCubicMeter, Scalar>(value)
 {
@@ -103,8 +115,23 @@ public partial record LuminousEfficacy(LumenPerWatt value)
 }
 
 
-// (https://en.wikipedia.org/wiki/Luminous_intensity)
+// https://en.wikipedia.org/wiki/Luminous_intensity
+// https://en.wikipedia.org/wiki/Exposure_(photography)#Photometric_and_radiometric_exposure
 // TODO:
+//  - luma
 //  - radiance
 //  - irradiance
-//  - luma
+//  - radiant flux
+//  - radiant energy density
+//  - spectral flux
+//  - radiant intensity
+//  - spectral intensity
+//  - spectral radiance
+//  - irradiance flux density
+//  - spectral irradiance
+//  - radiosity
+//  - spectral radiosity
+//  - radiant exitance
+//  - spectral exitance
+//  - radiant exposure
+//  - spectral exposure
