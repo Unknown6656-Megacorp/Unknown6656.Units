@@ -6,7 +6,7 @@ public partial record ReciprocalMeter(Scalar Value)
     : BaseUnit<LinearWavenumber, ReciprocalMeter, Scalar>(Value)
 {
 #if USE_PURE_ASCII
-    public static string UnitSymbol { get; } = "m^-1";
+    public static string UnitSymbol { get; } = "{0}m^-1";
 #else
     public static string UnitSymbol { get; } = "{0}m¯¹";
 #endif
