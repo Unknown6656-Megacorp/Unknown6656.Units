@@ -23,6 +23,7 @@ public partial record KineticEnergy(Joule value)
     public static string QuantitySymbol { get; } = "E";
 }
 
+[MultiplicativeRelationship<SpecificEnergy, Mass, KineticEnergy, JoulePerKilogram, Kilogram, Joule, Scalar>]
 public partial record SpecificEnergy(JoulePerKilogram value)
     : Quantity<SpecificEnergy, JoulePerKilogram, Scalar>(value)
 {
