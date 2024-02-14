@@ -47,6 +47,8 @@ public partial record AreaMassDensity(KilogramPerSquareMeter value)
 #else
     public static string QuantitySymbol { get; } = "ρᴀ";
 #endif
+
+    public static Grammage OfficePaperDensity { get; } = new(80);
 }
 
 // TODO : conversion to force

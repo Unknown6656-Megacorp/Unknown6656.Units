@@ -12,7 +12,7 @@ public partial record KilogramPerSquareMeter(Scalar Value)
 #else
     public static string UnitSymbol { get; } = "kg/m²";
 #endif
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilogram/meter^2", "kilogram/m^2", "kg/meter^2"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilogram/meter^2", "kilogram/m^2", "kg/meter^2", "kilo/m^2", "kilo/meter^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 
@@ -44,4 +44,19 @@ public partial record PoundPerSquareFoot(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["pound/foot^2", "pound/ft^2", "lbs/foot^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / SquareFoot.ScalingFactor;
+}
+
+[KnownUnit<AreaMassDensity, Grammage, KilogramPerSquareMeter, Scalar>]
+public partial record Grammage(Scalar Value)
+    : AreaMassDensity.AffineUnit<Grammage>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "gsm";
+#else
+    public static string UnitSymbol { get; } = "g/m²";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["gram/meter^2", "gram/m^2", "g/meter^2", "g/m^2"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static Scalar ScalingFactor { get; } = Gram.ScalingFactor;
 }
