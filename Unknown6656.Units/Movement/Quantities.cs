@@ -111,6 +111,13 @@ public partial record Force(Newton value)
     public static string QuantitySymbol { get; } = "F";
 }
 
+[MultiplicativeRelationship<LinearForceDensity, Length, Force, NewtonPerMeter, Meter, Newton, Scalar>]
+public partial record LinearForceDensity(NewtonPerMeter value)
+    : Quantity<LinearForceDensity, NewtonPerMeter, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "F/l";
+}
+
 [IdentityRelationship<Torque, KineticEnergy, NewtonMeter, Joule, Scalar>]
 [MultiplicativeRelationship<Force, Length, Torque, Newton, Meter, NewtonMeter, Scalar>]
 [MultiplicativeRelationship<KineticEnergy, Angle, Torque, Joule, Radian, NewtonMeter, Scalar>]
