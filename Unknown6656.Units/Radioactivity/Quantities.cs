@@ -1,5 +1,6 @@
-using Unknown6656.Units.Electricity;
+﻿using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Matter;
+using Unknown6656.Units.Temporal;
 
 namespace Unknown6656.Units.Radioactivity;
 
@@ -11,8 +12,15 @@ public partial record RadiationExposure(CoulombPerKilogram value)
     public static string QuantitySymbol { get; } = "X";
 }
 
+[IdentityRelationship<Activity, Frequency, Becquerel, Hertz, Scalar>]
+public partial record Activity(Becquerel value)
+    : Quantity<Activity, Becquerel, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "A";
+}
 
-// activity
+
+
 // specific activity
 // absorbed dose
 // equivalent dose
