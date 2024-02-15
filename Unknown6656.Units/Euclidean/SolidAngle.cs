@@ -6,7 +6,7 @@ public partial record Steradian(Scalar Value)
     : BaseUnit<SolidAngle, Steradian, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "sr";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["rad^2", "radian^2", "sq rad", "square rad", "sq radian"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["rad^2", "radian^2", "sq rad", "square rad", "sq radian", "sterad"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 

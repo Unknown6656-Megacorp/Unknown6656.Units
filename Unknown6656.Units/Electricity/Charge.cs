@@ -13,6 +13,17 @@ public partial record Coulomb(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
+[KnownUnit<Charge, Franklin, Coulomb, Scalar>]
+[KnownAlias<Charge, Franklin, Coulomb, Scalar>("Statcoulomb", "StatC", "esu")]
+public partial record Franklin(Scalar Value)
+    : Charge.AffineUnit<Franklin>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "Fr";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)2.99792457999999998916394890769699222666709715058982848552029e9;
+}
+
 [KnownUnit<Charge, AmpèreHour, Coulomb, Scalar>]
 #if USE_DIACRITICS
 public partial record AmpèreHour(Scalar Value)
