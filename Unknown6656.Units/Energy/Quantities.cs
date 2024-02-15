@@ -30,6 +30,13 @@ public partial record SpecificEnergy(JoulePerKilogram value)
     public static string QuantitySymbol { get; } = "e";
 }
 
+[MultiplicativeRelationship<EnergyDensity, Volume, KineticEnergy, JoulePerCubicMeter, CubicMeter, Joule, Scalar>]
+public partial record EnergyDensity(JoulePerCubicMeter value)
+    : Quantity<EnergyDensity, JoulePerCubicMeter, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "U";
+}
+
 // TODO : W = kg * (m/s)^2 / s
 //          = kg * m^2 / s^3
 [MultiplicativeRelationship<Power, Time, KineticEnergy, Watt, Second, Joule, Scalar>]
@@ -38,6 +45,5 @@ public partial record Power(Watt value)
 {
     public static string QuantitySymbol { get; } = "P";
 }
-
 
 // TODO : specific heat capacity https://en.wikipedia.org/wiki/Specific_heat_capacity
