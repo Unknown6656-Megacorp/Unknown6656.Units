@@ -1,12 +1,12 @@
-﻿using Unknown6656.Units.Electricity;
+using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Matter;
 
 namespace Unknown6656.Units.Radioactivity;
 
 
-[MultiplicativeRelationship<RadiationExposure, Mass, Charge, Röntgen, Kilogram, Coulomb, Scalar>]
-public partial record RadiationExposure(Röntgen value)
-    : Quantity<RadiationExposure, Röntgen, Scalar>(value)
+[MultiplicativeRelationship<RadiationExposure, Mass, Charge, CoulombPerKilogram, Kilogram, Coulomb, Scalar>]
+public partial record RadiationExposure(CoulombPerKilogram value)
+    : Quantity<RadiationExposure, CoulombPerKilogram, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "X";
 }
