@@ -669,7 +669,9 @@ public sealed class QuantityDependencyGenerator
 
         void AppendCast(CastOperator cast)
         {
-            if (EMIT_LINE_NUMBERS)
+            if (cast.Operand == cast.Result)
+                return;
+            else if (EMIT_LINE_NUMBERS)
                 sb.AppendLine($"//#line {+1} \"...\" ");
 
             sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromBaseUnit(unit.ToBaseUnit());");
@@ -845,31 +847,39 @@ public sealed class QuantityDependencyGenerator
                         public static {{Identifier_UnitDisplay}} UnitDisplay { get; } = {{alias.AliasFor}}.UnitDisplay;
 
                         public static {{alias.Scalar}} ScalingFactor { get; } = {{alias.AliasFor}}.ScalingFactor;
-
-
-                        public static implicit operator {{name}}({{unit.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
-
-                        public static implicit operator {{name}}({{alias.AliasFor}} unit) => new(unit.Value);
-                
-                        public static implicit operator {{alias.AliasFor}}({{name}} unit) => new(unit.Value);
-
-                        public static implicit operator {{name}}(string s) => Parse(s, null);
-                    }
-                #line default
                 """");
 
-                //foreach (PropertyInfo property in unit.Properties)
-                //    AppendProperty(property);
-                //
-                //foreach (CastOperator cast in unit.Casts)
-                //    AppendCast(cast);
-                //
+                foreach (PropertyInfo property in unit.Properties)
+                    AppendProperty(property);
+
+                for (int i = 0; i < unit.Casts.Count; i++)
+                {
+                    CastOperator cast = unit.Casts[i];
+
+                    if (cast.Operand == alias.AliasFor)
+                        cast = cast with { Operand = name };
+
+                    if (cast.Result == alias.AliasFor)
+                        cast = cast with { Result = name };
+
+                    AppendCast(cast);
+                }
+
                 //foreach (BinaryOperator @operator in unit_info.BinaryOperators)
                 //    AppendOp(@operator);
                 //
-                //sb.AppendLine($$"""
-                //    }
-                //""");
+
+                sb.AppendLine($$"""
+                        public static implicit operator {{name}}({{unit.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
+                
+                        public static implicit operator {{name}}({{alias.AliasFor}} unit) => new(unit.Value);
+                
+                        public static implicit operator {{alias.AliasFor}}({{name}} unit) => new(unit.Value);
+                
+                        public static implicit operator {{name}}(string s) => Parse(s, null);
+                    }
+                #line default
+                """);
             }
 
             sb.AppendLine("}");
