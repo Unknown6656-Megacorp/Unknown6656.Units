@@ -6,6 +6,7 @@ public partial record Lux(Scalar Value)
     : BaseUnit<Illuminance, Lux, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "lx";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["lm/meter^2", "lumen/m^2", "lm*m^-2", "lumen*m^-2", "lm*meter^-2", "lumen*meter^-2","lumen/sq meter", "lumen/sqm", "lm/m^2", "lumen/square meter"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 

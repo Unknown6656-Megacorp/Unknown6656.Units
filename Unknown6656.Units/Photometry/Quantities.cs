@@ -38,7 +38,7 @@ public partial record LuminousFlux(Lumen value)
 #endif
 }
 
-[MultiplicativeRelationship<Luminance, SolidAngle, LuminousExitance, CandelaPerSquareMeter, Steradian, LumenPerSquareMeter, Scalar>]
+[MultiplicativeRelationship<Luminance, SolidAngle, Illuminance, CandelaPerSquareMeter, Steradian, Lux, Scalar>]
 [MultiplicativeRelationship<Luminance, Area, LuminousIntensity, CandelaPerSquareMeter, SquareMeter, Candela, Scalar>]
 public partial record Luminance(CandelaPerSquareMeter value)
     : Quantity<Luminance, CandelaPerSquareMeter, Scalar>(value)
@@ -72,18 +72,6 @@ public partial record Illuminance(Lux value)
     public static Lux SunriseOrSunsetOnClearDay { get; } = new(400);
     public static Lux DirectSunlightOnClearDay { get; } = new(100_000);
     public static Lux FullDaylight { get; } = new(20_000);
-}
-
-[IdentityRelationship<Illuminance, LuminousExitance, Lux, LumenPerSquareMeter, Scalar>]
-[MultiplicativeRelationship<LuminousExitance, Area, LuminousFlux, LumenPerSquareMeter, SquareMeter, Lumen, Scalar>]
-public partial record LuminousExitance(LumenPerSquareMeter value)
-    : Quantity<LuminousExitance, LumenPerSquareMeter, Scalar>(value)
-{
-#if USE_PURE_ASCII
-    public static string QuantitySymbol { get; } = "Mv";
-#else
-    public static string QuantitySymbol { get; } = "Mᵥ";
-#endif
 }
 
 [MultiplicativeRelationship<Illuminance, Time, LuminousExposure, Lux, Second, LuxSecond, Scalar>]
