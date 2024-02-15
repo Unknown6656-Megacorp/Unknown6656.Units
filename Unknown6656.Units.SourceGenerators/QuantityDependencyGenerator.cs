@@ -21,9 +21,12 @@ public sealed class QuantityDependencyGenerator
     public static readonly Identifier Identifier_InverseRelationship = "Unknown6656.Units.InverseRelationship";
     public static readonly Identifier Identifier_IdentityRelationship = "Unknown6656.Units.IdentityRelationship";
     public static readonly Identifier Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
+    public static readonly Identifier Identifier_KnownAlias = "Unknown6656.Units.KnownAlias";
     public static readonly Identifier Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
+    public static readonly Identifier Identifier_ILinearUnit = "Unknown6656.Units.ILinearUnit";
     public static readonly Identifier Identifier_IQuantity = "Unknown6656.Units.IQuantity";
     public static readonly Identifier Identifier_ExtensionClass = "Unknown6656.Units.Unit";
+    public static readonly Identifier Identifier_UnitDisplay = "Unknown6656.Units.UnitDisplay";
     public static readonly Identifier Identifier_IBaseUnit = "Unknown6656.Units.IBaseUnit";
     public static readonly Identifier Identifier_IUnit = "Unknown6656.Units.IUnit";
 
@@ -104,6 +107,24 @@ public sealed class QuantityDependencyGenerator
         DiagnosticSeverity.Error,
         true
     );
+    private static readonly DiagnosticDescriptor _diagnostic_alias_name_literal = new(
+        "U6656_010",
+        "An alias for the unit type must be provided using a compile-time constant string literal expression, not via composite or arbitrary expressions.",
+        "An alias for the unit type '{0}' must be provided using a compile-time constant string literal expression, not via composite or arbitrary expressions.",
+        "Unknown6656.Units",
+        DiagnosticSeverity.Error,
+        true
+    );
+    private static readonly DiagnosticDescriptor _diagnostic_alias_for_base_unit = new(
+        "U6656_011",
+        "The alias cannot be used for the unit type, as it is a base unit. Aliases may only be used for non-base unit types.",
+        "The alias '{0}' cannot be used for the unit type '{1}', as '{1}' is a base unit. Aliases may only be used for non-base unit types.",
+        "Unknown6656.Units",
+        DiagnosticSeverity.Error,
+        true
+    );
+
+    
 
     #endregion
 
@@ -116,6 +137,7 @@ public sealed class QuantityDependencyGenerator
         IncrementalValuesProvider<GenericAttributeClassUsage[]> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
         IncrementalValuesProvider<GenericAttributeClassUsage[]> identity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_IdentityRelationship);
         IncrementalValuesProvider<GenericAttributeClassUsage[]> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
+        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_aliases = FetchTypeDeclarationsByAttribute(context, Identifier_KnownAlias);
         IncrementalValuesProvider<GenericAttributeClassUsage[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
         IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
                                                                                    .CreateSyntaxProvider(
@@ -134,8 +156,10 @@ public sealed class QuantityDependencyGenerator
                                                   .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, base_units: t.Right))
                                                   .Combine(known_units.Collect())
                                                   .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, units: t.Right))
+                                                  .Combine(known_aliases.Collect())
+                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, aliases: t.Right))
                                                   .Combine(disable_emitting_iunit_interfaces.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, disable: t.Right.Contains(true)));
+                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, t.Left.aliases, disable: t.Right.Contains(true)));
 
         context.RegisterSourceOutput(combined, (spc, source) => Execute(
             context,
@@ -146,6 +170,7 @@ public sealed class QuantityDependencyGenerator
             [.. source.id.SelectMany(x => x)],
             [.. source.base_units.SelectMany(x => x)],
             [.. source.units.SelectMany(x => x)],
+            [.. source.aliases.SelectMany(x => x)],
             source.disable
         ));
     }
@@ -200,302 +225,9 @@ public sealed class QuantityDependencyGenerator
         GenericAttributeClassUsage[] identity_relationships,
         GenericAttributeClassUsage[] known_base_units,
         GenericAttributeClassUsage[] known_units,
+        GenericAttributeClassUsage[] known_aliases,
         bool disable_emitting_interfaces
     )
-#if OLD_CODEBASE
-    {
-        CancellationToken ct = production_context.CancellationToken;
-        StringBuilder sb = new();
-
-        sb.AppendLine($"// THIS FILE IS AUTO-GENERATED BY {nameof(QuantityDependencyGenerator)} ({DateTime.Now}). ALL CHANGES WILL BE LOST!\n");
-
-        Dictionary<string, (List<string> units, string? base_unit)> known_units_dict = [];
-        Dictionary<string, string> unit_scalar_mapper = [];
-
-        foreach (GenericAttributeClassUsage usage in known_units)
-            if (usage.TargetSymbol?.ToDisplayString() is string target_name)
-            {
-                if (usage.TargetType is not RecordDeclarationSyntax record)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
-                else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
-                else if (usage.GenericAttributeArguments.Length < 2 || usage.GenericAttributeArguments[1].ToString() != target_name)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [target_name]));
-                else
-                {
-                    string quantity = usage.GenericAttributeArguments[0].ToString();
-
-                    if (!known_units_dict.TryGetValue(quantity, out var entry))
-                        entry = ([target_name], null);
-                    else
-                        entry.units.Add(target_name);
-
-                    known_units_dict[quantity] = entry;
-                    unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
-                }
-            }
-
-        foreach (GenericAttributeClassUsage usage in known_base_units)
-            if (usage.TargetSymbol?.ToDisplayString() is string target_name)
-            {
-                if (usage.TargetType is not RecordDeclarationSyntax record)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
-                else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
-                else if (usage.GenericAttributeArguments.Length < 2 || usage.GenericAttributeArguments[1].ToString() != target_name)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [target_name]));
-                else
-                {
-                    string quantity = usage.GenericAttributeArguments[0].ToString();
-
-                    if (!known_units_dict.TryGetValue(quantity, out var entry))
-                        entry = ([], target_name);
-                    else
-                        entry.base_unit = target_name;
-
-                    known_units_dict[quantity] = entry;
-                    unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
-                }
-            }
-
-        foreach (var kvp in known_units_dict)
-        {
-            List<string> units = [.. kvp.Value.units];
-
-            if (kvp.Value.base_unit is { } base_unit)
-                units.Add(base_unit);
-
-            foreach (string unit in units)
-            {
-                string interfaces = disable_emitting_iunit_interfaces ? "" :
-                    $": IUnit, {(unit == kvp.Value.base_unit ? $"IBaseUnit<{unit}, {unit_scalar_mapper[unit]}>" : $"IUnit<{unit}, {kvp.Value.base_unit}, {unit_scalar_mapper[unit]}>")}";
-
-                sb.AppendLine($$""""
-                namespace {{GetNamespace(unit)}}
-                {
-                    partial record {{GetTypeName(unit)}} {{interfaces}}
-                    {
-                """");
-
-                foreach (string target_unit in units)
-                    if (target_unit != unit)
-                        sb.AppendLine($$""""
-                        public {{target_unit}} {{GetTypeName(target_unit)}} => ({{target_unit}})this;
-                """");
-
-                sb.AppendLine($$""""
-                    }
-                }
-                """");
-            }
-
-            for (int i = 0; i < units.Count - 1; ++i)
-            {
-                string unit = units[i];
-
-                sb.AppendLine($$""""
-                namespace {{GetNamespace(unit)}}
-                {
-                    partial record {{GetTypeName(unit)}}
-                    {
-                        public static implicit operator {{unit}}({{kvp.Key}} unit) => {{unit}}.FromBaseUnit(unit.Value);
-                """");
-
-                for (int j = i + 1; j < units.Count; ++j)
-                    sb.AppendLine($$"""
-                        public static implicit operator {{units[j]}}({{unit}} unit) => {{units[j]}}.FromBaseUnit(unit.ToBaseUnit());
-                        public static implicit operator {{unit}}({{units[j]}} unit) => {{unit}}.FromBaseUnit(unit.ToBaseUnit());
-                """);
-
-                sb.AppendLine($$""""
-                    }
-                }
-                """");
-            }
-        }
-
-        foreach (GenericAttributeClassUsage usage in quantity_multiplicative_dependencies)
-            if (usage.TargetSymbol?.ToDisplayString() is string target_name)
-            {
-                if (usage.TargetType is not RecordDeclarationSyntax record)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
-                else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
-                else if (!usage.GenericAttributeArguments.Contains(target_name))
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_quantity_as_attribute_argument, usage.AttributeLocation, [target_name]));
-                else
-                {
-                    string? scaling = usage.AttributeArguments.FirstOrDefault()?.ToString();
-                    string? invscaling = null;
-
-                    if (scaling is { })
-                    {
-                        invscaling = $"/ ({scaling})";
-                        scaling = $"* ({scaling})";
-                    }
-
-                    string t_quantity_in1, t_quantity_in2, t_quantity_out,
-                           t_baseunit_in1, t_baseunit_in2, t_baseunit_out,
-                           t_scalar;
-
-                    (t_quantity_in1, t_quantity_in2, t_quantity_out, t_baseunit_in1, t_baseunit_in2, t_baseunit_out, t_scalar) = usage.GenericAttributeArguments switch
-                    {
-                        { Length: 7 } args => (args[0], args[1], args[2], args[3], args[4], args[5], args[6]),
-                        { Length: 5 } args => (args[0], args[0], args[1], args[2], args[2], args[3], args[4]),
-                    };
-
-                    sb.AppendLine($$""""
-                    namespace {{usage.Namespace}}
-                    {
-                        public partial record {{record.ClassOrStructKeyword}} {{record.Identifier}}{{record.TypeParameterList}}
-                        {
-                            // TODO
-                        }
-                    }
-
-                    namespace {{GetNamespace(t_quantity_in1)}}
-                    {
-                        partial record {{GetTypeName(t_quantity_in1)}}
-                        {
-                            public static {{t_quantity_out}} operator *({{t_quantity_in1}} first, {{t_quantity_in2}} second) => new(first.Value * second.Value {{scaling}});
-                            public static {{t_quantity_in2}} operator /({{t_quantity_out}} first, {{t_quantity_in1}} second) => new(first.Value / second.Value {{invscaling}});
-                    """");
-
-                    if (t_quantity_in1 != t_quantity_in2)
-                        sb.AppendLine($$""""
-                            public static {{t_quantity_out}} operator *({{t_quantity_in2}} first, {{t_quantity_in1}} second) => new(first.Value * second.Value {{scaling}});
-                        }
-                    }
-                    
-                    namespace {{GetNamespace(t_quantity_in2)}}
-                    {
-                        partial record {{GetTypeName(t_quantity_in2)}}
-                        {
-                            public static {{t_quantity_in1}} operator /({{t_quantity_out}} first, {{t_quantity_in2}} second) => new(first.Value / second.Value {{invscaling}});
-                    """");
-
-                    sb.AppendLine($$""""
-                        }
-                    }
-                    
-                    namespace {{GetNamespace(t_baseunit_in1)}}
-                    {
-                        partial record {{GetTypeName(t_baseunit_in1)}}
-                        {
-                            public static {{t_baseunit_out}} operator *({{t_baseunit_in1}} first, {{t_baseunit_in2}} second) => new(first.Value * second.Value {{scaling}});
-                            public static {{t_baseunit_in2}} operator /({{t_baseunit_out}} first, {{t_baseunit_in1}} second) => new(first.Value / second.Value {{invscaling}});
-                    """");
-
-                    if (t_baseunit_in1 != t_baseunit_in2)
-                        sb.AppendLine($$""""
-                            public static {{t_baseunit_out}} operator *({{t_baseunit_in2}} first, {{t_baseunit_in1}} second) => new(first.Value * second.Value {{scaling}});
-                        }
-                    }
-                    
-                    namespace {{GetNamespace(t_baseunit_in2)}}
-                    {
-                        partial record {{GetTypeName(t_baseunit_in2)}}
-                        {
-                            public static {{t_baseunit_in1}} operator /({{t_baseunit_out}} first, {{t_baseunit_in2}} second) => new(first.Value / second.Value {{invscaling}});
-                    """");
-
-                    sb.AppendLine($$""""
-                        }
-                    }
-
-                    """");
-
-                    // TODO : use known_units to generate mathematical operators
-                }
-            }
-
-        foreach (GenericAttributeClassUsage usage in quantity_inverse_dependencies)
-            if (usage.TargetSymbol?.ToDisplayString() is string target_name)
-            {
-                if (usage.TargetType is not RecordDeclarationSyntax record)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
-                else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
-                else if (!usage.GenericAttributeArguments.Contains(target_name))
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_quantity_as_attribute_argument, usage.AttributeLocation, [target_name]));
-                else
-                {
-                    string? scaling = usage.AttributeArguments.FirstOrDefault()?.ToString();
-                    string? invscaling = null;
-
-                    if (scaling is { })
-                    {
-                        invscaling = $"/ ({scaling})";
-                        scaling = $"* ({scaling})";
-                    }
-
-                    string t_quantity_1 = usage.GenericAttributeArguments[0],
-                           t_quantity_2 = usage.GenericAttributeArguments[1],
-                           t_baseunit_1 = usage.GenericAttributeArguments[2],
-                           t_baseunit_2 = usage.GenericAttributeArguments[3],
-                           t_scalar = usage.GenericAttributeArguments[4];
-
-                    sb.AppendLine($$""""
-                    namespace {{GetNamespace(t_quantity_1)}}
-                    {
-                        partial record {{GetTypeName(t_quantity_1)}}
-                        {
-                            public static {{t_scalar}} operator *({{t_quantity_1}} first, {{t_quantity_2}} second) => first.Value * second.Value {{scaling}};
-                            public static {{t_quantity_2}} operator /({{t_scalar}} first, {{t_quantity_1}} second) => new(first / second.Value {{invscaling}});
-                        }
-                    }
-
-                    namespace {{GetNamespace(t_quantity_2)}}
-                    {
-                        partial record {{GetTypeName(t_quantity_2)}}
-                        {
-                            public static {{t_quantity_1}} operator /({{t_scalar}} first, {{t_quantity_2}} second) => new(first / second.Value {{invscaling}});
-                        }
-                    }
-
-                    namespace {{GetNamespace(t_baseunit_1)}}
-                    {
-                        partial record {{GetTypeName(t_baseunit_1)}}
-                        {
-                            public static {{t_scalar}} operator *({{t_baseunit_1}} first, {{t_baseunit_2}} second) => first.Value * second.Value {{scaling}};
-                            public static {{t_baseunit_2}} operator /({{t_scalar}} first, {{t_baseunit_1}} second) => new(first / second.Value {{invscaling}});
-                        }
-                    }
-
-                    namespace {{GetNamespace(t_baseunit_2)}}
-                    {
-                        partial record {{GetTypeName(t_baseunit_2)}}
-                        {
-                            public static {{t_baseunit_1}} operator /({{t_scalar}} first, {{t_baseunit_2}} second) => new(first / second.Value {{invscaling}});
-                        }
-                    }
-                    """");
-
-                    // TODO : use known_units to generate mathematical operators
-                }
-            }
-
-        sb.AppendLine($$""""
-        namespace {{GetNamespace(Identifier_ExtensionClass)}}
-        {
-            public static partial class {{GetTypeName(Identifier_ExtensionClass)}}
-            {
-        """");
-
-        foreach (string target_name in from usage in known_units.Concat(known_base_units)
-                                       let target_name = usage.TargetSymbol?.ToDisplayString()
-                                       where target_name is { }
-                                       select target_name)
-            sb.AppendLine($"        public static {target_name} {GetTypeName(target_name)}(this {unit_scalar_mapper[target_name]} value) => new(value);");
-
-        sb.AppendLine($$""""
-            }
-        }
-        """");
-
-        production_context.AddSource($"{typeof(QuantityDependencyGenerator)}.g.cs", sb.ToString());
-    }
-#else
     {
         GenerateInfo(
             incremental_context,
@@ -507,14 +239,15 @@ public sealed class QuantityDependencyGenerator
             identity_relationships,
             known_base_units,
             known_units,
+            known_aliases,
             out Dictionary<Identifier, QuantityInformation> quantity_infos,
             out Dictionary<Identifier, UnitInformation> unit_infos,
-            out List<StaticCreationMethod> static_infos
+            out List<StaticCreationMethod> static_infos,
+            out List<AliasInformation> alias_infos
         );
 
-        GenerateSource(production_context, quantity_infos, unit_infos, static_infos, disable_emitting_interfaces);
+        GenerateSource(production_context, quantity_infos, unit_infos, static_infos, alias_infos, disable_emitting_interfaces);
     }
-#endif
 
     private static void GenerateInfo(
         IncrementalGeneratorInitializationContext incremental_context,
@@ -526,9 +259,11 @@ public sealed class QuantityDependencyGenerator
         GenericAttributeClassUsage[] identity_relationships,
         GenericAttributeClassUsage[] known_base_units,
         GenericAttributeClassUsage[] known_units,
+        GenericAttributeClassUsage[] known_aliases,
         out Dictionary<Identifier, QuantityInformation> quantity_infos,
         out Dictionary<Identifier, UnitInformation> unit_infos,
-        out List<StaticCreationMethod> static_infos
+        out List<StaticCreationMethod> static_infos,
+        out List<AliasInformation> alias_infos
     )
     {
         Dictionary<SyntaxTree, SemanticModel> models = compilation.SyntaxTrees.ToDictionary(t => t, t => compilation.GetSemanticModel(t));
@@ -633,6 +368,7 @@ public sealed class QuantityDependencyGenerator
             }
 
         unit_infos = [];
+        alias_infos = [];
         quantity_infos = [];
         static_infos = [..from usage in known_units.Concat(known_base_units)
                           let target_name = usage.TargetSymbol?.ToDisplayString()
@@ -837,6 +573,36 @@ public sealed class QuantityDependencyGenerator
                 unit_infos[t_baseunit_1].Casts.Add(new(t_baseunit_1, t_baseunit_2, scaling));
                 unit_infos[t_baseunit_2].Casts.Add(new(t_baseunit_2, t_baseunit_1, invscaling));
             }
+
+        foreach (GenericAttributeClassUsage usage in known_aliases)
+            if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
+            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
+            else if (usage.GenericAttributeArguments.Length < 4 || usage.GenericAttributeArguments[1].ToString() != target_name)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [target_name]));
+            else if (usage.AttributeArguments is AttributeArgumentSyntax[] { Length: > 1 } args && args[0].Expression is LiteralExpressionSyntax { Token.ValueText: string alias_name })
+            {
+                string cs_symbol_name = args[1].ToFullString();
+                string[] cs_symbol_alias = args.Skip(2).Select(a => a.ToFullString()).ToArray();
+                Identifier t_quantity = usage.GenericAttributeArguments[0];
+                Identifier t_unit = usage.GenericAttributeArguments[1];
+                Identifier t_baseunit = usage.GenericAttributeArguments[2];
+                Identifier t_scalar = usage.GenericAttributeArguments[3];
+
+                alias_infos.Add(new(
+                    usage.AttributeLocation,
+                    t_unit,
+                    t_baseunit,
+                    t_quantity,
+                    t_scalar,
+                    new(t_unit.Namespace, alias_name),
+                    cs_symbol_name,
+                    cs_symbol_alias
+                ));
+            }
+            else
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_alias_name_literal, usage.AttributeLocation, [target_name]));
     }
 
     private static void GenerateSource(
@@ -844,6 +610,7 @@ public sealed class QuantityDependencyGenerator
         Dictionary<Identifier, QuantityInformation> quantity_infos,
         Dictionary<Identifier, UnitInformation> unit_infos,
         List<StaticCreationMethod> static_infos,
+        List<AliasInformation> alias_infos,
         bool disable_emitting_interfaces
     )
     {
@@ -1045,6 +812,69 @@ public sealed class QuantityDependencyGenerator
             sb.AppendLine("}");
         }
 
+        foreach (IGrouping<string, AliasInformation> group in alias_infos.GroupBy(info => info.AliasName.Namespace))
+        {
+            sb.AppendLine($$"""
+
+            namespace {{group.Key}}
+            {
+            """);
+
+            foreach (AliasInformation alias in group)
+            {
+                Identifier name = alias.AliasName;
+                FileLinePositionSpan location = alias.Location.GetLineSpan();
+                UnitInformation unit = unit_infos[alias.AliasFor];
+
+                if (unit.IsBaseUnit)
+                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_alias_for_base_unit, alias.Location, [name, alias.AliasFor]));
+
+                sb.AppendLine($$""""
+                {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
+                    public record {{name.Name}}({{alias.Scalar}} Value)
+                        : {{alias.Quantity}}.AffineUnit<{{name.Name}}>(Value)
+                        , {{Identifier_ILinearUnit}}<{{alias.Scalar}}>
+                        , {{Identifier_IUnit}}
+                        , {{Identifier_IUnit}}<{{name}}, {{alias.BaseUnit}}, {{alias.Scalar}}>
+                {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
+                    {
+                        public static string UnitSymbol { get; } = {{alias.AliasUnitSymbol}};
+
+                        static string[] {{Identifier_IUnit}}.AlternativeUnitSymbols { get; } = [{{string.Join(", ", alias.AliasAlternativeUnitSymbols)}}];
+
+                        public static {{Identifier_UnitDisplay}} UnitDisplay { get; } = {{alias.AliasFor}}.UnitDisplay;
+
+                        public static {{alias.Scalar}} ScalingFactor { get; } = {{alias.AliasFor}}.ScalingFactor;
+
+
+                        public static implicit operator {{name}}({{unit.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
+
+                        public static implicit operator {{name}}({{alias.AliasFor}} unit) => new(unit.Value);
+                
+                        public static implicit operator {{alias.AliasFor}}({{name}} unit) => new(unit.Value);
+
+                        public static implicit operator {{name}}(string s) => Parse(s, null);
+                    }
+                #line default
+                """");
+
+                //foreach (PropertyInfo property in unit.Properties)
+                //    AppendProperty(property);
+                //
+                //foreach (CastOperator cast in unit.Casts)
+                //    AppendCast(cast);
+                //
+                //foreach (BinaryOperator @operator in unit_info.BinaryOperators)
+                //    AppendOp(@operator);
+                //
+                //sb.AppendLine($$"""
+                //    }
+                //""");
+            }
+
+            sb.AppendLine("}");
+        }
+
         production_context.AddSource($"{typeof(QuantityDependencyGenerator)}.g.cs", sb.ToString());
     }
 }
@@ -1086,6 +916,17 @@ public sealed record BinaryOperator(Location Location, Identifier Operand1, Iden
 {
     public (bool op1, bool op2, bool result) IsScalar { get; set; } = (false, false, false);
 }
+
+public sealed record AliasInformation(
+    Location Location,
+    Identifier AliasFor,
+    Identifier BaseUnit,
+    Identifier Quantity,
+    Identifier Scalar,
+    Identifier AliasName,
+    string AliasUnitSymbol,
+    string[] AliasAlternativeUnitSymbols
+);
 
 public sealed record QuantityInformation(
     Location Location,

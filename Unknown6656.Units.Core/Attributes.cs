@@ -199,3 +199,13 @@ public class KnownBaseUnit<TQuantity, TBaseUnit, TScalar>
                     , IBaseUnit<TBaseUnit, TScalar>
                     , IUnit
     where TScalar : INumber<TScalar>;
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+public class KnownAlias<TQuantity, TUnit, TBaseUnit, TScalar>(string name, string unit_symbol, params string[] alternative_symbols)
+    : Attribute
+    where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
+                    , IQuantity<TQuantity>
+    where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>
+                    , IBaseUnit<TBaseUnit, TScalar>
+                    , IUnit
+    where TScalar : INumber<TScalar>;
