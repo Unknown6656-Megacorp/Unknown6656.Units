@@ -759,17 +759,21 @@ public sealed class QuantityDependencyGenerator
                             {
                     """");
 
-                    if (quantities)
+                    if (!quantities)
                         sb.AppendLine($"            return {expression};\n        }}");
                     else
-                        sb.AppendLine($$"""
-                                    // I hate the following lines. Do that shit explicitly-typed.
-                                    ({{string.Join(", ", Enumerable.Range(0, results.Count).Select(i => $"var __{i}"))}}) = {{expression}};
+                    {
+                        string operand1 = group.FirstOrDefault().IsScalar.op1 ? name1 : name1 + ".Value";
+                        string operand2 = group.FirstOrDefault().IsScalar.op2 ? name2 : name2 + ".Value";
 
-                                    return ({{string.Join(", ", Enumerable.Range(0, results.Count).Select(i => $"new(__{i})"))}});
+                        sb.AppendLine($$"""
+                                    // I hate the following lines. Do that shit explicitly-typed and explicitly-named.
+                                    var result = {{operand1}} {{op}} {{operand2}};
+
+                                    return ({{string.Join(", ", Enumerable.Range(1, results.Count).Select(i => $"new(result.Item{i})"))}});
                                 }
                         """);
-                     
+                    }
                 }
             }
         }
