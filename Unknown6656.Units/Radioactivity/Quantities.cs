@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using Unknown6656.Units.Electricity;
@@ -164,6 +164,30 @@ public partial record EquivalentDose(Sievert value)
     : Quantity<EquivalentDose, Sievert, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "H";
+
+
+    public Sievert AirportScreeningDose { get; } = new(2.5e-7);
+    public Sievert AverageDentalRadiographDose { get; } = new(1e-5);
+    public Sievert AverageChestRadiographDose { get; } = new(1e-5);
+    public Sievert TwoViewMammogramDose { get; } = new(5e-4);
+    public Sievert FullBodyCTScanDose { get; } = new(3e-3);
+    public Sievert AverageDosePerAnnum { get; } = new(1e-3);
+    public Sievert BariumFluoroscopyDose { get; } = new(6e-3);
+    public Sievert TotalDosePerAnnumLimitUS { get; } = new(5e-2);
+    public Sievert ISSDosePerAnnum { get; } = new(.16);
+    public Sievert SolarSystemBackgroundRadiationPerAnnum { get; } = new(.6);
+    public Sievert NASADosePerLifetimeLimit { get; } = new(1);
+    public Sievert HumanLD50_In30Days { get; } = new(4.5);
+    public Sievert FatalAcuteDose_HarryDaghlian { get; } = new(5.1);
+#if USE_DIACRITICS
+    public Sievert FatalAcuteDose_GoiâniaIncident { get; } = new(6);
+#else
+    public Sievert FatalAcuteDose_GoianiaIncident { get; } = new(6);
+#endif
+    public Sievert FatalAcuteDose_HisashiOuchi { get; } = new(17);
+    public Sievert FatalAcuteDose_LouisSlotin { get; } = new(21);
+    public Sievert FatalAcuteDose_CecilKelley { get; } = new(36);
+    public Sievert FatalAcuteDose_BorisKorchilov { get; } = new(54);
 }
 
 [MultiplicativeRelationship<DoseRate, Time, EquivalentDose, SievertPerSecond, Second, Sievert, Scalar>]
@@ -173,6 +197,5 @@ public partial record DoseRate(SievertPerSecond value)
 }
 
 
-// equivalent dose
 // kerma https://en.wikipedia.org/wiki/Kerma_(physics)
 
