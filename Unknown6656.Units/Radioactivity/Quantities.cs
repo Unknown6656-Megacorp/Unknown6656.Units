@@ -166,6 +166,12 @@ public partial record EquivalentDose(Sievert value)
     public static string QuantitySymbol { get; } = "H";
 }
 
+[MultiplicativeRelationship<DoseRate, Time, EquivalentDose, SievertPerSecond, Second, Sievert, Scalar>]
+public partial record DoseRate(SievertPerSecond value)
+    : Quantity<DoseRate, SievertPerSecond, Scalar>(value)
+{
+}
+
 
 // equivalent dose
 // kerma https://en.wikipedia.org/wiki/Kerma_(physics)
