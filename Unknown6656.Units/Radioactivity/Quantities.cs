@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Matter;
+using Unknown6656.Units.Movement;
 using Unknown6656.Units.Temporal;
 
 namespace Unknown6656.Units.Radioactivity;
@@ -157,6 +158,7 @@ public enum TissueWeighingFactor
 
 [IdentityRelationship<AbsorbedDose, EquivalentDose, Gray, Sievert, Scalar>]
 [IdentityRelationship<EquivalentDose, SpecificEnergy, Sievert, JoulePerKilogram, Scalar>]
+[MultiplicativeRelationship<Speed, EquivalentDose, MeterPerSecond, Sievert, Scalar>]
 [MultiplicativeRelationship<EquivalentDose, Mass, KineticEnergy, Sievert, Kilogram, Joule, Scalar>]
 public partial record EquivalentDose(Sievert value)
     : Quantity<EquivalentDose, Sievert, Scalar>(value)
