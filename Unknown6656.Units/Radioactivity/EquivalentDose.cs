@@ -8,3 +8,6 @@ public partial record Sievert(Scalar Value)
     public static string UnitSymbol { get; } = "Sv";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
+
+// banana equivalent dose
+// rem
