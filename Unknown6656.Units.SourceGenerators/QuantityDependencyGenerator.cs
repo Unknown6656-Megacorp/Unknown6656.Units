@@ -704,6 +704,76 @@ public sealed class QuantityDependencyGenerator
             sb.AppendLine($"        public static {@operator.Result} operator {op}({@operator.Operand1} {name1}, {@operator.Operand2} {name2}) => {(@operator.IsScalar.result ? "" : "new")}({operand1} {op} {operand2} {scaling});");
         }
 
+        void AppendOps(List<BinaryOperator> operators, bool quantities)
+        {
+            foreach (var group in operators.GroupBy(o => (o.Operand1, o.Operand2, o.Type)))
+            {
+                char op = group.Key.Type switch
+                {
+                    OperatorType.Multiply => '*',
+                    OperatorType.Divide => '/',
+                    _ => '?',
+                };
+                (string name1, string name2) = group.Key.Operand1 == group.Key.Operand2 ? ("first", "second")
+                                                                                        : ('@' + group.Key.Operand1.Name, '@' + group.Key.Operand2.Name);
+                List<(Identifier result, string expression, FileLinePositionSpan span, Location location)> results = [];
+
+                foreach (BinaryOperator @operator in group)
+                {
+                    string operand1 = @operator.IsScalar.op1 ? name1 : name1 + ".Value";
+                    string operand2 = @operator.IsScalar.op2 ? name2 : name2 + ".Value";
+                    string? scaling = @operator.ScalingFactor;
+
+                    if (scaling is { })
+                        scaling = $"{op} ({scaling})";
+
+                    results.Add((@operator.Result, $"{(@operator.IsScalar.result ? "" : "new " + @operator.Result)}({operand1} {op} {operand2} {scaling})", @operator.Location.GetLineSpan(), @operator.Location));
+                }
+
+                if (results.Count == 1)
+                {
+                    if (EMIT_LINE_NUMBERS)
+                        sb.AppendLine($"#line {results[0].span.StartLinePosition.Line + 1} \"{results[0].location.SourceTree?.FilePath}\"");
+
+                    sb.AppendLine($"        public static {results[0].result} operator {op}({group.Key.Operand1} {name1}, {group.Key.Operand2} {name2}) => {results[0].expression};");
+                }
+                else
+                {
+                    string result, expression;
+
+                    if (EMIT_LINE_NUMBERS)
+                        result = $"(\n#line hidden\n        )";
+                    else
+                        result = $"({string.Join(", ", results.Select(r => $"{r.result} {r.result.Name}"))})";
+
+                    expression = $"({string.Join(", ", results.Select(r => r.expression))})";
+
+                    sb.AppendLine($$""""
+                            public static ({{string.Join(", ", results.Select(r => $"""
+
+                    #line {results[0].span.StartLinePosition.Line + 1} "{results[0].location.SourceTree?.FilePath}"
+                                {r.result} {r.result.Name}
+                    """))}}
+                    #line hidden
+                            ) operator {{op}}({{group.Key.Operand1}} {{name1}}, {{group.Key.Operand2}} {{name2}})
+                            {
+                    """");
+
+                    if (quantities)
+                        sb.AppendLine($"            return {expression};\n        }}");
+                    else
+                        sb.AppendLine($$"""
+                                    // I hate the following lines. Do that shit explicitly-typed.
+                                    ({{string.Join(", ", Enumerable.Range(0, results.Count).Select(i => $"var __{i}"))}}) = {{expression}};
+
+                                    return ({{string.Join(", ", Enumerable.Range(0, results.Count).Select(i => $"new(__{i})"))}});
+                                }
+                        """);
+                     
+                }
+            }
+        }
+
 
         foreach (IGrouping<string, KeyValuePair<Identifier, QuantityInformation>> group in quantity_infos.GroupBy(info => info.Value.Name.Namespace))
         {
@@ -735,8 +805,7 @@ public sealed class QuantityDependencyGenerator
                 foreach (CastOperator cast in quantity_info.Casts)
                     AppendCast(cast);
 
-                foreach (BinaryOperator @operator in quantity_info.BinaryOperators)
-                    AppendOp(@operator);
+                AppendOps(quantity_info.BinaryOperators, true);
 
                 sb.AppendLine($$"""
                 #line default
@@ -801,8 +870,7 @@ public sealed class QuantityDependencyGenerator
                 foreach (CastOperator cast in unit_info.Casts)
                     AppendCast(cast);
 
-                foreach (BinaryOperator @operator in unit_info.BinaryOperators)
-                    AppendOp(@operator);
+                AppendOps(unit_info.BinaryOperators, false);
 
                 sb.AppendLine($$"""
                 #line default
