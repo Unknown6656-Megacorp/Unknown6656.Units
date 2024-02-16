@@ -252,7 +252,8 @@ public static partial class Unit
         ("feet", "foot"),
         ("metre", "meter"),
         ("litre", "liter"),
-        
+        ("rontgen", "roentgen"),
+
         /*
         ₊₋₌₍₎ ⁰ ⁺⁻⁼⁽⁾ ⁿⁱ
          */
