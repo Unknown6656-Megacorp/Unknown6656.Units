@@ -12,7 +12,7 @@ namespace Unknown6656.Units.Magnetism;
 [MultiplicativeRelationship<MagneticFluxDensity, Area, MagneticFlux, Tesla, SquareMeter, Weber, Scalar>]
 [MultiplicativeRelationship<Inductance, Current, MagneticFlux, Henry, Ampère, Weber, Scalar>]
 [MultiplicativeRelationship<MagneticFlux, Current, Torque, Weber, Ampère, NewtonMeter, Scalar>]
-//[MultiplicativeRelationship<MagneticFlux, Current, KineticEnergy, Weber, Ampère, Joule, Scalar>] // TODO : duplicate multiply operator
+[MultiplicativeRelationship<MagneticFlux, Current, KineticEnergy, Weber, Ampère, Joule, Scalar>]
 [MultiplicativeRelationship<Resistance, Charge, MagneticFlux, Ohm, Coulomb, Weber, Scalar>]
 public partial record MagneticFlux(Weber value)
     : Quantity<MagneticFlux, Weber, Scalar>(value)

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using Unknown6656.Units.Electricity;
@@ -16,7 +16,7 @@ public partial record RadiationExposure(CoulombPerKilogram value)
     public static string QuantitySymbol { get; } = "X";
 }
 
-//[InverseRelationship<Activity, Time, Becquerel, Second, Scalar>]
+[InverseRelationship<Activity, Time, Becquerel, Second, Scalar>]
 [IdentityRelationship<Activity, Frequency, Becquerel, Hertz, Scalar>]
 public partial record Activity(Becquerel value)
     : Quantity<Activity, Becquerel, Scalar>(value)
@@ -31,6 +31,7 @@ public partial record SpecificActivity(BecquerelPerKilogram value)
     public static string QuantitySymbol { get; } = "a";
 }
 
+[IdentityRelationship<AbsorbedDose, SpecificEnergy, Gray, JoulePerKilogram, Scalar>]
 [MultiplicativeRelationship<AbsorbedDose, Mass, KineticEnergy, Gray, Kilogram, Joule, Scalar>]
 public partial record AbsorbedDose(Gray value)
     : Quantity<AbsorbedDose, Gray, Scalar>(value)
