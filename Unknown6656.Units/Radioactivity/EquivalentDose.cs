@@ -2,6 +2,8 @@
 global using RöntgenEquivalentMan = Unknown6656.Units.Radioactivity.RoentgenEquivalentMan;
 #endif
 
+using Unknown6656.Units.Temporal;
+
 namespace Unknown6656.Units.Radioactivity;
 
 
@@ -50,4 +52,18 @@ public enum BananaEquivalentDoseScalingFactorType
     /// 1 BED = 9.82×10^−8 Sv
     /// </summary>
     Realistic,
+}
+
+[KnownUnit<EquivalentDose, BackgroundRadiationEquivalentTime, Sievert, Scalar>]
+public partial record BackgroundRadiationEquivalentTime(Scalar Value)
+    : EquivalentDose.AffineUnit<BackgroundRadiationEquivalentTime>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "BRET";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = [
+        "back eq T", "back eqv T", "back eqiv T", "back eqivalent T", "background eq T", "background eqv T", "background eqiv T", "background eqivalent T",
+        "back eq time", "back eqv time", "back eqiv time", "back eqivalent time", "background eq time", "background eqv time", "background eqiv time",
+    ];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static Scalar ScalingFactor { get; } = 1 / (DoseRate.BackgroundRadiationGlobalAverage * StandardDay.One).Sievert.Value;
 }
