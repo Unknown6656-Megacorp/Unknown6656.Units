@@ -165,35 +165,51 @@ public partial record EquivalentDose(Sievert value)
 {
     public static string QuantitySymbol { get; } = "H";
 
-
-    public Sievert AirportScreeningDose { get; } = new(2.5e-7);
-    public Sievert AverageDentalRadiographDose { get; } = new(1e-5);
-    public Sievert AverageChestRadiographDose { get; } = new(1e-5);
-    public Sievert TwoViewMammogramDose { get; } = new(5e-4);
-    public Sievert FullBodyCTScanDose { get; } = new(3e-3);
-    public Sievert AverageDosePerAnnum { get; } = new(1e-3);
-    public Sievert BariumFluoroscopyDose { get; } = new(6e-3);
-    public Sievert TotalDosePerAnnumLimitUS { get; } = new(5e-2);
-    public Sievert ISSDosePerAnnum { get; } = new(.16);
-    public Sievert SolarSystemBackgroundRadiationPerAnnum { get; } = new(.6);
-    public Sievert NASADosePerLifetimeLimit { get; } = new(1);
-    public Sievert HumanLD50_In30Days { get; } = new(4.5);
-    public Sievert FatalAcuteDose_HarryDaghlian { get; } = new(5.1);
+    public static EquivalentDose AirportScreeningDose { get; } = new Sievert(2.5e-7);
+    public static EquivalentDose AverageDentalRadiographDose { get; } = new Sievert(1e-5);
+    public static EquivalentDose AverageChestRadiographDose { get; } = new Sievert(1e-5);
+    public static EquivalentDose TwoViewMammogramDose { get; } = new Sievert(5e-4);
+    public static EquivalentDose FullBodyCTScanDose { get; } = new Sievert(3e-3);
+    public static EquivalentDose AverageDosePerAnnum { get; } = new Sievert(1e-3);
+    public static EquivalentDose BariumFluoroscopyDose { get; } = new Sievert(6e-3);
+    public static EquivalentDose TotalDosePerAnnumLimitUS { get; } = new Sievert(5e-2);
+    public static EquivalentDose ISSDosePerAnnum { get; } = new Sievert(.16);
+    public static EquivalentDose SolarSystemBackgroundRadiationPerAnnum { get; } = new Sievert(.6);
+    public static EquivalentDose NASADosePerLifetimeLimit { get; } = new Sievert(1);
+    public static EquivalentDose HumanLD50_In30Days { get; } = new Sievert(4.5);
+    public static EquivalentDose FatalAcuteDose_HarryDaghlian { get; } = new Sievert(5.1);
 #if USE_DIACRITICS
-    public Sievert FatalAcuteDose_GoiâniaIncident { get; } = new(6);
+    public static EquivalentDose FatalAcuteDose_GoiâniaIncident { get; } = new Sievert(6);
 #else
-    public Sievert FatalAcuteDose_GoianiaIncident { get; } = new(6);
+    public static EquivalentDose FatalAcuteDose_GoianiaIncident { get; } = new Sievert(6);
 #endif
-    public Sievert FatalAcuteDose_HisashiOuchi { get; } = new(17);
-    public Sievert FatalAcuteDose_LouisSlotin { get; } = new(21);
-    public Sievert FatalAcuteDose_CecilKelley { get; } = new(36);
-    public Sievert FatalAcuteDose_BorisKorchilov { get; } = new(54);
+    public static EquivalentDose FatalAcuteDose_HisashiOuchi { get; } = new Sievert(17);
+    public static EquivalentDose FatalAcuteDose_LouisSlotin { get; } = new Sievert(21);
+    public static EquivalentDose FatalAcuteDose_CecilKelley { get; } = new Sievert(36);
+    public static EquivalentDose FatalAcuteDose_BorisKorchilov { get; } = new Sievert(54);
 }
 
 [MultiplicativeRelationship<DoseRate, Time, EquivalentDose, SievertPerSecond, Second, Sievert, Scalar>]
 public partial record DoseRate(SievertPerSecond value)
     : Quantity<DoseRate, SievertPerSecond, Scalar>(value)
 {
+    public static string QuantitySymbol { get; } = "H/t";
+
+    public static DoseRate TotalDoseRateLimitUS { get; } = new SievertPerYear(EquivalentDose.TotalDosePerAnnumLimitUS.Sievert.Value);
+    public static DoseRate ISSDoseRate { get; } = new SievertPerYear(EquivalentDose.ISSDosePerAnnum.Sievert.Value);
+    public static DoseRate SolarSystemBackgroundRadiation { get; } = new SievertPerYear(EquivalentDose.SolarSystemBackgroundRadiationPerAnnum.Sievert.Value);
+    public static DoseRate RecommendedMaximumHumanIrradiation { get; } = new SievertPerYear(1e-3);
+    public static DoseRate BackgroundRadiationGlobalAverage { get; } = new SievertPerYear(2.4e-3);
+    public static DoseRate ChernobylOutsideNSC { get; } = new SievertPerYear(8e-3);
+    public static DoseRate BackgroundRadiationFinland { get; } = new SievertPerYear(8e-3);
+    public static DoseRate BackgroundRadiationCruisingAltitude { get; } = new SievertPerYear(.024);
+    public static DoseRate ChernobylInsideNSC { get; } = new SievertPerYear(.046);
+    public static DoseRate ChernobylInsideTheClaw { get; } = new SievertPerYear(.35);
+    public static DoseRate GuarapariBeach { get; } = new SievertPerYear(.18);
+    public static DoseRate HighRadiationAreaLimit { get; } = new SievertPerYear(9);
+    public static DoseRate TrinityMaxFallout { get; } = new SievertPerYear(1.7e3);
+    public static DoseRate PWRFuelWaste { get; } = new SievertPerYear(2.3e6);
+    public static DoseRate FukushimaDaiichi2017 { get; } = new SievertPerYear(5e6);
 }
 
 
