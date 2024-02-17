@@ -12,8 +12,38 @@ public partial record CubicMeter(Scalar Value)
 #else
     public static string UnitSymbol { get; } = "m³";
 #endif
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^3"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^3", "m cubed", "meter cubed", "cubic m"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+}
+
+[KnownUnit<Volume, CubicCentimeter, CubicMeter, Scalar>]
+public partial record CubicCentimeter(Scalar Value)
+    : Volume.AffineUnit<CubicCentimeter>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "cm^3";
+#else
+    public static string UnitSymbol { get; } = "cm³";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["centimeter^3", "cm cubed", "centimeter cubed", "cubic cm"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e8;
+}
+
+[KnownUnit<Volume, CubicMillimeter, CubicMeter, Scalar>]
+public partial record CubicMillimeter(Scalar Value)
+    : Volume.AffineUnit<CubicMillimeter>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "mm^3";
+#else
+    public static string UnitSymbol { get; } = "mm³";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["millimeter^3", "mm cubed", "millimeter cubed", "cubic mm"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e9;
 }
 
 [KnownUnit<Volume, Liter, CubicMeter, Scalar>]

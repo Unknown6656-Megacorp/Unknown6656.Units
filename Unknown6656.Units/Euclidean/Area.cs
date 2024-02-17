@@ -12,8 +12,38 @@ public partial record SquareMeter(Scalar Value)
 #else
     public static string UnitSymbol { get; } = "m²";
 #endif
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^2"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^2", "m squared", "meter squared", "sqm", "sq meter"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+}
+
+[KnownUnit<Area, SquareCentimeter, SquareMeter, Scalar>]
+public partial record SquareCentimeter(Scalar Value)
+    : Area.AffineUnit<SquareCentimeter>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "cm^2";
+#else
+    public static string UnitSymbol { get; } = "cm²";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["centimeter^2", "cm squared", "centimeter squared", "sq centimeter", "sq cm"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e4;
+}
+
+[KnownUnit<Area, SquareMillimeter, SquareMeter, Scalar>]
+public partial record SquareMillimeter(Scalar Value)
+    : Area.AffineUnit<SquareMillimeter>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "mm^2";
+#else
+    public static string UnitSymbol { get; } = "mm²";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["millimeter^2", "mm squared", "millimeter squared", "sq millimeter", "sq mm"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e6;
 }
 
 [KnownUnit<Area, SquareFoot, SquareMeter, Scalar>]
