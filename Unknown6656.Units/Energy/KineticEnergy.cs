@@ -2,6 +2,7 @@
 
 
 [KnownBaseUnit<KineticEnergy, Joule, Scalar>]
+[KnownAlias<KineticEnergy, Joule, Scalar>("WattSecond", "Ws")]
 public partial record Joule(Scalar Value)
     : BaseUnit<KineticEnergy, Joule, Scalar>(Value)
 {
@@ -217,16 +218,6 @@ public partial record WattHour(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["whr"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)0.00028;
-}
-
-[KnownUnit<KineticEnergy, WattSecond, Joule, Scalar>]
-public partial record WattSecond(Scalar Value)
-    : KineticEnergy.AffineUnit<WattSecond>(Value)
-    , ILinearUnit<Scalar>
-{
-    public static string UnitSymbol { get; } = "Ws";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)1.0;
 }
 
 [KnownUnit<KineticEnergy, Erg, Joule, Scalar>]

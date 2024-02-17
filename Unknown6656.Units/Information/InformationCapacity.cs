@@ -7,22 +7,13 @@ namespace Unknown6656.Units.Information;
 
 
 [KnownBaseUnit<InformationCapacity, Bit, Scalar>]
+[KnownAlias<InformationCapacity, Bit, Scalar>("Shannon", "Sh")]
 public partial record Bit(Scalar Value)
     : BaseUnit<InformationCapacity, Bit, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "bit";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["unibit", "sniff"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
-}
-
-[KnownUnit<InformationCapacity, Shannon, Bit, Scalar>]
-public partial record Shannon(Scalar Value)
-    : InformationCapacity.AffineUnit<Shannon>(Value)
-    , ILinearUnit<Scalar>
-{
-    public static string UnitSymbol { get; } = "Sh";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)1.0;
 }
 
 [KnownUnit<InformationCapacity, Byte, Bit, Scalar>]
@@ -120,7 +111,3 @@ public partial record QuadWord(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar).0078125;
 }
-
-
-
-

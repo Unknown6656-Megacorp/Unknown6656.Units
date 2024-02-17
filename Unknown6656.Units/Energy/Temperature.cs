@@ -38,7 +38,7 @@ public partial record Celsius(Scalar Value)
     public static string UnitSymbol { get; } = "°C";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["C", "°" + nameof(Celsius)];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)1;
+    public static Scalar ScalingFactor { get; } = (Scalar)1.0;
     public static Scalar PreScalingOffset { get; } = (Scalar)(-273.15);
     public static Scalar PostScalingOffset { get; }
 }
@@ -132,7 +132,7 @@ public partial record Leiden(Scalar Value)
     public static string UnitSymbol { get; } = "°L";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["L", "°" + nameof(Leiden)];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)1d;
+    public static Scalar ScalingFactor { get; } = (Scalar)1.0;
     public static Scalar PreScalingOffset { get; } = (Scalar)20.15;
     public static Scalar PostScalingOffset { get; }
 }

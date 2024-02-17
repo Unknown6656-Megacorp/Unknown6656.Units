@@ -4,6 +4,7 @@ namespace Unknown6656.Units.Photometry;
 
 
 [KnownBaseUnit<Luminance, CandelaPerSquareMeter, Scalar>]
+[KnownAlias<Luminance, CandelaPerSquareMeter, Scalar>("Nit", "nt")]
 public partial record CandelaPerSquareMeter(Scalar Value)
     : BaseUnit<Luminance, CandelaPerSquareMeter, Scalar>(Value)
 {
@@ -14,16 +15,6 @@ public partial record CandelaPerSquareMeter(Scalar Value)
 #endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["cd/meter^2", "candela/m^2", "cd*m^-2", "candela*m^-2", "cd*meter^-2", "candela*meter^-2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
-}
-
-[KnownUnit<Luminance, Nit, CandelaPerSquareMeter, Scalar>]
-public partial record Nit(Scalar Value)
-    : Luminance.AffineUnit<Nit>(Value)
-    , ILinearUnit<Scalar>
-{
-    public static string UnitSymbol { get; } = "nt";
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)1;
 }
 
 [KnownUnit<Luminance, Stilb, CandelaPerSquareMeter, Scalar>]

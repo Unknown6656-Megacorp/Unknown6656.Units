@@ -4,6 +4,12 @@ namespace Unknown6656.Units.Movement;
 
 
 [KnownBaseUnit<Impulse, NewtonSecond, Scalar>]
+#warning TODO implement alias with custom UnitDisplay
+//#if USE_PURE_ASCII
+//[KnownAlias<Impulse, NewtonSecond, Scalar>("KilogramMeterPerSecond", "kg*m/s")]
+//#else
+//[KnownAlias<Impulse, NewtonSecond, Scalar>("KilogramMeterPerSecond", "kg·m/s")]
+//#endif
 public partial record NewtonSecond(Scalar Value)
     : BaseUnit<Impulse, NewtonSecond, Scalar>(Value)
 {

@@ -7,6 +7,6 @@ public partial record InformationCapacity(Bit value)
     public static string QuantitySymbol { get; } = "";
 }
 
-// TODO : entropy
+// TODO : information entropy
 // TODO : information density
 // TODO : transfer rate

@@ -47,3 +47,4 @@ public partial record Power(Watt value)
 }
 
 // TODO : specific heat capacity https://en.wikipedia.org/wiki/Specific_heat_capacity
+// TODO : (thermal) energetic entropy
