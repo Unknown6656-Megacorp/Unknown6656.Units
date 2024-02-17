@@ -11,6 +11,8 @@ public partial record Time(Second value)
     public static string QuantitySymbol { get; } = "t";
 }
 
+// TODO : datetime parsing and datetime conversions
+
 public partial record Frequency(Hertz value)
     : Quantity<Frequency, Hertz, Scalar>(value)
 {

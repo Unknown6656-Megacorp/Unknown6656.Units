@@ -275,3 +275,13 @@ public partial record USBushel(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)35.23907016688;
 }
+
+[KnownUnit<Volume, Brass, CubicMeter, Scalar>]
+public partial record Brass(Scalar Value)
+    : Volume.AffineUnit<Brass>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "brass";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor * 100;
+}

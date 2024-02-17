@@ -266,6 +266,3 @@ public partial record SiderialPlutoDay(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.8119881133579763716750018119881133579763716750018119881133e-6;
 }
-
-
-// TODO : datetime parsing and datetime conversions
