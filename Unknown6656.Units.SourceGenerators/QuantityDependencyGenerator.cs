@@ -115,16 +115,6 @@ public sealed class QuantityDependencyGenerator
         DiagnosticSeverity.Error,
         true
     );
-    private static readonly DiagnosticDescriptor _diagnostic_alias_for_base_unit = new(
-        "U6656_011",
-        "The alias cannot be used for the unit type, as it is a base unit. Aliases may only be used for non-base unit types.",
-        "The alias '{0}' cannot be used for the unit type '{1}', as '{1}' is a base unit. Aliases may only be used for non-base unit types.",
-        "Unknown6656.Units",
-        DiagnosticSeverity.Error,
-        true
-    );
-
-    
 
     #endregion
 
@@ -286,6 +276,8 @@ public sealed class QuantityDependencyGenerator
         Dictionary<string, string> unit_scalar_mapper = [];
         Dictionary<string, Location> locations = [];
 
+        alias_infos = [];
+
         foreach (GenericAttributeClassUsage usage in known_units)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
@@ -367,8 +359,37 @@ public sealed class QuantityDependencyGenerator
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
             }
 
+        foreach (GenericAttributeClassUsage usage in known_aliases)
+            if (usage.TargetSymbol?.ToDisplayString() is not string alias_target_name)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
+            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [alias_target_name]));
+            else if (usage.GenericAttributeArguments.Length < 3 || usage.GenericAttributeArguments[1].ToString() != alias_target_name)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [alias_target_name]));
+            else if (usage.AttributeArguments is AttributeArgumentSyntax[] { Length: > 1 } args && args[0].Expression is LiteralExpressionSyntax { Token.ValueText: string alias_name })
+            {
+                string cs_unit_symbol = args[1].ToFullString();
+                string[] cs_symbol_alias = args.Skip(2).Select(a => a.ToFullString()).ToArray();
+                Identifier t_quantity = usage.GenericAttributeArguments[0];
+                Identifier t_unit = usage.GenericAttributeArguments[1];
+                Identifier target_name = new(t_unit.Namespace, alias_name);
+
+                known_units_dict[t_quantity].units.Add(target_name);
+                locations[target_name] = usage.TargetType.GetLocation();
+                unit_scalar_mapper[target_name] = unit_scalar_mapper[t_unit];
+
+                alias_infos.Add(new(
+                    usage.AttributeLocation,
+                    t_unit,
+                    target_name,
+                    cs_unit_symbol,
+                    cs_symbol_alias
+                ));
+            }
+            else
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_alias_name_literal, usage.AttributeLocation, [alias_target_name]));
+
         unit_infos = [];
-        alias_infos = [];
         quantity_infos = [];
         static_infos = [..from usage in known_units.Concat(known_base_units)
                           let target_name = usage.TargetSymbol?.ToDisplayString()
@@ -573,36 +594,6 @@ public sealed class QuantityDependencyGenerator
                 unit_infos[t_baseunit_1].Casts.Add(new(t_baseunit_1, t_baseunit_2, scaling));
                 unit_infos[t_baseunit_2].Casts.Add(new(t_baseunit_2, t_baseunit_1, invscaling));
             }
-
-        foreach (GenericAttributeClassUsage usage in known_aliases)
-            if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
-            else if (usage.TargetType is not RecordDeclarationSyntax record)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
-            else if (usage.GenericAttributeArguments.Length < 4 || usage.GenericAttributeArguments[1].ToString() != target_name)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [target_name]));
-            else if (usage.AttributeArguments is AttributeArgumentSyntax[] { Length: > 1 } args && args[0].Expression is LiteralExpressionSyntax { Token.ValueText: string alias_name })
-            {
-                string cs_symbol_name = args[1].ToFullString();
-                string[] cs_symbol_alias = args.Skip(2).Select(a => a.ToFullString()).ToArray();
-                Identifier t_quantity = usage.GenericAttributeArguments[0];
-                Identifier t_unit = usage.GenericAttributeArguments[1];
-                Identifier t_baseunit = usage.GenericAttributeArguments[2];
-                Identifier t_scalar = usage.GenericAttributeArguments[3];
-
-                alias_infos.Add(new(
-                    usage.AttributeLocation,
-                    t_unit,
-                    t_baseunit,
-                    t_quantity,
-                    t_scalar,
-                    new(t_unit.Namespace, alias_name),
-                    cs_symbol_name,
-                    cs_symbol_alias
-                ));
-            }
-            else
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_alias_name_literal, usage.AttributeLocation, [target_name]));
     }
 
     private static void GenerateSource(
@@ -878,17 +869,21 @@ public sealed class QuantityDependencyGenerator
                 Identifier name = alias.AliasName;
                 FileLinePositionSpan location = alias.Location.GetLineSpan();
                 UnitInformation unit = unit_infos[alias.AliasFor];
+                List<string> interfaces = [
+                    $"{unit.Quantity}.AffineUnit<{name.Name}>(Value)",
+                    $"{Identifier_ILinearUnit}<{unit.Scalar}>",
+                ];
 
-                if (unit.IsBaseUnit)
-                    production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_alias_for_base_unit, alias.Location, [name, alias.AliasFor]));
+                if (disable_emitting_interfaces)
+                {
+                    interfaces.Add(Identifier_IUnit);
+                    interfaces.Add($"{Identifier_IUnit}<{name}, {unit.BaseUnit}, {unit.Scalar}>");
+                }
 
                 sb.AppendLine($$""""
                 {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
-                    public record {{name.Name}}({{alias.Scalar}} Value)
-                        : {{alias.Quantity}}.AffineUnit<{{name.Name}}>(Value)
-                        , {{Identifier_ILinearUnit}}<{{alias.Scalar}}>
-                        , {{Identifier_IUnit}}
-                        , {{Identifier_IUnit}}<{{name}}, {{alias.BaseUnit}}, {{alias.Scalar}}>
+                    public partial record {{name.Name}}({{unit.Scalar}} Value)
+                        : {{string.Join("\n        , ", interfaces)}}
                 {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
                     {
                         public static string UnitSymbol { get; } = {{alias.AliasUnitSymbol}};
@@ -897,37 +892,26 @@ public sealed class QuantityDependencyGenerator
 
                         public static {{Identifier_UnitDisplay}} UnitDisplay { get; } = {{alias.AliasFor}}.UnitDisplay;
 
-                        public static {{alias.Scalar}} ScalingFactor { get; } = {{alias.AliasFor}}.ScalingFactor;
+                        public static {{unit.Scalar}} ScalingFactor { get; } = {{alias.AliasFor}}.ScalingFactor;
                 """");
 
                 //for (int i = 0; i < unit.Casts.Count; i++)
                 //{
                 //    CastOperator cast = unit.Casts[i];
-                for (int i = 0; i < unit.Casts.Count; i++)
-                {
-                    CastOperator cast = unit.Casts[i];
-
-                    if (cast.Operand == alias.AliasFor)
-                        cast = cast with { Operand = name };
-
-                    if (cast.Result == alias.AliasFor)
-                        cast = cast with { Result = name };
-
-                    AppendCast(cast);
-                }
-
+                //
+                //    if (cast.Operand == alias.AliasFor)
+                //        cast = cast with { Operand = name };
+                //
+                //    if (cast.Result == alias.AliasFor)
+                //        cast = cast with { Result = name };
+                //
+                //    AppendCast(cast);
+                //}
+                //
                 //foreach (BinaryOperator @operator in unit_info.BinaryOperators)
                 //    AppendOp(@operator);
-                //
 
                 sb.AppendLine($$"""
-                        public static implicit operator {{name}}({{unit.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
-                
-                        public static implicit operator {{name}}({{alias.AliasFor}} unit) => new(unit.Value);
-                
-                        public static implicit operator {{alias.AliasFor}}({{name}} unit) => new(unit.Value);
-                
-                        public static implicit operator {{name}}(string s) => Parse(s, null);
                     }
                 #line default
                 """);
@@ -981,9 +965,6 @@ public sealed record BinaryOperator(Location Location, Identifier Operand1, Iden
 public sealed record AliasInformation(
     Location Location,
     Identifier AliasFor,
-    Identifier BaseUnit,
-    Identifier Quantity,
-    Identifier Scalar,
     Identifier AliasName,
     string AliasUnitSymbol,
     string[] AliasAlternativeUnitSymbols
