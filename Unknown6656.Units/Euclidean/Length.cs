@@ -191,3 +191,14 @@ public partial record LightYear(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.0570008340246154637094605244851272333529213877036685606597e-13;
 }
+
+[KnownUnit<Length, MetricFoot, Meter, Scalar>]
+public partial record MetricFoot(Scalar Value)
+    : Length.AffineUnit<MetricFoot>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "metric ft";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ft metric", "foot metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)(10d / 3d);
+}
