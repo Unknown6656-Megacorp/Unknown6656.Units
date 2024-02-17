@@ -1,8 +1,5 @@
 ﻿using System;
 
-using SystemByte = System.Byte;
-using Byte = Unknown6656.Units.Information.Byte;
-
 namespace Unknown6656.Units.Information;
 
 

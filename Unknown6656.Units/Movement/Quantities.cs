@@ -135,6 +135,13 @@ public partial record Torque(NewtonMeter value)
 #endif
 }
 
+[IdentityRelationship<LinearEnergyTransfer, Force, JoulePerMeter, Newton, Scalar>]
+[MultiplicativeRelationship<LinearEnergyTransfer, Length, KineticEnergy, JoulePerMeter, Meter, Joule, Scalar>]
+public partial record LinearEnergyTransfer(JoulePerMeter value)
+    : Quantity<LinearEnergyTransfer, JoulePerMeter, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "LET";
+}
 
 // TODO : implement all viscosity formulas from https://en.wikipedia.org/wiki/Viscosity
 // TODO : surface tension https://en.wikipedia.org/wiki/Surface_tension

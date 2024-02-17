@@ -2,10 +2,10 @@
 using System;
 
 using Unknown6656.Units.Electricity;
-using Unknown6656.Units.Energy;
-using Unknown6656.Units.Matter;
 using Unknown6656.Units.Movement;
 using Unknown6656.Units.Temporal;
+using Unknown6656.Units.Energy;
+using Unknown6656.Units.Matter;
 
 namespace Unknown6656.Units.Radioactivity;
 
@@ -211,7 +211,6 @@ public partial record DoseRate(SievertPerSecond value)
     public static DoseRate PWRFuelWaste { get; } = new SievertPerYear(2.3e6);
     public static DoseRate FukushimaDaiichi2017 { get; } = new SievertPerYear(5e6);
 }
-
 
 // kerma https://en.wikipedia.org/wiki/Kerma_(physics)
 

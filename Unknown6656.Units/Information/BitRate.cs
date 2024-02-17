@@ -20,3 +20,5 @@ public partial record BytePerSecond(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor;
 }
+
+// TODO : baud
