@@ -68,8 +68,10 @@ public partial record DynamicViscosity(PascalSecond value)
 
 // TODO: kvis = J*s / kg
 [MultiplicativeRelationship<KinematicViscosity, Time, Area, SquareMeterPerSecond, Second, SquareMeter, Scalar>]
+[MultiplicativeRelationship<Speed, Length, KinematicViscosity, MeterPerSecond, Meter, SquareMeterPerSecond, Scalar>]
 [MultiplicativeRelationship<SpecificEnergy, Time, KinematicViscosity, JoulePerKilogram, Second, SquareMeterPerSecond, Scalar>] // TODO : verify this.
 [MultiplicativeRelationship<KinematicViscosity, MassFlowRate, Torque, SquareMeterPerSecond, KilogramPerSecond, NewtonMeter, Scalar>]
+[MultiplicativeRelationship<KinematicViscosity, Length, VolumetricFlowRate, SquareMeterPerSecond, Meter, CubicMeterPerSecond, Scalar>]
 public partial record KinematicViscosity(SquareMeterPerSecond value)
     : Quantity<KinematicViscosity, SquareMeterPerSecond, Scalar>(value)
 {
@@ -106,6 +108,7 @@ public partial record Impulse(NewtonSecond value)
 // }
 
 [MultiplicativeRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]
+[MultiplicativeRelationship<MassFlowRate, Speed, Force, KilogramPerSecond, MeterPerSecond, Newton, Scalar>]
 public partial record Force(Newton value)
     : Quantity<Force, Newton, Scalar>(value)
 {

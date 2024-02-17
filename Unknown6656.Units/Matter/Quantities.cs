@@ -37,8 +37,10 @@ public partial record MolarMass(GramPerMol value)
 }
 
 // TODO : conversion to force
+
 [MultiplicativeRelationship<AreaMassDensity, Area, Mass, KilogramPerSquareMeter, SquareMeter, Kilogram, Scalar>]
 [MultiplicativeRelationship<AreaMassDensity, Length, VolumetricMassDensity, KilogramPerSquareMeter, Meter, KilogramPerCubicMeter, Scalar>]
+[MultiplicativeRelationship<AreaMassDensity, KinematicViscosity, MassFlowRate, KilogramPerSquareMeter, SquareMeterPerSecond, KilogramPerSecond, Scalar>]
 public partial record AreaMassDensity(KilogramPerSquareMeter value)
     : Quantity<AreaMassDensity, KilogramPerSquareMeter, Scalar>(value)
 {
