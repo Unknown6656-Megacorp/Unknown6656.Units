@@ -42,6 +42,21 @@ public partial record GramPerLiter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Gram.ScalingFactor / Liter.ScalingFactor;
 }
 
+[KnownUnit<VolumetricMassDensity, GramPerCubicCentimeter, KilogramPerCubicMeter, Scalar>]
+public partial record GramPerCubicCentimeter(Scalar Value)
+    : VolumetricMassDensity.AffineUnit<GramPerCubicCentimeter>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "g/cm^3";
+#else
+    public static string UnitSymbol { get; } = "g/cm³";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["gram/centimeter^3", "gram/cm^3", "g/centimeter^3"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static Scalar ScalingFactor { get; } = Gram.ScalingFactor / CubicCentimeter.ScalingFactor;
+}
+
 [KnownUnit<VolumetricMassDensity, PoundPerCubicInch, KilogramPerCubicMeter, Scalar>]
 public partial record PoundPerCubicInch(Scalar Value)
     : VolumetricMassDensity.AffineUnit<PoundPerCubicInch>(Value)
