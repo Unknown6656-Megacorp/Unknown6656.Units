@@ -9,3 +9,8 @@ public partial record BitPerMeter(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
+
+// TODO : bit/in, bit/ft
+// TODO : byte/in, byte/ft
+// TODO : byte/m, byte/mm
+// TODO : bit/mm

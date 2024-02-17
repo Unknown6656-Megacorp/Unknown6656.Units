@@ -13,3 +13,8 @@ public partial record BitPerSquareMeter(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/sqm", "bit/sq meter", "bit/meter^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
+
+// TODO : bit/in^2, bit/ft^2
+// TODO : byte/in^2, byte/ft^2
+// TODO : byte/m^2, byte/mm^2
+// TODO : bit/m^2, bit/mm^2

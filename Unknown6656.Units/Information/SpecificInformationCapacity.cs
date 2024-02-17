@@ -9,3 +9,8 @@ public partial record BitPerKilogram(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/kilo"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
+
+// TODO : bit/lb, bit/oz
+// TODO : byte/lb, byte/oz
+// TODO : byte/kg, byte/g, byte/mg
+// TODO : bit/g, bit/mg
