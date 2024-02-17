@@ -178,3 +178,43 @@ public partial record ElectronVoltMassEquivalent(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5.60958864983476645299741629583157968944023663372081019062242e35;
 }
+
+[KnownUnit<Mass, DutchOunce, Kilogram, Scalar>]
+public partial record DutchOunce(Scalar Value)
+    : Mass.AffineUnit<DutchOunce>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "ons";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["NL oz", "NL ounce", "ounce NL", "oz NL", "dutch oz", "oz dutch", "ounce dutch"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = Pound.ScalingFactor * 16;
+}
+
+[KnownUnit<Mass, USHundredweight, Kilogram, Scalar>]
+public partial record USHundredweight(Scalar Value)
+    : Mass.AffineUnit<USHundredweight>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "cwt US";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = [
+        "centum weight US", "centum wt US", "hundred wt US", "quintal US", "US centum weight", "US centum wt", "US hundred wt",
+        "US quintal", "short hundredweight", "short cental", "US cental"
+    ];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / 100;
+}
+
+[KnownUnit<Mass, Hundredweight, Kilogram, Scalar>]
+public partial record Hundredweight(Scalar Value)
+    : Mass.AffineUnit<Hundredweight>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "cwt";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = [
+        "UK centum weight", "UK centum wt", "UK hundred wt", "UK quintal", "cental", "long cental", "UK cental", "centum weight UK",
+        "centum wt UK", "hundred wt UK", "quintal UK", "UK hundredweight", "centum weight", "centum wt", "hundred wt", "quintal", 
+        "imperial centum weight", "imperial centum wt", "imperial hundred wt", "imperial quintal", "imperial hundredweight"
+    ];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / 112;
+}
