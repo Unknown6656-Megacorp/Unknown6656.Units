@@ -750,6 +750,7 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     , IDecrementOperators<TUnit>
     , IFormattable
     , IParsable<TUnit>
+    , IComparable<TUnit>
     where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
                 , IUnit<TUnit, TBaseUnit, TScalar>
                 , IUnit
@@ -787,6 +788,28 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
         _constructor = s => constructor.Invoke([is_quantity ? AbstractUnit<TBaseUnit, TBaseUnit, TScalar>.FromScalar(s) : s]) as TUnit ?? throw ex;
         Zero = _constructor(TScalar.Zero);
         One = _constructor(TScalar.One);
+    }
+
+    //public virtual int CompareTo(AbstractUnit<TUnit, TBaseUnit, TScalar>? other)
+    //{
+    //    if (other is null)
+    //        return 1;
+    //
+    //    TBaseUnit this_base = ToBaseUnit();
+    //    TBaseUnit other_base = other.ToBaseUnit();
+    //
+    //    return this_base.Value.CompareTo(other_base.Value);
+    //}
+
+    public virtual int CompareTo(TUnit? other)
+    {
+        if (other is null)
+            return 1;
+
+        TBaseUnit this_base = ToBaseUnit();
+        TBaseUnit other_base = other.ToBaseUnit();
+
+        return this_base.Value.CompareTo(other_base.Value);
     }
 
     #region TOSTRING / PARSING
@@ -838,6 +861,33 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     public static implicit operator string(AbstractUnit<TUnit, TBaseUnit, TScalar> unit) => unit.ToString();
 
     public static implicit operator AbstractUnit<TUnit, TBaseUnit, TScalar>(string s) => Parse(s, null);
+
+    #endregion
+    #region COMPARISON OPERATORS
+
+    public static bool operator <(AbstractUnit<TUnit, TBaseUnit, TScalar> left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => left.CompareTo(right) < 0;
+
+    public static bool operator <=(AbstractUnit<TUnit, TBaseUnit, TScalar> left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => left.CompareTo(right) <= 0;
+
+    public static bool operator >(AbstractUnit<TUnit, TBaseUnit, TScalar> left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => left.CompareTo(right) > 0;
+
+    public static bool operator >=(AbstractUnit<TUnit, TBaseUnit, TScalar> left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => left.CompareTo(right) >= 0;
+
+    //public static bool operator <(AbstractUnit<TUnit, TBaseUnit, TScalar> left, TBaseUnit right) => left.CompareTo(right) < 0;
+
+    //public static bool operator <=(AbstractUnit<TUnit, TBaseUnit, TScalar> left, TBaseUnit right) => left.CompareTo(right) <= 0;
+
+    //public static bool operator >(AbstractUnit<TUnit, TBaseUnit, TScalar> left, TBaseUnit right) => left.CompareTo(right) > 0;
+
+    //public static bool operator >=(AbstractUnit<TUnit, TBaseUnit, TScalar> left, TBaseUnit right) => left.CompareTo(right) >= 0;
+
+    public static bool operator <(TBaseUnit left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => right >= left;
+
+    public static bool operator <=(TBaseUnit left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => right > left;
+
+    public static bool operator >(TBaseUnit left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => right <= left;
+
+    public static bool operator >=(TBaseUnit left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => right < left;
 
     #endregion
     #region ARITHMETIC OPERATORS
@@ -988,6 +1038,18 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
 
     public static implicit operator Quantity<TQuantity, TBaseUnit, TScalar>(string s) => Parse(s, null);
 
+    #region COMPARISON OPERATORS
+
+    public static bool operator <(Quantity<TQuantity, TBaseUnit, TScalar> left, Quantity<TQuantity, TBaseUnit, TScalar> right) => left.ToBaseUnit().CompareTo(right.Value) < 0;
+
+    public static bool operator <=(Quantity<TQuantity, TBaseUnit, TScalar> left, Quantity<TQuantity, TBaseUnit, TScalar> right) => left.ToBaseUnit().CompareTo(right.Value) <= 0;
+
+    public static bool operator >(Quantity<TQuantity, TBaseUnit, TScalar> left, Quantity<TQuantity, TBaseUnit, TScalar> right) => left.ToBaseUnit().CompareTo(right.Value) > 0;
+
+    public static bool operator >=(Quantity<TQuantity, TBaseUnit, TScalar> left, Quantity<TQuantity, TBaseUnit, TScalar> right) => left.ToBaseUnit().CompareTo(right.Value) >= 0;
+
+    #endregion
+
 
     public abstract record Unit<TUnit>(TScalar Value)
         : AbstractUnit<TUnit, TBaseUnit, TScalar>(Value)
@@ -995,9 +1057,9 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
                     , IUnit<TUnit, TBaseUnit, TScalar>
                     , IUnit
     {
-        public static implicit operator TQuantity(Unit<TUnit> unit) => new Quantity<TQuantity, TBaseUnit, TScalar>(unit.ToBaseUnit());
+        //public static implicit operator TQuantity(Unit<TUnit> unit) => new Quantity<TQuantity, TBaseUnit, TScalar>(unit.ToBaseUnit());
 
-        public static implicit operator Unit<TUnit>(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => TUnit.FromBaseUnit(quantity.Value);
+        //public static implicit operator Unit<TUnit>(Quantity<TQuantity, TBaseUnit, TScalar> quantity) => TUnit.FromBaseUnit(quantity.Value);
 
         public static implicit operator Unit<TUnit>(string s) => Parse(s, null);
     }

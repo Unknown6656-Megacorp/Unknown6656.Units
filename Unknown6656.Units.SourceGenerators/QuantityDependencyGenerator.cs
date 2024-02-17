@@ -839,6 +839,8 @@ public sealed class QuantityDependencyGenerator
                 {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
                     {
                         public static implicit operator {{name}}({{unit_info.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
+
+                        public static implicit operator {{unit_info.Quantity}}({{name}} unit) => {{unit_info.Quantity}}.FromBaseUnit(unit.ToBaseUnit());
                 #line default
                 """");
 
