@@ -655,53 +655,40 @@ public sealed class QuantityDependencyGenerator
             sb.AppendLine($"        public static {@static.Result} {@static.Result.Name}(this {@static.Scalar} value) => new(value);");
         }
 
-        void AppendProperty(PropertyInfo property)
+        void AppendProperties(List<PropertyInfo> properties)
         {
-            if (EMIT_LINE_NUMBERS)
+            foreach (PropertyInfo property in from p in properties
+                                              group p by p.Name into g
+                                              select g.First()) // TODO : fix this ?
             {
-                FileLinePositionSpan location = property.Location.GetLineSpan();
+                if (EMIT_LINE_NUMBERS)
+                {
+                    FileLinePositionSpan location = property.Location.GetLineSpan();
 
-                sb.AppendLine($"#line {location.StartLinePosition.Line + 1} \"{location.Path}\"");
+                    sb.AppendLine($"#line {location.StartLinePosition.Line + 1} \"{location.Path}\"");
+                }
+
+                sb.AppendLine($"        public {property.Result} {property.Name} => ({property.Result})this;");
             }
-
-            sb.AppendLine($"        public {property.Result} {property.Name} => ({property.Result})this;");
         }
 
-        void AppendCast(CastOperator cast)
+        void AppendCasts(List<CastOperator> operators)
         {
-            if (cast.Operand == cast.Result)
-                return;
-            else if (EMIT_LINE_NUMBERS)
-                sb.AppendLine($"//#line {+1} \"...\" ");
-
-            sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromBaseUnit(unit.ToBaseUnit());");
-        }
-
-        void AppendOp(BinaryOperator @operator)
-        {
-            char op = @operator.Type switch
+            foreach (CastOperator cast in from op in operators
+                                          where op.Operand != op.Result
+                                          group op by (op.Operand, op.Result) into g
+                                          let impl = g.Any(op => op.Implicit)
+                                          let scaling = g.Select(op => op.Scaling)
+                                                         .Distinct()
+                                                         //.FirstOrDefault()
+                                                         .Single()
+                                          select new CastOperator(g.Key.Operand, g.Key.Result, scaling, impl))
             {
-                OperatorType.Multiply => '*',
-                OperatorType.Divide => '/',
-                _ => '?',
-            };
-            string? scaling = @operator.ScalingFactor;
-            (string name1, string name2) = @operator.Operand1 == @operator.Operand2 ? ("first", "second")
-                                                                                    : ('@' + @operator.Operand1.Name, '@' + @operator.Operand2.Name);
-            string operand1 = @operator.IsScalar.op1 ? name1 : name1 + ".Value";
-            string operand2 = @operator.IsScalar.op2 ? name2 : name2 + ".Value";
+                if (EMIT_LINE_NUMBERS)
+                    sb.AppendLine($"//#line {+1} \"...\" ");
 
-            if (scaling is { })
-                scaling = $"{op} ({scaling})";
-
-            if (EMIT_LINE_NUMBERS)
-            {
-                FileLinePositionSpan location = @operator.Location.GetLineSpan();
-
-                sb.AppendLine($"#line {location.StartLinePosition.Line + 1} \"{@operator.Location.SourceTree?.FilePath}\"");
+                sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromBaseUnit(unit.ToBaseUnit());");
             }
-
-            sb.AppendLine($"        public static {@operator.Result} operator {op}({@operator.Operand1} {name1}, {@operator.Operand2} {name2}) => {(@operator.IsScalar.result ? "" : "new")}({operand1} {op} {operand2} {scaling});");
         }
 
         void AppendOps(List<BinaryOperator> operators, bool quantities)
@@ -803,12 +790,8 @@ public sealed class QuantityDependencyGenerator
                     {
                 """");
 
-                foreach (PropertyInfo property in quantity_info.Properties)
-                    AppendProperty(property);
-
-                foreach (CastOperator cast in quantity_info.Casts)
-                    AppendCast(cast);
-
+                AppendProperties(quantity_info.Properties);
+                AppendCasts(quantity_info.Casts);
                 AppendOps(quantity_info.BinaryOperators, true);
 
                 sb.AppendLine($$"""
@@ -868,12 +851,8 @@ public sealed class QuantityDependencyGenerator
                 #line default
                 """");
 
-                foreach (PropertyInfo property in unit_info.Properties)
-                    AppendProperty(property);
-
-                foreach (CastOperator cast in unit_info.Casts)
-                    AppendCast(cast);
-
+                AppendProperties(unit_info.Properties);
+                AppendCasts(unit_info.Casts);
                 AppendOps(unit_info.BinaryOperators, false);
 
                 sb.AppendLine($$"""
@@ -921,9 +900,9 @@ public sealed class QuantityDependencyGenerator
                         public static {{alias.Scalar}} ScalingFactor { get; } = {{alias.AliasFor}}.ScalingFactor;
                 """");
 
-                foreach (PropertyInfo property in unit.Properties)
-                    AppendProperty(property);
-
+                //for (int i = 0; i < unit.Casts.Count; i++)
+                //{
+                //    CastOperator cast = unit.Casts[i];
                 for (int i = 0; i < unit.Casts.Count; i++)
                 {
                     CastOperator cast = unit.Casts[i];
