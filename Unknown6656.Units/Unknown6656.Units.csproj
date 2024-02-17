@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <!-- change the following for different precisions. if all are commented out, every configuration will be built. -->
 
@@ -6,7 +6,7 @@
         <!--<Scalar>F32</Scalar>-->
         <Scalar>F64</Scalar>
         <!--<Scalar>D128</Scalar>-->
-        <DefineConstants>$(DefineConstants);$(Scalar);USE_DIACRITICS;</DefineConstants>
+        <DefineConstants>$(DefineConstants);$(Scalar);USE_DIACRITICS<!--;USE_PURE_ASCII--></DefineConstants>
     </PropertyGroup>
     <!--<Target Name="BuildOthers" BeforeTargets="DispatchToInnerBuilds" Condition="'$(Scalar)' == ''">-->
     <Target Name="BuildOthers" BeforeTargets="CoreBuild" Condition="'$(Scalar)' == ''">
