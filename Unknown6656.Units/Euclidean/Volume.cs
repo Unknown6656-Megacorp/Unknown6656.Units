@@ -12,7 +12,7 @@ public partial record CubicMeter(Scalar Value)
 #else
     public static string UnitSymbol { get; } = "m³";
 #endif
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^3", "m cubed", "meter cubed", "cubic m"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["meter^3", "m cubed", "meter cubed", "cubic m", "stere"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
@@ -146,7 +146,9 @@ public partial record FluidOunce(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "fl oz";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["fluid oz", "fl ounce"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["fluid oz", "fl ounce", "UK fl oz", "UK fl ounce", "UK fluid oz", "UK fluid ounce",
+        "imp fl oz", "imp fl ounce", "imp fluid oz", "imp fluid ounce", "imperial fl oz", "imperial fl ounce", "imperial fluid oz", "imperial fluid ounce"
+    ];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)35195.079727854;
 }
@@ -182,7 +184,7 @@ public partial record CubicFoot(Scalar Value)
 #else
     public static string UnitSymbol { get; } = "ft³";
 #endif
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["foot^3", "feet^3"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["foot^3", "feet^3", "cu foot", "cu feet", "cu ft", "cubic ft"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = Foot.ScalingFactor * SquareFoot.ScalingFactor;
 }
@@ -197,7 +199,7 @@ public partial record CubicInch(Scalar Value)
 #else
     public static string UnitSymbol { get; } = "in³";
 #endif
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["inch^3", "inches^3"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["inch^3", "inches^3", "cu in", "cu inch", "cubic in"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = Inch.ScalingFactor * SquareInch.ScalingFactor;
 }
@@ -284,4 +286,54 @@ public partial record Brass(Scalar Value)
     public static string UnitSymbol { get; } = "brass";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor * 100;
+}
+
+[KnownUnit<Volume, MetricOunce, CubicMeter, Scalar>]
+public partial record MetricOunce(Scalar Value)
+    : Volume.AffineUnit<MetricOunce>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "Metric oz";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["metr oz", "metr fl oz", "metr fluid oz", "metric fluid ounce US", "fl ounce metric", "fl oz metric", "oz metric", "oz metr"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)33333.3333333333333333333333333333333333333333333333333333333333; // 30 mL
+}
+
+[KnownUnit<Volume, Cord, CubicMeter, Scalar>]
+public partial record Cord(Scalar Value)
+    : Volume.AffineUnit<Cord>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "cord";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor / 128;
+}
+
+[KnownUnit<Volume, TwentyFootEquivalentUnit, CubicMeter, Scalar>]
+public partial record TwentyFootEquivalentUnit(Scalar Value)
+    : Volume.AffineUnit<TwentyFootEquivalentUnit>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "TEU";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["20ft EU", "container EU", "container equivalent unit", "container eq unit", "container equiv unit",
+        "20 foot EU", "20 foot eq unit", "20 foot equiv unit", "20 foot equivalent unit", "20ft eq unit", "20ft equiv unit", "20ft EU", "20ft equivalent unit",
+        "shipping container", "standard shipping container", "ISO container", "container", "intermodal container"
+    ];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor / 1_172;
+}
+
+[KnownUnit<Volume, AcreFoot, CubicMeter, Scalar>]
+public partial record AcreFoot(Scalar Value)
+    : Volume.AffineUnit<AcreFoot>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "ac·ft";
+#else
+    public static string UnitSymbol { get; } = "ac*ft";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["acre ft", "ft acre", "ft*ac", "ft ac", "ac ft", "ac foot", "foot ac", "acre*ft", "ft*acre", "ac*ft", "ac*foot", "foot*ac"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = Foot.ScalingFactor * Acre.ScalingFactor;
 }
