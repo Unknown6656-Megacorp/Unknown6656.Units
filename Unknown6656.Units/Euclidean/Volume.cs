@@ -368,3 +368,36 @@ public partial record AcreFoot(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = Foot.ScalingFactor * Acre.ScalingFactor;
 }
+
+[KnownUnit<Volume, BoardFoot, CubicMeter, Scalar>]
+public partial record BoardFoot(Scalar Value)
+    : Volume.AffineUnit<BoardFoot>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "FBM";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["board ft", "board-ft", "board-foot", "foot board measure", "ft board measure", "super foot"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = SquareFoot.ScalingFactor * Inch.ScalingFactor;
+}
+
+[KnownUnit<Volume, HoppusCubicFoot, CubicMeter, Scalar>]
+public partial record HoppusCubicFoot(Scalar Value)
+    : Volume.AffineUnit<HoppusCubicFoot>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "h cu ft";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["hoppus", "hoppus ft^3", "hoppus cubic ft", "hoppus foot^3", "hoppus cubic foot"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)27.7392510402;
+}
+
+[KnownUnit<Volume, HoppusTon, CubicMeter, Scalar>]
+public partial record HoppusTon(Scalar Value)
+    : Volume.AffineUnit<HoppusTon>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "HT";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["hoppus t", "hoppus ton"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = HoppusCubicFoot.ScalingFactor * .02;
+}
