@@ -34,7 +34,9 @@ public enum UnitDisplay
     MetricSI_Shifted_M,
     MetricSI_Shifted_m,
     MetricSI_Shifted_μ,
-
+#if USE_PURE_ASCII
+    MetricSI_Shifted_u = MetricSI_Shifted_μ,
+#endif
     Imperial,
     ImperialWithSIPrefixes,
 
@@ -998,11 +1000,16 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
                     , IUnit
     where TScalar : INumber<TScalar>
 {
+    private static readonly ConstructorInfo _ctor;
+
     public static string UnitSymbol { get; } = TBaseUnit.UnitSymbol;
     public static UnitDisplay UnitDisplay { get; } = TBaseUnit.UnitDisplay;
 
     public new TBaseUnit Value;
 
+
+    static Quantity() => _ctor = typeof(TQuantity).GetConstructor([typeof(TBaseUnit)]) ??
+        throw new InvalidProgramException($"The type '{typeof(TQuantity)}' does not have a public constructor with a single parameter of type '{typeof(TBaseUnit)}'.");
 
     private Quantity(TScalar value)
         : base(value) => Value = BaseUnit<TQuantity, TBaseUnit, TScalar>.FromScalar(value);
@@ -1030,7 +1037,7 @@ public record Quantity<TQuantity, TBaseUnit, TScalar>
         return success;
     }
 
-    public static TQuantity FromBaseUnit(TBaseUnit base_unit) => throw new NotImplementedException(); // TODO
+    public static TQuantity FromBaseUnit(TBaseUnit base_unit) => (TQuantity)_ctor.Invoke([base_unit]);
 
     public static explicit operator Quantity<TQuantity, TBaseUnit, TScalar>(TScalar value) => new(value);
 
