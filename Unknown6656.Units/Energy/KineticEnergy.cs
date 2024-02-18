@@ -1,4 +1,4 @@
-namespace Unknown6656.Units.Energy;
+﻿namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<KineticEnergy, Joule, Scalar>]
@@ -30,6 +30,20 @@ public partial record BarrelOfOilEquivalent(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["barrel oil equivalent", "barrel of oil equiv"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.6345576344368079364703676277037381286982683757949997966610e-10;
+}
+
+[KnownUnit<KineticEnergy, GasolineGallonEquivalent, Joule, Scalar>]
+public partial record GasolineGallonEquivalent(Scalar Value)
+    : KineticEnergy.AffineUnit<GasolineGallonEquivalent>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "GGE";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["GEG", "GGE US", "US GGE", "GEG US", "US GEG",
+        "gas gal eq", "US gas gal eq", "gas US gal eq", "gasoline US gal eq", "gasoline US gallon eq", "US gallon gas eq", "US gal gasoline eq", "US gallon gasoline eq", "gasoline gal eq", "gal gas eq", "gal gasoline eq", "gallon gasoline eq",
+        "gas gal equivalent", "US gas gal equivalent", "gas US gal equivalent", "gasoline US gal equivalent", "gasoline US gallon equivalent", "US gallon gas equivalent", "US gal gasoline equivalent", "US gallon gasoline equivalent", "gasoline gal equivalent", "gal gas equivalent", "gal gasoline equivalent", "gallon gasoline equivalent",
+    ];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)7.7243290163201292397660818713450292397660818713450292397660e-9;
 }
 
 [KnownUnit<KineticEnergy, BritishThermalUnit, Joule, Scalar>]
