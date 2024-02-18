@@ -346,8 +346,8 @@ public partial record TwentyFootEquivalentUnit(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "TEU";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["20ft EU", "container EU", "container equivalent unit", "container eq unit", "container equiv unit",
-        "20 foot EU", "20 foot eq unit", "20 foot equiv unit", "20 foot equivalent unit", "20ft eq unit", "20ft equiv unit", "20ft EU", "20ft equivalent unit",
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["20ft EU", "container EU", "container equivalent unit", "container eq unit",
+        "20 foot EU", "20 foot eq unit", "20 foot equivalent unit", "20ft eq unit", "20ft EU", "20ft equivalent unit",
         "shipping container", "standard shipping container", "ISO container", "container", "intermodal container"
     ];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;

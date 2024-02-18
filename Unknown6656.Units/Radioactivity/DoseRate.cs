@@ -73,10 +73,8 @@ public partial record RemPerSecond(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "rem/s";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = [
-        "röntgen eqv man/s", "röntgen eqiv man/s", "röntgen eq man/s", "röntgen equivalent man/s", "rem/sec",
-        "röntgen eqv man/sec", "röntgen eqiv man/sec", "röntgen eq man/sec", "röntgen equivalent man/sec",
-        "röntgen eqv man/second", "röntgen eqiv man/second", "röntgen eq man/second", "röntgen equivalent man/second"
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["röntgen eq man/s", "röntgen equivalent man/s", "rem/sec",
+        "röntgen eq man/sec", "röntgen equivalent man/sec", "röntgen eq man/second", "röntgen equivalent man/second"
     ];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = RöntgenEquivalentMan.ScalingFactor;
@@ -88,10 +86,7 @@ public partial record RemPerMinute(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "rem/min";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = [
-        "röntgen eqv man/min", "röntgen eqiv man/min", "röntgen eq man/min", "röntgen equivalent man/min",
-        "röntgen eqv man/minute", "röntgen eqiv man/minute", "röntgen eq man/minute", "röntgen equivalent man/minute"
-    ];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["röntgen eq man/min", "röntgen equivalent man/min", "röntgen eq man/minute", "röntgen equivalent man/minute"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = RöntgenEquivalentMan.ScalingFactor / Minute.ScalingFactor;
 }
@@ -103,10 +98,8 @@ public partial record RemPerHour(Scalar Value)
 {
     public static string UnitSymbol { get; } = "rem/h";
     static string[] IUnit.AlternativeUnitSymbols { get; } = [
-        "röntgen eqv man/h", "röntgen eqiv man/h", "röntgen eq man/h", "röntgen equivalent man/h", "rem/hr",
-        "röntgen eqv man/hr", "röntgen eqiv man/hr", "röntgen eq man/hr", "röntgen equivalent man/hr", "rem/hou",
-        "röntgen eqv man/hou", "röntgen eqiv man/hou", "röntgen eq man/hou", "röntgen equivalent man/hou",
-        "röntgen eqv man/hour", "röntgen eqiv man/hour", "röntgen eq man/hour", "röntgen equivalent man/hour",
+        "röntgen eq man/h", "röntgen equivalent man/h", "rem/hr", "röntgen eq man/hr", "röntgen equivalent man/hr", "rem/hou",
+        "röntgen eq man/hou", "röntgen equivalent man/hou", "röntgen eq man/hour", "röntgen equivalent man/hour",
     ];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = RöntgenEquivalentMan.ScalingFactor / Hour.ScalingFactor;

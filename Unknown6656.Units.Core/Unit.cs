@@ -255,6 +255,9 @@ public static partial class Unit
         ("metre", "meter"),
         ("litre", "liter"),
         ("rontgen", "roentgen"),
+        ("eqv", "equiv"),
+        ("eqiv", "equiv"),
+        ("equiv", "equivalent"),
 
         /*
         ₊₋₌₍₎ ⁰ ⁺⁻⁼⁽⁾ ⁿⁱ

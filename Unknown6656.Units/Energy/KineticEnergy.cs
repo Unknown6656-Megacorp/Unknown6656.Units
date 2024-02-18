@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Energy;
+namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<KineticEnergy, Joule, Scalar>]
@@ -16,7 +16,7 @@ public partial record TonTNTEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t TNT";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton TNT", "ton of TNT", "ton of TNT equivalent", "ton TNT equiv", "ton of TNT equiv"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton TNT", "ton of TNT", "ton of TNT equivalent", "ton TNT equiv"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples;
     public static Scalar ScalingFactor { get; } = (Scalar)2.3900573613766730401529636711281070745697896749521988527724e-10;
 }
@@ -27,7 +27,7 @@ public partial record BarrelOfOilEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "BOE";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["barrel oil equivalent", "barrel of oil equiv", "barrel oil equiv"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["barrel oil equivalent", "barrel of oil equiv"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.6345576344368079364703676277037381286982683757949997966610e-10;
 }
@@ -193,7 +193,7 @@ public partial record TonCoalEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t coal";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton coal", "ton of coal", "ton coal equiv", "ton of coal equivalent", "ton of coal equiv"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton coal", "ton of coal", "ton coal equivalent", "ton of coal equivalent"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples;
     public static Scalar ScalingFactor { get; } = (Scalar)2.930710746e-10;
 }
@@ -204,7 +204,7 @@ public partial record TonOilEquivalent(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t oil";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton oil", "ton of oil", "ton of oil equivalent", "ton of oil equiv", "ton oil equiv"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton oil", "ton of oil", "ton of oil equivalent", "ton oil equiv"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnMultiples;
     public static Scalar ScalingFactor { get; } = (Scalar)2.388458966275e-10;
 }

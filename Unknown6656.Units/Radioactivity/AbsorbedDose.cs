@@ -44,8 +44,8 @@ public partial record RoentgenEquivalentPhysical(Scalar Value)
 {
     public static string UnitSymbol { get; } = "rep";
     static string[] IUnit.AlternativeUnitSymbols { get; } = [
-        "röntgen eqv physical", "röntgen eqiv physical", "röntgen eq physical", "röntgen eqv ph", "röntgen eqiv ph", "röntgen eq ph",
-        "röntgen eqv phy", "röntgen eqiv phy", "röntgen eq phy", "röntgen eqv phys", "röntgen eqiv phys", "röntgen eq phys"
+        "röntgen equivalent physical", "röntgen eq physical", "röntgen equivalent ph", "röntgen eq ph", "röntgen equivalent phy",
+        "röntgen eq phy", "röntgen equivalent phys", "röntgen eq phys"
     ];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)107.526881720430107;
