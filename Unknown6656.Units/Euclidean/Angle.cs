@@ -52,7 +52,7 @@ public partial record ArcMinute(Scalar Value)
     public static string UnitSymbol { get; } = "'";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["arc'", "arc min"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)3437.7467707849392526078892888463102199443283479938592929496146316;
+    public static Scalar ScalingFactor { get; } = Degree.ScalingFactor / Minute.ScalingFactor;
 }
 
 [KnownUnit<Angle, ArcSecond, Radian, Scalar>]
@@ -63,7 +63,7 @@ public partial record ArcSecond(Scalar Value)
     public static string UnitSymbol { get; } = "\"";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["arc\"", "arc sec"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)206264.80624709635515647335733077861319665970087963155757697687790;
+    public static Scalar ScalingFactor { get; } = Degree.ScalingFactor / Hour.ScalingFactor;
 }
 
 [KnownUnit<Angle, Turn, Radian, Scalar>]
@@ -73,7 +73,7 @@ public partial record Turn(Scalar Value)
 {
     public static string UnitSymbol { get; } = "turns";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)0.1591549430918953357688837633725143620344596457404564487476673440;
+    public static Scalar ScalingFactor { get; } = 1 / Math.Tau;
 }
 
 [KnownUnit<Angle, HourAngle, Radian, Scalar>]
@@ -92,9 +92,48 @@ public partial record HourAngle(Scalar Value)
     public static explicit operator HourAngle(Hour hour) => new(hour.Value);
 }
 
-// furman = 1/65536
-// Binary degree, binary radian, brad = 1/256
-// NATO mil = .982 mrad
+[KnownUnit<Angle, Furman, Radian, Scalar>]
+public partial record Furman(Scalar Value)
+    : Angle.AffineUnit<Furman>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "furman";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = Turn.ScalingFactor * 65_536;
+}
+
+[KnownUnit<Angle, BinaryDegree, Radian, Scalar>]
+public partial record BinaryDegree(Scalar Value)
+    : Angle.AffineUnit<BinaryDegree>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "brad";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["bin degree", "bin radian", "furboy", "small furman", "mifurman"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = Turn.ScalingFactor * 256;
+}
+
+[KnownUnit<Angle, NATOmil, Radian, Scalar>]
+public partial record NATOmil(Scalar Value)
+    : Angle.AffineUnit<NATOmil>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "NATO mil";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["mil"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = Turn.ScalingFactor * 6400;
+}
+
+[KnownUnit<Angle, Streck, Radian, Scalar>]
+public partial record Streck(Scalar Value)
+    : Angle.AffineUnit<Streck>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "streck";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["SWE streck", "streck SWE", "SE streck", "streck SE", "swedish streck"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = Turn.ScalingFactor * 6300;
+}
 
 
 // angular velocity:
