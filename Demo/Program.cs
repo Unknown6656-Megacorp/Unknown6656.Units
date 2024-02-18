@@ -7,14 +7,14 @@ using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Movement;
 using Unknown6656.Units.Matter;
 using Unknown6656.Units.Energy;
+using Unknown6656.Units.Thermodynamics;
 using Unknown6656.Units;
 
 using System.Diagnostics;
 
 
-
 Temperature temp1 = "-14 degrees celsius";
-Temperature temp2 = "-14 degrees F";
+Temperature temp2 = "-14°F";
 Temperature temp3 = "14 kelvin";
 
 temp3 *= 10;

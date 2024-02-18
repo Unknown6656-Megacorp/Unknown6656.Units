@@ -5,14 +5,6 @@ using Unknown6656.Units.Matter;
 namespace Unknown6656.Units.Energy;
 
 
-public partial record Temperature(Kelvin value)
-    : Quantity<Temperature, Kelvin, Scalar>(value)
-{
-    public static string QuantitySymbol { get; } = "T";
-    public static Kelvin AbsoluteZero { get; } = new((Scalar)0);
-    public static Kelvin AbsoluteHot { get; } = new((Scalar)1.416808338416e32);
-}
-
 // TODO : implement shit like  E = 1/2 * m * v^2
 // TODO : implement gravitational energy    E = - g1 * g2 * m1 * m2 / r     or    E = m * g * h
 [MultiplicativeRelationship<Pressure, Volume, KineticEnergy, Pascal, CubicMeter, Joule, Scalar>]

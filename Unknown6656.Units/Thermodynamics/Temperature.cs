@@ -1,9 +1,9 @@
 ﻿#if !USE_DIACRITICS
-global using Rømer = Unknown6656.Units.Energy.Romer;
-global using Réaumur = Unknown6656.Units.Energy.Reaumur;
+global using Rømer = Unknown6656.Units.Thermodynamics.Romer;
+global using Réaumur = Unknown6656.Units.Thermodynamics.Reaumur;
 #endif
 
-namespace Unknown6656.Units.Energy;
+namespace Unknown6656.Units.Thermodynamics;
 
 
 [KnownBaseUnit<Temperature, Kelvin, Scalar>]
