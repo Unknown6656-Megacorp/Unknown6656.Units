@@ -78,6 +78,37 @@ public partial record USGallon(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)264.17205235814842;
 }
 
+[KnownUnit<Volume, AleGallon, CubicMeter, Scalar>]
+public partial record AleGallon(Scalar Value)
+    : Volume.AffineUnit<AleGallon>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "Ale gal";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["gal ale", "gallon ale"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = CubicInch.ScalingFactor / 282;
+}
+
+[KnownUnit<Volume, Tun, CubicMeter, Scalar>]
+public partial record Tun(Scalar Value)
+    : Volume.AffineUnit<Tun>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "tun";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = Gallon.ScalingFactor / 252;
+}
+
+[KnownUnit<Volume, Pin, CubicMeter, Scalar>]
+public partial record Pin(Scalar Value)
+    : Volume.AffineUnit<Pin>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "pin";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar).0488820551775750638949563739878053936948503488101252333812621884;
+}
+
 [KnownUnit<Volume, USCup, CubicMeter, Scalar>]
 public partial record USCup(Scalar Value)
     : Volume.AffineUnit<USCup>(Value)

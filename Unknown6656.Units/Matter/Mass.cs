@@ -218,3 +218,13 @@ public partial record Hundredweight(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / 112;
 }
+
+[KnownUnit<Mass, Firkin, Kilogram, Scalar>]
+public partial record Firkin(Scalar Value)
+    : Mass.AffineUnit<Firkin>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "fir";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / 90;
+}

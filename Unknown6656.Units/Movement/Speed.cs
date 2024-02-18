@@ -93,6 +93,9 @@ public partial record Mach(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.0029411764705882;
 }
 
+// furlong/fortnight
+// furlong/microfortnight
+
 
 // TODO:
 // - speed

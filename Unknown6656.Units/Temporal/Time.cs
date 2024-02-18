@@ -10,6 +10,7 @@ public partial record Second(Scalar Value)
     : BaseUnit<Time, Second, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "s";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["sec"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples;
 }
 
@@ -39,6 +40,7 @@ public partial record Hour(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "h";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["hr", "hou"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)2.7777777777777777777777777777778e-4;
 }
@@ -84,7 +86,7 @@ public partial record Fortnight(Scalar Value)
     : Time.AffineUnit<Fortnight>(Value)
     , ILinearUnit<Scalar>
 {
-    public static string UnitSymbol { get; } = "d";
+    public static string UnitSymbol { get; } = "ftn";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)8.267195767195767195767195767195767195767195767195767195767e-7;
 }
@@ -183,6 +185,16 @@ public partial record SiderialMarsDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.1246063877642825011246063877642825011246063877642825011246e-5;
 }
 
+[KnownUnit<Time, MarsDay, Second, Scalar>]
+public partial record MarsDay(Scalar Value)
+    : Time.AffineUnit<MarsDay>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "sol";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1.12644325542100816671360180230920867361306674176288369473387e-5;
+}
+
 [KnownUnit<Time, SiderialCeresDay, Second, Scalar>]
 public partial record SiderialCeresDay(Scalar Value)
     : Time.AffineUnit<SiderialCeresDay>(Value)
@@ -265,4 +277,40 @@ public partial record SiderialPlutoDay(Scalar Value)
 #endif
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.8119881133579763716750018119881133579763716750018119881133e-6;
+}
+
+[KnownUnit<Time, Shake, Second, Scalar>]
+public partial record Shake(Scalar Value)
+    : Time.AffineUnit<Shake>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "shake";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e8;
+}
+
+[KnownUnit<Time, MicroFortnight, Second, Scalar>]
+public partial record MicroFortnight(Scalar Value)
+    : Time.AffineUnit<MicroFortnight>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "uftn";
+#else
+    public static string UnitSymbol { get; } = "μftn";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["μfortnight"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_μ;
+    public static Scalar ScalingFactor { get; } = Fortnight.ScalingFactor * 1e6;
+}
+
+[KnownUnit<Time, Kermit, Second, Scalar>]
+public partial record Kermit(Scalar Value)
+    : Time.AffineUnit<Kermit>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "kermit";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kermetric time", "kermetric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = StandardDay.ScalingFactor * 100;
 }

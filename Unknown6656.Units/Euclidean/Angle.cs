@@ -91,3 +91,11 @@ public partial record HourAngle(Scalar Value)
 
     public static explicit operator HourAngle(Hour hour) => new(hour.Value);
 }
+
+// furman = 1/65536
+// Binary degree, binary radian, brad = 1/256
+// NATO mil = .982 mrad
+
+
+// angular velocity:
+// MERU = 7.292115×10−8 rad/sec
