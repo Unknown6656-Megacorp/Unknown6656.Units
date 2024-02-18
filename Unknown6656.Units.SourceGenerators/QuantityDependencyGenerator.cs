@@ -29,9 +29,11 @@ public sealed class QuantityDependencyGenerator
     public static readonly Identifier Identifier_UnitDisplay = "Unknown6656.Units.UnitDisplay";
     public static readonly Identifier Identifier_IBaseUnit = "Unknown6656.Units.IBaseUnit";
     public static readonly Identifier Identifier_IUnit = "Unknown6656.Units.IUnit";
-
-    public const bool EMIT_LINE_NUMBERS = true; // TODO : make this an attribute
-
+#if DEBUG // TODO : make this an attribute
+    public const bool EMIT_LINE_NUMBERS = false;
+#else
+    public const bool EMIT_LINE_NUMBERS = true;
+#endif
 
     #region DIAGNOSTIC ERRORS
 
