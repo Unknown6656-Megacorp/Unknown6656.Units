@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Thermodynamics;
+namespace Unknown6656.Units.Thermodynamics;
 
 
 public partial record Temperature(Kelvin value)
@@ -16,10 +16,10 @@ public partial record HeatFlux
 
 public partial record HeatTransferCoefficient
 {
-
+    // TODO
 }
 
 public partial record ThermalConductivity
 {
-
+    // TODO
 }
