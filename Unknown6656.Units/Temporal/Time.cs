@@ -119,6 +119,17 @@ public partial record SolarYear(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3.1688764886054404467120992835579306257576513095006304230054e-8;
 }
 
+[KnownUnit<Time, GalacticYear, Second, Scalar>]
+public partial record GalacticYear(Scalar Value)
+    : Time.AffineUnit<GalacticYear>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "GY";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["galactic y", "galactic yr", "cosmic yr", "cosmic y", "cosmic year"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = SolarYear.ScalingFactor / 2.25e-8;
+}
+
 [KnownUnit<Time, SiderialDay, Second, Scalar>]
 public partial record SiderialDay(Scalar Value)
     : Time.AffineUnit<SiderialDay>(Value)
