@@ -212,5 +212,13 @@ public partial record DoseRate(SievertPerSecond value)
     public static DoseRate FukushimaDaiichi2017 { get; } = new SievertPerYear(5e6);
 }
 
+[InverseRelationship<CountRate, Time, CountPerSecond, Second, Scalar>]
+[IdentityRelationship<CountRate, Frequency, CountPerSecond, Hertz, Scalar>]
+public partial record CountRate(CountPerSecond value)
+    : Quantity<CountRate, CountPerSecond, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "A";
+}
+
 // kerma https://en.wikipedia.org/wiki/Kerma_(physics)
 

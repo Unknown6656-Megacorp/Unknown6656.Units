@@ -12,6 +12,11 @@ public partial record Temperature(Kelvin value)
     public static Kelvin AbsoluteHot { get; } = new((Scalar)1.416808338416e32);
 }
 
+// HeatFlux = kg * s^-3
+// HeatFlux = MassFlow * s^-2
+// HeatFlux = MassFlow * Hz^2
+
+// TODO : this thing is usually a multi-dimensional vector
 [MultiplicativeRelationship<HeatFlux, Area, Power, WattPerSquareMeter, SquareMeter, Watt, Scalar>]
 public partial record HeatFlux(WattPerSquareMeter value)
     : Quantity<HeatFlux, WattPerSquareMeter, Scalar>(value)

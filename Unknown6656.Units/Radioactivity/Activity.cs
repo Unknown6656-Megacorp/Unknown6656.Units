@@ -8,6 +8,7 @@ public partial record Becquerel(Scalar Value)
     : BaseUnit<Activity, Becquerel, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "Bq";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["dps", "disintegration/sec", "disintegration/s", "disintegration/second"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
@@ -37,6 +38,7 @@ public partial record DisintegrationPerMinute(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "dpm";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["disintegration/min", "disintegration/minute"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = 1 / Minute.ScalingFactor;
 }
