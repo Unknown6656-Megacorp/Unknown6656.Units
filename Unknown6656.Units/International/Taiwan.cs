@@ -1,18 +1,18 @@
 ﻿#if !USE_DIACRITICS
-global using Chhùn = Unknown6656.Units.International.Taiwanese.Chhun;
-global using Tn̄g = Unknown6656.Units.International.Taiwanese.Tng;
-global using Pêⁿ = Unknown6656.Units.International.Taiwanese.Pen;
-global using Bó = Unknown6656.Units.International.Taiwanese.Bo;
-global using Lê = Unknown6656.Units.International.Taiwanese.Le;
-global using Lî = Unknown6656.Units.International.Taiwanese.Li;
-global using Chîⁿ = Unknown6656.Units.International.Taiwanese.Chin;
-global using Tàⁿ = Unknown6656.Units.International.Taiwanese.Tan;
+global using Chhùn = Unknown6656.Units.International.Taiwan.Chhun;
+global using Tn̄g = Unknown6656.Units.International.Taiwan.Tng;
+global using Pêⁿ = Unknown6656.Units.International.Taiwan.Pen;
+global using Bó = Unknown6656.Units.International.Taiwan.Bo;
+global using Lê = Unknown6656.Units.International.Taiwan.Le;
+global using Lî = Unknown6656.Units.International.Taiwan.Li;
+global using Chîⁿ = Unknown6656.Units.International.Taiwan.Chin;
+global using Tàⁿ = Unknown6656.Units.International.Taiwan.Tan;
 #endif
 
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Matter;
 
-namespace Unknown6656.Units.International.Taiwanese;
+namespace Unknown6656.Units.International.Taiwan;
 
 
 // https://en.wikipedia.org/wiki/Taiwanese_units_of_measurement
