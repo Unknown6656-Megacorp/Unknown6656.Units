@@ -1,4 +1,9 @@
-﻿namespace Unknown6656.Units.Euclidean;
+﻿#if !USE_DIACRITICS
+global using Ångström = Unknown6656.Units.Euclidean.Angstrom;
+#endif
+
+
+namespace Unknown6656.Units.Euclidean;
 
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
@@ -201,4 +206,19 @@ public partial record MetricFoot(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ft metric", "foot metric"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)(10d / 3d);
+}
+
+[KnownUnit<Length, Ångström, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record Ångström(Scalar Value)
+#else
+public partial record Angstrom(Scalar Value)
+#endif
+    : Length.AffineUnit<Ångström>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "Å";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["angstrom"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e10;
 }
