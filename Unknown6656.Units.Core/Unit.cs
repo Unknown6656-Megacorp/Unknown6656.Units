@@ -245,6 +245,8 @@ public static partial class Unit
         ("τ", "tau"),
         ("υ", "upsilon"),
         ("φ", "phi"),
+        ("Φ", "phi"),
+        ("ϕ", "phi"),
         ("χ", "chi"),
         ("ψ", "psi"),
         ("ω", "omega"),
