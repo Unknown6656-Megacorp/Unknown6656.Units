@@ -1,16 +1,23 @@
 ﻿#if !USE_DIACRITICS
-global using Háo = Unknown6656.Units.International.China.Hao;
-global using Lí = Unknown6656.Units.International.China.Li;
-global using Fēn = Unknown6656.Units.International.China.Fen;
-global using Cùn = Unknown6656.Units.International.China.Cun;
-global using Chǐ = Unknown6656.Units.International.China.Chi;
-global using Bù = Unknown6656.Units.International.China.Bu;
-global using Zhàng = Unknown6656.Units.International.China.Zhang;
-global using Yǐn = Unknown6656.Units.International.China.Yin;
-global using Lǐ = Unknown6656.Units.International.China.ChineseMile;
-global using  = Unknown6656.Units.International.China.;
-global using  = Unknown6656.Units.International.China.;
-global using  = Unknown6656.Units.International.China.;
+global using ImperialHáo = Unknown6656.Units.International.China.ImperialHao;
+global using ImperialLí = Unknown6656.Units.International.China.ImperialLi;
+global using ImperialFēn = Unknown6656.Units.International.China.ImperialFen;
+global using ImperialCùn = Unknown6656.Units.International.China.ImperialCun;
+global using ImperialChǐ = Unknown6656.Units.International.China.ImperialChi;
+global using ImperialBù = Unknown6656.Units.International.China.ImperialBu;
+global using ImperialZhàng = Unknown6656.Units.International.China.ImperialZhang;
+global using ImperialYǐn = Unknown6656.Units.International.China.ImperialYin;
+global using ImperialLǐ = Unknown6656.Units.International.China.ImperialChineseMile;
+global using MetricHū = Unknown6656.Units.International.China.MetricHu;
+global using MetricSī = Unknown6656.Units.International.China.MetricSi;
+global using MetricHáo = Unknown6656.Units.International.China.MetricHao;
+global using MetricLí = Unknown6656.Units.International.China.MetricLi;
+global using MetricFēn = Unknown6656.Units.International.China.MetricFen;
+global using MetricCùn = Unknown6656.Units.International.China.MetricCun;
+global using MetricChǐ = Unknown6656.Units.International.China.MetricChi;
+global using MetricZhàng = Unknown6656.Units.International.China.MetricZhang;
+global using MetricYǐn = Unknown6656.Units.International.China.MetricYin;
+global using MetricLǐ = Unknown6656.Units.International.China.MetricLi;
 #endif
 
 using System;
@@ -23,13 +30,13 @@ namespace Unknown6656.Units.International.China;
 
 // https://en.wikipedia.org/wiki/Chinese_units_of_measurement
 
-[KnownUnit<Length, Háo, Meter, Scalar>]
+[KnownUnit<Length, ImperialHáo, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Háo(Scalar Value)
+public partial record ImperialHáo(Scalar Value)
 #else
 public partial record Hao(Scalar Value)
 #endif
-    : Length.AffineUnit<Háo>(Value)
+    : Length.AffineUnit<ImperialHáo>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -39,16 +46,16 @@ public partial record Hao(Scalar Value)
 #endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["hao", "chinese mil", "china mil", "PRC mil", "mil PRC", "CN mil", "mil CN"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = Chǐ.ScalingFactor * 10000;
+    public static Scalar ScalingFactor { get; } = ImperialChǐ.ScalingFactor * 10000;
 }
 
-[KnownUnit<Length, Lí, Meter, Scalar>]
+[KnownUnit<Length, ImperialLí, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Lí(Scalar Value)
+public partial record ImperialLí(Scalar Value)
 #else
 public partial record Li(Scalar Value)
 #endif
-    : Length.AffineUnit<Lí>(Value)
+    : Length.AffineUnit<ImperialLí>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -58,16 +65,16 @@ public partial record Li(Scalar Value)
 #endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["li", "chinese calibre", "chinese cal", "china cal", "china calibre", "PRC cal", "cal PRC", "PRC calibre", "calibre PRC", "CN calibre", "calibre CN", "CN cal", "cal CN"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = Chǐ.ScalingFactor * 1000;
+    public static Scalar ScalingFactor { get; } = ImperialChǐ.ScalingFactor * 1000;
 }
 
-[KnownUnit<Length, Fēn, Meter, Scalar>]
+[KnownUnit<Length, ImperialFēn, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Fēn(Scalar Value)
+public partial record ImperialFēn(Scalar Value)
 #else
 public partial record Fen(Scalar Value)
 #endif
-    : Length.AffineUnit<Fēn>(Value)
+    : Length.AffineUnit<ImperialFēn>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -77,16 +84,16 @@ public partial record Fen(Scalar Value)
 #endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["fen", "chinese line", "china line", "PRC line", "line PRC", "CN line", "line CN"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = Chǐ.ScalingFactor * 100;
+    public static Scalar ScalingFactor { get; } = ImperialChǐ.ScalingFactor * 100;
 }
 
-[KnownUnit<Length, Cùn, Meter, Scalar>]
+[KnownUnit<Length, ImperialCùn, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Cùn(Scalar Value)
+public partial record ImperialCùn(Scalar Value)
 #else
 public partial record Cun(Scalar Value)
 #endif
-    : Length.AffineUnit<Cùn>(Value)
+    : Length.AffineUnit<ImperialCùn>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -96,16 +103,16 @@ public partial record Cun(Scalar Value)
 #endif
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["chinese inch", "chinese in", "china in", "china inch", "PRC in", "in PRC", "PRC inch", "inch PRC", "cun", "CN inch", "inch CN", "CN in", "in CN"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
-    public static Scalar ScalingFactor { get; } = Chǐ.ScalingFactor * 10;
+    public static Scalar ScalingFactor { get; } = ImperialChǐ.ScalingFactor * 10;
 }
 
-[KnownUnit<Length, Chǐ, Meter, Scalar>]
+[KnownUnit<Length, ImperialChǐ, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Chǐ(Scalar Value)
+public partial record ImperialChǐ(Scalar Value)
 #else
 public partial record Chi(Scalar Value)
 #endif
-    : Length.AffineUnit<Chǐ>(Value)
+    : Length.AffineUnit<ImperialChǐ>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -118,13 +125,13 @@ public partial record Chi(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3;
 }
 
-[KnownUnit<Length, Bù, Meter, Scalar>]
+[KnownUnit<Length, ImperialBù, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Bù(Scalar Value)
+public partial record ImperialBù(Scalar Value)
 #else
 public partial record Bu(Scalar Value)
 #endif
-    : Length.AffineUnit<Bù>(Value)
+    : Length.AffineUnit<ImperialBù>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -137,13 +144,13 @@ public partial record Bu(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar).625;
 }
 
-[KnownUnit<Length, Zhàng, Meter, Scalar>]
+[KnownUnit<Length, ImperialZhàng, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Zhàng(Scalar Value)
+public partial record ImperialZhàng(Scalar Value)
 #else
 public partial record Zhang(Scalar Value)
 #endif
-    : Length.AffineUnit<Zhàng>(Value)
+    : Length.AffineUnit<ImperialZhàng>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -156,13 +163,13 @@ public partial record Zhang(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar).3;
 }
 
-[KnownUnit<Length, Yǐn, Meter, Scalar>]
+[KnownUnit<Length, ImperialYǐn, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Yǐn(Scalar Value)
+public partial record ImperialYǐn(Scalar Value)
 #else
 public partial record Yin(Scalar Value)
 #endif
-    : Length.AffineUnit<Yǐn>(Value)
+    : Length.AffineUnit<ImperialYǐn>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -175,13 +182,13 @@ public partial record Yin(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar).3;
 }
 
-[KnownUnit<Length, Lǐ, Meter, Scalar>]
+[KnownUnit<Length, ImperialLǐ, Meter, Scalar>]
 #if USE_DIACRITICS
-public partial record Lǐ(Scalar Value)
+public partial record ImperialLǐ(Scalar Value)
 #else
 public partial record ChineseMile(Scalar Value)
 #endif
-    : Length.AffineUnit<Lǐ>(Value)
+    : Length.AffineUnit<ImperialLǐ>(Value)
     , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
@@ -193,3 +200,194 @@ public partial record ChineseMile(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar).002;
 }
+
+[KnownUnit<Length, MetricHū, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricHū(Scalar Value)
+#else
+public partial record MetricHu(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricHū>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "hu";
+#else
+    public static string UnitSymbol { get; } = "忽";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols{ get; } = ["hu", "hu metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e6;
+}
+
+[KnownUnit<Length, MetricSī, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricSī(Scalar Value)
+#else
+public partial record MetricSi(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricSī>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "si";
+#else
+    public static string UnitSymbol { get; } = "絲";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["si", "si metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e5;
+}
+
+[KnownUnit<Length, MetricHáo, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricHáo(Scalar Value)
+#else
+public partial record MetrichHao(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricHáo>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "hao";
+#else
+    public static string UnitSymbol { get; } = "毫";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["hao", "hao metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e4;
+}
+
+[KnownUnit<Length, MetricLí, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricLí(Scalar Value)
+#else
+public partial record MetricLi(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricLí>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "li";
+#else
+    public static string UnitSymbol { get; } = "釐";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["li", "li metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e3;
+}
+
+[KnownUnit<Length, MetricFēn, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricFēn(Scalar Value)
+#else
+public partial record MetricFen(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricFēn>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "fen";
+#else
+    public static string UnitSymbol { get; } = "公分";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["fen", "fen metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)100d;
+}
+
+[KnownUnit<Length, MetricCùn, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricCùn(Scalar Value)
+#else
+public partial record MetricCun(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricCùn>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "cun";
+#else
+    public static string UnitSymbol { get; } = "公寸";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["cun", "cun metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)10d;
+}
+
+[KnownUnit<Length, MetricChǐ, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricChǐ(Scalar Value)
+#else
+public partial record MetricChi(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricChǐ>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "chi";
+#else
+    public static string UnitSymbol { get; } = "公尺";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["chi", "chi metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = Meter.ScalingFactor;
+}
+
+[KnownUnit<Length, MetricZhàng, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricZhàng(Scalar Value)
+#else
+public partial record MetricZhang(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricZhàng>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "zhang";
+#else
+    public static string UnitSymbol { get; } = "公丈";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["zhang", "zhang metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar).1;
+}
+
+[KnownUnit<Length, MetricYǐn, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricYǐn(Scalar Value)
+#else
+public partial record MetricYin(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricYǐn>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "yin";
+#else
+    public static string UnitSymbol { get; } = "公引"; // 百米
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["yin", "yin metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar).01;
+}
+
+[KnownUnit<Length, MetricLǐ, Meter, Scalar>]
+#if USE_DIACRITICS
+public partial record MetricLǐ(Scalar Value)
+#else
+public partial record MetricLi(Scalar Value)
+#endif
+    : Length.AffineUnit<MetricLǐ>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "li";
+#else
+    public static string UnitSymbol { get; } = "公里";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["li", "li metric"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
+}
+
