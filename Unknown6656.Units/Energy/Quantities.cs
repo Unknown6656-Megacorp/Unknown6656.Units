@@ -37,5 +37,13 @@ public partial record Power(Watt value)
     public static string QuantitySymbol { get; } = "P";
 }
 
-// TODO : specific heat capacity https://en.wikipedia.org/wiki/Specific_heat_capacity
-// TODO : (thermal) energetic entropy
+
+// J*s / W = s^2
+
+[MultiplicativeRelationship<KineticEnergy, Time, Action, Joule, Second, JouleSecond, Scalar>]
+[MultiplicativeRelationship<Action, Frequency, KineticEnergy, JouleSecond, Hertz, Joule, Scalar>]
+public partial record Action(JouleSecond value)
+    : Quantity<Action, JouleSecond, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "P";
+}
