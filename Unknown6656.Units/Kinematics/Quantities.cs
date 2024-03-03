@@ -1,4 +1,4 @@
-﻿using Unknown6656.Units.Euclidean;
+using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 using Unknown6656.Units.Energy;
@@ -33,6 +33,7 @@ public partial record Jerk(MeterPerSecondCubed value)
 
 [MultiplicativeRelationship<VolumetricFlowRate, Time, Volume, CubicMeterPerSecond, Second, CubicMeter, Scalar>]
 [MultiplicativeRelationship<Volume, Frequency, VolumetricFlowRate, CubicMeter, Hertz, CubicMeterPerSecond, Scalar>]
+[MultiplicativeRelationship<Area, Speed, VolumetricFlowRate, SquareMeter, MeterPerSecond, CubicMeterPerSecond, Scalar>]
 public partial record VolumetricFlowRate(CubicMeterPerSecond value)
     : Quantity<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(value)
 {
