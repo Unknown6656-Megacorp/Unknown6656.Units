@@ -1,4 +1,4 @@
-using Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 using Unknown6656.Units.Energy;
@@ -29,6 +29,16 @@ public partial record Jerk(MeterPerSecondCubed value)
     : Quantity<Jerk, MeterPerSecondCubed, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "j";
+}
+
+[MultiplicativeRelationship<Length, Time, Absement, Meter, Second, MeterSecond, Scalar>]
+[MultiplicativeRelationship<Absement, Frequency, Length, MeterSecond, Hertz, Meter, Scalar>]
+[MultiplicativeRelationship<Absement, Speed, Area, MeterSecond, MeterPerSecond, SquareMeter, Scalar>]
+[MultiplicativeRelationship<Absement, Acceleration, KinematicViscosity, MeterSecond, MeterPerSecondSquared, SquareMeterPerSecond, Scalar>]
+public partial record Absement(MeterSecond value)
+    : Quantity<Absement, MeterSecond, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "A";
 }
 
 [MultiplicativeRelationship<VolumetricFlowRate, Time, Volume, CubicMeterPerSecond, Second, CubicMeter, Scalar>]
