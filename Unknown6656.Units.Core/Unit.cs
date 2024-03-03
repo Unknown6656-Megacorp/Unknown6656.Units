@@ -7,6 +7,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Globalization;
+#if USE_PURE_ASCII
+using System.ComponentModel;
+using System.Diagnostics;
+#endif
 using System.Reflection;
 using System.Numerics;
 using System.Linq;
@@ -33,6 +37,9 @@ public enum UnitDisplay
     MetricSI_Shifted_k,
     MetricSI_Shifted_M,
     MetricSI_Shifted_m,
+#if USE_PURE_ASCII
+    [DebuggerDisplay, EditorBrowsable(EditorBrowsableState.Never)]
+#endif
     MetricSI_Shifted_μ,
 #if USE_PURE_ASCII
     MetricSI_Shifted_u = MetricSI_Shifted_μ,
