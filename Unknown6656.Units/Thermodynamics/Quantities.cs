@@ -1,5 +1,7 @@
-﻿using Unknown6656.Units.Euclidean;
+using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Energy;
+using Unknown6656.Units.Matter;
+using Unknown6656.Units.Kinematics;
 
 namespace Unknown6656.Units.Thermodynamics;
 
@@ -33,7 +35,29 @@ public partial record HeatTransferCoefficient
     // TODO
 }
 
-public partial record ThermalConductivity
+// W/m/K * m/s = W/K/s = J/K/s^2
+[MultiplicativeRelationship<ThermalConductivity, Absement, ThermalEntropy, WattPerMeterKelvin, MeterSecond, JoulePerKelvin, Scalar>]
+public partial record ThermalConductivity(WattPerMeterKelvin value)
+    : Quantity<ThermalConductivity, WattPerMeterKelvin, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "k";
+#else
+    public static string QuantitySymbol { get; } = "κ";
+#endif
+}
+
+[InverseRelationship<ThermalConductivity, ThermalResistivity, WattPerMeterKelvin, KelvinMeterPerWatt, Scalar>]
+[MultiplicativeRelationship<ThermalResistivity, ThermalEntropy, Absement, KelvinMeterPerWatt, JoulePerKelvin, MeterSecond, Scalar>]
+public partial record ThermalResistivity(KelvinMeterPerWatt value)
+    : Quantity<ThermalResistivity, KelvinMeterPerWatt, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "p";
+#else
+    public static string QuantitySymbol { get; } = "ρ";
+#endif
+}
 {
     // TODO
 }
