@@ -16,6 +16,7 @@ namespace Unknown6656.Units.Internals;
 public sealed class QuantityDependencyGenerator
     : IIncrementalGenerator
 {
+    public static readonly string Namespace_International = "Unknown6656.Units.International";
     public static readonly Identifier Identifier_DisableEmittingIUnitInterfaces = "Unknown6656.Units.DisableEmittingIUnitInterfaces";
     public static readonly Identifier Identifier_MultiplicativeRelationship = "Unknown6656.Units.MultiplicativeRelationship";
     public static readonly Identifier Identifier_InverseRelationship = "Unknown6656.Units.InverseRelationship";
@@ -449,6 +450,8 @@ public sealed class QuantityDependencyGenerator
                 ],
                 [..from i in unit_infos
                    where i.Value.Quantity == quantity
+#warning TODO : use attributes for that shit:
+                   where !i.Key.Namespace.StartsWith(Namespace_International)
                    select new PropertyInfo(i.Value.Location, i.Key.Name, i.Key)
                 ],
                 [],
@@ -535,6 +538,10 @@ public sealed class QuantityDependencyGenerator
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_quantities_must_be_different, usage.AttributeLocation, [usage.GenericAttributeArguments[0]]));
             else
             {
+                // TODO :
+                //  if [A * B * x = C] and [y / A = D]
+                //      add (C, D) -> B := C * D / (x * y)
+
                 if (!locations.ContainsKey(target_name))
                     locations[target_name] = usage.TargetType.GetLocation();
 

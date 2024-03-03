@@ -222,3 +222,6 @@ public class KnownAlias<TQuantity, TUnit, TBaseUnit, TScalar>(string name, strin
                     , IBaseUnit<TBaseUnit, TScalar>
                     , IUnit
     where TScalar : INumber<TScalar>;
+
+//[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+//public class DontEmitProperties : Attribute;
