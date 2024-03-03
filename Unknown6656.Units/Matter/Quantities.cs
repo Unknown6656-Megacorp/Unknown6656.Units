@@ -29,9 +29,9 @@ public partial record Mass(Kilogram value)
     // TODO : atomic masses for entire perdiodic system
 }
 
-[MultiplicativeRelationship<MolarMass, Amount, Mass, GramPerMol, Mol, Kilogram, Scalar>((Scalar)1e-3)]
-public partial record MolarMass(GramPerMol value)
-    : Quantity<MolarMass, GramPerMol, Scalar>(value)
+[MultiplicativeRelationship<MolarMass, Amount, Mass, KilogramPerMol, Mol, Kilogram, Scalar>]
+public partial record MolarMass(KilogramPerMol value)
+    : Quantity<MolarMass, KilogramPerMol, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "M";
 }

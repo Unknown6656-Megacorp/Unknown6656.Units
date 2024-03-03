@@ -1,11 +1,11 @@
 ﻿namespace Unknown6656.Units.Matter;
 
 
-[KnownBaseUnit<MolarMass, GramPerMol, Scalar>]
-public partial record GramPerMol(Scalar Value)
-    : BaseUnit<MolarMass, GramPerMol, Scalar>(Value)
+[KnownBaseUnit<MolarMass, KilogramPerMol, Scalar>]
+public partial record KilogramPerMol(Scalar Value)
+    : BaseUnit<MolarMass, KilogramPerMol, Scalar>(Value)
 {
-    public static string UnitSymbol { get; } = "g/mol";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["g/mol", "gram/mol"];
-    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static string UnitSymbol { get; } = "kg/mol";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["kilog/mol", "kilo/mol"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
