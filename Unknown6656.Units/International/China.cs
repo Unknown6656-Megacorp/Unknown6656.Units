@@ -391,3 +391,60 @@ public partial record MetricLi(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e-3;
 }
 
+[KnownUnit<Area, FāngCùn, SquareMeter, Scalar>]
+#if USE_DIACRITICS
+public partial record FāngCùn(Scalar Value)
+#else
+public partial record FangCun(Scalar Value)
+#endif
+    : Area.AffineUnit<FāngCùn>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "fang cun";
+#else
+    public static string UnitSymbol { get; } = "方寸";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["fang cun", "square cun", "sq cun", "cun^2", "cun squared"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = FāngChǐ.ScalingFactor * 100;
+}
+
+[KnownUnit<Area, FāngChǐ, SquareMeter, Scalar>]
+#if USE_DIACRITICS
+public partial record FāngChǐ(Scalar Value)
+#else
+public partial record FangChi(Scalar Value)
+#endif
+    : Area.AffineUnit<FāngChǐ>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "fang chi";
+#else
+    public static string UnitSymbol { get; } = "方尺";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["fang chi", "square chi", "sq chi", "chi^2", "chi squared"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)9;
+}
+
+[KnownUnit<Area, FāngZhàng, SquareMeter, Scalar>]
+#if USE_DIACRITICS
+public partial record FāngZhàng(Scalar Value)
+#else
+public partial record FangZhang(Scalar Value)
+#endif
+    : Area.AffineUnit<FāngZhàng>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "fang zhang";
+#else
+    public static string UnitSymbol { get; } = "方丈";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["fang zhang", "square zhang", "sq zhang", "zhang^2", "zhang squared"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = FāngChǐ.ScalingFactor * .01;
+}
+
