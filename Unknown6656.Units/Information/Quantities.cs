@@ -1,6 +1,6 @@
 ﻿using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Matter;
-using Unknown6656.Units.Movement;
+using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Temporal;
 
 namespace Unknown6656.Units.Information;

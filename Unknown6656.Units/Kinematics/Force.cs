@@ -2,7 +2,7 @@
 global using Sthène = Unknown6656.Units.Electricity.Sthene;
 #endif
 
-namespace Unknown6656.Units.Movement;
+namespace Unknown6656.Units.Kinematics;
 
 
 [KnownBaseUnit<Force, Newton, Scalar>]

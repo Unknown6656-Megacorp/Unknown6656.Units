@@ -1,4 +1,4 @@
-﻿namespace Unknown6656.Units.Movement;
+﻿namespace Unknown6656.Units.Kinematics;
 
 
 [KnownBaseUnit<DynamicViscosity, PascalSecond, Scalar>]

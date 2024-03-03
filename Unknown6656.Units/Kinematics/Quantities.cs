@@ -3,7 +3,7 @@ using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 using Unknown6656.Units.Energy;
 
-namespace Unknown6656.Units.Movement;
+namespace Unknown6656.Units.Kinematics;
 
 
 [MultiplicativeRelationship<Speed, Time, Length, MeterPerSecond, Second, Meter, Scalar>]

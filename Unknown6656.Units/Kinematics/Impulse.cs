@@ -1,6 +1,6 @@
 ﻿using Unknown6656.Units.Matter;
 
-namespace Unknown6656.Units.Movement;
+namespace Unknown6656.Units.Kinematics;
 
 
 [KnownBaseUnit<Impulse, NewtonSecond, Scalar>]

@@ -1,6 +1,6 @@
 ﻿using Unknown6656.Units.Energy;
 
-namespace Unknown6656.Units.Movement;
+namespace Unknown6656.Units.Kinematics;
 
 
 [KnownBaseUnit<LinearEnergyTransfer, JoulePerMeter, Scalar>]
