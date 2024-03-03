@@ -1,4 +1,4 @@
-using Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Kinematics;
 
 namespace Unknown6656.Units.Matter;
@@ -70,4 +70,17 @@ public partial record Pressure(Pascal value)
     : Quantity<Pressure, Pascal, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "p";
+}
+
+[InverseRelationship<Compressibility, Pressure, SquareMeterPerNewton, Pascal, Scalar>]
+[MultiplicativeRelationship<Compressibility, Force, Area, SquareMeterPerNewton, Newton, SquareMeter, Scalar>]
+[MultiplicativeRelationship<Compressibility, Torque, Volume, SquareMeterPerNewton, NewtonMeter, CubicMeter, Scalar>]
+public partial record Compressibility(SquareMeterPerNewton value)
+    : Quantity<Compressibility, SquareMeterPerNewton, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "k";
+#else
+    public static string QuantitySymbol { get; } = "κ";
+#endif
 }
