@@ -4,8 +4,6 @@
 [KnownBaseUnit<Absement, MeterSecond, Scalar>]
 public partial record MeterSecond(Scalar Value)
     : BaseUnit<Absement, MeterSecond, Scalar>(Value)
-    , IBaseUnit<MeterSecond, Scalar>
-    , IUnit
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m*s";

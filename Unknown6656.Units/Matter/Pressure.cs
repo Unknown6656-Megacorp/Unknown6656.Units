@@ -4,8 +4,6 @@
 [KnownBaseUnit<Pressure, Pascal, Scalar>]
 public partial record Pascal(Scalar Value)
     : BaseUnit<Pressure, Pascal, Scalar>(Value)
-    , IBaseUnit<Pascal, Scalar>
-    , IUnit
 {
     public static string UnitSymbol { get; } = "Pa";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
