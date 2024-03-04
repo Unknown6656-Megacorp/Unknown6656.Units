@@ -41,6 +41,18 @@ public partial record ChemicalPotential(JoulePerMol value)
 #endif
 }
 
+[MultiplicativeRelationship<Temperature, MolarMass, CryoscopicConstant, Kelvin, KilogramPerMol, KilogramKelvinPerMol, Scalar>]
+[MultiplicativeRelationship<CryoscopicConstant, SpecificEntropy, ChemicalPotential, KilogramKelvinPerMol, JoulePerKilogramKelvin, JoulePerMol, Scalar>]
+public partial record CryoscopicConstant(KilogramKelvinPerMol value)
+    : Quantity<CryoscopicConstant, KilogramKelvinPerMol, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "Kf";
+#else
+    public static string QuantitySymbol { get; } = "K𝘧";
+#endif
+}
+
 [MultiplicativeRelationship<ThermalEntropy, Temperature, KineticEnergy, JoulePerKelvin, Kelvin, Joule, Scalar>]
 [MultiplicativeRelationship<ThermodynamicEntropy, Amount, ThermalEntropy, JoulePerMolKelvin, Mol, JoulePerKelvin, Scalar>]
 [MultiplicativeRelationship<SpecificEntropy, Mass, ThermalEntropy, JoulePerKilogramKelvin, Kilogram, JoulePerKelvin, Scalar>]
