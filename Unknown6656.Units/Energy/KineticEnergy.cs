@@ -62,9 +62,29 @@ public partial record Calorie(Scalar Value)
     : KineticEnergy.AffineUnit<Calorie>(Value)
     , ILinearUnit<Scalar>
 {
+#if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cal";
+#else
+    public static string UnitSymbol { get; } = "calₜₕ";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["therm cal", "thermochemical cal", "thermochem cal", "therm calorie", "thermochemical calorie", "thermochem calorie"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
-    public static Scalar ScalingFactor { get; } = (Scalar)0.0002388459966275;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.2390057361376673;
+}
+
+[KnownUnit<KineticEnergy, InternationalSteamTableCalorie, Joule, Scalar>]
+public partial record InternationalSteamTableCalorie(Scalar Value)
+    : KineticEnergy.AffineUnit<InternationalSteamTableCalorie>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "cal";
+#else
+    public static string UnitSymbol { get; } = "calᵢₜ";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["int steam cal", "IT cal", "IST cal", "international steam cal", "int steam tbl cal", "int steam calorie", "IT calorie", "IST calorie", "international steam calorie", "int steam tbl calorie"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)0.2388458966274959;
 }
 
 [KnownUnit<KineticEnergy, HorsepowerHour, Joule, Scalar>]
