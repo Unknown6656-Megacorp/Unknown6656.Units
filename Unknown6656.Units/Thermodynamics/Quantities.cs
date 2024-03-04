@@ -30,6 +30,44 @@ public partial record HeatFlux(WattPerSquareMeter value)
 #endif
 }
 
+[MultiplicativeRelationship<ThermalEntropy, Temperature, KineticEnergy, JoulePerKelvin, Kelvin, Joule, Scalar>]
+[MultiplicativeRelationship<ThermodynamicEntropy, Amount, ThermalEntropy, JoulePerMolKelvin, Mol, JoulePerKelvin, Scalar>]
+[MultiplicativeRelationship<SpecificEntropy, Mass, ThermalEntropy, JoulePerKilogramKelvin, Kilogram, JoulePerKelvin, Scalar>]
+public partial record ThermalEntropy(JoulePerKelvin value)
+    : Quantity<ThermalEntropy, JoulePerKelvin, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "S";
+}
+
+//[MultiplicativeRelationship<SpecificEntropy, Temperature, , JoulePerKilogramKelvin, Kelvin, JoulePerMol, Scalar>]
+public partial record ThermodynamicEntropy(JoulePerMolKelvin value)
+    : Quantity<ThermodynamicEntropy, JoulePerMolKelvin, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "S";
+}
+
+[MultiplicativeRelationship<SpecificEntropy, Temperature, SpecificEnergy, JoulePerKilogramKelvin, Kelvin, JoulePerKilogram, Scalar>]
+public partial record SpecificEntropy(JoulePerKilogramKelvin value)
+    : Quantity<SpecificEntropy, JoulePerKilogramKelvin, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "S";
+#else
+    public static string QuantitySymbol { get; } = "Sₛₚ";
+#endif
+}
+
+
+
+// Thermodynamic entropy [e.u. / eU] ==  cal/K*mol (https://en.wikipedia.org/wiki/Entropy_unit)
+// Negentropy
+
+
+
+// TODO : specific entropy == J/(kg * K)
+// TODO : heat capacity == entropy
+// TODO : specific enthalpy == j/kg
+
 public partial record HeatTransferCoefficient
 {
     // TODO
