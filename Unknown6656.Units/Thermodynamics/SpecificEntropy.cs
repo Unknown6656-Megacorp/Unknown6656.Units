@@ -17,3 +17,5 @@ public partial record JoulePerKilogramKelvin(Scalar Value)
     ];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
+
+// TODO : imperial equivalents

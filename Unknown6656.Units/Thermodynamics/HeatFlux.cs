@@ -13,3 +13,5 @@ public partial record WattPerSquareMeter(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["watt/sq meter", "watt/square meter", "watt/sqm", "w/sqm", "w/square meter", "w/sq meter", "watt/m^2", "w/m^2"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
+
+// TODO : imperial equivalents

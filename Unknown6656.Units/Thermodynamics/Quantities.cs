@@ -117,3 +117,5 @@ public partial record ThermalResistivity(KelvinMeterPerWatt value)
 {
     // TODO
 }
+
+// TODO : specific heat capacity https://en.wikipedia.org/wiki/Specific_heat_capacity
