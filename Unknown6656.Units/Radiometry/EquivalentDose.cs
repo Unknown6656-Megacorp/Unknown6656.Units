@@ -66,6 +66,3 @@ public partial record BackgroundRadiationEquivalentTime(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = 1 / (DoseRate.BackgroundRadiationGlobalAverage * StandardDay.One).Sievert.Value;
 }
-
-
-// TODO : https://en.wikipedia.org/wiki/Crab_(unit)

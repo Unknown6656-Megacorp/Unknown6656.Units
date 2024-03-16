@@ -220,5 +220,6 @@ public partial record CountRate(CountPerSecond value)
     public static string QuantitySymbol { get; } = "A";
 }
 
-// kerma https://en.wikipedia.org/wiki/Kerma_(physics)
 
+// kerma https://en.wikipedia.org/wiki/Kerma_(physics)
+// TODO : https://en.wikipedia.org/wiki/Crab_(unit)
