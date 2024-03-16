@@ -18,6 +18,9 @@ global using MetricChǐ = Unknown6656.Units.International.China.MetricChi;
 global using MetricZhàng = Unknown6656.Units.International.China.MetricZhang;
 global using MetricYǐn = Unknown6656.Units.International.China.MetricYin;
 global using MetricLǐ = Unknown6656.Units.International.China.MetricLi;
+global using FāngCùn = Unknown6656.Units.International.China.FangCun;
+global using FāngChǐ = Unknown6656.Units.International.China.FangChi;
+global using FāngZhàng = Unknown6656.Units.International.China.FangZhang;
 #endif
 
 using System;
@@ -447,4 +450,3 @@ public partial record FangZhang(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = FāngChǐ.ScalingFactor * .01;
 }
-
