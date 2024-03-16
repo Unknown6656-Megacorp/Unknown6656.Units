@@ -43,7 +43,7 @@ public partial record Inch(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "in";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["inches"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["inches", "\""];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)39.37007874015748031496062992125984251968504;
 }

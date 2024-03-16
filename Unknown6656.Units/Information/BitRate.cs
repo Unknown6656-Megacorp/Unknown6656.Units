@@ -22,3 +22,4 @@ public partial record BytePerSecond(Scalar Value)
 }
 
 // TODO : baud
+// TODO : bogomips https://en.wikipedia.org/wiki/BogoMips

@@ -55,3 +55,4 @@ public partial record VolumetricInformationDensity(BitPerCubicMeter value)
 }
 
 // TODO : information entropy
+// TODO : erlang https://en.wikipedia.org/wiki/Erlang_(unit)

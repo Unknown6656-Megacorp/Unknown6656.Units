@@ -10,7 +10,7 @@ public partial record Second(Scalar Value)
     : BaseUnit<Time, Second, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "s";
-    static string[] IUnit.AlternativeUnitSymbols { get; } = ["sec"];
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["sec", "\""];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples;
 }
 
@@ -30,6 +30,7 @@ public partial record Minute(Scalar Value)
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "min";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["'"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1 / (Scalar)60;
 }

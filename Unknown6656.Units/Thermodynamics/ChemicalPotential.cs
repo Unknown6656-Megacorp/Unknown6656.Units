@@ -9,5 +9,3 @@ public partial record JoulePerMol(Scalar Value)
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["joule/mol"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
-
-// TODO : imperial equivalents
