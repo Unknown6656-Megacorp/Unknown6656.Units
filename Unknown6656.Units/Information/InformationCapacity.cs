@@ -108,3 +108,31 @@ public partial record QuadWord(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar).0078125;
 }
+
+[KnownUnit<InformationCapacity, CDROM, Bit, Scalar>]
+public partial record CDROM(Scalar Value)
+    : InformationCapacity.AffineUnit<CDROM>(Value)
+    , ILinearUnit<Scalar>
+{
+    public static string UnitSymbol { get; } = "CD-ROM";
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["compact disk", "cd", "read only CD", "ROM CD", "ro CD", "read only compact disk",
+        "compact disk ro", "compact disk ROM", "compact disk read only"
+    ];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)1.5384615384615384615384615384615384615384615384615384615384e-9;
+}
+
+[KnownUnit<InformationCapacity, FloppyDisk3_5, Bit, Scalar>]
+public partial record FloppyDisk3_5(Scalar Value)
+    : InformationCapacity.AffineUnit<FloppyDisk3_5>(Value)
+    , ILinearUnit<Scalar>
+{
+#if USE_PURE_ASCII
+    public static string UnitSymbol { get; } = "3.5in floppy";
+#else
+    public static string UnitSymbol { get; } = "3½\" floppy";
+#endif
+    static string[] IUnit.AlternativeUnitSymbols { get; } = ["floppy", "floppy 3.5in", "floppy 3.5inch", "floppy 3.5\"", "floppy disk", "floppy diskette", "diskette"];
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)6.94444444444444444444444444444444444444444444444444444444e-7;
+}
