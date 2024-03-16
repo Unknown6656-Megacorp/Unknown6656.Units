@@ -7,7 +7,7 @@ using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Matter;
 
-namespace Unknown6656.Units.Radioactivity;
+namespace Unknown6656.Units.Radiometry;
 
 
 [MultiplicativeRelationship<RadiationExposure, Mass, Charge, CoulombPerKilogram, Kilogram, Coulomb, Scalar>]

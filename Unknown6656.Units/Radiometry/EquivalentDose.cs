@@ -4,7 +4,7 @@ global using RöntgenEquivalentMan = Unknown6656.Units.Radioactivity.RoentgenEqu
 
 using Unknown6656.Units.Temporal;
 
-namespace Unknown6656.Units.Radioactivity;
+namespace Unknown6656.Units.Radiometry;
 
 
 [KnownBaseUnit<EquivalentDose, Sievert, Scalar>]
@@ -66,3 +66,6 @@ public partial record BackgroundRadiationEquivalentTime(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = 1 / (DoseRate.BackgroundRadiationGlobalAverage * StandardDay.One).Sievert.Value;
 }
+
+
+// TODO : https://en.wikipedia.org/wiki/Crab_(unit)

@@ -1,6 +1,6 @@
 ﻿using Unknown6656.Units.Temporal;
 
-namespace Unknown6656.Units.Radioactivity;
+namespace Unknown6656.Units.Radiometry;
 
 
 [KnownBaseUnit<Activity, Becquerel, Scalar>]

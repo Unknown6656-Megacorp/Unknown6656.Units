@@ -1,7 +1,7 @@
 ﻿using System;
 
 using Unknown6656.Units.Electricity;
-using Unknown6656.Units.Radioactivity;
+using Unknown6656.Units.Radiometry;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Kinematics;

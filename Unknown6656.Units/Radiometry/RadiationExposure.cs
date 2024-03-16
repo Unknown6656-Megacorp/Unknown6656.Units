@@ -2,7 +2,7 @@
 global using Röntgen = Unknown6656.Units.Radioactivity.Roentgen;
 #endif
 
-namespace Unknown6656.Units.Radioactivity;
+namespace Unknown6656.Units.Radiometry;
 
 
 [KnownBaseUnit<RadiationExposure, CoulombPerKilogram, Scalar>]

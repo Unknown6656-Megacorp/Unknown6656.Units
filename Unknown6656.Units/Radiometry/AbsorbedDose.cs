@@ -2,7 +2,7 @@
 global using RöntgenEquivalentPhysical = Unknown6656.Units.Radioactivity.RoentgenEquivalentPhysical;
 #endif
 
-namespace Unknown6656.Units.Radioactivity;
+namespace Unknown6656.Units.Radiometry;
 
 
 [KnownBaseUnit<AbsorbedDose, Gray, Scalar>]
