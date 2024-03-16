@@ -62,7 +62,7 @@ public partial record ThermalEntropy(JoulePerKelvin value)
     public static string QuantitySymbol { get; } = "S";
 }
 
-[MultiplicativeRelationship<SpecificEntropy, Temperature, ChemicalPotential, JoulePerKilogramKelvin, Kelvin, JoulePerMol, Scalar>]
+[MultiplicativeRelationship<ThermodynamicEntropy, Temperature, ChemicalPotential, JoulePerMolKelvin, Kelvin, JoulePerMol, Scalar>]
 public partial record ThermodynamicEntropy(JoulePerMolKelvin value)
     : Quantity<ThermodynamicEntropy, JoulePerMolKelvin, Scalar>(value)
 {
