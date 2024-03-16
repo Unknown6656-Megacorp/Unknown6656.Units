@@ -581,7 +581,7 @@ public static partial class Unit
         return unit_symbol;
     }
 
-    public static bool TryParse<TScalar, TUnit>(string? value, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
+    public static bool TryParse<TScalar, TUnit>(string? value, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
         where TScalar : INumber<TScalar>
         where TUnit : IUnit
     {
@@ -634,10 +634,10 @@ public static partial class Unit
             _cached_alternative_unit_symbols[type] = unit_symbols;
         }
 
-        return TryParse(value, unit_symbols, TUnit.UnitDisplay, provider, out scalar);
+        return TryParse(value, unit_symbols, TUnit.UnitDisplay, style, provider, out scalar);
     }
 
-    private static bool TryParse<TScalar>(string? value, IEnumerable<string> unit_symbols, UnitDisplay display, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
+    private static bool TryParse<TScalar>(string? value, IEnumerable<string> unit_symbols, UnitDisplay display, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TScalar? scalar)
         where TScalar : INumber<TScalar>
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -700,7 +700,7 @@ public static partial class Unit
 
             if (success)
             {
-                success = TScalar.TryParse(number, new NumberFormatInfo(), out scalar);
+                success = TScalar.TryParse(number, style, new NumberFormatInfo(), out scalar);
                 scalar ??= TScalar.Zero;
 
                 if (@const.ToLowerInvariant() switch
@@ -752,10 +752,10 @@ public static partial class Unit
 public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     : IAdditionOperators<TUnit, TUnit, TUnit>
     , ISubtractionOperators<TUnit, TUnit, TUnit>
-    , IDivisionOperators<TUnit, TUnit, TScalar>
-    , IMultiplyOperators<TUnit, TScalar, TUnit>
 #if IGNORE_CS0695
     , IMultiplyOperators<TScalar, TUnit, TUnit>
+    , IMultiplyOperators<TUnit, TScalar, TUnit>
+    , IDivisionOperators<TUnit, TUnit, TScalar>
     , IDivisionOperators<TUnit, TScalar, TUnit>
 #endif
     , IUnaryNegationOperators<TUnit, TUnit>
@@ -764,7 +764,8 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     , IDecrementOperators<TUnit>
     , IFormattable
     , IParsable<TUnit>
-    , IComparable<TUnit>
+  //, IComparable<TUnit>
+    , INumber<TUnit>
     where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
                 , IUnit<TUnit, TBaseUnit, TScalar>
                 , IUnit
@@ -775,11 +776,18 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 {
     private static readonly Func<TScalar, TUnit> _constructor;
 
+
     public static bool IsMetric => TUnit.UnitDisplay.IsMetric();
 
     public static bool IsSI => TUnit.UnitDisplay.IsSI();
 
     public static bool IsImperial => TUnit.UnitDisplay.IsImperial();
+
+    static int INumberBase<TUnit>.Radix => TScalar.Radix;
+
+    static TUnit IMultiplicativeIdentity<TUnit, TUnit>.MultiplicativeIdentity => One;
+
+    static TUnit IAdditiveIdentity<TUnit, TUnit>.AdditiveIdentity => Zero;
 
     public static TUnit Zero { get; }
 
@@ -826,7 +834,11 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
         return this_base.Value.CompareTo(other_base.Value);
     }
 
-    #region TOSTRING / PARSING
+    public int CompareTo(object? obj) => obj is TUnit u ? CompareTo(u) : 1;
+
+    bool IEquatable<TUnit>.Equals(TUnit? other) => Equals(other);
+
+    #region TOSTRING / FORMATTING
 
     public sealed override string ToString() => ToString(null, null);
 
@@ -834,14 +846,24 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale) => Unit.Format(Value, TUnit.UnitSymbol, format, formatProvider, TUnit.UnitDisplay, scale);
 
-    public static TUnit Parse(string s, IFormatProvider? provider) =>
-        TryParse(s, provider, out TUnit? result) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TUnit)} or {typeof(TScalar)}.");
+    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider) => throw new NotImplementedException();
 
-    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    #endregion
+    #region PARSING
+
+    public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, NumberStyles.Float, provider);
+
+    public static TUnit Parse(ReadOnlySpan<char> s, IFormatProvider? provider) => Parse(new(s), provider);
+
+    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) => TryParse(s, NumberStyles.Float, provider, out result);
+
+    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) => TryParse(new(s), provider, out result);
+
+    public static bool TryParse(string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
     {
         bool success;
 
-        if (Unit.TryParse<TScalar, TUnit>(s, provider, out TScalar? scalar))
+        if (Unit.TryParse<TScalar, TUnit>(s, style, provider, out TScalar? scalar))
             (success, result) = (true, FromScalar(scalar));
         else
             (success, result) = (false, null);
@@ -849,12 +871,97 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
         return success;
     }
 
+    public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) =>
+        TryParse(new(s), style, provider, out result);
+
+    public static TUnit Parse(string s, NumberStyles style, IFormatProvider? provider) =>
+        TryParse(s, style, provider, out TUnit? result) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TUnit)} or {typeof(TScalar)}.");
+
+    public static TUnit Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider) => Parse(new(s), style, provider);
+
     #endregion
 
     public abstract TBaseUnit ToBaseUnit();
 
     public static TUnit FromScalar(TScalar value) => _constructor(value);
 
+    #region INUMBERBASE<> MEMBERS
+
+    public static TUnit Abs(TUnit value) => FromScalar(TScalar.Abs(value.Value));
+
+    static bool INumberBase<TUnit>.IsCanonical(TUnit value) => TScalar.IsCanonical(value.Value);
+
+    static bool INumberBase<TUnit>.IsComplexNumber(TUnit value) => TScalar.IsComplexNumber(value.Value);
+
+    static bool INumberBase<TUnit>.IsEvenInteger(TUnit value) => TScalar.IsEvenInteger(value.Value);
+
+    static bool INumberBase<TUnit>.IsFinite(TUnit value) => TScalar.IsFinite(value.Value);
+
+    static bool INumberBase<TUnit>.IsImaginaryNumber(TUnit value) => TScalar.IsImaginaryNumber(value.Value);
+
+    static bool INumberBase<TUnit>.IsInfinity(TUnit value) => TScalar.IsInfinity(value.Value);
+
+    static bool INumberBase<TUnit>.IsInteger(TUnit value) => TScalar.IsInteger(value.Value);
+
+    static bool INumberBase<TUnit>.IsNaN(TUnit value) => TScalar.IsNaN(value.Value);
+
+    static bool INumberBase<TUnit>.IsNegative(TUnit value) => TScalar.IsNegative(value.Value);
+
+    static bool INumberBase<TUnit>.IsNegativeInfinity(TUnit value) => TScalar.IsNegativeInfinity(value.Value);
+
+    static bool INumberBase<TUnit>.IsNormal(TUnit value) => TScalar.IsNormal(value.Value);
+
+    static bool INumberBase<TUnit>.IsOddInteger(TUnit value) => TScalar.IsOddInteger(value.Value);
+
+    static bool INumberBase<TUnit>.IsPositive(TUnit value) => TScalar.IsPositive(value.Value);
+
+    static bool INumberBase<TUnit>.IsPositiveInfinity(TUnit value) => TScalar.IsPositiveInfinity(value.Value);
+
+    static bool INumberBase<TUnit>.IsRealNumber(TUnit value) => TScalar.IsRealNumber(value.Value);
+
+    static bool INumberBase<TUnit>.IsSubnormal(TUnit value) => TScalar.IsSubnormal(value.Value);
+
+    static bool INumberBase<TUnit>.IsZero(TUnit value) => TScalar.IsZero(value.Value);
+
+    static TUnit INumberBase<TUnit>.MaxMagnitude(TUnit x, TUnit y) => FromScalar(TScalar.MaxMagnitude(x.Value, y.Value));
+
+    static TUnit INumberBase<TUnit>.MaxMagnitudeNumber(TUnit x, TUnit y) => FromScalar(TScalar.MaxMagnitudeNumber(x.Value, y.Value));
+
+    static TUnit INumberBase<TUnit>.MinMagnitude(TUnit x, TUnit y) => FromScalar(TScalar.MinMagnitude(x.Value, y.Value));
+
+    static TUnit INumberBase<TUnit>.MinMagnitudeNumber(TUnit x, TUnit y) => FromScalar(TScalar.MinMagnitudeNumber(x.Value, y.Value));
+
+    static bool INumberBase<TUnit>.TryConvertFromChecked<TOther>(TOther value, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    {
+        result = TScalar.TryConvertFromChecked(value, out TScalar? s) is bool success && success && s is { } ? FromScalar(s) : default;
+
+        return success;
+    }
+
+    static bool INumberBase<TUnit>.TryConvertFromSaturating<TOther>(TOther value, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    {
+        result = TScalar.TryConvertFromSaturating(value, out TScalar? s) is bool success && success && s is { } ? FromScalar(s) : default;
+
+        return success;
+    }
+
+    static bool INumberBase<TUnit>.TryConvertFromTruncating<TOther>(TOther value, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    {
+        result = TScalar.TryConvertFromTruncating(value, out TScalar? s) is bool success && success && s is { } ? FromScalar(s) : default;
+
+        return success;
+    }
+
+    static bool INumberBase<TUnit>.TryConvertToChecked<TOther>(TUnit value, [MaybeNullWhen(false), NotNullWhen(true)] out TOther result) =>
+        TScalar.TryConvertToChecked(value.Value, out result);
+
+    static bool INumberBase<TUnit>.TryConvertToSaturating<TOther>(TUnit value, [MaybeNullWhen(false), NotNullWhen(true)] out TOther result) =>
+        TScalar.TryConvertToSaturating(value.Value, out result);
+
+    static bool INumberBase<TUnit>.TryConvertToTruncating<TOther>(TUnit value, [MaybeNullWhen(false), NotNullWhen(true)] out TOther result) =>
+        TScalar.TryConvertToTruncating(value.Value, out result);
+
+    #endregion
     #region CASTING / CONVERSION OPERATORS
 
     public static implicit operator TBaseUnit(AbstractUnit<TUnit, TBaseUnit, TScalar> unit) => unit.ToBaseUnit();
@@ -903,8 +1010,26 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public static bool operator >=(TBaseUnit left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => right < left;
 
+    static bool IComparisonOperators<TUnit, TUnit, bool>.operator >(TUnit left, TUnit right) => left.CompareTo(right) > 0;
+
+    static bool IComparisonOperators<TUnit, TUnit, bool>.operator >=(TUnit left, TUnit right) => left.CompareTo(right) >= 0;
+
+    static bool IComparisonOperators<TUnit, TUnit, bool>.operator <(TUnit left, TUnit right) => left.CompareTo(right) < 0;
+
+    static bool IComparisonOperators<TUnit, TUnit, bool>.operator <=(TUnit left, TUnit right) => left.CompareTo(right) <= 0;
+
+    static bool IEqualityOperators<TUnit, TUnit, bool>.operator ==(TUnit? left, TUnit? right) => left == right;
+
+    static bool IEqualityOperators<TUnit, TUnit, bool>.operator !=(TUnit? left, TUnit? right) => left != right;
+
     #endregion
     #region ARITHMETIC OPERATORS
+
+    static TUnit IModulusOperators<TUnit, TUnit, TUnit>.operator %(TUnit left, TUnit right) => FromScalar(left.Value % right.Value);
+
+    static TUnit IDivisionOperators<TUnit, TUnit, TUnit>.operator /(TUnit left, TUnit right) => FromScalar(left.Value / right.Value);
+
+    static TUnit IMultiplyOperators<TUnit, TUnit, TUnit>.operator *(TUnit left, TUnit right) => FromScalar(left.Value * right.Value);
 
     public static TUnit operator +(AbstractUnit<TUnit, TBaseUnit, TScalar> left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => FromScalar(left.Value + right.Value);
 
@@ -918,6 +1043,10 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public static TScalar operator /(AbstractUnit<TUnit, TBaseUnit, TScalar> left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => left.Value / right.Value;
 
+    public static TUnit operator %(AbstractUnit<TUnit, TBaseUnit, TScalar> left, TScalar right) => FromScalar(left.Value % right);
+
+    public static TUnit operator %(AbstractUnit<TUnit, TBaseUnit, TScalar> left, AbstractUnit<TUnit, TBaseUnit, TScalar> right) => FromScalar(left.Value % right.Value);
+
     public static TUnit operator +(AbstractUnit<TUnit, TBaseUnit, TScalar> value) => value;
 
     public static TUnit operator -(AbstractUnit<TUnit, TBaseUnit, TScalar> value) => value;
@@ -925,18 +1054,6 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
     public static TUnit operator ++(AbstractUnit<TUnit, TBaseUnit, TScalar> value) => value + One;
 
     public static TUnit operator --(AbstractUnit<TUnit, TBaseUnit, TScalar> value) => value - One;
-
-    static TUnit IAdditionOperators<TUnit, TUnit, TUnit>.operator +(TUnit left, TUnit right) => left + right;
-
-    static TUnit ISubtractionOperators<TUnit, TUnit, TUnit>.operator -(TUnit left, TUnit right) => left - right;
-
-    static TUnit IMultiplyOperators<TUnit, TScalar, TUnit>.operator *(TUnit left, TScalar right) => left * right;
-#if IGNORE_CS0695
-    static TUnit IMultiplyOperators<TScalar, TUnit, TUnit>.operator *(TScalar left, TUnit right) => left * right;
-
-    static TUnit IDivisionOperators<TUnit, TScalar, TUnit>.operator /(TUnit left, TScalar right) => left / right;
-#endif
-    static TScalar IDivisionOperators<TUnit, TUnit, TScalar>.operator /(TUnit left, TUnit right) => left / right;
 
     static TUnit IUnaryPlusOperators<TUnit, TUnit>.operator +(TUnit value) => value;
 
@@ -946,6 +1063,18 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     static TUnit IDecrementOperators<TUnit>.operator --(TUnit value) => --value;
 
+    static TUnit IAdditionOperators<TUnit, TUnit, TUnit>.operator +(TUnit left, TUnit right) => left + right;
+
+    static TUnit ISubtractionOperators<TUnit, TUnit, TUnit>.operator -(TUnit left, TUnit right) => left - right;
+#if IGNORE_CS0695
+    static TUnit IMultiplyOperators<TUnit, TScalar, TUnit>.operator *(TUnit left, TScalar right) => left * right;
+
+    static TUnit IMultiplyOperators<TScalar, TUnit, TUnit>.operator *(TScalar left, TUnit right) => left * right;
+
+    static TUnit IDivisionOperators<TUnit, TScalar, TUnit>.operator /(TUnit left, TScalar right) => left / right;
+
+    static TScalar IDivisionOperators<TUnit, TUnit, TScalar>.operator /(TUnit left, TUnit right) => left / right;
+#endif
     #endregion
 }
 
