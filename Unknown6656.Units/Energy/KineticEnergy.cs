@@ -3,17 +3,15 @@
 
 [KnownBaseUnit<KineticEnergy, Joule, Scalar>]
 [KnownAlias<KineticEnergy, Joule, Scalar>("WattSecond", "Ws")]
-public partial record Joule(Scalar Value)
-    : BaseUnit<KineticEnergy, Joule, Scalar>(Value)
+public partial record Joule
 {
     public static string UnitSymbol { get; } = "J";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<KineticEnergy, TonTNTEquivalent, Joule, Scalar>]
-public partial record TonTNTEquivalent(Scalar Value)
-    : KineticEnergy.AffineUnit<TonTNTEquivalent>(Value)
-    , ILinearUnit<Scalar>
+public partial record TonTNTEquivalent
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t TNT";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton TNT", "ton of TNT", "ton of TNT equivalent", "ton TNT equiv"];
@@ -22,9 +20,8 @@ public partial record TonTNTEquivalent(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, BarrelOfOilEquivalent, Joule, Scalar>]
-public partial record BarrelOfOilEquivalent(Scalar Value)
-    : KineticEnergy.AffineUnit<BarrelOfOilEquivalent>(Value)
-    , ILinearUnit<Scalar>
+public partial record BarrelOfOilEquivalent
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "BOE";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["barrel oil equivalent", "barrel of oil equiv"];
@@ -33,9 +30,8 @@ public partial record BarrelOfOilEquivalent(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, GasolineGallonEquivalent, Joule, Scalar>]
-public partial record GasolineGallonEquivalent(Scalar Value)
-    : KineticEnergy.AffineUnit<GasolineGallonEquivalent>(Value)
-    , ILinearUnit<Scalar>
+public partial record GasolineGallonEquivalent
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "GGE";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["GEG", "GGE US", "US GGE", "GEG US", "US GEG",
@@ -47,9 +43,8 @@ public partial record GasolineGallonEquivalent(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, BritishThermalUnit, Joule, Scalar>]
-public partial record BritishThermalUnit(Scalar Value)
-    : KineticEnergy.AffineUnit<BritishThermalUnit>(Value)
-    , ILinearUnit<Scalar>
+public partial record BritishThermalUnit
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "BTU";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["british TU"];
@@ -58,9 +53,8 @@ public partial record BritishThermalUnit(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, Calorie, Joule, Scalar>]
-public partial record Calorie(Scalar Value)
-    : KineticEnergy.AffineUnit<Calorie>(Value)
-    , ILinearUnit<Scalar>
+public partial record Calorie
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cal";
@@ -73,9 +67,8 @@ public partial record Calorie(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, InternationalSteamTableCalorie, Joule, Scalar>]
-public partial record InternationalSteamTableCalorie(Scalar Value)
-    : KineticEnergy.AffineUnit<InternationalSteamTableCalorie>(Value)
-    , ILinearUnit<Scalar>
+public partial record InternationalSteamTableCalorie
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cal";
@@ -88,9 +81,8 @@ public partial record InternationalSteamTableCalorie(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, HorsepowerHour, Joule, Scalar>]
-public partial record HorsepowerHour(Scalar Value)
-    : KineticEnergy.AffineUnit<HorsepowerHour>(Value)
-    , ILinearUnit<Scalar>
+public partial record HorsepowerHour
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "HPh";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
@@ -98,9 +90,8 @@ public partial record HorsepowerHour(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, CelsiusHeatUnit, Joule, Scalar>]
-public partial record CelsiusHeatUnit(Scalar Value)
-    : KineticEnergy.AffineUnit<CelsiusHeatUnit>(Value)
-    , ILinearUnit<Scalar>
+public partial record CelsiusHeatUnit
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "CHU";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["celsius HU"];
@@ -110,9 +101,8 @@ public partial record CelsiusHeatUnit(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, CubicCentimeterAtmosphere, Joule, Scalar>]
-public partial record CubicCentimeterAtmosphere(Scalar Value)
-    : KineticEnergy.AffineUnit<CubicCentimeterAtmosphere>(Value)
-    , ILinearUnit<Scalar>
+public partial record CubicCentimeterAtmosphere
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "cm³ atm";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["cm³ atmosphere"];
@@ -121,9 +111,8 @@ public partial record CubicCentimeterAtmosphere(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, CubicCentimeterNaturalGas, Joule, Scalar>]
-public partial record CubicCentimeterNaturalGas(Scalar Value)
-    : KineticEnergy.AffineUnit<CubicCentimeterNaturalGas>(Value)
-    , ILinearUnit<Scalar>
+public partial record CubicCentimeterNaturalGas
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cm^3 NG";
@@ -136,9 +125,8 @@ public partial record CubicCentimeterNaturalGas(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, CubicFootAtmosphere, Joule, Scalar>]
-public partial record CubicFootAtmosphere(Scalar Value)
-    : KineticEnergy.AffineUnit<CubicFootAtmosphere>(Value)
-    , ILinearUnit<Scalar>
+public partial record CubicFootAtmosphere
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft^3 atm";
@@ -151,9 +139,8 @@ public partial record CubicFootAtmosphere(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, CubicFootNaturalGas, Joule, Scalar>]
-public partial record CubicFootNaturalGas(Scalar Value)
-    : KineticEnergy.AffineUnit<CubicFootNaturalGas>(Value)
-    , ILinearUnit<Scalar>
+public partial record CubicFootNaturalGas
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft^3 NG";
@@ -166,9 +153,8 @@ public partial record CubicFootNaturalGas(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, ElectronVolt, Joule, Scalar>]
-public partial record ElectronVolt(Scalar Value)
-    : KineticEnergy.AffineUnit<ElectronVolt>(Value)
-    , ILinearUnit<Scalar>
+public partial record ElectronVolt
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "eV";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
@@ -176,9 +162,8 @@ public partial record ElectronVolt(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, Hartree, Joule, Scalar>]
-public partial record Hartree(Scalar Value)
-    : KineticEnergy.AffineUnit<Hartree>(Value)
-    , ILinearUnit<Scalar>
+public partial record Hartree
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Eh";
@@ -191,9 +176,8 @@ public partial record Hartree(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, LiterAtmosphere, Joule, Scalar>]
-public partial record LiterAtmosphere(Scalar Value)
-    : KineticEnergy.AffineUnit<LiterAtmosphere>(Value)
-    , ILinearUnit<Scalar>
+public partial record LiterAtmosphere
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "L atm";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["liters atm", "liters atmosphere"];
@@ -202,9 +186,8 @@ public partial record LiterAtmosphere(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, Quad, Joule, Scalar>]
-public partial record Quad(Scalar Value)
-    : KineticEnergy.AffineUnit<Quad>(Value)
-    , ILinearUnit<Scalar>
+public partial record Quad
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "quad";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -212,9 +195,8 @@ public partial record Quad(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, Rydberg, Joule, Scalar>]
-public partial record Rydberg(Scalar Value)
-    : KineticEnergy.AffineUnit<Rydberg>(Value)
-    , ILinearUnit<Scalar>
+public partial record Rydberg
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Ry";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
@@ -222,9 +204,8 @@ public partial record Rydberg(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, TonCoalEquivalent, Joule, Scalar>]
-public partial record TonCoalEquivalent(Scalar Value)
-    : KineticEnergy.AffineUnit<TonCoalEquivalent>(Value)
-    , ILinearUnit<Scalar>
+public partial record TonCoalEquivalent
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t coal";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton coal", "ton of coal", "ton coal equivalent", "ton of coal equivalent"];
@@ -233,9 +214,8 @@ public partial record TonCoalEquivalent(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, TonOilEquivalent, Joule, Scalar>]
-public partial record TonOilEquivalent(Scalar Value)
-    : KineticEnergy.AffineUnit<TonOilEquivalent>(Value)
-    , ILinearUnit<Scalar>
+public partial record TonOilEquivalent
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t oil";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton oil", "ton of oil", "ton of oil equivalent", "ton oil equiv"];
@@ -244,9 +224,8 @@ public partial record TonOilEquivalent(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, WattHour, Joule, Scalar>]
-public partial record WattHour(Scalar Value)
-    : KineticEnergy.AffineUnit<WattHour>(Value)
-    , ILinearUnit<Scalar>
+public partial record WattHour
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Wh";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["whr"];
@@ -255,9 +234,8 @@ public partial record WattHour(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, Erg, Joule, Scalar>]
-public partial record Erg(Scalar Value)
-    : KineticEnergy.AffineUnit<Erg>(Value)
-    , ILinearUnit<Scalar>
+public partial record Erg
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "erg";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
@@ -265,9 +243,8 @@ public partial record Erg(Scalar Value)
 }
 
 [KnownUnit<KineticEnergy, AtomicUnitOfAction, Joule, Scalar>]
-public partial record AtomicUnitOfAction(Scalar Value)
-    : KineticEnergy.AffineUnit<AtomicUnitOfAction>(Value)
-    , ILinearUnit<Scalar>
+public partial record AtomicUnitOfAction
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "au";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;

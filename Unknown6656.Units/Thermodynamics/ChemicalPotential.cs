@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<ChemicalPotential, JoulePerMol, Scalar>]
-public partial record JoulePerMol(Scalar Value)
-    : BaseUnit<ChemicalPotential, JoulePerMol, Scalar>(Value)
+public partial record JoulePerMol
 {
     public static string UnitSymbol { get; } = "J/mol";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["joule/mol"];

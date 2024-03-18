@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<EnergyDensity, JoulePerCubicMeter, Scalar>]
-public partial record JoulePerCubicMeter(Scalar Value)
-    : BaseUnit<EnergyDensity, JoulePerCubicMeter, Scalar>(Value)
+public partial record JoulePerCubicMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J/m^3";
@@ -17,9 +16,8 @@ public partial record JoulePerCubicMeter(Scalar Value)
 }
 
 [KnownUnit<EnergyDensity, JoulePerLiter, JoulePerCubicMeter, Scalar>]
-public partial record JoulePerLiter(Scalar Value)
-    : EnergyDensity.AffineUnit<JoulePerLiter>(Value)
-    , ILinearUnit<Scalar>
+public partial record JoulePerLiter
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "J/L";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["J/liter", "joule/L"];
@@ -28,9 +26,8 @@ public partial record JoulePerLiter(Scalar Value)
 }
 
 [KnownUnit<EnergyDensity, JoulePerCubicInch, JoulePerCubicMeter, Scalar>]
-public partial record JoulePerCubicInch(Scalar Value)
-    : EnergyDensity.AffineUnit<JoulePerCubicInch>(Value)
-    , ILinearUnit<Scalar>
+public partial record JoulePerCubicInch
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J/in^3";
@@ -43,9 +40,8 @@ public partial record JoulePerCubicInch(Scalar Value)
 }
 
 [KnownUnit<EnergyDensity, JoulePerCubicFoot, JoulePerCubicMeter, Scalar>]
-public partial record JoulePerCubicFoot(Scalar Value)
-    : EnergyDensity.AffineUnit<JoulePerCubicFoot>(Value)
-    , ILinearUnit<Scalar>
+public partial record JoulePerCubicFoot
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J/ft^3";

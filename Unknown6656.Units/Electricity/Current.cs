@@ -9,11 +9,10 @@ namespace Unknown6656.Units.Electricity;
 
 [KnownBaseUnit<Current, Ampère, Scalar>]
 #if USE_DIACRITICS
-public partial record Ampère(Scalar Value)
+public partial record Ampère
 #else
-public partial record Ampere(Scalar Value)
+public partial record Ampere
 #endif
-    : BaseUnit<Current, Ampère, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "A";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
@@ -21,12 +20,11 @@ public partial record Ampere(Scalar Value)
 
 [KnownUnit<Current, Abampère, Ampère, Scalar>]
 #if USE_DIACRITICS
-public partial record Abampère(Scalar Value)
+public partial record Abampère
 #else
-public partial record Abampere(Scalar Value)
+public partial record Abampere
 #endif
-    : Current.AffineUnit<Abampère>(Value)
-    , ILinearUnit<Scalar>
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "abA";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
@@ -35,12 +33,11 @@ public partial record Abampere(Scalar Value)
 
 [KnownUnit<Current, Statampère, Ampère, Scalar>]
 #if USE_DIACRITICS
-public partial record Statampère(Scalar Value)
+public partial record Statampère
 #else
-public partial record Statampere(Scalar Value)
+public partial record Statampere
 #endif
-    : Current.AffineUnit<Statampère>(Value)
-    , ILinearUnit<Scalar>
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "statA";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
@@ -48,9 +45,8 @@ public partial record Statampere(Scalar Value)
 }
 
 [KnownUnit<Current, Biot, Ampère, Scalar>]
-public partial record Biot(Scalar Value)
-    : Current.AffineUnit<Biot>(Value)
-    , ILinearUnit<Scalar>
+public partial record Biot
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Bi";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;

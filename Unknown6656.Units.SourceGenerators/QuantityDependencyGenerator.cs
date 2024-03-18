@@ -29,7 +29,10 @@ public sealed class QuantityDependencyGenerator
     public static readonly Identifier Identifier_ExtensionClass = "Unknown6656.Units.Unit";
     public static readonly Identifier Identifier_UnitDisplay = "Unknown6656.Units.UnitDisplay";
     public static readonly Identifier Identifier_IBaseUnit = "Unknown6656.Units.IBaseUnit";
+    public static readonly Identifier Identifier_BaseUnit = "Unknown6656.Units.BaseUnit";
     public static readonly Identifier Identifier_IUnit = "Unknown6656.Units.IUnit";
+    public static readonly string Identifier_ArbitraryUnit = "ArbitraryUnit";
+    public static readonly string Identifier_AffineUnit = "AffineUnit";
 #if DEBUG // TODO : make this an attribute
     public const bool EMIT_LINE_NUMBERS = false;
 #else
@@ -838,8 +841,17 @@ public sealed class QuantityDependencyGenerator
                 Identifier name = kvp.Key;
                 UnitInformation unit_info = kvp.Value;
                 FileLinePositionSpan location = unit_info.Location.GetLineSpan();
-                string interfaces = disable_emitting_interfaces ? "" :
-                    $"\n        : {Identifier_IUnit}, {(unit_info.IsBaseUnit ? $"{Identifier_IBaseUnit}<{name}, {unit_info.Scalar}>" : $"{Identifier_IUnit}<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>")}";
+                string interfaces = disable_emitting_interfaces ? "" : $"({unit_info.Scalar} Value)\n" + (unit_info.IsBaseUnit ? 
+                    $"""
+                            : {Identifier_BaseUnit}<{unit_info.Quantity}, {name}, {unit_info.Scalar}>(Value)
+                            , {Identifier_IUnit}
+                            , {Identifier_IBaseUnit}<{name}, {unit_info.Scalar}>
+                    """ :
+                    $"""
+                            : {unit_info.Quantity}.{Identifier_AffineUnit}<{name}>(Value)
+                            , {Identifier_IUnit}
+                            , {Identifier_IUnit}<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>
+                    """);
 
                 sb.AppendLine($$""""
 

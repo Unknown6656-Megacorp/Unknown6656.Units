@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<ThermalResistivity, KelvinMeterPerWatt, Scalar>]
-public partial record KelvinMeterPerWatt(Scalar Value)
-    : BaseUnit<ThermalResistivity, KelvinMeterPerWatt, Scalar>(Value)
+public partial record KelvinMeterPerWatt
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "K*m/W";

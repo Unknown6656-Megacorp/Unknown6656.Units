@@ -6,8 +6,7 @@ namespace Unknown6656.Units.Temporal;
 
 
 [KnownBaseUnit<Time, Second, Scalar>]
-public partial record Second(Scalar Value)
-    : BaseUnit<Time, Second, Scalar>(Value)
+public partial record Second
 {
     public static string UnitSymbol { get; } = "s";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["sec", "\""];
@@ -15,9 +14,8 @@ public partial record Second(Scalar Value)
 }
 
 [KnownUnit<Time, OSTicks, Second, Scalar>]
-public partial record OSTicks(Scalar Value)
-    : Time.AffineUnit<OSTicks>(Value)
-    , ILinearUnit<Scalar>
+public partial record OSTicks
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ticks";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;

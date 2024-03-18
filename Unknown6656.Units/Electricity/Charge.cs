@@ -6,8 +6,7 @@ namespace Unknown6656.Units.Electricity;
 
 
 [KnownBaseUnit<Charge, Coulomb, Scalar>]
-public partial record Coulomb(Scalar Value)
-    : BaseUnit<Charge, Coulomb, Scalar>(Value)
+public partial record Coulomb
 {
     public static string UnitSymbol { get; } = "C";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
@@ -15,9 +14,8 @@ public partial record Coulomb(Scalar Value)
 
 [KnownUnit<Charge, Franklin, Coulomb, Scalar>]
 [KnownAlias<Charge, Franklin, Coulomb, Scalar>("Statcoulomb", "StatC", "esu")]
-public partial record Franklin(Scalar Value)
-    : Charge.AffineUnit<Franklin>(Value)
-    , ILinearUnit<Scalar>
+public partial record Franklin
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Fr";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
@@ -26,12 +24,11 @@ public partial record Franklin(Scalar Value)
 
 [KnownUnit<Charge, AmpèreHour, Coulomb, Scalar>]
 #if USE_DIACRITICS
-public partial record AmpèreHour(Scalar Value)
+public partial record AmpèreHour
 #else
-public partial record AmpereHour(Scalar Value)
+public partial record AmpereHour
 #endif
-    : Charge.AffineUnit<AmpèreHour>(Value)
-    , ILinearUnit<Scalar>
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Ah";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ampere h", "ampere hr", "Ahr", "a hour"];
@@ -40,9 +37,8 @@ public partial record AmpereHour(Scalar Value)
 }
 
 [KnownUnit<Charge, ElementaryCharge, Coulomb, Scalar>]
-public partial record ElementaryCharge(Scalar Value)
-    : Charge.AffineUnit<ElementaryCharge>(Value)
-    , ILinearUnit<Scalar>
+public partial record ElementaryCharge
+    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "e";

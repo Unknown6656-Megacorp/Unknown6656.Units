@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<Action, JouleSecond, Scalar>]
-public partial record JouleSecond(Scalar Value)
-    : BaseUnit<Action, JouleSecond, Scalar>(Value)
+public partial record JouleSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J*s";

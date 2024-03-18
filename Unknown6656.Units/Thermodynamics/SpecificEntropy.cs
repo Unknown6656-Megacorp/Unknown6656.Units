@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<SpecificEntropy, JoulePerKilogramKelvin, Scalar>]
-public partial record JoulePerKilogramKelvin(Scalar Value)
-    : BaseUnit<SpecificEntropy, JoulePerKilogramKelvin, Scalar>(Value)
+public partial record JoulePerKilogramKelvin
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J/kg/mol";
