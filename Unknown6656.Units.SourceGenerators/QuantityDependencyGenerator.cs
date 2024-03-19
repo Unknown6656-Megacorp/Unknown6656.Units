@@ -24,15 +24,17 @@ public sealed class QuantityDependencyGenerator
     public static readonly Identifier Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
     public static readonly Identifier Identifier_KnownAlias = "Unknown6656.Units.KnownAlias";
     public static readonly Identifier Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
+    public static readonly Identifier Identifier_IArbitraryUnit = "Unknown6656.Units.IArbitraryUnit";
+    public static readonly Identifier Identifier_IAffineUnit = "Unknown6656.Units.IAffineUnit";
     public static readonly Identifier Identifier_ILinearUnit = "Unknown6656.Units.ILinearUnit";
     public static readonly Identifier Identifier_IQuantity = "Unknown6656.Units.IQuantity";
     public static readonly Identifier Identifier_ExtensionClass = "Unknown6656.Units.Unit";
     public static readonly Identifier Identifier_UnitDisplay = "Unknown6656.Units.UnitDisplay";
     public static readonly Identifier Identifier_IBaseUnit = "Unknown6656.Units.IBaseUnit";
+    public static readonly Identifier Identifier_ArbitraryUnit = "Unknown6656.Units.Quantity<,,,>.ArbitraryUnit";
+    public static readonly Identifier Identifier_AffineUnit = "Unknown6656.Units.Quantity<,,,>.AffineUnit";
     public static readonly Identifier Identifier_BaseUnit = "Unknown6656.Units.BaseUnit";
     public static readonly Identifier Identifier_IUnit = "Unknown6656.Units.IUnit";
-    public static readonly string Identifier_ArbitraryUnit = "ArbitraryUnit";
-    public static readonly string Identifier_AffineUnit = "AffineUnit";
 #if DEBUG // TODO : make this an attribute
     public const bool EMIT_LINE_NUMBERS = false;
 #else
@@ -281,6 +283,7 @@ public sealed class QuantityDependencyGenerator
         Dictionary<string, (List<string> units, string? base_unit)> known_units_dict = [];
         Dictionary<string, string> unit_scalar_mapper = [];
         Dictionary<string, Location> locations = [];
+        Dictionary<string, UnitType> unit_types = [];
 
         alias_infos = [];
 
@@ -316,6 +319,7 @@ public sealed class QuantityDependencyGenerator
                 if (error)
                     continue;
 
+                string? unit_type = (usage.AttributeArguments.FirstOrDefault()?.Expression as MemberAccessExpressionSyntax)?.Name?.Identifier.ToString();
                 string quantity = usage.GenericAttributeArguments[0].ToString();
 
                 if (!known_units_dict.TryGetValue(quantity, out var entry))
@@ -326,6 +330,7 @@ public sealed class QuantityDependencyGenerator
                 locations[target_name] = usage.TargetType.GetLocation();
                 known_units_dict[quantity] = entry;
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
+                unit_types[target_name] = Enum.TryParse(unit_type, true, out UnitType t) ? t : UnitType.Linear;
             }
 
         foreach (GenericAttributeClassUsage usage in known_base_units)
@@ -425,7 +430,18 @@ public sealed class QuantityDependencyGenerator
                     if (target_unit != unit)
                         properties.Add(new(locations[target_unit], new Identifier(target_unit).Name, target_unit));
 
-                UnitInformation unit_info = new(locations[unit], unit, unit == kvp.Value.base_unit, unit_scalar_mapper[unit], quantity, kvp.Value.base_unit, properties, [], []);
+                UnitInformation unit_info = new(
+                    locations[unit],
+                    unit,
+                    unit == kvp.Value.base_unit,
+                    unit_scalar_mapper[unit],
+                    quantity,
+                    kvp.Value.base_unit,
+                    unit_types.TryGetValue(unit, out UnitType type) ? type : UnitType.Linear,
+                    properties,
+                    [],
+                    []
+                );
 
                 unit_infos[unit_info.Name] = unit_info;
             }
@@ -848,9 +864,15 @@ public sealed class QuantityDependencyGenerator
                             , {Identifier_IBaseUnit}<{name}, {unit_info.Scalar}>
                     """ :
                     $"""
-                            : {unit_info.Quantity}.{Identifier_AffineUnit}<{name}>(Value)
+                            : {unit_info.Quantity}.{(unit_info.Type == UnitType.Arbitrary ? Identifier_ArbitraryUnit : Identifier_AffineUnit).Name}<{name}>(Value)
                             , {Identifier_IUnit}
                             , {Identifier_IUnit}<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>
+                            , {unit_info.Type switch {
+                                UnitType.Linear => Identifier_ILinearUnit,
+                                UnitType.Affine => Identifier_IAffineUnit,
+                                UnitType.Arbitrary => Identifier_IArbitraryUnit,
+                                _ => throw new NotImplementedException()
+                            }}<{unit_info.Scalar}>
                     """);
 
                 sb.AppendLine($$""""
@@ -1003,6 +1025,13 @@ public sealed record QuantityInformation(
     List<CastOperator> Casts
 );
 
+public enum UnitType
+{
+    Linear,
+    Affine,
+    Arbitrary,
+}
+
 public sealed record UnitInformation(
     Location Location,
     Identifier Name,
@@ -1010,6 +1039,7 @@ public sealed record UnitInformation(
     Identifier Scalar,
     Identifier Quantity,
     Identifier BaseUnit,
+    UnitType Type,
     List<PropertyInfo> Properties,
     List<BinaryOperator> BinaryOperators,
     List<CastOperator> Casts
