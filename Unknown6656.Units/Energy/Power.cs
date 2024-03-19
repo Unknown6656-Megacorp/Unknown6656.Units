@@ -2,16 +2,14 @@
 
 
 [KnownBaseUnit<Power, Watt, Scalar>]
-public partial record Watt(Scalar Value)
-    : BaseUnit<Power, Watt, Scalar>(Value)
+public partial record Watt
 {
     public static string UnitSymbol { get; } = "W";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
 [KnownUnit<Power, MetricHorsepower, Watt, Scalar>]
-public partial record MetricHorsepower(Scalar Value)
-    : Power.AffineUnit<MetricHorsepower>(Value)
+public partial record MetricHorsepower
     , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "hp";
@@ -21,9 +19,8 @@ public partial record MetricHorsepower(Scalar Value)
 }
 
 [KnownUnit<Power, ElectricalHorsepower, Watt, Scalar>]
-public partial record ElectricalHorsepower(Scalar Value)
-    : Power.AffineUnit<ElectricalHorsepower>(Value)
-    , ILinearUnit<Scalar>
+public partial record ElectricalHorsepower
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "hp";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -31,9 +28,8 @@ public partial record ElectricalHorsepower(Scalar Value)
 }
 
 [KnownUnit<Power, BoilerHorsepower, Watt, Scalar>]
-public partial record BoilerHorsepower(Scalar Value)
-    : Power.AffineUnit<BoilerHorsepower>(Value)
-    , ILinearUnit<Scalar>
+public partial record BoilerHorsepower
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "BHP";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["hp"];
@@ -46,9 +42,8 @@ public partial record BoilerHorsepower(Scalar Value)
 #warning TODO : Nominal horsepower
 
 [KnownUnit<Power, UKHorsepower, Watt, Scalar>]
-public partial record UKHorsepower(Scalar Value)
-    : Power.AffineUnit<UKHorsepower>(Value)
-    , ILinearUnit<Scalar>
+public partial record UKHorsepower
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "UK hp";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["hp UK", "hp"];
@@ -57,9 +52,8 @@ public partial record UKHorsepower(Scalar Value)
 }
 
 [KnownUnit<Power, Lusec, Watt, Scalar>]
-public partial record Lusec(Scalar Value)
-    : Power.AffineUnit<Lusec>(Value)
-    , ILinearUnit<Scalar>
+public partial record Lusec
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "lusec";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -67,9 +61,8 @@ public partial record Lusec(Scalar Value)
 }
 
 [KnownUnit<Power, Poncelet, Watt, Scalar>]
-public partial record Poncelet(Scalar Value)
-    : Power.AffineUnit<Poncelet>(Value)
-    , ILinearUnit<Scalar>
+public partial record Poncelet
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "p";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
@@ -77,9 +70,8 @@ public partial record Poncelet(Scalar Value)
 }
 
 [KnownUnit<Power, TonAirConditioningEquivalent, Watt, Scalar>]
-public partial record TonAirConditioningEquivalent(Scalar Value)
-    : Power.AffineUnit<TonAirConditioningEquivalent>(Value)
-    , ILinearUnit<Scalar>
+public partial record TonAirConditioningEquivalent
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t AC";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["AC ton", "ton AC"];
@@ -88,9 +80,8 @@ public partial record TonAirConditioningEquivalent(Scalar Value)
 }
 
 [KnownUnit<Power, TonRefrigerationEquivalent, Watt, Scalar>]
-public partial record TonRefrigerationEquivalent(Scalar Value)
-    : Power.AffineUnit<TonRefrigerationEquivalent>(Value)
-    , ILinearUnit<Scalar>
+public partial record TonRefrigerationEquivalent
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "t ice";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ton of ice", "ton ice"];

@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<SpecificEnergy, JoulePerKilogram, Scalar>]
-public partial record JoulePerKilogram(Scalar Value)
-    : BaseUnit<SpecificEnergy, JoulePerKilogram, Scalar>(Value)
+public partial record JoulePerKilogram
 {
     public static string UnitSymbol { get; } = "J/kg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["joule/kg", "j/kilogram"];
@@ -11,9 +10,8 @@ public partial record JoulePerKilogram(Scalar Value)
 }
 
 [KnownUnit<SpecificEnergy, CaloriePerKilogram, JoulePerKilogram, Scalar>]
-public partial record CaloriePerKilogram(Scalar Value)
-    : SpecificEnergy.AffineUnit<CaloriePerKilogram>(Value)
-    , ILinearUnit<Scalar>
+public partial record CaloriePerKilogram
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "cal/kg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["calorie/kg", "cal/kilogram"];
@@ -22,9 +20,8 @@ public partial record CaloriePerKilogram(Scalar Value)
 }
 
 [KnownUnit<SpecificEnergy, WattHourPerKilogram, JoulePerKilogram, Scalar>]
-public partial record WattHourPerKilogram(Scalar Value)
-    : SpecificEnergy.AffineUnit<WattHourPerKilogram>(Value)
-    , ILinearUnit<Scalar>
+public partial record WattHourPerKilogram
+    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Wh/kg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["whr/kg", "wh/kilogram", "whr/kilogram", "watthour/kg", "watth/kg", "watthr/kg"];
