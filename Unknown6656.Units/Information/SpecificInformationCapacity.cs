@@ -4,28 +4,23 @@ namespace Unknown6656.Units.Information;
 
 
 [KnownBaseUnit<SpecificInformationCapacity, BitPerKilogram, Scalar>]
-public partial record BitPerKilogram(Scalar Value)
-    : BaseUnit<SpecificInformationCapacity, BitPerKilogram, Scalar>(Value)
+public partial record BitPerKilogram
 {
     public static string UnitSymbol { get; } = "bit/kg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/kilo"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<SpecificInformationCapacity, BitPerGram, BitPerKilogram, Scalar>]
-public partial record BitPerGram(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BitPerGram>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SpecificInformationCapacity, BitPerGram, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerGram
 {
     public static string UnitSymbol { get; } = "bit/g";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = 1 / Gram.ScalingFactor;
 }
 
-[KnownUnit<SpecificInformationCapacity, BitPerMilligram, BitPerKilogram, Scalar>]
-public partial record BitPerMilligram(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BitPerMilligram>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SpecificInformationCapacity, BitPerMilligram, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerMilligram
 {
     public static string UnitSymbol { get; } = "bit/mg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/milligram"];
@@ -33,10 +28,8 @@ public partial record BitPerMilligram(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1e6;
 }
 
-[KnownUnit<SpecificInformationCapacity, BytePerKilogram, BitPerKilogram, Scalar>]
-public partial record BytePerKilogram(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BytePerKilogram>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SpecificInformationCapacity, BytePerKilogram, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerKilogram
 {
     public static string UnitSymbol { get; } = "B/kg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/kg", "byte/kilo", "byte/kilogram", "B/kilo", "B/kilogram"];
@@ -44,7 +37,7 @@ public partial record BytePerKilogram(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor;
 }
 
-[KnownUnit<SpecificInformationCapacity, BytePerGram, BitPerKilogram, Scalar>]
+[KnownUnit<SpecificInformationCapacity, BytePerGram, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
 public partial record BytePerGram(Scalar Value)
     : SpecificInformationCapacity.AffineUnit<BytePerGram>(Value)
     , ILinearUnit<Scalar>
@@ -55,10 +48,8 @@ public partial record BytePerGram(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor / Gram.ScalingFactor;
 }
 
-[KnownUnit<SpecificInformationCapacity, BytePerMilligram, BitPerKilogram, Scalar>]
-public partial record BytePerMilligram(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BytePerMilligram>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SpecificInformationCapacity, BytePerMilligram, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerMilligram
 {
     public static string UnitSymbol { get; } = "B/mg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/mg", "byte/milligram", "B/mg", "B/milligram"];
@@ -66,10 +57,8 @@ public partial record BytePerMilligram(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor * 1e6;
 }
 
-[KnownUnit<SpecificInformationCapacity, BitPerPound, BitPerKilogram, Scalar>]
-public partial record BitPerPound(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BitPerPound>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SpecificInformationCapacity, BitPerPound, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerPound
 {
     public static string UnitSymbol { get; } = "bit/lb";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/pound"];
@@ -77,10 +66,8 @@ public partial record BitPerPound(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / Pound.ScalingFactor;
 }
 
-[KnownUnit<SpecificInformationCapacity, BytePerPound, BitPerKilogram, Scalar>]
-public partial record BytePerPound(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BytePerPound>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SpecificInformationCapacity, BytePerPound, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerPound
 {
     public static string UnitSymbol { get; } = "B/lb";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/lb", "byte/pound", "b/lb", "b/pound"];
@@ -88,10 +75,8 @@ public partial record BytePerPound(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor / Pound.ScalingFactor;
 }
 
-[KnownUnit<SpecificInformationCapacity, BitPerOunce, BitPerKilogram, Scalar>]
-public partial record BitPerOunce(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BitPerOunce>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SpecificInformationCapacity, BitPerOunce, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerOunce
 {
     public static string UnitSymbol { get; } = "bit/oz";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/ounce"];
@@ -99,10 +84,8 @@ public partial record BitPerOunce(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / Ounce.ScalingFactor;
 }
 
-[KnownUnit<SpecificInformationCapacity, BytePerOunce, BitPerKilogram, Scalar>]
-public partial record BytePerOunce(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BytePerOunce>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SpecificInformationCapacity, BytePerOunce, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerOunce
 {
     public static string UnitSymbol { get; } = "B/oz";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/oz", "byte/ounce", "b/oz", "b/ounce"];

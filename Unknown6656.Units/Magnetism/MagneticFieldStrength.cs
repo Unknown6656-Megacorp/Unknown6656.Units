@@ -8,24 +8,21 @@ namespace Unknown6656.Units.Magnetism;
 
 [KnownBaseUnit<MagneticFieldStrength, AmpèrePerMeter, Scalar>]
 #if USE_DIACRITICS
-public partial record AmpèrePerMeter(Scalar Value)
+public partial record AmpèrePerMeter
 #else
-public partial record AmperePerMeter(Scalar Value)
+public partial record AmperePerMeter
 #endif
-    : BaseUnit<MagneticFieldStrength, AmpèrePerMeter, Scalar>(Value)
 {
     public static string UnitSymbol { get; } = "A/m";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<MagneticFieldStrength, Ørsted, AmpèrePerMeter, Scalar>]
+[KnownUnit<MagneticFieldStrength, Ørsted, AmpèrePerMeter, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Ørsted(Scalar Value)
+public partial record Ørsted
 #else
-public partial record Oersted(Scalar Value)
+public partial record Oersted
 #endif
-    : MagneticFieldStrength.AffineUnit<Ørsted>(Value)
-    , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Oe";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["Ø"];

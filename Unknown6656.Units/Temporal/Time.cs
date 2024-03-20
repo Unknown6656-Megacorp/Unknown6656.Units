@@ -13,19 +13,16 @@ public partial record Second
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixesOnlyOnSubmultiples;
 }
 
-[KnownUnit<Time, OSTicks, Second, Scalar>]
+[KnownUnit<Time, OSTicks, Second, Scalar>(KnownUnitType.Linear)]
 public partial record OSTicks
-    : ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "ticks";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)Stopwatch.Frequency;
 }
 
-[KnownUnit<Time, Minute, Second, Scalar>]
-public partial record Minute(Scalar Value)
-    : Time.AffineUnit<Minute>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, Minute, Second, Scalar>(KnownUnitType.Linear)]
+public partial record Minute
 {
     public static string UnitSymbol { get; } = "min";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["'"];
@@ -33,10 +30,8 @@ public partial record Minute(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1 / (Scalar)60;
 }
 
-[KnownUnit<Time, Hour, Second, Scalar>]
-public partial record Hour(Scalar Value)
-    : Time.AffineUnit<Hour>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, Hour, Second, Scalar>(KnownUnitType.Linear)]
+public partial record Hour
 {
     public static string UnitSymbol { get; } = "h";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["hr", "hou"];
@@ -45,10 +40,8 @@ public partial record Hour(Scalar Value)
 }
 
 #if !D128
-[KnownUnit<Time, PlanckTime, Second, Scalar>]
-public partial record PlanckTime(Scalar Value)
-    : Time.AffineUnit<PlanckTime>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, PlanckTime, Second, Scalar>(KnownUnitType.Linear)]
+public partial record PlanckTime
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "tp";
@@ -60,40 +53,32 @@ public partial record PlanckTime(Scalar Value)
 }
 #endif
 
-[KnownUnit<Time, StandardDay, Second, Scalar>]
-public partial record StandardDay(Scalar Value)
-    : Time.AffineUnit<StandardDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, StandardDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record StandardDay
 {
     public static string UnitSymbol { get; } = "d";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.15740740740740740740740740740740740740740740740740740740741e-5;
 }
 
-[KnownUnit<Time, StandardWeek, Second, Scalar>]
-public partial record StandardWeek(Scalar Value)
-    : Time.AffineUnit<StandardWeek>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, StandardWeek, Second, Scalar>(KnownUnitType.Linear)]
+public partial record StandardWeek
 {
     public static string UnitSymbol { get; } = "w";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.6534391534391534391534391534391534391534391534391534391534e-6;
 }
 
-[KnownUnit<Time, Fortnight, Second, Scalar>]
-public partial record Fortnight(Scalar Value)
-    : Time.AffineUnit<Fortnight>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, Fortnight, Second, Scalar>(KnownUnitType.Linear)]
+public partial record Fortnight
 {
     public static string UnitSymbol { get; } = "ftn";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)8.267195767195767195767195767195767195767195767195767195767e-7;
 }
 
-[KnownUnit<Time, SolarDay, Second, Scalar>]
-public partial record SolarDay(Scalar Value)
-    : Time.AffineUnit<SolarDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SolarDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SolarDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d solar";
@@ -104,10 +89,8 @@ public partial record SolarDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.15740738061556989315810432504388136472496840914424978832755e-5;
 }
 
-[KnownUnit<Time, SolarYear, Second, Scalar>]
-public partial record SolarYear(Scalar Value)
-    : Time.AffineUnit<SolarYear>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SolarYear, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SolarYear
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "y solar";
@@ -118,10 +101,8 @@ public partial record SolarYear(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3.1688764886054404467120992835579306257576513095006304230054e-8;
 }
 
-[KnownUnit<Time, GalacticYear, Second, Scalar>]
-public partial record GalacticYear(Scalar Value)
-    : Time.AffineUnit<GalacticYear>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, GalacticYear, Second, Scalar>(KnownUnitType.Linear)]
+public partial record GalacticYear
 {
     public static string UnitSymbol { get; } = "GY";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["galactic y", "galactic yr", "cosmic yr", "cosmic y", "cosmic year"];
@@ -129,20 +110,16 @@ public partial record GalacticYear(Scalar Value)
     public static Scalar ScalingFactor { get; } = SolarYear.ScalingFactor / 2.25e-8;
 }
 
-[KnownUnit<Time, SiderialDay, Second, Scalar>]
-public partial record SiderialDay(Scalar Value)
-    : Time.AffineUnit<SiderialDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialDay
 {
     public static string UnitSymbol { get; } = "d";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.16057629112081378681072358566080138489247666864467552550024e-5;
 }
 
-[KnownUnit<Time, SiderialMercuryDay, Second, Scalar>]
-public partial record SiderialMercuryDay(Scalar Value)
-    : Time.AffineUnit<SiderialMercuryDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialMercuryDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialMercuryDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d mercury";
@@ -153,10 +130,8 @@ public partial record SiderialMercuryDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)6.5783587784250882815748064646847387339027560691938089749864e-8;
 }
 
-[KnownUnit<Time, SiderialVenusDay, Second, Scalar>]
-public partial record SiderialVenusDay(Scalar Value)
-    : Time.AffineUnit<SiderialVenusDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialVenusDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialVenusDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d venus";
@@ -167,10 +142,8 @@ public partial record SiderialVenusDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)9.9135538107700848600206201919264017765088428899992069156951e-8;
 }
 
-[KnownUnit<Time, SiderialMoonDay, Second, Scalar>]
-public partial record SiderialMoonDay(Scalar Value)
-    : Time.AffineUnit<SiderialMoonDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialMoonDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialMoonDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d moon";
@@ -181,10 +154,8 @@ public partial record SiderialMoonDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3.9195396892588934355549284292052741326058667670068827116943e-7;
 }
 
-[KnownUnit<Time, SiderialMarsDay, Second, Scalar>]
-public partial record SiderialMarsDay(Scalar Value)
-    : Time.AffineUnit<SiderialMarsDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialMarsDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialMarsDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d mars";
@@ -195,20 +166,16 @@ public partial record SiderialMarsDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.1246063877642825011246063877642825011246063877642825011246e-5;
 }
 
-[KnownUnit<Time, MarsDay, Second, Scalar>]
-public partial record MarsDay(Scalar Value)
-    : Time.AffineUnit<MarsDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, MarsDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record MarsDay
 {
     public static string UnitSymbol { get; } = "sol";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.12644325542100816671360180230920867361306674176288369473387e-5;
 }
 
-[KnownUnit<Time, SiderialCeresDay, Second, Scalar>]
-public partial record SiderialCeresDay(Scalar Value)
-    : Time.AffineUnit<SiderialCeresDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialCeresDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialCeresDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d ceres";
@@ -219,10 +186,8 @@ public partial record SiderialCeresDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3.0693677102516881522406384284837323511356660527931246163290e-5;
 }
 
-[KnownUnit<Time, SiderialJupiterDay, Second, Scalar>]
-public partial record SiderialJupiterDay(Scalar Value)
-    : Time.AffineUnit<SiderialJupiterDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialJupiterDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialJupiterDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d jupiter";
@@ -233,10 +198,8 @@ public partial record SiderialJupiterDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)2.8058361391694725028058361391694725028058361391694725028058e-5;
 }
 
-[KnownUnit<Time, SiderialSaturnDay, Second, Scalar>]
-public partial record SiderialSaturnDay(Scalar Value)
-    : Time.AffineUnit<SiderialSaturnDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialSaturnDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialSaturnDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d saturn";
@@ -247,10 +210,8 @@ public partial record SiderialSaturnDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)2.5960539979231568016614745586708203530633437175493250259605e-5;
 }
 
-[KnownUnit<Time, SiderialUranusDay, Second, Scalar>]
-public partial record SiderialUranusDay(Scalar Value)
-    : Time.AffineUnit<SiderialUranusDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialUranusDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialUranusDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d uranus"; // hehe
@@ -261,10 +222,8 @@ public partial record SiderialUranusDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.6149870801033591731266149870801033591731266149870801033591e-5;
 }
 
-[KnownUnit<Time, SiderialNeptuneDay, Second, Scalar>]
-public partial record SiderialNeptuneDay(Scalar Value)
-    : Time.AffineUnit<SiderialNeptuneDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialNeptuneDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialNeptuneDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d neptune";
@@ -275,10 +234,8 @@ public partial record SiderialNeptuneDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.7253278122843340234644582470669427191166321601104209799861e-5;
 }
 
-[KnownUnit<Time, SiderialPlutoDay, Second, Scalar>]
-public partial record SiderialPlutoDay(Scalar Value)
-    : Time.AffineUnit<SiderialPlutoDay>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, SiderialPlutoDay, Second, Scalar>(KnownUnitType.Linear)]
+public partial record SiderialPlutoDay
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "d pluto";
@@ -289,20 +246,16 @@ public partial record SiderialPlutoDay(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.8119881133579763716750018119881133579763716750018119881133e-6;
 }
 
-[KnownUnit<Time, Shake, Second, Scalar>]
-public partial record Shake(Scalar Value)
-    : Time.AffineUnit<Shake>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, Shake, Second, Scalar>(KnownUnitType.Linear)]
+public partial record Shake
 {
     public static string UnitSymbol { get; } = "shake";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e8;
 }
 
-[KnownUnit<Time, MicroFortnight, Second, Scalar>]
-public partial record MicroFortnight(Scalar Value)
-    : Time.AffineUnit<MicroFortnight>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, MicroFortnight, Second, Scalar>(KnownUnitType.Linear)]
+public partial record MicroFortnight
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "uftn";
@@ -314,10 +267,8 @@ public partial record MicroFortnight(Scalar Value)
     public static Scalar ScalingFactor { get; } = Fortnight.ScalingFactor * 1e6;
 }
 
-[KnownUnit<Time, Kermit, Second, Scalar>]
-public partial record Kermit(Scalar Value)
-    : Time.AffineUnit<Kermit>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, Kermit, Second, Scalar>(KnownUnitType.Linear)]
+public partial record Kermit
 {
     public static string UnitSymbol { get; } = "kermit";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["kermetric time", "kermetric"];

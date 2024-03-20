@@ -5,8 +5,7 @@ namespace Unknown6656.Units.Kinematics;
 
 
 [KnownBaseUnit<Absement, MeterSecond, Scalar>]
-public partial record MeterSecond(Scalar Value)
-    : BaseUnit<Absement, MeterSecond, Scalar>(Value)
+public partial record MeterSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m*s";
@@ -17,10 +16,8 @@ public partial record MeterSecond(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<Absement, MeterHour, MeterSecond, Scalar>]
-public partial record MeterHour(Scalar Value)
-    : Absement.AffineUnit<MeterHour>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, MeterHour, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record MeterHour
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m*h";
@@ -32,10 +29,8 @@ public partial record MeterHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / Hour.ScalingFactor;
 }
 
-[KnownUnit<Absement, InchSecond, MeterSecond, Scalar>]
-public partial record InchSecond(Scalar Value)
-    : Absement.AffineUnit<InchSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, InchSecond, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record InchSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "in*s";
@@ -47,10 +42,8 @@ public partial record InchSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = Inch.ScalingFactor;
 }
 
-[KnownUnit<Absement, FootSecond, MeterSecond, Scalar>]
-public partial record FootSecond(Scalar Value)
-    : Absement.AffineUnit<FootSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, FootSecond, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record FootSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft*s";
@@ -62,10 +55,8 @@ public partial record FootSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = Foot.ScalingFactor;
 }
 
-[KnownUnit<Absement, YardSecond, MeterSecond, Scalar>]
-public partial record YardSecond(Scalar Value)
-    : Absement.AffineUnit<YardSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, YardSecond, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record YardSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "yd*s";
@@ -77,10 +68,8 @@ public partial record YardSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = Yard.ScalingFactor;
 }
 
-[KnownUnit<Absement, MileSecond, MeterSecond, Scalar>]
-public partial record MileSecond(Scalar Value)
-    : Absement.AffineUnit<MileSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, MileSecond, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record MileSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "mi*s";
@@ -92,10 +81,8 @@ public partial record MileSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = Mile.ScalingFactor;
 }
 
-[KnownUnit<Absement, InchHour, MeterSecond, Scalar>]
-public partial record InchHour(Scalar Value)
-    : Absement.AffineUnit<InchHour>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, InchHour, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record InchHour
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "in*h";
@@ -107,10 +94,8 @@ public partial record InchHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = Inch.ScalingFactor / Hour.ScalingFactor;
 }
 
-[KnownUnit<Absement, FootHour, MeterSecond, Scalar>]
-public partial record FootHour(Scalar Value)
-    : Absement.AffineUnit<FootHour>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, FootHour, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record FootHour
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft*h";
@@ -122,10 +107,8 @@ public partial record FootHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = Foot.ScalingFactor / Hour.ScalingFactor;
 }
 
-[KnownUnit<Absement, YardHour, MeterSecond, Scalar>]
-public partial record YardHour(Scalar Value)
-    : Absement.AffineUnit<YardHour>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, YardHour, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record YardHour
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "yd*h";
@@ -137,10 +120,8 @@ public partial record YardHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = Yard.ScalingFactor / Hour.ScalingFactor;
 }
 
-[KnownUnit<Absement, MileHour, MeterSecond, Scalar>]
-public partial record MileHour(Scalar Value)
-    : Absement.AffineUnit<MileHour>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Absement, MileHour, MeterSecond, Scalar>(KnownUnitType.Linear)]
+public partial record MileHour
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "mi*h";

@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<LinearWavenumber, ReciprocalMeter, Scalar>]
-public partial record ReciprocalMeter(Scalar Value)
-    : BaseUnit<LinearWavenumber, ReciprocalMeter, Scalar>(Value)
+public partial record ReciprocalMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "{0}m^-1";
@@ -14,10 +13,8 @@ public partial record ReciprocalMeter(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.UseInverseFormatStrings;
 }
 
-[KnownUnit<LinearWavenumber, Kayser, ReciprocalMeter, Scalar>]
-public partial record Kayser(Scalar Value)
-    : LinearWavenumber.AffineUnit<Kayser>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LinearWavenumber, Kayser, ReciprocalMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Kayser
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cm^-1";

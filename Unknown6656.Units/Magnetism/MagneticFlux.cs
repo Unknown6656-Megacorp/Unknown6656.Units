@@ -2,17 +2,14 @@
 
 
 [KnownBaseUnit<MagneticFlux, Weber, Scalar>]
-public partial record Weber(Scalar Value)
-    : BaseUnit<MagneticFlux, Weber, Scalar>(Value)
+public partial record Weber
 {
     public static string UnitSymbol { get; } = "Wb";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<MagneticFlux, Maxwell, Weber, Scalar>]
-public partial record Maxwell(Scalar Value)
-    : MagneticFlux.AffineUnit<Maxwell>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<MagneticFlux, Maxwell, Weber, Scalar>(KnownUnitType.Linear)]
+public partial record Maxwell
 {
     public static string UnitSymbol { get; } = "Mx";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;

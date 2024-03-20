@@ -37,10 +37,8 @@ public partial record KilogramMeterPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1;
 }
 
-[KnownUnit<Impulse, KilogramKilometerPerHour, NewtonSecond, Scalar>]
-public partial record KilogramKilometerPerHour(Scalar Value)
-    : Impulse.AffineUnit<KilogramKilometerPerHour>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Impulse, KilogramKilometerPerHour, NewtonSecond, Scalar>(KnownUnitType.Linear)]
+public partial record KilogramKilometerPerHour
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "kg*km/h";
@@ -52,10 +50,8 @@ public partial record KilogramKilometerPerHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = KilometerPerHour.ScalingFactor;
 }
 
-[KnownUnit<Impulse, PoundFootPerSecond, NewtonSecond, Scalar>]
-public partial record PoundFootPerSecond(Scalar Value)
-    : Impulse.AffineUnit<PoundFootPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Impulse, PoundFootPerSecond, NewtonSecond, Scalar>(KnownUnitType.Linear)]
+public partial record PoundFootPerSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lb*ft/s";
@@ -67,10 +63,8 @@ public partial record PoundFootPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / FootPerSecond.ScalingFactor;
 }
 
-[KnownUnit<Impulse, PoundMilePerHour, NewtonSecond, Scalar>]
-public partial record PoundMilePerHour(Scalar Value)
-    : Impulse.AffineUnit<PoundMilePerHour>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Impulse, PoundMilePerHour, NewtonSecond, Scalar>(KnownUnitType.Linear)]
+public partial record PoundMilePerHour
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lb*mi/h";
@@ -82,10 +76,8 @@ public partial record PoundMilePerHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / MilePerHour.ScalingFactor;
 }
 
-[KnownUnit<Impulse, PoundSecond, NewtonSecond, Scalar>]
-public partial record PoundSecond(Scalar Value)
-    : Impulse.AffineUnit<PoundSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Impulse, PoundSecond, NewtonSecond, Scalar>(KnownUnitType.Linear)]
+public partial record PoundSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lbf*s";
@@ -97,10 +89,8 @@ public partial record PoundSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.224808943099717;
 }
 
-[KnownUnit<Impulse, SlugFootPerSecond, NewtonSecond, Scalar>]
-public partial record SlugFootPerSecond(Scalar Value)
-    : Impulse.AffineUnit<SlugFootPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Impulse, SlugFootPerSecond, NewtonSecond, Scalar>(KnownUnitType.Linear)]
+public partial record SlugFootPerSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "sl*ft/s";

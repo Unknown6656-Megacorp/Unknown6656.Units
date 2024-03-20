@@ -4,18 +4,15 @@ namespace Unknown6656.Units.Kinematics;
 
 
 [KnownBaseUnit<Torque, NewtonMeter, Scalar>]
-public partial record NewtonMeter(Scalar Value)
-    : BaseUnit<Torque, NewtonMeter, Scalar>(Value)
+public partial record NewtonMeter
 {
     public static string UnitSymbol { get; } = "Nm";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["newton m", "n meter"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<Torque, FootPound, NewtonMeter, Scalar>]
-public partial record FootPound(Scalar Value)
-    : Torque.AffineUnit<FootPound>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Torque, FootPound, NewtonMeter, Scalar>(KnownUnitType.Linear)]
+public partial record FootPound
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lb*ft";
@@ -27,10 +24,8 @@ public partial record FootPound(Scalar Value)
     public static Scalar ScalingFactor { get; } = PoundForce.ScalingFactor * Foot.ScalingFactor;
 }
 
-[KnownUnit<Torque, PoundInch, NewtonMeter, Scalar>]
-public partial record PoundInch(Scalar Value)
-    : Torque.AffineUnit<PoundInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Torque, PoundInch, NewtonMeter, Scalar>(KnownUnitType.Linear)]
+public partial record PoundInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lb*in";
@@ -42,10 +37,8 @@ public partial record PoundInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = PoundForce.ScalingFactor * Inch.ScalingFactor;
 }
 
-[KnownUnit<Torque, OunceInch, NewtonMeter, Scalar>]
-public partial record OunceInch(Scalar Value)
-    : Torque.AffineUnit<OunceInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Torque, OunceInch, NewtonMeter, Scalar>(KnownUnitType.Linear)]
+public partial record OunceInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "oz*in";

@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<Compressibility, SquareMeterPerNewton, Scalar>]
-public partial record SquareMeterPerNewton(Scalar Value)
-    : BaseUnit<Compressibility, SquareMeterPerNewton, Scalar>(Value)
+public partial record SquareMeterPerNewton
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m^2/N";

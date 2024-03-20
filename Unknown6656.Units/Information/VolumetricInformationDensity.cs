@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Information;
 
 
 [KnownBaseUnit<VolumetricInformationDensity, BitPerCubicMeter, Scalar>]
-public partial record BitPerCubicMeter(Scalar Value)
-    : BaseUnit<VolumetricInformationDensity, BitPerCubicMeter, Scalar>(Value)
+public partial record BitPerCubicMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "bit/m^3";
@@ -16,10 +15,8 @@ public partial record BitPerCubicMeter(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<VolumetricInformationDensity, BitPerCubicMillimeter, BitPerCubicMeter, Scalar>]
-public partial record BitPerCubicMillimeter(Scalar Value)
-    : VolumetricInformationDensity.AffineUnit<BitPerCubicMillimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricInformationDensity, BitPerCubicMillimeter, BitPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerCubicMillimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "bit/mm^3";
@@ -31,10 +28,8 @@ public partial record BitPerCubicMillimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / CubicMillimeter.ScalingFactor;
 }
 
-[KnownUnit<VolumetricInformationDensity, BytePerCubicMeter, BitPerCubicMeter, Scalar>]
-public partial record BytePerCubicMeter(Scalar Value)
-    : VolumetricInformationDensity.AffineUnit<BytePerCubicMeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricInformationDensity, BytePerCubicMeter, BitPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerCubicMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "B/m^3";
@@ -46,7 +41,7 @@ public partial record BytePerCubicMeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor;
 }
 
-[KnownUnit<VolumetricInformationDensity, BytePerCubicMillimeter, BitPerCubicMeter, Scalar>]
+[KnownUnit<VolumetricInformationDensity, BytePerCubicMillimeter, BitPerCubicMeter, Scalar>(KnownUnitType.Linear)]
 public partial record BytePerCubicMillimeter(Scalar Value)
     : VolumetricInformationDensity.AffineUnit<BytePerCubicMillimeter>(Value)
     , ILinearUnit<Scalar>
@@ -61,10 +56,8 @@ public partial record BytePerCubicMillimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor / CubicMillimeter.ScalingFactor;
 }
 
-[KnownUnit<VolumetricInformationDensity, BitPerCubicInch, BitPerCubicMeter, Scalar>]
-public partial record BitPerCubicInch(Scalar Value)
-    : VolumetricInformationDensity.AffineUnit<BitPerCubicInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricInformationDensity, BitPerCubicInch, BitPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerCubicInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "bit/in^3";
@@ -76,10 +69,8 @@ public partial record BitPerCubicInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / CubicInch.ScalingFactor;
 }
 
-[KnownUnit<VolumetricInformationDensity, BytePerCubicInch, BitPerCubicMeter, Scalar>]
-public partial record BytePerCubicInch(Scalar Value)
-    : VolumetricInformationDensity.AffineUnit<BytePerCubicInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricInformationDensity, BytePerCubicInch, BitPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerCubicInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "B/in^3";
@@ -91,10 +82,8 @@ public partial record BytePerCubicInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor / CubicInch.ScalingFactor;
 }
 
-[KnownUnit<VolumetricInformationDensity, BitPerCubicFoot, BitPerCubicMeter, Scalar>]
-public partial record BitPerCubicFoot(Scalar Value)
-    : VolumetricInformationDensity.AffineUnit<BitPerCubicFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricInformationDensity, BitPerCubicFoot, BitPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerCubicFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "bit/ft^3";
@@ -106,10 +95,8 @@ public partial record BitPerCubicFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / CubicFoot.ScalingFactor;
 }
 
-[KnownUnit<VolumetricInformationDensity, BytePerCubicFoot, BitPerCubicMeter, Scalar>]
-public partial record BytePerCubicFoot(Scalar Value)
-    : VolumetricInformationDensity.AffineUnit<BytePerCubicFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricInformationDensity, BytePerCubicFoot, BitPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerCubicFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "B/ft^3";

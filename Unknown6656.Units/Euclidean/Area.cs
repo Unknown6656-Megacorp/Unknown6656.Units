@@ -4,8 +4,7 @@
 
 
 [KnownBaseUnit<Area, SquareMeter, Scalar>]
-public partial record SquareMeter(Scalar Value)
-    : BaseUnit<Area, SquareMeter, Scalar>(Value)
+public partial record SquareMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m^2";
@@ -16,10 +15,8 @@ public partial record SquareMeter(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
-[KnownUnit<Area, SquareCentimeter, SquareMeter, Scalar>]
-public partial record SquareCentimeter(Scalar Value)
-    : Area.AffineUnit<SquareCentimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, SquareCentimeter, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record SquareCentimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cm^2";
@@ -31,10 +28,8 @@ public partial record SquareCentimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e4;
 }
 
-[KnownUnit<Area, SquareMillimeter, SquareMeter, Scalar>]
-public partial record SquareMillimeter(Scalar Value)
-    : Area.AffineUnit<SquareMillimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, SquareMillimeter, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record SquareMillimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "mm^2";
@@ -46,10 +41,8 @@ public partial record SquareMillimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e6;
 }
 
-[KnownUnit<Area, SquareFoot, SquareMeter, Scalar>]
-public partial record SquareFoot(Scalar Value)
-    : Area.AffineUnit<SquareFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, SquareFoot, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record SquareFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft^2";
@@ -61,10 +54,8 @@ public partial record SquareFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = Foot.ScalingFactor * Foot.ScalingFactor;
 }
 
-[KnownUnit<Area, SquareInch, SquareMeter, Scalar>]
-public partial record SquareInch(Scalar Value)
-    : Area.AffineUnit<SquareInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, SquareInch, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record SquareInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "in^2";
@@ -76,20 +67,16 @@ public partial record SquareInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = Inch.ScalingFactor * Inch.ScalingFactor;
 }
 
-[KnownUnit<Area, Acre, SquareMeter, Scalar>]
-public partial record Acre(Scalar Value)
-    : Area.AffineUnit<Acre>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Acre, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Acre
 {
     public static string UnitSymbol { get; } = "ac";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)2.47105381467165348551e-4;
 }
 
-[KnownUnit<Area, Hectare, SquareMeter, Scalar>]
-public partial record Hectare(Scalar Value)
-    : Area.AffineUnit<Hectare>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Hectare, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Hectare
 {
     public static string UnitSymbol { get; } = "ha";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["hectar", "hektar"];
@@ -97,10 +84,8 @@ public partial record Hectare(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e-4;
 }
 
-[KnownUnit<Area, SquareKilometer, SquareMeter, Scalar>]
-public partial record SquareKilometer(Scalar Value)
-    : Area.AffineUnit<SquareKilometer>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, SquareKilometer, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record SquareKilometer
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "km^2";
@@ -112,30 +97,24 @@ public partial record SquareKilometer(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e-6;
 }
 
-[KnownUnit<Area, Barn, SquareMeter, Scalar>]
-public partial record Barn(Scalar Value)
-    : Area.AffineUnit<Barn>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Barn, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Barn
 {
     public static string UnitSymbol { get; } = "b";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e28;
 }
 
-[KnownUnit<Area, Square, SquareMeter, Scalar>]
-public partial record Square(Scalar Value)
-    : Area.AffineUnit<Square>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Square, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Square
 {
     public static string UnitSymbol { get; } = "square";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = SquareFoot.ScalingFactor * 100;
 }
 
-[KnownUnit<Area, FIFAFootballField, SquareMeter, Scalar>]
-public partial record FIFAFootballField(Scalar Value)
-    : Area.AffineUnit<FIFAFootballField>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, FIFAFootballField, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record FIFAFootballField
 {
     public static string UnitSymbol { get; } = "FIFA field";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["field", "field FIFA", "FIFA football pitch", "FIFA pitch", "football field FIFA", "football pitch FIFA"];
@@ -143,10 +122,8 @@ public partial record FIFAFootballField(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.400560224089635854341736694677871148459383753501400560224089e-4;
 }
 
-[KnownUnit<Area, AmericanFootballField, SquareMeter, Scalar>]
-public partial record AmericanFootballField(Scalar Value)
-    : Area.AffineUnit<AmericanFootballField>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, AmericanFootballField, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record AmericanFootballField
 {
     public static string UnitSymbol { get; } = "US field";
     static string[] IUnit.AlternativeUnitSymbols { get; } = [
@@ -158,10 +135,8 @@ public partial record AmericanFootballField(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.868734447345437900752344714565972341821226852330247870372283e-4;
 }
 
-[KnownUnit<Area, CanadianFootballPitch, SquareMeter, Scalar>]
-public partial record CanadianFootballPitch(Scalar Value)
-    : Area.AffineUnit<CanadianFootballPitch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, CanadianFootballPitch, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record CanadianFootballPitch
 {
     public static string UnitSymbol { get; } = "CA field";
     static string[] IUnit.AlternativeUnitSymbols { get; } = [
@@ -173,10 +148,8 @@ public partial record CanadianFootballPitch(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.672713351470042316757343520730380837434384874813089002850715e-4;
 }
 
-[KnownUnit<Area, Morgen, SquareMeter, Scalar>]
-public partial record Morgen(Scalar Value)
-    : Area.AffineUnit<Morgen>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Morgen, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Morgen
 {
     public static string UnitSymbol { get; } = "Mg";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;

@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<Jerk, MeterPerSecondCubed, Scalar>]
-public partial record MeterPerSecondCubed(Scalar Value)
-    : BaseUnit<Jerk, MeterPerSecondCubed, Scalar>(Value)
+public partial record MeterPerSecondCubed
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m/s^2";
@@ -14,10 +13,8 @@ public partial record MeterPerSecondCubed(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<Jerk, FootPerSecondCubed, MeterPerSecondCubed, Scalar>]
-public partial record FootPerSecondCubed(Scalar Value)
-    : Jerk.AffineUnit<FootPerSecondCubed>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Jerk, FootPerSecondCubed, MeterPerSecondCubed, Scalar>(KnownUnitType.Linear)]
+public partial record FootPerSecondCubed
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft/s^2";
