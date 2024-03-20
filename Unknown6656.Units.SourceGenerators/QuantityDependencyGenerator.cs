@@ -8,6 +8,7 @@ using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
+using System.Diagnostics;
 
 namespace Unknown6656.Units.Internals;
 
@@ -129,48 +130,57 @@ public sealed class QuantityDependencyGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        //System.Diagnostics.Debugger.Launch();
+         Debugger.Launch();
 
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> identity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_IdentityRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_aliases = FetchTypeDeclarationsByAttribute(context, Identifier_KnownAlias);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
-        IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
-                                                                                   .CreateSyntaxProvider(
-                                                                                       predicate: static (s, _) => s is AttributeListSyntax { Attributes.Count: > 0 },
-                                                                                       transform: (ctx, _) => HasDisableEmittingIUnitInterfacesDefined(ctx)
-                                                                                   )
-                                                                                   .Where(static x => x);
+        try
+        {
 
-        // which idiot decided to name this stuff "left" and "right"? and not to provide an extension method for combining 3 or more IncrementalValueProvider<>?
-        var combined = context.CompilationProvider.Combine(multiplicative_dependencies.Collect())
-                                                  .Combine(inverse_dependencies.Collect())
-                                                  .Select(static (t, _) => (comp: t.Left.Left, mul: t.Left.Right, inv: t.Right))
-                                                  .Combine(identity_dependencies.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, id: t.Right))
-                                                  .Combine(known_base_units.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, base_units: t.Right))
-                                                  .Combine(known_units.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, units: t.Right))
-                                                  .Combine(known_aliases.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, aliases: t.Right))
-                                                  .Combine(disable_emitting_iunit_interfaces.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, t.Left.aliases, disable: t.Right.Contains(true)));
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeRelationship);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> identity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_IdentityRelationship);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_aliases = FetchTypeDeclarationsByAttribute(context, Identifier_KnownAlias);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
+            IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
+                                                                                       .CreateSyntaxProvider(
+                                                                                           predicate: static (s, _) => s is AttributeListSyntax { Attributes.Count: > 0 },
+                                                                                           transform: (ctx, _) => HasDisableEmittingIUnitInterfacesDefined(ctx)
+                                                                                       )
+                                                                                       .Where(static x => x);
 
-        context.RegisterSourceOutput(combined, (spc, source) => Execute(
-            context,
-            spc,
-            source.comp,
-            [.. source.mul.SelectMany(x => x)],
-            [.. source.inv.SelectMany(x => x)],
-            [.. source.id.SelectMany(x => x)],
-            [.. source.base_units.SelectMany(x => x)],
-            [.. source.units.SelectMany(x => x)],
-            [.. source.aliases.SelectMany(x => x)],
-            source.disable
-        ));
+            // which idiot decided to name this stuff "left" and "right"? and not to provide an extension method for combining 3 or more IncrementalValueProvider<>?
+            var combined = context.CompilationProvider.Combine(multiplicative_dependencies.Collect())
+                                                      .Combine(inverse_dependencies.Collect())
+                                                      .Select(static (t, _) => (comp: t.Left.Left, mul: t.Left.Right, inv: t.Right))
+                                                      .Combine(identity_dependencies.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, id: t.Right))
+                                                      .Combine(known_base_units.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, base_units: t.Right))
+                                                      .Combine(known_units.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, units: t.Right))
+                                                      .Combine(known_aliases.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, aliases: t.Right))
+                                                      .Combine(disable_emitting_iunit_interfaces.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, t.Left.aliases, disable: t.Right.Contains(true)));
+
+            context.RegisterSourceOutput(combined, (spc, source) => Execute(
+                context,
+                spc,
+                source.comp,
+                [.. source.mul.SelectMany(x => x)],
+                [.. source.inv.SelectMany(x => x)],
+                [.. source.id.SelectMany(x => x)],
+                [.. source.base_units.SelectMany(x => x)],
+                [.. source.units.SelectMany(x => x)],
+                [.. source.aliases.SelectMany(x => x)],
+                source.disable
+            ));
+        }
+        catch (Exception ex)
+        when (Debugger.IsAttached)
+        {
+            Debugger.Break();
+        }
     }
 
     private static IncrementalValuesProvider<GenericAttributeClassUsage[]> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, Identifier attribute_name) => context.SyntaxProvider
@@ -331,6 +341,9 @@ public sealed class QuantityDependencyGenerator
                 known_units_dict[quantity] = entry;
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
                 unit_types[target_name] = Enum.TryParse(unit_type, true, out UnitType t) ? t : UnitType.Linear;
+
+                if (target_name.EndsWith(".Byte"))
+                    ;
             }
 
         foreach (GenericAttributeClassUsage usage in known_base_units)
@@ -379,6 +392,8 @@ public sealed class QuantityDependencyGenerator
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [alias_target_name]));
             else if (usage.AttributeArguments is AttributeArgumentSyntax[] { Length: > 1 } args && args[0].Expression is LiteralExpressionSyntax { Token.ValueText: string alias_name })
             {
+                Debug.Print((alias_target_name, alias_name) + "");
+
                 string cs_unit_symbol = args[1].ToFullString();
                 string[] cs_symbol_alias = args.Skip(2).Select(a => a.ToFullString()).ToArray();
                 Identifier t_quantity = usage.GenericAttributeArguments[0];
@@ -387,7 +402,14 @@ public sealed class QuantityDependencyGenerator
 
                 known_units_dict[t_quantity].units.Add(target_name);
                 locations[target_name] = usage.TargetType.GetLocation();
+
+                Debug.Print("\tS");
+                if (alias_name == "Octet")
+                    ;
+
                 unit_scalar_mapper[target_name] = unit_scalar_mapper[t_unit];
+
+                Debug.Print("\tA");
 
                 alias_infos.Add(new(
                     usage.AttributeLocation,
