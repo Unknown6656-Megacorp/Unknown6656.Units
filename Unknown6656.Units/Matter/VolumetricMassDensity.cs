@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Matter;
 
 
 [KnownBaseUnit<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>]
-public partial record KilogramPerCubicMeter(Scalar Value)
-    : BaseUnit<VolumetricMassDensity, KilogramPerCubicMeter, Scalar>(Value)
+public partial record KilogramPerCubicMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "kg/m^3";
@@ -16,10 +15,8 @@ public partial record KilogramPerCubicMeter(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 
-[KnownUnit<VolumetricMassDensity, GramPerCubicMeter, KilogramPerCubicMeter, Scalar>]
-public partial record GramPerCubicMeter(Scalar Value)
-    : VolumetricMassDensity.AffineUnit<GramPerCubicMeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricMassDensity, GramPerCubicMeter, KilogramPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record GramPerCubicMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "g/m^3";
@@ -31,10 +28,8 @@ public partial record GramPerCubicMeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Gram.ScalingFactor;
 }
 
-[KnownUnit<VolumetricMassDensity, GramPerLiter, KilogramPerCubicMeter, Scalar>]
-public partial record GramPerLiter(Scalar Value)
-    : VolumetricMassDensity.AffineUnit<GramPerLiter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricMassDensity, GramPerLiter, KilogramPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record GramPerLiter
 {
     public static string UnitSymbol { get; } = "g/L";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["g/liter", "gram/L"];
@@ -42,10 +37,8 @@ public partial record GramPerLiter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Gram.ScalingFactor / Liter.ScalingFactor;
 }
 
-[KnownUnit<VolumetricMassDensity, GramPerCubicCentimeter, KilogramPerCubicMeter, Scalar>]
-public partial record GramPerCubicCentimeter(Scalar Value)
-    : VolumetricMassDensity.AffineUnit<GramPerCubicCentimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricMassDensity, GramPerCubicCentimeter, KilogramPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record GramPerCubicCentimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "g/cm^3";
@@ -57,10 +50,8 @@ public partial record GramPerCubicCentimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Gram.ScalingFactor / CubicCentimeter.ScalingFactor;
 }
 
-[KnownUnit<VolumetricMassDensity, PoundPerCubicInch, KilogramPerCubicMeter, Scalar>]
-public partial record PoundPerCubicInch(Scalar Value)
-    : VolumetricMassDensity.AffineUnit<PoundPerCubicInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricMassDensity, PoundPerCubicInch, KilogramPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record PoundPerCubicInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lb/in^3";
@@ -72,10 +63,8 @@ public partial record PoundPerCubicInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / CubicInch.ScalingFactor;
 }
 
-[KnownUnit<VolumetricMassDensity, PoundPerCubicFoot, KilogramPerCubicMeter, Scalar>]
-public partial record PoundPerCubicFoot(Scalar Value)
-    : VolumetricMassDensity.AffineUnit<PoundPerCubicFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricMassDensity, PoundPerCubicFoot, KilogramPerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record PoundPerCubicFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lb/ft^3";
