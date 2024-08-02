@@ -61,9 +61,8 @@ public partial record Calorie
     public static Scalar ScalingFactor { get; } = (Scalar)0.2390057361376673;
 }
 
-[KnownUnit<KineticEnergy, InternationalSteamTableCalorie, Joule, Scalar>]
+[KnownUnit<KineticEnergy, InternationalSteamTableCalorie, Joule, Scalar>(KnownUnitType.Linear)]
 public partial record InternationalSteamTableCalorie
-    : ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cal";

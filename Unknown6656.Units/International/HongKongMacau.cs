@@ -96,8 +96,6 @@ public partial record Zoeng
 
 [KnownUnit<Area, AreaFan, SquareMeter, Scalar>(KnownUnitType.Linear)]
 public partial record AreaFan
-    : Area.AffineUnit<AreaFan>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "fan";

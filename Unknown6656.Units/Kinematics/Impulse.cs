@@ -10,8 +10,7 @@ namespace Unknown6656.Units.Kinematics;
 //#else
 //[KnownAlias<Impulse, NewtonSecond, Scalar>("KilogramMeterPerSecond", "kg·m/s")]
 //#endif
-public partial record NewtonSecond(Scalar Value)
-    : BaseUnit<Impulse, NewtonSecond, Scalar>(Value)
+public partial record NewtonSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "N*s";
@@ -22,10 +21,8 @@ public partial record NewtonSecond(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<Impulse, KilogramMeterPerSecond, NewtonSecond, Scalar>]
-public partial record KilogramMeterPerSecond(Scalar Value)
-    : Impulse.AffineUnit<KilogramMeterPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Impulse, KilogramMeterPerSecond, NewtonSecond, Scalar>(KnownUnitType.Linear)]
+public partial record KilogramMeterPerSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "kg*m/s";

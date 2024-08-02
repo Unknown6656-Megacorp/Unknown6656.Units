@@ -3,7 +3,7 @@
 namespace Unknown6656.Units.Kinematics;
 
 
-[KnownBaseUnit<MassFlowRate, KilogramPerSecond, Scalar>(KnownUnitType.Linear)]
+[KnownBaseUnit<MassFlowRate, KilogramPerSecond, Scalar>]
 public partial record KilogramPerSecond
 {
     public static string UnitSymbol { get; } = "kg/s";

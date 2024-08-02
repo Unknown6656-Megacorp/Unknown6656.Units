@@ -38,9 +38,7 @@ public partial record BytePerKilogram
 }
 
 [KnownUnit<SpecificInformationCapacity, BytePerGram, BitPerKilogram, Scalar>(KnownUnitType.Linear)]
-public partial record BytePerGram(Scalar Value)
-    : SpecificInformationCapacity.AffineUnit<BytePerGram>(Value)
-    , ILinearUnit<Scalar>
+public partial record BytePerGram
 {
     public static string UnitSymbol { get; } = "B/g";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/g", "byte/gram", "B/gram"];

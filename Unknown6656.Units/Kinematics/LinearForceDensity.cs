@@ -3,7 +3,7 @@
 namespace Unknown6656.Units.Kinematics;
 
 
-[KnownBaseUnit<LinearForceDensity, NewtonPerMeter, Scalar>(KnownUnitType.Linear)]
+[KnownBaseUnit<LinearForceDensity, NewtonPerMeter, Scalar>]
 public partial record NewtonPerMeter
 {
     public static string UnitSymbol { get; } = "N/m";

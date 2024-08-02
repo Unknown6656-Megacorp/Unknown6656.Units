@@ -42,9 +42,7 @@ public partial record BytePerCubicMeter
 }
 
 [KnownUnit<VolumetricInformationDensity, BytePerCubicMillimeter, BitPerCubicMeter, Scalar>(KnownUnitType.Linear)]
-public partial record BytePerCubicMillimeter(Scalar Value)
-    : VolumetricInformationDensity.AffineUnit<BytePerCubicMillimeter>(Value)
-    , ILinearUnit<Scalar>
+public partial record BytePerCubicMillimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "B/mm^3";

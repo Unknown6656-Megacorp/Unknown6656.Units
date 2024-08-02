@@ -107,8 +107,6 @@ public partial record ImperialChǐ
 #else
 public partial record Chi
 #endif
-    : Length.AffineUnit<ImperialChǐ>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "chi";
