@@ -1,4 +1,4 @@
-using Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Matter;
 using Unknown6656.Units.Kinematics;
@@ -114,6 +114,13 @@ public partial record ThermalResistivity(KelvinMeterPerWatt value)
     public static string QuantitySymbol { get; } = "ρ";
 #endif
 }
+
+public partial record ThermalDiffusivity //  m^2/s
+{
+    // TODO
+}
+
+public partial record ThermalExpansion //  1/K
 {
     // TODO
 }
