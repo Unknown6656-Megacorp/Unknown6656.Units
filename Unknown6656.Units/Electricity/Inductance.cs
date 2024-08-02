@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<Inductance, Henry, Scalar>]
-public partial record Henry(Scalar Value)
-    : BaseUnit<Inductance, Henry, Scalar>(Value)
+public partial record Henry
 {
     public static string UnitSymbol { get; } = "H";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;

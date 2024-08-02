@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Kinematics;
 
 
 [KnownBaseUnit<Acceleration, MeterPerSecondSquared, Scalar>]
-public partial record MeterPerSecondSquared(Scalar Value)
-    : BaseUnit<Acceleration, MeterPerSecondSquared, Scalar>(Value)
+public partial record MeterPerSecondSquared
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m/s^2";
@@ -16,10 +15,8 @@ public partial record MeterPerSecondSquared(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<Acceleration, FootPerSecondSquared, MeterPerSecondSquared, Scalar>]
-public partial record FootPerSecondSquared(Scalar Value)
-    : Acceleration.AffineUnit<FootPerSecondSquared>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Acceleration, FootPerSecondSquared, MeterPerSecondSquared, Scalar>(KnownUnitType.Linear)]
+public partial record FootPerSecondSquared
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft/s^2";
@@ -31,20 +28,16 @@ public partial record FootPerSecondSquared(Scalar Value)
     public static Scalar ScalingFactor { get; } = Foot.ScalingFactor;
 }
 
-[KnownUnit<Acceleration, Gal, MeterPerSecondSquared, Scalar>]
-public partial record Gal(Scalar Value)
-    : Acceleration.AffineUnit<Gal>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Acceleration, Gal, MeterPerSecondSquared, Scalar>(KnownUnitType.Linear)]
+public partial record Gal
 {
     public static string UnitSymbol { get; } = "Gal";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e2;
 }
 
-[KnownUnit<Acceleration, G, MeterPerSecondSquared, Scalar>]
-public partial record G(Scalar Value)
-    : Acceleration.AffineUnit<G>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Acceleration, G, MeterPerSecondSquared, Scalar>(KnownUnitType.Linear)]
+public partial record G
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "g";

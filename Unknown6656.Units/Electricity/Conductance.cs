@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<Conductance, Siemens, Scalar>]
-public partial record Siemens(Scalar Value)
-    : BaseUnit<Conductance, Siemens, Scalar>(Value)
+public partial record Siemens
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "S";

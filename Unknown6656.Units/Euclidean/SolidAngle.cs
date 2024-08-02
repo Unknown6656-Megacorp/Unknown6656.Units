@@ -2,18 +2,15 @@
 
 
 [KnownBaseUnit<SolidAngle, Steradian, Scalar>]
-public partial record Steradian(Scalar Value)
-    : BaseUnit<SolidAngle, Steradian, Scalar>(Value)
+public partial record Steradian
 {
     public static string UnitSymbol { get; } = "sr";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["rad^2", "radian^2", "sq rad", "square rad", "sq radian", "sterad"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<SolidAngle, SquareDegree, Steradian, Scalar>]
-public partial record SquareDegree(Scalar Value)
-    : SolidAngle.AffineUnit<SquareDegree>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<SolidAngle, SquareDegree, Steradian, Scalar>(KnownUnitType.Linear)]
+public partial record SquareDegree
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "deg^2";

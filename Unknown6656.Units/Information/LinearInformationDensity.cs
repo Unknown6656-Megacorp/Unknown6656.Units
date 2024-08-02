@@ -4,18 +4,15 @@ namespace Unknown6656.Units.Information;
 
 
 [KnownBaseUnit<LinearInformationDensity, BitPerMeter, Scalar>]
-public partial record BitPerMeter(Scalar Value)
-    : BaseUnit<LinearInformationDensity, BitPerMeter, Scalar>(Value)
+public partial record BitPerMeter
 {
     public static string UnitSymbol { get; } = "bit/m";
     static string[] IUnit.AlternativeUnitSymbols { get; } = [];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<LinearInformationDensity, BitPerMillimeter, BitPerMeter, Scalar>]
-public partial record BitPerMillimeter(Scalar Value)
-    : LinearInformationDensity.AffineUnit<BitPerMillimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LinearInformationDensity, BitPerMillimeter, BitPerMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerMillimeter
 {
     public static string UnitSymbol { get; } = "bit/mm";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/millimeter"];
@@ -23,10 +20,8 @@ public partial record BitPerMillimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
-[KnownUnit<LinearInformationDensity, BytePerMeter, BitPerMeter, Scalar>]
-public partial record BytePerMeter(Scalar Value)
-    : LinearInformationDensity.AffineUnit<BytePerMeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LinearInformationDensity, BytePerMeter, BitPerMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerMeter
 {
     public static string UnitSymbol { get; } = "B/m";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/meter", "B/meter"];
@@ -34,10 +29,8 @@ public partial record BytePerMeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor;
 }
 
-[KnownUnit<LinearInformationDensity, BytePerMillimeter, BitPerMeter, Scalar>]
-public partial record BytePerMillimeter(Scalar Value)
-    : LinearInformationDensity.AffineUnit<BytePerMillimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LinearInformationDensity, BytePerMillimeter, BitPerMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerMillimeter
 {
     public static string UnitSymbol { get; } = "B/mm";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/millimeter", "B/millimeter", "byte/mm"];
@@ -45,10 +38,8 @@ public partial record BytePerMillimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor / 1e3;
 }
 
-[KnownUnit<LinearInformationDensity, BitPerInch, BitPerMeter, Scalar>]
-public partial record BitPerInch(Scalar Value)
-    : LinearInformationDensity.AffineUnit<BitPerInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LinearInformationDensity, BitPerInch, BitPerMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerInch
 {
     public static string UnitSymbol { get; } = "bit/in";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/inch"];
@@ -56,10 +47,8 @@ public partial record BitPerInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / Inch.ScalingFactor;
 }
 
-[KnownUnit<LinearInformationDensity, BytePerInch, BitPerMeter, Scalar>]
-public partial record BytePerInch(Scalar Value)
-    : LinearInformationDensity.AffineUnit<BytePerInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LinearInformationDensity, BytePerInch, BitPerMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerInch
 {
     public static string UnitSymbol { get; } = "B/in";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/inch", "B/inch", "byte/in"];
@@ -67,10 +56,8 @@ public partial record BytePerInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor / Inch.ScalingFactor;
 }
 
-[KnownUnit<LinearInformationDensity, BitPerFoot, BitPerMeter, Scalar>]
-public partial record BitPerFoot(Scalar Value)
-    : LinearInformationDensity.AffineUnit<BitPerFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LinearInformationDensity, BitPerFoot, BitPerMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerFoot
 {
     public static string UnitSymbol { get; } = "bit/ft";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/foot"];
@@ -78,10 +65,8 @@ public partial record BitPerFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / Foot.ScalingFactor;
 }
 
-[KnownUnit<LinearInformationDensity, BytePerFoot, BitPerMeter, Scalar>]
-public partial record BytePerFoot(Scalar Value)
-    : LinearInformationDensity.AffineUnit<BytePerFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LinearInformationDensity, BytePerFoot, BitPerMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerFoot
 {
     public static string UnitSymbol { get; } = "B/ft";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/foot", "B/foot", "byte/ft"];

@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<ThermalEntropy, JoulePerKelvin, Scalar>]
-public partial record JoulePerKelvin(Scalar Value)
-    : BaseUnit<ThermalEntropy, JoulePerKelvin, Scalar>(Value)
+public partial record JoulePerKelvin
 {
     public static string UnitSymbol { get; } = "J/K";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["joule/K", "J/kelvin", "joule/kelvin"];

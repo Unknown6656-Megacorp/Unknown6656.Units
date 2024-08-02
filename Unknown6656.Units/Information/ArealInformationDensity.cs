@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Information;
 
 
 [KnownBaseUnit<ArealInformationDensity, BitPerSquareMeter, Scalar>]
-public partial record BitPerSquareMeter(Scalar Value)
-    : BaseUnit<ArealInformationDensity, BitPerSquareMeter, Scalar>(Value)
+public partial record BitPerSquareMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "bit/m^2";
@@ -16,10 +15,8 @@ public partial record BitPerSquareMeter(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<ArealInformationDensity, BitPerSquareMillimeter, BitPerSquareMeter, Scalar>]
-public partial record BitPerSquareMillimeter(Scalar Value)
-    : ArealInformationDensity.AffineUnit<BitPerSquareMillimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<ArealInformationDensity, BitPerSquareMillimeter, BitPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerSquareMillimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "bit/mm^2";
@@ -31,10 +28,8 @@ public partial record BitPerSquareMillimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / SquareMillimeter.ScalingFactor;
 }
 
-[KnownUnit<ArealInformationDensity, BytePerSquareMeter, BitPerSquareMeter, Scalar>]
-public partial record BytePerSquareMeter(Scalar Value)
-    : ArealInformationDensity.AffineUnit<BytePerSquareMeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<ArealInformationDensity, BytePerSquareMeter, BitPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerSquareMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "B/m^2";
@@ -46,10 +41,8 @@ public partial record BytePerSquareMeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor;
 }
 
-[KnownUnit<ArealInformationDensity, BytePerSquareMillimeter, BitPerSquareMeter, Scalar>]
-public partial record BytePerSquareMillimeter(Scalar Value)
-    : ArealInformationDensity.AffineUnit<BytePerSquareMillimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<ArealInformationDensity, BytePerSquareMillimeter, BitPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerSquareMillimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "B/mm^2";
@@ -61,10 +54,8 @@ public partial record BytePerSquareMillimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor / SquareMillimeter.ScalingFactor;
 }
 
-[KnownUnit<ArealInformationDensity, BitPerSquareInch, BitPerSquareMeter, Scalar>]
-public partial record BitPerSquareInch(Scalar Value)
-    : ArealInformationDensity.AffineUnit<BitPerSquareInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<ArealInformationDensity, BitPerSquareInch, BitPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerSquareInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "bit/in^2";
@@ -76,10 +67,8 @@ public partial record BitPerSquareInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / SquareInch.ScalingFactor;
 }
 
-[KnownUnit<ArealInformationDensity, BytePerSquareInch, BitPerSquareMeter, Scalar>]
-public partial record BytePerSquareInch(Scalar Value)
-    : ArealInformationDensity.AffineUnit<BytePerSquareInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<ArealInformationDensity, BytePerSquareInch, BitPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerSquareInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "B/in^2";
@@ -91,10 +80,8 @@ public partial record BytePerSquareInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = Byte.ScalingFactor / SquareInch.ScalingFactor;
 }
 
-[KnownUnit<ArealInformationDensity, BitPerSquareFoot, BitPerSquareMeter, Scalar>]
-public partial record BitPerSquareFoot(Scalar Value)
-    : ArealInformationDensity.AffineUnit<BitPerSquareFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<ArealInformationDensity, BitPerSquareFoot, BitPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BitPerSquareFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "bit/ft^2";
@@ -106,10 +93,8 @@ public partial record BitPerSquareFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / SquareFoot.ScalingFactor;
 }
 
-[KnownUnit<ArealInformationDensity, BytePerSquareFoot, BitPerSquareMeter, Scalar>]
-public partial record BytePerSquareFoot(Scalar Value)
-    : ArealInformationDensity.AffineUnit<BytePerSquareFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<ArealInformationDensity, BytePerSquareFoot, BitPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerSquareFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "B/ft^2";

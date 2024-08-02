@@ -2,18 +2,15 @@ namespace Unknown6656.Units.Information;
 
 
 [KnownBaseUnit<BitRate, BitPerSecond, Scalar>]
-public partial record BitPerSecond(Scalar Value)
-    : BaseUnit<BitRate, BitPerSecond, Scalar>(Value)
+public partial record BitPerSecond
 {
     public static string UnitSymbol { get; } = "bps";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bit/s", "bit/sec"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<BitRate, BytePerSecond, BitPerSecond, Scalar>]
-public partial record BytePerSecond(Scalar Value)
-    : BitRate.AffineUnit<BytePerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<BitRate, BytePerSecond, BitPerSecond, Scalar>(KnownUnitType.Linear)]
+public partial record BytePerSecond
 {
     public static string UnitSymbol { get; } = "B/s";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["byte/s", "B/second", "byte/second", "byte/sec", "B/sec"];

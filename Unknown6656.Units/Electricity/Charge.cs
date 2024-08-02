@@ -6,32 +6,27 @@ namespace Unknown6656.Units.Electricity;
 
 
 [KnownBaseUnit<Charge, Coulomb, Scalar>]
-public partial record Coulomb(Scalar Value)
-    : BaseUnit<Charge, Coulomb, Scalar>(Value)
+public partial record Coulomb
 {
     public static string UnitSymbol { get; } = "C";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<Charge, Franklin, Coulomb, Scalar>]
+[KnownUnit<Charge, Franklin, Coulomb, Scalar>(KnownUnitType.Linear)]
 [KnownAlias<Charge, Franklin, Coulomb, Scalar>("Statcoulomb", "StatC", "esu")]
-public partial record Franklin(Scalar Value)
-    : Charge.AffineUnit<Franklin>(Value)
-    , ILinearUnit<Scalar>
+public partial record Franklin
 {
     public static string UnitSymbol { get; } = "Fr";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)2.99792457999999998916394890769699222666709715058982848552029e9;
 }
 
-[KnownUnit<Charge, AmpèreHour, Coulomb, Scalar>]
+[KnownUnit<Charge, AmpèreHour, Coulomb, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record AmpèreHour(Scalar Value)
+public partial record AmpèreHour
 #else
-public partial record AmpereHour(Scalar Value)
+public partial record AmpereHour
 #endif
-    : Charge.AffineUnit<AmpèreHour>(Value)
-    , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "Ah";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["ampere h", "ampere hr", "Ahr", "a hour"];
@@ -39,10 +34,8 @@ public partial record AmpereHour(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)2.777777777777777777777777777777777777777777777777777777777777e-4;
 }
 
-[KnownUnit<Charge, ElementaryCharge, Coulomb, Scalar>]
-public partial record ElementaryCharge(Scalar Value)
-    : Charge.AffineUnit<ElementaryCharge>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Charge, ElementaryCharge, Coulomb, Scalar>(KnownUnitType.Linear)]
+public partial record ElementaryCharge
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "e";

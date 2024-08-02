@@ -8,6 +8,7 @@ using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
+using System.Diagnostics;
 
 namespace Unknown6656.Units.Internals;
 
@@ -24,11 +25,16 @@ public sealed class QuantityDependencyGenerator
     public static readonly Identifier Identifier_KnownBaseUnit = "Unknown6656.Units.KnownBaseUnit";
     public static readonly Identifier Identifier_KnownAlias = "Unknown6656.Units.KnownAlias";
     public static readonly Identifier Identifier_KnownUnit = "Unknown6656.Units.KnownUnit";
+    public static readonly Identifier Identifier_IArbitraryUnit = "Unknown6656.Units.IArbitraryUnit";
+    public static readonly Identifier Identifier_IAffineUnit = "Unknown6656.Units.IAffineUnit";
     public static readonly Identifier Identifier_ILinearUnit = "Unknown6656.Units.ILinearUnit";
     public static readonly Identifier Identifier_IQuantity = "Unknown6656.Units.IQuantity";
     public static readonly Identifier Identifier_ExtensionClass = "Unknown6656.Units.Unit";
     public static readonly Identifier Identifier_UnitDisplay = "Unknown6656.Units.UnitDisplay";
     public static readonly Identifier Identifier_IBaseUnit = "Unknown6656.Units.IBaseUnit";
+    public static readonly Identifier Identifier_ArbitraryUnit = "Unknown6656.Units.Quantity<,,,>.ArbitraryUnit";
+    public static readonly Identifier Identifier_AffineUnit = "Unknown6656.Units.Quantity<,,,>.AffineUnit";
+    public static readonly Identifier Identifier_BaseUnit = "Unknown6656.Units.BaseUnit";
     public static readonly Identifier Identifier_IUnit = "Unknown6656.Units.IUnit";
 #if DEBUG // TODO : make this an attribute
     public const bool EMIT_LINE_NUMBERS = false;
@@ -124,48 +130,57 @@ public sealed class QuantityDependencyGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        //System.Diagnostics.Debugger.Launch();
+         //Debugger.Launch();
 
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> identity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_IdentityRelationship);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_aliases = FetchTypeDeclarationsByAttribute(context, Identifier_KnownAlias);
-        IncrementalValuesProvider<GenericAttributeClassUsage[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
-        IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
-                                                                                   .CreateSyntaxProvider(
-                                                                                       predicate: static (s, _) => s is AttributeListSyntax { Attributes.Count: > 0 },
-                                                                                       transform: (ctx, _) => HasDisableEmittingIUnitInterfacesDefined(ctx)
-                                                                                   )
-                                                                                   .Where(static x => x);
+        try
+        {
 
-        // which idiot decided to name this stuff "left" and "right"? and not to provide an extension method for combining 3 or more IncrementalValueProvider<>?
-        var combined = context.CompilationProvider.Combine(multiplicative_dependencies.Collect())
-                                                  .Combine(inverse_dependencies.Collect())
-                                                  .Select(static (t, _) => (comp: t.Left.Left, mul: t.Left.Right, inv: t.Right))
-                                                  .Combine(identity_dependencies.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, id: t.Right))
-                                                  .Combine(known_base_units.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, base_units: t.Right))
-                                                  .Combine(known_units.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, units: t.Right))
-                                                  .Combine(known_aliases.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, aliases: t.Right))
-                                                  .Combine(disable_emitting_iunit_interfaces.Collect())
-                                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, t.Left.aliases, disable: t.Right.Contains(true)));
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeRelationship);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> identity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_IdentityRelationship);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_aliases = FetchTypeDeclarationsByAttribute(context, Identifier_KnownAlias);
+            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
+            IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
+                                                                                       .CreateSyntaxProvider(
+                                                                                           predicate: static (s, _) => s is AttributeListSyntax { Attributes.Count: > 0 },
+                                                                                           transform: (ctx, _) => HasDisableEmittingIUnitInterfacesDefined(ctx)
+                                                                                       )
+                                                                                       .Where(static x => x);
 
-        context.RegisterSourceOutput(combined, (spc, source) => Execute(
-            context,
-            spc,
-            source.comp,
-            [.. source.mul.SelectMany(x => x)],
-            [.. source.inv.SelectMany(x => x)],
-            [.. source.id.SelectMany(x => x)],
-            [.. source.base_units.SelectMany(x => x)],
-            [.. source.units.SelectMany(x => x)],
-            [.. source.aliases.SelectMany(x => x)],
-            source.disable
-        ));
+            // which idiot decided to name this stuff "left" and "right"? and not to provide an extension method for combining 3 or more IncrementalValueProvider<>?
+            var combined = context.CompilationProvider.Combine(multiplicative_dependencies.Collect())
+                                                      .Combine(inverse_dependencies.Collect())
+                                                      .Select(static (t, _) => (comp: t.Left.Left, mul: t.Left.Right, inv: t.Right))
+                                                      .Combine(identity_dependencies.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, id: t.Right))
+                                                      .Combine(known_base_units.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, base_units: t.Right))
+                                                      .Combine(known_units.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, units: t.Right))
+                                                      .Combine(known_aliases.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, aliases: t.Right))
+                                                      .Combine(disable_emitting_iunit_interfaces.Collect())
+                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, t.Left.aliases, disable: t.Right.Contains(true)));
+
+            context.RegisterSourceOutput(combined, (spc, source) => Execute(
+                context,
+                spc,
+                source.comp,
+                [.. source.mul.SelectMany(x => x)],
+                [.. source.inv.SelectMany(x => x)],
+                [.. source.id.SelectMany(x => x)],
+                [.. source.base_units.SelectMany(x => x)],
+                [.. source.units.SelectMany(x => x)],
+                [.. source.aliases.SelectMany(x => x)],
+                source.disable
+            ));
+        }
+        catch (Exception ex)
+        when (Debugger.IsAttached)
+        {
+            Debugger.Break();
+        }
     }
 
     private static IncrementalValuesProvider<GenericAttributeClassUsage[]> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, Identifier attribute_name) => context.SyntaxProvider
@@ -278,6 +293,7 @@ public sealed class QuantityDependencyGenerator
         Dictionary<string, (List<string> units, string? base_unit)> known_units_dict = [];
         Dictionary<string, string> unit_scalar_mapper = [];
         Dictionary<string, Location> locations = [];
+        Dictionary<string, UnitType> unit_types = [];
 
         alias_infos = [];
 
@@ -313,6 +329,7 @@ public sealed class QuantityDependencyGenerator
                 if (error)
                     continue;
 
+                string? unit_type = (usage.AttributeArguments.FirstOrDefault()?.Expression as MemberAccessExpressionSyntax)?.Name?.Identifier.ToString();
                 string quantity = usage.GenericAttributeArguments[0].ToString();
 
                 if (!known_units_dict.TryGetValue(quantity, out var entry))
@@ -323,6 +340,10 @@ public sealed class QuantityDependencyGenerator
                 locations[target_name] = usage.TargetType.GetLocation();
                 known_units_dict[quantity] = entry;
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
+                unit_types[target_name] = Enum.TryParse(unit_type, true, out UnitType t) ? t : UnitType.Linear;
+
+                if (target_name.EndsWith(".Byte"))
+                    ;
             }
 
         foreach (GenericAttributeClassUsage usage in known_base_units)
@@ -371,6 +392,8 @@ public sealed class QuantityDependencyGenerator
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [alias_target_name]));
             else if (usage.AttributeArguments is AttributeArgumentSyntax[] { Length: > 1 } args && args[0].Expression is LiteralExpressionSyntax { Token.ValueText: string alias_name })
             {
+                Debug.Print((alias_target_name, alias_name) + "");
+
                 string cs_unit_symbol = args[1].ToFullString();
                 string[] cs_symbol_alias = args.Skip(2).Select(a => a.ToFullString()).ToArray();
                 Identifier t_quantity = usage.GenericAttributeArguments[0];
@@ -422,7 +445,18 @@ public sealed class QuantityDependencyGenerator
                     if (target_unit != unit)
                         properties.Add(new(locations[target_unit], new Identifier(target_unit).Name, target_unit));
 
-                UnitInformation unit_info = new(locations[unit], unit, unit == kvp.Value.base_unit, unit_scalar_mapper[unit], quantity, kvp.Value.base_unit, properties, [], []);
+                UnitInformation unit_info = new(
+                    locations[unit],
+                    unit,
+                    unit == kvp.Value.base_unit,
+                    unit_scalar_mapper[unit],
+                    quantity,
+                    kvp.Value.base_unit,
+                    unit_types.TryGetValue(unit, out UnitType type) ? type : UnitType.Linear,
+                    properties,
+                    [],
+                    []
+                );
 
                 unit_infos[unit_info.Name] = unit_info;
             }
@@ -838,8 +872,23 @@ public sealed class QuantityDependencyGenerator
                 Identifier name = kvp.Key;
                 UnitInformation unit_info = kvp.Value;
                 FileLinePositionSpan location = unit_info.Location.GetLineSpan();
-                string interfaces = disable_emitting_interfaces ? "" :
-                    $"\n        : {Identifier_IUnit}, {(unit_info.IsBaseUnit ? $"{Identifier_IBaseUnit}<{name}, {unit_info.Scalar}>" : $"{Identifier_IUnit}<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>")}";
+                string interfaces = disable_emitting_interfaces ? "" : $"({unit_info.Scalar} Value)\n" + (unit_info.IsBaseUnit ? 
+                    $"""
+                            : {Identifier_BaseUnit}<{unit_info.Quantity}, {name}, {unit_info.Scalar}>(Value)
+                            , {Identifier_IUnit}
+                            , {Identifier_IBaseUnit}<{name}, {unit_info.Scalar}>
+                    """ :
+                    $"""
+                            : {unit_info.Quantity}.{(unit_info.Type == UnitType.Arbitrary ? Identifier_ArbitraryUnit : Identifier_AffineUnit).Name}<{name}>(Value)
+                            , {Identifier_IUnit}
+                            , {Identifier_IUnit}<{name}, {unit_info.BaseUnit}, {unit_info.Scalar}>
+                            , {unit_info.Type switch {
+                                UnitType.Linear => Identifier_ILinearUnit,
+                                UnitType.Affine => Identifier_IAffineUnit,
+                                UnitType.Arbitrary => Identifier_IArbitraryUnit,
+                                _ => throw new NotImplementedException()
+                            }}<{unit_info.Scalar}>
+                    """);
 
                 sb.AppendLine($$""""
 
@@ -893,8 +942,9 @@ public sealed class QuantityDependencyGenerator
 
                 sb.AppendLine($$""""
                 {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
-                    public partial record {{name.Name}}({{unit.Scalar}} Value)
-                        : {{string.Join("\n        , ", interfaces)}}
+                    public partial record {{name.Name}}
+                     /* : {{string.Join("\n        , ", interfaces)}}
+                     */
                 {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
                     {
                         public static string UnitSymbol { get; } = {{alias.AliasUnitSymbol}};
@@ -991,6 +1041,13 @@ public sealed record QuantityInformation(
     List<CastOperator> Casts
 );
 
+public enum UnitType
+{
+    Linear,
+    Affine,
+    Arbitrary,
+}
+
 public sealed record UnitInformation(
     Location Location,
     Identifier Name,
@@ -998,6 +1055,7 @@ public sealed record UnitInformation(
     Identifier Scalar,
     Identifier Quantity,
     Identifier BaseUnit,
+    UnitType Type,
     List<PropertyInfo> Properties,
     List<BinaryOperator> BinaryOperators,
     List<CastOperator> Casts

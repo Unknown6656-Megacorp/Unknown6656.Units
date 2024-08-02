@@ -7,18 +7,15 @@ namespace Unknown6656.Units.Thermodynamics;
 
 
 [KnownBaseUnit<Temperature, Kelvin, Scalar>]
-public partial record Kelvin(Scalar Value)
-    : BaseUnit<Temperature, Kelvin, Scalar>(Value)
+public partial record Kelvin
 {
     public static string UnitSymbol { get; } = "K";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["°K", "°" + nameof(Kelvin)];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<Temperature, PlanckTemperature, Kelvin, Scalar>]
-public partial record PlanckTemperature(Scalar Value)
-    : Temperature.AffineUnit<PlanckTemperature>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Temperature, PlanckTemperature, Kelvin, Scalar>(KnownUnitType.Linear)]
+public partial record PlanckTemperature
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Tp";
@@ -30,10 +27,8 @@ public partial record PlanckTemperature(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.416808338416e32;
 }
 
-[KnownUnit<Temperature, Celsius, Kelvin, Scalar>]
-public partial record Celsius(Scalar Value)
-    : Temperature.AffineUnit<Celsius>(Value)
-    , IAffineUnit<Scalar>
+[KnownUnit<Temperature, Celsius, Kelvin, Scalar>(KnownUnitType.Affine)]
+public partial record Celsius
 {
     public static string UnitSymbol { get; } = "°C";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["C", "°" + nameof(Celsius)];
@@ -43,10 +38,8 @@ public partial record Celsius(Scalar Value)
     public static Scalar PostScalingOffset { get; }
 }
 
-[KnownUnit<Temperature, Fahrenheit, Kelvin, Scalar>]
-public partial record Fahrenheit(Scalar Value)
-    : Temperature.AffineUnit<Fahrenheit>(Value)
-    , IAffineUnit<Scalar>
+[KnownUnit<Temperature, Fahrenheit, Kelvin, Scalar>(KnownUnitType.Affine)]
+public partial record Fahrenheit
 {
     public static string UnitSymbol { get; } = "°F";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["F", "°" + nameof(Fahrenheit)];
@@ -56,10 +49,8 @@ public partial record Fahrenheit(Scalar Value)
     public static Scalar PostScalingOffset { get; } = (Scalar)(-459.67);
 }
 
-[KnownUnit<Temperature, Rankine, Kelvin, Scalar>]
-public partial record Rankine(Scalar Value)
-    : Temperature.AffineUnit<Rankine>(Value)
-    , IAffineUnit<Scalar>
+[KnownUnit<Temperature, Rankine, Kelvin, Scalar>(KnownUnitType.Affine)]
+public partial record Rankine
 {
     public static string UnitSymbol { get; } = "°R";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["R", "°" + nameof(Rankine)];
@@ -69,14 +60,12 @@ public partial record Rankine(Scalar Value)
     public static Scalar PostScalingOffset { get; } = (Scalar)459.67;
 }
 
-[KnownUnit<Temperature, Rømer, Kelvin, Scalar>]
+[KnownUnit<Temperature, Rømer, Kelvin, Scalar>(KnownUnitType.Affine)]
 #if USE_DIACRITICS
-public partial record Rømer(Scalar Value)
+public partial record Rømer
 #else
-public partial record Romer(Scalar Value)
+public partial record Romer
 #endif
-    : Temperature.AffineUnit<Rømer>(Value)
-    , IAffineUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "°Ro";
@@ -90,14 +79,12 @@ public partial record Romer(Scalar Value)
     public static Scalar PostScalingOffset { get; } = (Scalar)7.5;
 }
 
-[KnownUnit<Temperature, Réaumur, Kelvin, Scalar>]
+[KnownUnit<Temperature, Réaumur, Kelvin, Scalar>(KnownUnitType.Affine)]
 #if USE_DIACRITICS
-public partial record Réaumur(Scalar Value)
+public partial record Réaumur
 #else
-public partial record Reaumur(Scalar Value)
+public partial record Reaumur
 #endif
-    : Temperature.AffineUnit<Réaumur>(Value)
-    , IAffineUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "°Re";
@@ -111,10 +98,8 @@ public partial record Reaumur(Scalar Value)
     public static Scalar PostScalingOffset { get; }
 }
 
-[KnownUnit<Temperature, Delisle, Kelvin, Scalar>]
-public partial record Delisle(Scalar Value)
-    : Temperature.AffineUnit<Delisle>(Value)
-    , IAffineUnit<Scalar>
+[KnownUnit<Temperature, Delisle, Kelvin, Scalar>(KnownUnitType.Affine)]
+public partial record Delisle
 {
     public static string UnitSymbol { get; } = "°De";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["De", "°" + nameof(Delisle)];
@@ -124,10 +109,8 @@ public partial record Delisle(Scalar Value)
     public static Scalar PostScalingOffset { get; } = (Scalar)(-100.0);
 }
 
-[KnownUnit<Temperature, Leiden, Kelvin, Scalar>]
-public partial record Leiden(Scalar Value)
-    : Temperature.AffineUnit<Leiden>(Value)
-    , IAffineUnit<Scalar>
+[KnownUnit<Temperature, Leiden, Kelvin, Scalar>(KnownUnitType.Affine)]
+public partial record Leiden
 {
     public static string UnitSymbol { get; } = "°L";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["L", "°" + nameof(Leiden)];
@@ -137,10 +120,8 @@ public partial record Leiden(Scalar Value)
     public static Scalar PostScalingOffset { get; }
 }
 
-[KnownUnit<Temperature, Wedgwood, Kelvin, Scalar>]
-public partial record Wedgwood(Scalar Value)
-    : Temperature.AffineUnit<Wedgwood>(Value)
-    , IAffineUnit<Scalar>
+[KnownUnit<Temperature, Wedgwood, Kelvin, Scalar>(KnownUnitType.Affine)]
+public partial record Wedgwood
 {
     public static string UnitSymbol { get; } = "°We";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["We", "°" + nameof(Wedgwood)];
@@ -152,10 +133,8 @@ public partial record Wedgwood(Scalar Value)
     public static Scalar PostScalingOffset { get; } = (Scalar)537.7777777777778;
 }
 
-[KnownUnit<Temperature, DegreesNewton, Kelvin, Scalar>]
-public partial record DegreesNewton(Scalar Value)
-    : Temperature.AffineUnit<DegreesNewton>(Value)
-    , IAffineUnit<Scalar>
+[KnownUnit<Temperature, DegreesNewton, Kelvin, Scalar>(KnownUnitType.Affine)]
+public partial record DegreesNewton
 {
     public static string UnitSymbol { get; } = "°N";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["N"];

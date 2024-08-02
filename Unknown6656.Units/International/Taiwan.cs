@@ -17,10 +17,8 @@ namespace Unknown6656.Units.International.Taiwan;
 
 // https://en.wikipedia.org/wiki/Taiwanese_units_of_measurement
 
-[KnownUnit<Length, Chhioh, Meter, Scalar>]
-public partial record Chhioh(Scalar Value)
-    : Length.AffineUnit<Chhioh>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Length, Chhioh, Meter, Scalar>(KnownUnitType.Linear)]
+public partial record Chhioh
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Chi";
@@ -32,14 +30,12 @@ public partial record Chhioh(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)3.3;
 }
 
-[KnownUnit<Length, Chhùn, Meter, Scalar>]
+[KnownUnit<Length, Chhùn, Meter, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Chhùn(Scalar Value)
+public partial record Chhùn
 #else
-public partial record Chhun(Scalar Value)
+public partial record Chhun
 #endif
-    : Length.AffineUnit<Chhùn>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Cun";
@@ -51,10 +47,8 @@ public partial record Chhun(Scalar Value)
     public static Scalar ScalingFactor { get; } = Chhioh.ScalingFactor * 10;
 }
 
-[KnownUnit<Length, HunLength, Meter, Scalar>]
-public partial record HunLength(Scalar Value)
-    : Length.AffineUnit<HunLength>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Length, HunLength, Meter, Scalar>(KnownUnitType.Linear)]
+public partial record HunLength
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Fen";
@@ -66,14 +60,12 @@ public partial record HunLength(Scalar Value)
     public static Scalar ScalingFactor { get; } = Chhioh.ScalingFactor * 100;
 }
 
-[KnownUnit<Length, Tn̄g, Meter, Scalar>]
+[KnownUnit<Length, Tn̄g, Meter, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Tn̄g(Scalar Value)
+public partial record Tn̄g
 #else
-public partial record Tng(Scalar Value)
+public partial record Tng
 #endif
-    : Length.AffineUnit<Tn̄g>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Zhang";
@@ -85,14 +77,12 @@ public partial record Tng(Scalar Value)
     public static Scalar ScalingFactor { get; } = Chhioh.ScalingFactor * .1;
 }
 
-[KnownUnit<Area, Pêⁿ, SquareMeter, Scalar>]
+[KnownUnit<Area, Pêⁿ, SquareMeter, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Pêⁿ(Scalar Value)
+public partial record Pêⁿ
 #else
-public partial record Pen(Scalar Value)
+public partial record Pen
 #endif
-    : Area.AffineUnit<Pêⁿ>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Ping";
@@ -104,14 +94,12 @@ public partial record Pen(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar).3025;
 }
 
-[KnownUnit<Area, Bó, SquareMeter, Scalar>]
+[KnownUnit<Area, Bó, SquareMeter, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Bó(Scalar Value)
+public partial record Bó
 #else
-public partial record Bo(Scalar Value)
+public partial record Bo
 #endif
-    : Area.AffineUnit<Bó>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Mu";
@@ -123,10 +111,8 @@ public partial record Bo(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pêⁿ.ScalingFactor / 30;
 }
 
-[KnownUnit<Area, HunArea, SquareMeter, Scalar>]
-public partial record HunArea(Scalar Value)
-    : Area.AffineUnit<HunArea>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, HunArea, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record HunArea
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Fen";
@@ -138,10 +124,8 @@ public partial record HunArea(Scalar Value)
     public static Scalar ScalingFactor { get; } = Kah.ScalingFactor * 10;
 }
 
-[KnownUnit<Area, Kah, SquareMeter, Scalar>]
-public partial record Kah(Scalar Value)
-    : Area.AffineUnit<Kah>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Kah, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Kah
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Jia";
@@ -153,14 +137,12 @@ public partial record Kah(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pêⁿ.ScalingFactor / 2934;
 }
 
-[KnownUnit<Area, Lê, SquareMeter, Scalar>]
+[KnownUnit<Area, Lê, SquareMeter, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Lê(Scalar Value)
+public partial record Lê
 #else
-public partial record Le(Scalar Value)
+public partial record Le
 #endif
-    : Area.AffineUnit<Lê>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Li";
@@ -172,14 +154,12 @@ public partial record Le(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pêⁿ.ScalingFactor / 14670;
 }
 
-[KnownUnit<Mass, Lî, Kilogram, Scalar>]
+[KnownUnit<Mass, Lî, Kilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Lî(Scalar Value)
+public partial record Lî
 #else
-public partial record Li(Scalar Value)
+public partial record Li
 #endif
-    : Mass.AffineUnit<Lî>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Li";
@@ -191,10 +171,8 @@ public partial record Li(Scalar Value)
     public static Scalar ScalingFactor { get; } = Niú.ScalingFactor * 1000;
 }
 
-[KnownUnit<Mass, HunMass, Kilogram, Scalar>]
-public partial record HunMass(Scalar Value)
-    : Mass.AffineUnit<HunMass>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Mass, HunMass, Kilogram, Scalar>(KnownUnitType.Linear)]
+public partial record HunMass
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Fen";
@@ -206,14 +184,12 @@ public partial record HunMass(Scalar Value)
     public static Scalar ScalingFactor { get; } = Niú.ScalingFactor * 100;
 }
 
-[KnownUnit<Mass, Chîⁿ, Kilogram, Scalar>]
+[KnownUnit<Mass, Chîⁿ, Kilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Chîⁿ(Scalar Value)
+public partial record Chîⁿ
 #else
-public partial record Chin(Scalar Value)
+public partial record Chin
 #endif
-    : Mass.AffineUnit<Chîⁿ>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Quian";
@@ -225,14 +201,12 @@ public partial record Chin(Scalar Value)
     public static Scalar ScalingFactor { get; } = Niú.ScalingFactor * 10;
 }
 
-[KnownUnit<Mass, Niú, Kilogram, Scalar>]
+[KnownUnit<Mass, Niú, Kilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Niú(Scalar Value)
+public partial record Niú
 #else
-public partial record Niu(Scalar Value)
+public partial record Niu
 #endif
-    : Mass.AffineUnit<Niú>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Liang";
@@ -244,10 +218,8 @@ public partial record Niu(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)26.6666666666666666666666666666666666666666666666666666;
 }
 
-[KnownUnit<Mass, Kin, Kilogram, Scalar>]
-public partial record Kin(Scalar Value)
-    : Mass.AffineUnit<Kin>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Mass, Kin, Kilogram, Scalar>(KnownUnitType.Linear)]
+public partial record Kin
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Jin";
@@ -259,14 +231,12 @@ public partial record Kin(Scalar Value)
     public static Scalar ScalingFactor { get; } = Niú.ScalingFactor / 16;
 }
 
-[KnownUnit<Mass, Tàⁿ, Kilogram, Scalar>]
+[KnownUnit<Mass, Tàⁿ, Kilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Tàⁿ(Scalar Value)
+public partial record Tàⁿ
 #else
-public partial record Tan(Scalar Value)
+public partial record Tan
 #endif
-    : Mass.AffineUnit<Tàⁿ>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Dan";

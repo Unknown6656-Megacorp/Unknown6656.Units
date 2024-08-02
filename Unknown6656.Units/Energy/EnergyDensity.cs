@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Energy;
 
 
 [KnownBaseUnit<EnergyDensity, JoulePerCubicMeter, Scalar>]
-public partial record JoulePerCubicMeter(Scalar Value)
-    : BaseUnit<EnergyDensity, JoulePerCubicMeter, Scalar>(Value)
+public partial record JoulePerCubicMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J/m^3";
@@ -16,10 +15,8 @@ public partial record JoulePerCubicMeter(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 
-[KnownUnit<EnergyDensity, JoulePerLiter, JoulePerCubicMeter, Scalar>]
-public partial record JoulePerLiter(Scalar Value)
-    : EnergyDensity.AffineUnit<JoulePerLiter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<EnergyDensity, JoulePerLiter, JoulePerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record JoulePerLiter
 {
     public static string UnitSymbol { get; } = "J/L";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["J/liter", "joule/L"];
@@ -27,10 +24,8 @@ public partial record JoulePerLiter(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / Liter.ScalingFactor;
 }
 
-[KnownUnit<EnergyDensity, JoulePerCubicInch, JoulePerCubicMeter, Scalar>]
-public partial record JoulePerCubicInch(Scalar Value)
-    : EnergyDensity.AffineUnit<JoulePerCubicInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<EnergyDensity, JoulePerCubicInch, JoulePerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record JoulePerCubicInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J/in^3";
@@ -42,10 +37,8 @@ public partial record JoulePerCubicInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / CubicInch.ScalingFactor;
 }
 
-[KnownUnit<EnergyDensity, JoulePerCubicFoot, JoulePerCubicMeter, Scalar>]
-public partial record JoulePerCubicFoot(Scalar Value)
-    : EnergyDensity.AffineUnit<JoulePerCubicFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<EnergyDensity, JoulePerCubicFoot, JoulePerCubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record JoulePerCubicFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J/ft^3";

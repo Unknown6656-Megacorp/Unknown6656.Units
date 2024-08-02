@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Electricity;
 
 
 [KnownBaseUnit<Resistance, Ohm, Scalar>]
-public partial record Ohm(Scalar Value)
-    : BaseUnit<Resistance, Ohm, Scalar>(Value)
+public partial record Ohm
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "Ohm";

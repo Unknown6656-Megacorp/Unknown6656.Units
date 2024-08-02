@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<ThermalConductivity, WattPerMeterKelvin, Scalar>]
-public partial record WattPerMeterKelvin(Scalar Value)
-    : BaseUnit<ThermalConductivity, WattPerMeterKelvin, Scalar>(Value)
+public partial record WattPerMeterKelvin
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "W/m/K";

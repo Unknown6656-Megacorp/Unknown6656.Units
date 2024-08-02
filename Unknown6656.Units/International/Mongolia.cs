@@ -13,14 +13,12 @@ namespace Unknown6656.Units.International.Mongolia;
 // TODO : https://en.wikipedia.org/wiki/Mongolian_units
 
 
-[KnownUnit<Mass, Пүү, Kilogram, Scalar>]
+[KnownUnit<Mass, Пүү, Kilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Пүү(Scalar Value)
+public partial record Пүү
 #else
-public partial record Puu(Scalar Value)
+public partial record Puu
 #endif
-    : Mass.AffineUnit<Пүү>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "puu";
@@ -32,14 +30,12 @@ public partial record Puu(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.0606060606060606060606061;
 }
 
-[KnownUnit<Mass, Жин, Kilogram, Scalar>]
+[KnownUnit<Mass, Жин, Kilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Жин(Scalar Value)
+public partial record Жин
 #else
-public partial record Jin(Scalar Value)
+public partial record Jin
 #endif
-    : Mass.AffineUnit<Жин>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "jin";
@@ -51,14 +47,12 @@ public partial record Jin(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1.6755582960242352751936945390204015978123910887107584247071124098;
 }
 
-[KnownUnit<Mass, Лан, Kilogram, Scalar>]
+[KnownUnit<Mass, Лан, Kilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Лан(Scalar Value)
+public partial record Лан
 #else
-public partial record Lan(Scalar Value)
+public partial record Lan
 #endif
-    : Mass.AffineUnit<Лан>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lan";
@@ -70,14 +64,12 @@ public partial record Lan(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)26.808932736387764403099112624326425564998257419372134795313798557;
 }
 
-[KnownUnit<Mass, Цэн, Kilogram, Scalar>]
+[KnownUnit<Mass, Цэн, Kilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Цэн(Scalar Value)
+public partial record Цэн
 #else
-public partial record Tsen(Scalar Value)
+public partial record Tsen
 #endif
-    : Mass.AffineUnit<Цэн>(Value)
-    , ILinearUnit<Scalar>
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "tsen";

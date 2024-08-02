@@ -6,10 +6,8 @@ namespace Unknown6656.Units.International.HongKongMacau;
 
 // TODO : https://en.wikipedia.org/wiki/Hong_Kong_units_of_measurement
 
-[KnownUnit<Length, LengthFan, Meter, Scalar>]
-public partial record LengthFan(Scalar Value)
-    : Length.AffineUnit<LengthFan>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Length, LengthFan, Meter, Scalar>(KnownUnitType.Linear)]
+public partial record LengthFan
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "fan";
@@ -21,10 +19,8 @@ public partial record LengthFan(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)269.19711959082037822195302510263140184400026919711959082037822195;
 }
 
-[KnownUnit<Length, Tsun, Meter, Scalar>]
-public partial record Tsun(Scalar Value)
-    : Length.AffineUnit<Tsun>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Length, Tsun, Meter, Scalar>(KnownUnitType.Linear)]
+public partial record Tsun
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "tsun";
@@ -38,10 +34,8 @@ public partial record Tsun(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)26.919711959082037822195302510263140184400026919711959082037822195;
 }
 
-[KnownUnit<Length, Chek, Meter, Scalar>]
-public partial record Chek(Scalar Value)
-    : Length.AffineUnit<Chek>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Length, Chek, Meter, Scalar>(KnownUnitType.Linear)]
+public partial record Chek
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "chek";
@@ -57,10 +51,8 @@ public partial record Chek(Scalar Value)
 }
 
 
-[KnownUnit<Area, Cek, SquareMeter, Scalar>]
-public partial record Cek(Scalar Value)
-    : Area.AffineUnit<Cek>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Cek, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Cek
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cek";
@@ -74,10 +66,8 @@ public partial record Cek(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pou.ScalingFactor * 25;
 }
 
-[KnownUnit<Area, Pou, SquareMeter, Scalar>]
-public partial record Pou(Scalar Value)
-    : Area.AffineUnit<Pou>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Pou, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Pou
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "pou";
@@ -89,10 +79,8 @@ public partial record Pou(Scalar Value)
     public static Scalar ScalingFactor { get; } = Zoeng.ScalingFactor * 4;
 }
 
-[KnownUnit<Area, Zoeng, SquareMeter, Scalar>]
-public partial record Zoeng(Scalar Value)
-    : Area.AffineUnit<Zoeng>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Zoeng, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Zoeng
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "zoeng";
@@ -106,10 +94,8 @@ public partial record Zoeng(Scalar Value)
     public static Scalar ScalingFactor { get; } = AreaFan.ScalingFactor * 6;
 }
 
-[KnownUnit<Area, AreaFan, SquareMeter, Scalar>]
-public partial record AreaFan(Scalar Value)
-    : Area.AffineUnit<AreaFan>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, AreaFan, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record AreaFan
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "fan";
@@ -121,10 +107,8 @@ public partial record AreaFan(Scalar Value)
     public static Scalar ScalingFactor { get; } = Mau.ScalingFactor * 10;
 }
 
-[KnownUnit<Area, Mau, SquareMeter, Scalar>]
-public partial record Mau(Scalar Value)
-    : Area.AffineUnit<Mau>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Area, Mau, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Mau
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "mau";
@@ -137,10 +121,8 @@ public partial record Mau(Scalar Value)
 }
 
 
-[KnownUnit<Time, Ji, Second, Scalar>]
-public partial record Ji(Scalar Value)
-    : Time.AffineUnit<Ji>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, Ji, Second, Scalar>(KnownUnitType.Linear)]
+public partial record Ji
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ji";
@@ -152,10 +134,8 @@ public partial record Ji(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)0.0033333333333333333333333333333333333333333333333333333333333333;
 }
 
-[KnownUnit<Time, Gwat, Second, Scalar>]
-public partial record Gwat(Scalar Value)
-    : Time.AffineUnit<Gwat>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Time, Gwat, Second, Scalar>(KnownUnitType.Linear)]
+public partial record Gwat
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "gwat";

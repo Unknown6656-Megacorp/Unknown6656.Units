@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<CryoscopicConstant, KilogramKelvinPerMol, Scalar>]
-public partial record KilogramKelvinPerMol(Scalar Value)
-    : BaseUnit<CryoscopicConstant, KilogramKelvinPerMol, Scalar>(Value)
+public partial record KilogramKelvinPerMol
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "kg*K/mol";

@@ -65,7 +65,9 @@ public partial record VolumetricMassDensity(KilogramPerCubicMeter value)
 #endif
 }
 
-[MultiplicativeRelationship<Force, Area, Pressure, Newton, SquareMeter, Pascal, Scalar>]
+[MultiplicativeRelationship<Pressure, Area, Force, Pascal, SquareMeter, Newton, Scalar>]
+[MultiplicativeRelationship<Pressure, Volume, Torque, Pascal, CubicMeter, NewtonMeter, Scalar>]
+[MultiplicativeRelationship<Pressure, Length, LinearForceDensity, Pascal, Meter, NewtonPerMeter, Scalar>]
 public partial record Pressure(Pascal value)
     : Quantity<Pressure, Pascal, Scalar>(value)
 {
@@ -74,6 +76,7 @@ public partial record Pressure(Pascal value)
 
 [InverseRelationship<Compressibility, Pressure, SquareMeterPerNewton, Pascal, Scalar>]
 [MultiplicativeRelationship<Compressibility, Force, Area, SquareMeterPerNewton, Newton, SquareMeter, Scalar>]
+[MultiplicativeRelationship<Compressibility, LinearForceDensity, Length, SquareMeterPerNewton, NewtonPerMeter, Meter, Scalar>]
 [MultiplicativeRelationship<Compressibility, Torque, Volume, SquareMeterPerNewton, NewtonMeter, CubicMeter, Scalar>]
 public partial record Compressibility(SquareMeterPerNewton value)
     : Quantity<Compressibility, SquareMeterPerNewton, Scalar>(value)

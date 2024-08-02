@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<KinematicViscosity, SquareMeterPerSecond, Scalar>]
-public partial record SquareMeterPerSecond(Scalar Value)
-    : BaseUnit<KinematicViscosity, SquareMeterPerSecond, Scalar>(Value)
+public partial record SquareMeterPerSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m^2/s";

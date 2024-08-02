@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Matter;
 
 
 [KnownBaseUnit<AreaMassDensity, KilogramPerSquareMeter, Scalar>]
-public partial record KilogramPerSquareMeter(Scalar Value)
-    : BaseUnit<AreaMassDensity, KilogramPerSquareMeter, Scalar>(Value)
+public partial record KilogramPerSquareMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "kg/m^2";
@@ -16,10 +15,8 @@ public partial record KilogramPerSquareMeter(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricSI_Shifted_k;
 }
 
-[KnownUnit<AreaMassDensity, PoundPerSquareInch, KilogramPerSquareMeter, Scalar>]
-public partial record PoundPerSquareInch(Scalar Value)
-    : AreaMassDensity.AffineUnit<PoundPerSquareInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<AreaMassDensity, PoundPerSquareInch, KilogramPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record PoundPerSquareInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lb/in^2";
@@ -31,10 +28,8 @@ public partial record PoundPerSquareInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / SquareInch.ScalingFactor;
 }
 
-[KnownUnit<AreaMassDensity, PoundPerSquareFoot, KilogramPerSquareMeter, Scalar>]
-public partial record PoundPerSquareFoot(Scalar Value)
-    : AreaMassDensity.AffineUnit<PoundPerSquareFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<AreaMassDensity, PoundPerSquareFoot, KilogramPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record PoundPerSquareFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lb/ft^2";
@@ -46,10 +41,8 @@ public partial record PoundPerSquareFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = Pound.ScalingFactor / SquareFoot.ScalingFactor;
 }
 
-[KnownUnit<AreaMassDensity, Grammage, KilogramPerSquareMeter, Scalar>]
-public partial record Grammage(Scalar Value)
-    : AreaMassDensity.AffineUnit<Grammage>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<AreaMassDensity, Grammage, KilogramPerSquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Grammage
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "gsm";

@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<HeatFlux, WattPerSquareMeter, Scalar>]
-public partial record WattPerSquareMeter(Scalar Value)
-    : BaseUnit<HeatFlux, WattPerSquareMeter, Scalar>(Value)
+public partial record WattPerSquareMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "W/m^2";

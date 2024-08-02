@@ -143,6 +143,15 @@ public class IdentityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB
 // TODO : inverse relationship for non-base units
 
 
+public enum KnownUnitType
+{
+    Linear,
+    Affine,
+    Arbitrary,
+    //Logarithmic,
+    //Exponential,
+}
+
 /// <summary>
 /// <b>
 ///     DO NOT FORGET TO REMOVE THE FOLLOWING TYPE ANNOTATIONS WHEN USING THIS ATTRIBUTE!
@@ -161,7 +170,7 @@ public class IdentityRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB
 /// </code>
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>
+public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>(KnownUnitType type)
     : Attribute
     where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
                     , IQuantity<TQuantity>
@@ -171,7 +180,10 @@ public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>
     where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>
                     , IBaseUnit<TBaseUnit, TScalar>
                     , IUnit
-    where TScalar : INumber<TScalar>;
+    where TScalar : INumber<TScalar>
+{
+    public KnownUnitType UnitType => type;
+}
 
 /// <summary>
 /// <b>
@@ -191,8 +203,8 @@ public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>
 /// </code>
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-public class KnownBaseUnit<TQuantity, TBaseUnit, TScalar>
-    : KnownUnit<TQuantity, TBaseUnit, TBaseUnit, TScalar>
+public class KnownBaseUnit<TQuantity, TBaseUnit, TScalar>()
+    : KnownUnit<TQuantity, TBaseUnit, TBaseUnit, TScalar>(KnownUnitType.Linear)
     where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
                     , IQuantity<TQuantity>
     where TBaseUnit : BaseUnit<TQuantity, TBaseUnit, TScalar>

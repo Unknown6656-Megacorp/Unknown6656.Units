@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Kinematics;
 
 
 [KnownBaseUnit<VolumetricFlowRate, CubicMeterPerSecond, Scalar>]
-public partial record CubicMeterPerSecond(Scalar Value)
-    : BaseUnit<VolumetricFlowRate, CubicMeterPerSecond, Scalar>(Value)
+public partial record CubicMeterPerSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m^3/s";
@@ -16,10 +15,8 @@ public partial record CubicMeterPerSecond(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
-[KnownUnit<VolumetricFlowRate, LiterPerSecond, CubicMeterPerSecond, Scalar>]
-public partial record LiterPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<LiterPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricFlowRate, LiterPerSecond, CubicMeterPerSecond, Scalar>(KnownUnitType.Linear)]
+public partial record LiterPerSecond
 {
     public static string UnitSymbol { get; } = "L/s";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["liter/second", "liter/s", "L/second"];
@@ -27,10 +24,8 @@ public partial record LiterPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = Liter.ScalingFactor;
 }
 
-[KnownUnit<VolumetricFlowRate, CubicFootPerSecond, CubicMeterPerSecond, Scalar>]
-public partial record CubicFootPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<CubicFootPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricFlowRate, CubicFootPerSecond, CubicMeterPerSecond, Scalar>(KnownUnitType.Linear)]
+public partial record CubicFootPerSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft^3/s";
@@ -42,10 +37,8 @@ public partial record CubicFootPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor;
 }
 
-[KnownUnit<VolumetricFlowRate, CubicInchPerSecond, CubicMeterPerSecond, Scalar>]
-public partial record CubicInchPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<CubicInchPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricFlowRate, CubicInchPerSecond, CubicMeterPerSecond, Scalar>(KnownUnitType.Linear)]
+public partial record CubicInchPerSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "in^3/s";
@@ -57,10 +50,8 @@ public partial record CubicInchPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = CubicInch.ScalingFactor;
 }
 
-[KnownUnit<VolumetricFlowRate, GallonPerSecond, CubicMeterPerSecond, Scalar>]
-public partial record GallonPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<GallonPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricFlowRate, GallonPerSecond, CubicMeterPerSecond, Scalar>(KnownUnitType.Linear)]
+public partial record GallonPerSecond
 {
     public static string UnitSymbol { get; } = "imp gal/s";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["imperial gal/s", "imp gallon/s", "gallon imp/s", "gal imp/s", "UK gal/s", "gal UK/s", "UK gallon/s", "gallon UK/s",
@@ -69,10 +60,8 @@ public partial record GallonPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = Gallon.ScalingFactor;
 }
 
-[KnownUnit<VolumetricFlowRate, USGallonPerSecond, CubicMeterPerSecond, Scalar>]
-public partial record USGallonPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<USGallonPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricFlowRate, USGallonPerSecond, CubicMeterPerSecond, Scalar>(KnownUnitType.Linear)]
+public partial record USGallonPerSecond
 {
     public static string UnitSymbol { get; } = "US gal/s";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["gal us/s", "gallon us/s", "gal us/second", "gallon us/second"];
@@ -80,10 +69,8 @@ public partial record USGallonPerSecond(Scalar Value)
     public static Scalar ScalingFactor { get; } = USGallon.ScalingFactor;
 }
 
-[KnownUnit<VolumetricFlowRate, BarrelPerSecond, CubicMeterPerSecond, Scalar>]
-public partial record BarrelPerSecond(Scalar Value)
-    : VolumetricFlowRate.AffineUnit<BarrelPerSecond>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<VolumetricFlowRate, BarrelPerSecond, CubicMeterPerSecond, Scalar>(KnownUnitType.Linear)]
+public partial record BarrelPerSecond
 {
     public static string UnitSymbol { get; } = "bbl/s";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["US bbl/s", "US barrel/s", "bbl US/s", "barrel US/s", "US bbl/second", "US barrel/second", "bbl US/second", "barrel US/second"];

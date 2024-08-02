@@ -1,11 +1,14 @@
-﻿namespace Unknown6656.Units.Euclidean;
+﻿#if !USE_DIACRITICS
+global using Gō = Unknown6656.Units.Euclidean.Go;
+#endif
+
+namespace Unknown6656.Units.Euclidean;
 
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
 
 [KnownBaseUnit<Volume, CubicMeter, Scalar>]
-public partial record CubicMeter(Scalar Value)
-    : BaseUnit<Volume, CubicMeter, Scalar>(Value)
+public partial record CubicMeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "m^3";
@@ -16,10 +19,8 @@ public partial record CubicMeter(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
 }
 
-[KnownUnit<Volume, CubicCentimeter, CubicMeter, Scalar>]
-public partial record CubicCentimeter(Scalar Value)
-    : Volume.AffineUnit<CubicCentimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, CubicCentimeter, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record CubicCentimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "cm^3";
@@ -31,10 +32,8 @@ public partial record CubicCentimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e8;
 }
 
-[KnownUnit<Volume, CubicMillimeter, CubicMeter, Scalar>]
-public partial record CubicMillimeter(Scalar Value)
-    : Volume.AffineUnit<CubicMillimeter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, CubicMillimeter, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record CubicMillimeter
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "mm^3";
@@ -46,20 +45,16 @@ public partial record CubicMillimeter(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e9;
 }
 
-[KnownUnit<Volume, Liter, CubicMeter, Scalar>]
-public partial record Liter(Scalar Value)
-    : Volume.AffineUnit<Liter>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Liter, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Liter
 {
     public static string UnitSymbol { get; } = "L";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e3;
 }
 
-[KnownUnit<Volume, Gallon, CubicMeter, Scalar>]
-public partial record Gallon(Scalar Value)
-    : Volume.AffineUnit<Gallon>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Gallon, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Gallon
 {
     public static string UnitSymbol { get; } = "imp gal";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["imperial gal", "imp gallon", "gallon imp", "gal imp", "UK gal", "gal UK", "UK gallon", "gallon UK"];
@@ -67,10 +62,8 @@ public partial record Gallon(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)219.96915738094787;
 }
 
-[KnownUnit<Volume, USGallon, CubicMeter, Scalar>]
-public partial record USGallon(Scalar Value)
-    : Volume.AffineUnit<USGallon>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, USGallon, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record USGallon
 {
     public static string UnitSymbol { get; } = "US gal";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["gal us", "gallon us"];
@@ -78,10 +71,8 @@ public partial record USGallon(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)264.17205235814842;
 }
 
-[KnownUnit<Volume, AleGallon, CubicMeter, Scalar>]
-public partial record AleGallon(Scalar Value)
-    : Volume.AffineUnit<AleGallon>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, AleGallon, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record AleGallon
 {
     public static string UnitSymbol { get; } = "Ale gal";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["gal ale", "gallon ale"];
@@ -89,30 +80,24 @@ public partial record AleGallon(Scalar Value)
     public static Scalar ScalingFactor { get; } = CubicInch.ScalingFactor / 282;
 }
 
-[KnownUnit<Volume, Tun, CubicMeter, Scalar>]
-public partial record Tun(Scalar Value)
-    : Volume.AffineUnit<Tun>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Tun, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Tun
 {
     public static string UnitSymbol { get; } = "tun";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = Gallon.ScalingFactor / 252;
 }
 
-[KnownUnit<Volume, Pin, CubicMeter, Scalar>]
-public partial record Pin(Scalar Value)
-    : Volume.AffineUnit<Pin>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Pin, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Pin
 {
     public static string UnitSymbol { get; } = "pin";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar).0488820551775750638949563739878053936948503488101252333812621884;
 }
 
-[KnownUnit<Volume, USCup, CubicMeter, Scalar>]
-public partial record USCup(Scalar Value)
-    : Volume.AffineUnit<USCup>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, USCup, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record USCup
 {
     public static string UnitSymbol { get; } = "US cup";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["cup us", "cups us"];
@@ -120,50 +105,44 @@ public partial record USCup(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)4226.75283773037465;
 }
 
-[KnownUnit<Volume, MetricCups, CubicMeter, Scalar>]
-public partial record MetricCups(Scalar Value)
-    : Volume.AffineUnit<MetricCups>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, MetricCups, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record MetricCups
 {
     public static string UnitSymbol { get; } = "cup";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)4000;
 }
 
-[KnownUnit<Volume, Pint, CubicMeter, Scalar>]
-public partial record Pint(Scalar Value)
-    : Volume.AffineUnit<Pint>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Pint, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Pint
 {
     public static string UnitSymbol { get; } = "pt";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)2113.37641886518732;
 }
 
-[KnownUnit<Volume, Ge, CubicMeter, Scalar>]
-public partial record Ge(Scalar Value)
-    : Volume.AffineUnit<Ge>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Ge, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Ge
 {
     public static string UnitSymbol { get; } = "ge";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)10_000;
 }
 
-[KnownUnit<Volume, Gō, CubicMeter, Scalar>]
-public partial record Gō(Scalar Value)
-    : Volume.AffineUnit<Gō>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Gō, CubicMeter, Scalar>(KnownUnitType.Linear)]
+#if USE_DIACRITICS
+public partial record Gō
+#else
+public partial record Go
+#endif
 {
     public static string UnitSymbol { get; } = "gō";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)0.0055435235318617242815493544356518117451062057476051645147855060;
 }
 
-[KnownUnit<Volume, USFluidOunce, CubicMeter, Scalar>]
-public partial record USFluidOunce(Scalar Value)
-    : Volume.AffineUnit<USFluidOunce>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, USFluidOunce, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record USFluidOunce
 {
     public static string UnitSymbol { get; } = "US fl oz";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["US fluid oz", "fl oz US", "fluid oz US", "fluid ounce US", "fl ounce US"];
@@ -171,10 +150,8 @@ public partial record USFluidOunce(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)33814.022701843;
 }
 
-[KnownUnit<Volume, FluidOunce, CubicMeter, Scalar>]
-public partial record FluidOunce(Scalar Value)
-    : Volume.AffineUnit<FluidOunce>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, FluidOunce, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record FluidOunce
 {
     public static string UnitSymbol { get; } = "fl oz";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["fluid oz", "fl ounce", "UK fl oz", "UK fl ounce", "UK fluid oz", "UK fluid ounce",
@@ -184,10 +161,8 @@ public partial record FluidOunce(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)35195.079727854;
 }
 
-[KnownUnit<Volume, Barrel, CubicMeter, Scalar>]
-public partial record Barrel(Scalar Value)
-    : Volume.AffineUnit<Barrel>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Barrel, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Barrel
 {
     public static string UnitSymbol { get; } = "bbl";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["US bbl", "US barrel", "bbl US", "barrel US"];
@@ -195,20 +170,16 @@ public partial record Barrel(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)6.2898105697751;
 }
 
-[KnownUnit<Volume, Quart, CubicMeter, Scalar>]
-public partial record Quart(Scalar Value)
-    : Volume.AffineUnit<Quart>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Quart, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Quart
 {
     public static string UnitSymbol { get; } = "qt";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)1056.68820943259366;
 }
 
-[KnownUnit<Volume, CubicFoot, CubicMeter, Scalar>]
-public partial record CubicFoot(Scalar Value)
-    : Volume.AffineUnit<CubicFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, CubicFoot, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record CubicFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ft^3";
@@ -220,10 +191,8 @@ public partial record CubicFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = Foot.ScalingFactor * SquareFoot.ScalingFactor;
 }
 
-[KnownUnit<Volume, CubicInch, CubicMeter, Scalar>]
-public partial record CubicInch(Scalar Value)
-    : Volume.AffineUnit<CubicInch>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, CubicInch, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record CubicInch
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "in^3";
@@ -235,10 +204,8 @@ public partial record CubicInch(Scalar Value)
     public static Scalar ScalingFactor { get; } = Inch.ScalingFactor * SquareInch.ScalingFactor;
 }
 
-[KnownUnit<Volume, Teaspoon, CubicMeter, Scalar>]
-public partial record Teaspoon(Scalar Value)
-    : Volume.AffineUnit<Teaspoon>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Teaspoon, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Teaspoon
 {
     public static string UnitSymbol { get; } = "tsp";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["teasp"];
@@ -246,10 +213,8 @@ public partial record Teaspoon(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)202884.13621106095;
 }
 
-[KnownUnit<Volume, Tablespoon, CubicMeter, Scalar>]
-public partial record Tablespoon(Scalar Value)
-    : Volume.AffineUnit<Tablespoon>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Tablespoon, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Tablespoon
 {
     public static string UnitSymbol { get; } = "tbsp";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["tablesp"];
@@ -257,30 +222,24 @@ public partial record Tablespoon(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)67628.04540368698;
 }
 
-[KnownUnit<Volume, Drop, CubicMeter, Scalar>]
-public partial record Drop(Scalar Value)
-    : Volume.AffineUnit<Drop>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Drop, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Drop
 {
     public static string UnitSymbol { get; } = "gtt";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)500000;
 }
 
-[KnownUnit<Volume, Peck, CubicMeter, Scalar>]
-public partial record Peck(Scalar Value)
-    : Volume.AffineUnit<Peck>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Peck, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Peck
 {
     public static string UnitSymbol { get; } = "pk";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)109.9846241495439;
 }
 
-[KnownUnit<Volume, USPeck, CubicMeter, Scalar>]
-public partial record USPeck(Scalar Value)
-    : Volume.AffineUnit<USPeck>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, USPeck, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record USPeck
 {
     public static string UnitSymbol { get; } = "US pk";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["pk US", "peck US"];
@@ -288,20 +247,16 @@ public partial record USPeck(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)113.510373033607;
 }
 
-[KnownUnit<Volume, Bushel, CubicMeter, Scalar>]
-public partial record Bushel(Scalar Value)
-    : Volume.AffineUnit<Bushel>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Bushel, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Bushel
 {
     public static string UnitSymbol { get; } = "bsh";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = (Scalar)36.36872;
 }
 
-[KnownUnit<Volume, USBushel, CubicMeter, Scalar>]
-public partial record USBushel(Scalar Value)
-    : Volume.AffineUnit<USBushel>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, USBushel, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record USBushel
 {
     public static string UnitSymbol { get; } = "US bsh";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["bsh US", "bushel US"];
@@ -309,20 +264,16 @@ public partial record USBushel(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)35.23907016688;
 }
 
-[KnownUnit<Volume, Brass, CubicMeter, Scalar>]
-public partial record Brass(Scalar Value)
-    : Volume.AffineUnit<Brass>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Brass, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Brass
 {
     public static string UnitSymbol { get; } = "brass";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor * 100;
 }
 
-[KnownUnit<Volume, MetricOunce, CubicMeter, Scalar>]
-public partial record MetricOunce(Scalar Value)
-    : Volume.AffineUnit<MetricOunce>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, MetricOunce, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record MetricOunce
 {
     public static string UnitSymbol { get; } = "Metric oz";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["metr oz", "metr fl oz", "metr fluid oz", "metric fluid ounce US", "fl ounce metric", "fl oz metric", "oz metric", "oz metr"];
@@ -330,20 +281,16 @@ public partial record MetricOunce(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)33333.3333333333333333333333333333333333333333333333333333333333; // 30 mL
 }
 
-[KnownUnit<Volume, Cord, CubicMeter, Scalar>]
-public partial record Cord(Scalar Value)
-    : Volume.AffineUnit<Cord>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, Cord, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Cord
 {
     public static string UnitSymbol { get; } = "cord";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
     public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor / 128;
 }
 
-[KnownUnit<Volume, TwentyFootEquivalentUnit, CubicMeter, Scalar>]
-public partial record TwentyFootEquivalentUnit(Scalar Value)
-    : Volume.AffineUnit<TwentyFootEquivalentUnit>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, TwentyFootEquivalentUnit, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record TwentyFootEquivalentUnit
 {
     public static string UnitSymbol { get; } = "TEU";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["20ft EU", "container EU", "container equivalent unit", "container eq unit",
@@ -354,10 +301,8 @@ public partial record TwentyFootEquivalentUnit(Scalar Value)
     public static Scalar ScalingFactor { get; } = CubicFoot.ScalingFactor / 1_172;
 }
 
-[KnownUnit<Volume, AcreFoot, CubicMeter, Scalar>]
-public partial record AcreFoot(Scalar Value)
-    : Volume.AffineUnit<AcreFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, AcreFoot, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record AcreFoot
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "ac·ft";
@@ -369,10 +314,8 @@ public partial record AcreFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = Foot.ScalingFactor * Acre.ScalingFactor;
 }
 
-[KnownUnit<Volume, BoardFoot, CubicMeter, Scalar>]
-public partial record BoardFoot(Scalar Value)
-    : Volume.AffineUnit<BoardFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, BoardFoot, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record BoardFoot
 {
     public static string UnitSymbol { get; } = "FBM";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["board ft", "board-ft", "board-foot", "foot board measure", "ft board measure", "super foot"];
@@ -380,10 +323,8 @@ public partial record BoardFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = SquareFoot.ScalingFactor * Inch.ScalingFactor;
 }
 
-[KnownUnit<Volume, HoppusCubicFoot, CubicMeter, Scalar>]
-public partial record HoppusCubicFoot(Scalar Value)
-    : Volume.AffineUnit<HoppusCubicFoot>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, HoppusCubicFoot, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record HoppusCubicFoot
 {
     public static string UnitSymbol { get; } = "h cu ft";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["hoppus", "hoppus ft^3", "hoppus cubic ft", "hoppus foot^3", "hoppus cubic foot"];
@@ -391,10 +332,8 @@ public partial record HoppusCubicFoot(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)27.7392510402;
 }
 
-[KnownUnit<Volume, HoppusTon, CubicMeter, Scalar>]
-public partial record HoppusTon(Scalar Value)
-    : Volume.AffineUnit<HoppusTon>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Volume, HoppusTon, CubicMeter, Scalar>(KnownUnitType.Linear)]
+public partial record HoppusTon
 {
     public static string UnitSymbol { get; } = "HT";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["hoppus t", "hoppus ton"];
