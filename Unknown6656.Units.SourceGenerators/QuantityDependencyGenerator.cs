@@ -130,7 +130,7 @@ public sealed class QuantityDependencyGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-         Debugger.Launch();
+         //Debugger.Launch();
 
         try
         {
@@ -402,14 +402,7 @@ public sealed class QuantityDependencyGenerator
 
                 known_units_dict[t_quantity].units.Add(target_name);
                 locations[target_name] = usage.TargetType.GetLocation();
-
-                Debug.Print("\tS");
-                if (alias_name == "Octet")
-                    ;
-
                 unit_scalar_mapper[target_name] = unit_scalar_mapper[t_unit];
-
-                Debug.Print("\tA");
 
                 alias_infos.Add(new(
                     usage.AttributeLocation,
@@ -949,8 +942,9 @@ public sealed class QuantityDependencyGenerator
 
                 sb.AppendLine($$""""
                 {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
-                    public partial record {{name.Name}}({{unit.Scalar}} Value)
-                        : {{string.Join("\n        , ", interfaces)}}
+                    public partial record {{name.Name}}
+                     /* : {{string.Join("\n        , ", interfaces)}}
+                     */
                 {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
                     {
                         public static string UnitSymbol { get; } = {{alias.AliasUnitSymbol}};
