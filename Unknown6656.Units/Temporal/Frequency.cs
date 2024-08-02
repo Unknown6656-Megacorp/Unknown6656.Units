@@ -5,17 +5,14 @@
 
 
 [KnownBaseUnit<Frequency, Hertz, Scalar>]
-public partial record Hertz(Scalar Value)
-    : BaseUnit<Frequency, Hertz, Scalar>(Value)
+public partial record Hertz
 {
     public static string UnitSymbol { get; } = "Hz";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<Frequency, BeatsPerMinute, Hertz, Scalar>]
-public partial record BeatsPerMinute(Scalar Value)
-    : Frequency.AffineUnit<BeatsPerMinute>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Frequency, BeatsPerMinute, Hertz, Scalar>(KnownUnitType.Linear)]
+public partial record BeatsPerMinute
 {
     public static string UnitSymbol { get; } = "BPM";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["beat/min", "beat/minute"];
@@ -23,10 +20,8 @@ public partial record BeatsPerMinute(Scalar Value)
     public static Scalar ScalingFactor { get; } = 1 / Minute.ScalingFactor;
 }
 
-[KnownUnit<Frequency, Cesium133Frequency, Hertz, Scalar>]
-public partial record Cesium133Frequency(Scalar Value)
-    : Frequency.AffineUnit<Cesium133Frequency>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<Frequency, Cesium133Frequency, Hertz, Scalar>(KnownUnitType.Linear)]
+public partial record Cesium133Frequency
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "f_Cs";

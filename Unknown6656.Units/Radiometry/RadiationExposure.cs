@@ -6,22 +6,19 @@ namespace Unknown6656.Units.Radiometry;
 
 
 [KnownBaseUnit<RadiationExposure, CoulombPerKilogram, Scalar>]
-public partial record CoulombPerKilogram(Scalar Value)
-    : BaseUnit<RadiationExposure, CoulombPerKilogram, Scalar>(Value)
+public partial record CoulombPerKilogram
 {
     public static string UnitSymbol { get; } = "C/kg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["coulomb/kg", "coulomb/kilo", "C/kilo", "C/kilogram"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<RadiationExposure, Röntgen, CoulombPerKilogram, Scalar>]
+[KnownUnit<RadiationExposure, Röntgen, CoulombPerKilogram, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record Röntgen(Scalar Value)
+public partial record Röntgen
 #else
-public partial record Roentgen(Scalar Value)
+public partial record Roentgen
 #endif
-    : RadiationExposure.AffineUnit<Röntgen>(Value)
-    , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "R";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;

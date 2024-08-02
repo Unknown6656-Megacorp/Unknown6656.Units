@@ -4,8 +4,7 @@ namespace Unknown6656.Units.Thermodynamics;
 
 
 [KnownBaseUnit<ThermodynamicEntropy, JoulePerMolKelvin, Scalar>]
-public partial record JoulePerMolKelvin(Scalar Value)
-    : BaseUnit<ThermodynamicEntropy, JoulePerMolKelvin, Scalar>(Value)
+public partial record JoulePerMolKelvin
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "J/K/mol";
@@ -19,10 +18,8 @@ public partial record JoulePerMolKelvin(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<ThermodynamicEntropy, EntropyUnit, JoulePerMolKelvin, Scalar>]
-public partial record EntropyUnit(Scalar Value)
-    : ThermodynamicEntropy.AffineUnit<EntropyUnit>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<ThermodynamicEntropy, EntropyUnit, JoulePerMolKelvin, Scalar>(KnownUnitType.Linear)]
+public partial record EntropyUnit
 {
     public static string UnitSymbol { get; } = "eU";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["e.u.", "entropy U", "cal/K/mol", "cal/mol/K", "cal/(K*mol)", "cal/(mol*K)",

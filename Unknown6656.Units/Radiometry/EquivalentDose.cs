@@ -8,21 +8,18 @@ namespace Unknown6656.Units.Radiometry;
 
 
 [KnownBaseUnit<EquivalentDose, Sievert, Scalar>]
-public partial record Sievert(Scalar Value)
-    : BaseUnit<EquivalentDose, Sievert, Scalar>(Value)
+public partial record Sievert
 {
     public static string UnitSymbol { get; } = "Sv";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<EquivalentDose, RöntgenEquivalentMan, Sievert, Scalar>]
+[KnownUnit<EquivalentDose, RöntgenEquivalentMan, Sievert, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record RöntgenEquivalentMan(Scalar Value)
+public partial record RöntgenEquivalentMan
 #else
-public partial record RoentgenEquivalentMan(Scalar Value)
+public partial record RoentgenEquivalentMan
 #endif
-    : EquivalentDose.AffineUnit<RöntgenEquivalentMan>(Value)
-    , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "rem";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["röntgen equivalent man", "röntgen eq man"];
@@ -30,10 +27,8 @@ public partial record RoentgenEquivalentMan(Scalar Value)
     public static Scalar ScalingFactor { get; } = (Scalar)1e2;
 }
 
-[KnownUnit<EquivalentDose, BananaEquivalentDose, Sievert, Scalar>]
-public partial record BananaEquivalentDose(Scalar Value)
-    : EquivalentDose.AffineUnit<BananaEquivalentDose>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<EquivalentDose, BananaEquivalentDose, Sievert, Scalar>(KnownUnitType.Linear)]
+public partial record BananaEquivalentDose
 {
     public static string UnitSymbol { get; } = "BED";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["banana equivalent dose", "banana eq dose", "banana ED"];
@@ -54,10 +49,8 @@ public enum BananaEquivalentDoseScalingFactorType
     Realistic,
 }
 
-[KnownUnit<EquivalentDose, BackgroundRadiationEquivalentTime, Sievert, Scalar>]
-public partial record BackgroundRadiationEquivalentTime(Scalar Value)
-    : EquivalentDose.AffineUnit<BackgroundRadiationEquivalentTime>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<EquivalentDose, BackgroundRadiationEquivalentTime, Sievert, Scalar>(KnownUnitType.Linear)]
+public partial record BackgroundRadiationEquivalentTime
 {
     public static string UnitSymbol { get; } = "BRET";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["back eq T", "back equivalent T", "background eq T", "background equivalent T",

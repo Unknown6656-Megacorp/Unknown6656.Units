@@ -6,41 +6,34 @@ namespace Unknown6656.Units.Radiometry;
 
 
 [KnownBaseUnit<AbsorbedDose, Gray, Scalar>]
-public partial record Gray(Scalar Value)
-    : BaseUnit<AbsorbedDose, Gray, Scalar>(Value)
+public partial record Gray
 {
     public static string UnitSymbol { get; } = "Gy";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<AbsorbedDose, ErgPerGram, Gray, Scalar>]
-public partial record ErgPerGram(Scalar Value)
-    : AbsorbedDose.AffineUnit<ErgPerGram>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<AbsorbedDose, ErgPerGram, Gray, Scalar>(KnownUnitType.Linear)]
+public partial record ErgPerGram
 {
     public static string UnitSymbol { get; } = "erg/g";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e4;
 }
 
-[KnownUnit<AbsorbedDose, Rad, Gray, Scalar>]
-public partial record Rad(Scalar Value)
-    : AbsorbedDose.AffineUnit<Rad>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<AbsorbedDose, Rad, Gray, Scalar>(KnownUnitType.Linear)]
+public partial record Rad
 {
     public static string UnitSymbol { get; } = "rad";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e2;
 }
 
-[KnownUnit<AbsorbedDose, RöntgenEquivalentPhysical, Gray, Scalar>]
+[KnownUnit<AbsorbedDose, RöntgenEquivalentPhysical, Gray, Scalar>(KnownUnitType.Linear)]
 #if USE_DIACRITICS
-public partial record RöntgenEquivalentPhysical(Scalar Value)
+public partial record RöntgenEquivalentPhysical
 #else
-public partial record RoentgenEquivalentPhysical(Scalar Value)
+public partial record RoentgenEquivalentPhysical
 #endif
-    : AbsorbedDose.AffineUnit<RöntgenEquivalentPhysical>(Value)
-    , ILinearUnit<Scalar>
 {
     public static string UnitSymbol { get; } = "rep";
     static string[] IUnit.AlternativeUnitSymbols { get; } = [
