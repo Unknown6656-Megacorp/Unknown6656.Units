@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<LuminousExposure, LuxSecond, Scalar>]
-public partial record LuxSecond(Scalar Value)
-    : BaseUnit<LuminousExposure, LuxSecond, Scalar>(Value)
+public partial record LuxSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lx*s";

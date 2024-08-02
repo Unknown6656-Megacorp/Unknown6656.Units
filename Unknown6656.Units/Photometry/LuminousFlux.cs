@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<LuminousFlux, Lumen, Scalar>]
-public partial record Lumen(Scalar Value)
-    : BaseUnit<LuminousFlux, Lumen, Scalar>(Value)
+public partial record Lumen
 {
     public static string UnitSymbol { get; } = "lm";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;

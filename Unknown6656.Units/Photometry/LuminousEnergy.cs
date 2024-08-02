@@ -2,8 +2,7 @@
 
 
 [KnownBaseUnit<LuminousEnergy, LumenSecond, Scalar>]
-public partial record LumenSecond(Scalar Value)
-    : BaseUnit<LuminousEnergy, LumenSecond, Scalar>(Value)
+public partial record LumenSecond
 {
 #if USE_PURE_ASCII
     public static string UnitSymbol { get; } = "lm*s";
@@ -14,10 +13,8 @@ public partial record LumenSecond(Scalar Value)
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
 }
 
-[KnownUnit<LuminousEnergy, Lumerg, LumenSecond, Scalar>]
-public partial record Lumerg(Scalar Value)
-    : LuminousEnergy.AffineUnit<Lumerg>(Value)
-    , ILinearUnit<Scalar>
+[KnownUnit<LuminousEnergy, Lumerg, LumenSecond, Scalar>(KnownUnitType.Linear)]
+public partial record Lumerg
 {
     public static string UnitSymbol { get; } = "lumerg";
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["lmerg", "lumen erg"];
