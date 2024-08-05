@@ -721,7 +721,9 @@ public sealed class QuantityDependencyGenerator
                 if (EMIT_LINE_NUMBERS)
                     sb.AppendLine($"//#line {+1} \"...\" ");
 
-                sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromBaseUnit(unit.ToBaseUnit());");
+                string scaling = cast.Scaling is { } s ? ' ' + s : "";
+
+                sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromScalar(unit.ToBaseUnit().Value{scaling});");
             }
         }
 
@@ -817,8 +819,7 @@ public sealed class QuantityDependencyGenerator
                     $"\n        : {Identifier_IQuantity}<{name}>";
 
                 sb.AppendLine($$""""
-
-                {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
+                {{(EMIT_LINE_NUMBERS ? $"\n#line {location.StartLinePosition.Line + 1} \"{location.Path}\"" : "")}}
                     public partial record {{name.Name}} {{interfaces}}
                 #line default
                     {
@@ -891,10 +892,8 @@ public sealed class QuantityDependencyGenerator
                     """);
 
                 sb.AppendLine($$""""
-
-                {{(EMIT_LINE_NUMBERS ? $"""#line {location.StartLinePosition.Line + 1} "{location.Path}" """ : "")}}
-                    public partial record {{name.Name}} {{interfaces}}
-                {{(EMIT_LINE_NUMBERS ? "#line hidden" : "")}}
+                {{(EMIT_LINE_NUMBERS ? $"\n#line {location.StartLinePosition.Line + 1} \"{location.Path}\"" : "")}}
+                    public partial record {{name.Name}} {{interfaces}}{{(EMIT_LINE_NUMBERS ? "\n#line hidden" : "")}}
                     {
                         public static implicit operator {{name}}({{unit_info.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
 
