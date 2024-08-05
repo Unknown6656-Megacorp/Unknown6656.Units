@@ -33,6 +33,20 @@ public partial record Length(Meter value)
     public static string QuantitySymbol { get; } = "l";
 }
 
+[IdentityRelationship<Wavelength, Length, Nanometer, Meter, Scalar>(1e-9)]
+public partial record Wavelength(Nanometer value)
+    : Quantity<Wavelength, Nanometer, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "l";
+#else
+    public static string QuantitySymbol { get; } = "λ";
+#endif
+
+    public Frequency Frequency => Speed.C0 / (Length)this;
+
+}
+
 [MultiplicativeRelationship<Area, Length, Volume, SquareMeter, Meter, CubicMeter, Scalar>]
 public partial record Area(SquareMeter value)
     : Quantity<Area, SquareMeter, Scalar>(value)
