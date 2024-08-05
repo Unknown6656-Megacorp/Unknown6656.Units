@@ -44,6 +44,7 @@ public enum UnitDisplay
 #if USE_PURE_ASCII
     MetricSI_Shifted_u = MetricSI_Shifted_μ,
 #endif
+    MetricSI_Shifted_n,
     Imperial,
     ImperialWithSIPrefixes,
 
@@ -349,7 +350,8 @@ public static partial class Unit
                                                                      or UnitDisplay.MetricSI_Shifted_k
                                                                      or UnitDisplay.MetricSI_Shifted_M
                                                                      or UnitDisplay.MetricSI_Shifted_m
-                                                                     or UnitDisplay.MetricSI_Shifted_μ;
+                                                                     or UnitDisplay.MetricSI_Shifted_μ
+                                                                     or UnitDisplay.MetricSI_Shifted_n;
 
     public static bool IsImperial(this UnitDisplay display) => display is UnitDisplay.Imperial or UnitDisplay.ImperialWithSIPrefixes;
 
@@ -364,6 +366,7 @@ public static partial class Unit
                                                                  or UnitDisplay.MetricSI_Shifted_M
                                                                  or UnitDisplay.MetricSI_Shifted_m
                                                                  or UnitDisplay.MetricSI_Shifted_μ
+                                                                 or UnitDisplay.MetricSI_Shifted_n
                                                                  or UnitDisplay.UseFormatStrings
                                                                  or UnitDisplay.UseInverseFormatStrings
                                                                  or UnitDisplay.ImperialWithSIPrefixes;
@@ -423,6 +426,12 @@ public static partial class Unit
         {
             value /= @base * @base;
             unit_symbol = suffixμ;
+            display = UnitDisplay.MetricUseSIPrefixes;
+        }
+        else if (display is UnitDisplay.MetricSI_Shifted_n && unit_symbol is ['n' or 'N', .. string suffixn])
+        {
+            value /= @base * @base * @base;
+            unit_symbol = suffixn;
             display = UnitDisplay.MetricUseSIPrefixes;
         }
         else if (display is UnitDisplay.UseFormatStrings or UnitDisplay.UseInverseFormatStrings)
