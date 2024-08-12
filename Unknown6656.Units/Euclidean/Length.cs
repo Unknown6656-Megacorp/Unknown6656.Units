@@ -183,3 +183,11 @@ public partial record Angstrom
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1e10;
 }
+
+[KnownUnit<Length, Potrzebie, Meter, Scalar>(KnownUnitType.Linear)]
+public partial record Potrzebie
+{
+    public static string UnitSymbol { get; } = "pz";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.Imperial;
+    public static Scalar ScalingFactor { get; } = (Scalar)441.8232637707822;
+}
