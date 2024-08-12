@@ -6,6 +6,7 @@ using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Matter;
+using Unknown6656.Units.Euclidean;
 
 namespace Unknown6656.Units.Radiometry;
 
@@ -218,6 +219,29 @@ public partial record CountRate(CountPerSecond value)
     : Quantity<CountRate, CountPerSecond, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "A";
+}
+
+[IdentityRelationship<SpectralFlux, KineticEnergy, WattPerHertz, Joule, Scalar>]
+[MultiplicativeRelationship<SpectralFlux, Frequency, Power, WattPerHertz, Hertz, Watt, Scalar>]
+public partial record SpectralFlux(WattPerHertz value)
+    : Quantity<SpectralFlux, WattPerHertz, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "Phi_e";
+#else
+    public static string QuantitySymbol { get; } = "Φₑ";
+#endif
+}
+
+[MultiplicativeRelationship<SpectralFluxPerWavelength, Wavelength, Power, WattPerNanometer, Nanometer, Watt, Scalar>]
+public partial record SpectralFluxPerWavelength(WattPerNanometer value)
+    : Quantity<SpectralFluxPerWavelength, WattPerNanometer, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "Phi_e";
+#else
+    public static string QuantitySymbol { get; } = "Φₑ";
+#endif
 }
 
 

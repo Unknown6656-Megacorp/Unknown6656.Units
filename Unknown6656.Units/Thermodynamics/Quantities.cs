@@ -1,7 +1,7 @@
-﻿using Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Kinematics;
+using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Matter;
-using Unknown6656.Units.Kinematics;
 
 namespace Unknown6656.Units.Thermodynamics;
 
@@ -20,6 +20,7 @@ public partial record Temperature(Kelvin value)
 
 // TODO : this thing is usually a multi-dimensional vector
 [MultiplicativeRelationship<HeatFlux, Area, Power, WattPerSquareMeter, SquareMeter, Watt, Scalar>]
+[MultiplicativeRelationship<HeatFlux, EnergyDensity, Speed, WattPerSquareMeter, JoulePerCubicMeter, MeterPerSecond, Scalar>]
 public partial record HeatFlux(WattPerSquareMeter value)
     : Quantity<HeatFlux, WattPerSquareMeter, Scalar>(value)
 {
