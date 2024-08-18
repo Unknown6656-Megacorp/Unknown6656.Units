@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Unknown6656.Units.Energy;
 using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Temporal;
 
@@ -42,9 +43,13 @@ public partial record Wavelength(Nanometer value)
 #else
     public static string QuantitySymbol { get; } = "λ";
 #endif
+    public Frequency ComputeFrequency() => ComputeFrequency(Speed.C0);
 
-    public Frequency Frequency => Speed.C0 / (Length)this;
+    public Frequency ComputeFrequency(Speed wavespeed) => wavespeed / (Length)this;
 
+    public KineticEnergy ComputePhotonEnergy() => ComputePhotonEnergy(Speed.C0);
+
+    public KineticEnergy ComputePhotonEnergy(Speed lightspeed) => ComputeFrequency(lightspeed).PhotonEnergy;
 }
 
 [MultiplicativeRelationship<Area, Length, Volume, SquareMeter, Meter, CubicMeter, Scalar>]

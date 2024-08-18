@@ -1,4 +1,5 @@
-﻿using Unknown6656.Units.Euclidean;
+﻿using Unknown6656.Units.Energy;
+using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Kinematics;
 
 namespace Unknown6656.Units.Temporal;
@@ -47,7 +48,10 @@ public partial record Frequency(Hertz value)
     public static BeatsPerMinute Bradycardia_UpperBound { get; } = new(60);
 
 
-    public Length ComputeWavelength() => ComputeWavelength(Speed.C0);
+    public KineticEnergy PhotonEnergy => this * Action.PlanckConstant;
 
-    public Length ComputeWavelength(Speed wavespeed) => wavespeed / this;
+
+    public Wavelength ComputeWavelength() => ComputeWavelength(Speed.C0);
+
+    public Wavelength ComputeWavelength(Speed wavespeed) => wavespeed / this;
 }

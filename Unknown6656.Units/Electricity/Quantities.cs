@@ -15,6 +15,8 @@ public partial record Charge(Coulomb value)
     : Quantity<Charge, Coulomb, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "Q";
+
+    public static Charge ElectronCharge { get; } = new Coulomb(1.602176634e-19);
 }
 
 // V = kg * m^2 / s^3 / A

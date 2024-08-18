@@ -46,4 +46,7 @@ public partial record Action(JouleSecond value)
     : Quantity<Action, JouleSecond, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "P";
+
+    public static Action PlanckConstant { get; } = new JouleSecond(6.62607015e-34);
+    public static Action ReducedPlanckConstant { get; } = PlanckConstant / Scalar.Tau;
 }
