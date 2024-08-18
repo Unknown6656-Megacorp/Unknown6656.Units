@@ -153,12 +153,14 @@ public enum KnownUnitType
 }
 
 /// <summary>
+/// Indicates to the source generator that this data type represents a known unit of measurement.
+/// <para/>
 /// <b>
 ///     DO NOT FORGET TO REMOVE THE FOLLOWING TYPE ANNOTATIONS WHEN USING THIS ATTRIBUTE!
 /// </b>
 /// <code>
 ///     [<see cref="KnownUnit{TQuantity, TUnit, TBaseUnit, TScalar}"/>]
-///     <see langword="public record"/> ....
+///     <see langword="public partial record"/> <typeparamref name="TUnit"/> ....
 ///         : ....
 ///         , <see cref="IUnit{TUnit, TBaseUnit, TScalar}"/> // &lt;-- this one<br/>
 ///         , <see cref="IUnit"/>                            // &lt;-- and this one
@@ -186,12 +188,14 @@ public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>(KnownUnitType type)
 }
 
 /// <summary>
+/// Indicates to the source generator that this data type represents a known base unit of measurement.
+/// <para/>
 /// <b>
 ///     DO NOT FORGET TO REMOVE THE FOLLOWING TYPE ANNOTATIONS WHEN USING THIS ATTRIBUTE!
 /// </b>
 /// <code>
 ///     [<see cref="KnownBaseUnit{TQuantity, TBaseUnit, TScalar}"/>]
-///     <see langword="public record"/> ....
+///     <see langword="public partial record"/> <typeparamref name="TBaseUnit"/> ....
 ///         : ....
 ///         , <see cref="IBaseUnit{TBaseUnit, TScalar}"/> // &lt;-- this one<br/>
 ///         , <see cref="IUnit"/>                         // &lt;-- and this one

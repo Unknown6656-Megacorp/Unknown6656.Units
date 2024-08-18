@@ -29,7 +29,8 @@ public sealed class QuantityDependencyGenerator
     public static readonly Identifier Identifier_IAffineUnit = "Unknown6656.Units.IAffineUnit";
     public static readonly Identifier Identifier_ILinearUnit = "Unknown6656.Units.ILinearUnit";
     public static readonly Identifier Identifier_IQuantity = "Unknown6656.Units.IQuantity";
-    public static readonly Identifier Identifier_ExtensionClass = "Unknown6656.Units.Unit";
+    public static readonly Identifier Identifier_GlobalExtensionClass = "Unknown6656.Units.Unit";
+    public static readonly string Identifier_LocalExtensionClass = "Extensions";
     public static readonly Identifier Identifier_UnitDisplay = "Unknown6656.Units.UnitDisplay";
     public static readonly Identifier Identifier_IBaseUnit = "Unknown6656.Units.IBaseUnit";
     public static readonly Identifier Identifier_ArbitraryUnit = "Unknown6656.Units.Quantity<,,,>.ArbitraryUnit";
@@ -130,7 +131,7 @@ public sealed class QuantityDependencyGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-         //Debugger.Launch();
+        //Debugger.Launch();
 
         try
         {
@@ -250,11 +251,10 @@ public sealed class QuantityDependencyGenerator
             known_aliases,
             out Dictionary<Identifier, QuantityInformation> quantity_infos,
             out Dictionary<Identifier, UnitInformation> unit_infos,
-            out List<StaticCreationMethod> static_infos,
             out List<AliasInformation> alias_infos
         );
 
-        GenerateSource(production_context, quantity_infos, unit_infos, static_infos, alias_infos, disable_emitting_interfaces);
+        GenerateSource(production_context, quantity_infos, unit_infos, alias_infos, disable_emitting_interfaces);
     }
 
     private static void GenerateInfo(
@@ -270,7 +270,6 @@ public sealed class QuantityDependencyGenerator
         GenericAttributeClassUsage[] known_aliases,
         out Dictionary<Identifier, QuantityInformation> quantity_infos,
         out Dictionary<Identifier, UnitInformation> unit_infos,
-        out List<StaticCreationMethod> static_infos,
         out List<AliasInformation> alias_infos
     )
     {
@@ -341,9 +340,6 @@ public sealed class QuantityDependencyGenerator
                 known_units_dict[quantity] = entry;
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
                 unit_types[target_name] = Enum.TryParse(unit_type, true, out UnitType t) ? t : UnitType.Linear;
-
-                if (target_name.EndsWith(".Byte"))
-                    ;
             }
 
         foreach (GenericAttributeClassUsage usage in known_base_units)
@@ -392,8 +388,6 @@ public sealed class QuantityDependencyGenerator
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [alias_target_name]));
             else if (usage.AttributeArguments is AttributeArgumentSyntax[] { Length: > 1 } args && args[0].Expression is LiteralExpressionSyntax { Token.ValueText: string alias_name })
             {
-                Debug.Print((alias_target_name, alias_name) + "");
-
                 string cs_unit_symbol = args[1].ToFullString();
                 string[] cs_symbol_alias = args.Skip(2).Select(a => a.ToFullString()).ToArray();
                 Identifier t_quantity = usage.GenericAttributeArguments[0];
@@ -417,15 +411,6 @@ public sealed class QuantityDependencyGenerator
 
         unit_infos = [];
         quantity_infos = [];
-        static_infos = [..from usage in known_units.Concat(known_base_units)
-                          let target_name = usage.TargetSymbol?.ToDisplayString()
-                          where target_name is { }
-                          where unit_scalar_mapper.ContainsKey(target_name)
-                          select new StaticCreationMethod(
-                              usage.TargetType.GetLocation(),
-                              unit_scalar_mapper[target_name],
-                              target_name
-                        )];
 
         foreach (var kvp in known_units_dict)
         {
@@ -489,7 +474,16 @@ public sealed class QuantityDependencyGenerator
                    select new PropertyInfo(i.Value.Location, i.Key.Name, i.Key)
                 ],
                 [],
-                []
+                [],
+                [..from i in unit_infos
+                   where i.Value.Quantity == quantity
+                   where unit_scalar_mapper.ContainsKey(i.Key)
+                   select new StaticCreationMethod(
+                       i.Value.Location,
+                       unit_scalar_mapper[i.Key],
+                       i.Key
+                   )
+                ]
             );
         }
 
@@ -634,16 +628,27 @@ public sealed class QuantityDependencyGenerator
 
                 quantity_infos[t_quantity_1].Casts.Add(new(t_quantity_1, t_quantity_2, scaling));
                 quantity_infos[t_quantity_2].Casts.Add(new(t_quantity_2, t_quantity_1, invscaling));
-                unit_infos[t_baseunit_1].Casts.Add(new(t_baseunit_1, t_baseunit_2, scaling));
-                unit_infos[t_baseunit_2].Casts.Add(new(t_baseunit_2, t_baseunit_1, invscaling));
+
+                foreach (Identifier unit_1 in quantity_infos[t_quantity_1].KnownUnits.Concat([t_baseunit_1]))
+                    foreach (Identifier unit_2 in quantity_infos[t_quantity_2].KnownUnits.Concat([t_baseunit_2]))
+                    {
+                        unit_infos[unit_1].Casts.Add(new(unit_1, unit_2, scaling));
+                        unit_infos[unit_2].Casts.Add(new(unit_2, unit_1, invscaling));
+                    }
             }
+
+        //foreach (AliasInformation alias in alias_infos)
+        //{
+        //    UnitInformation unit = unit_infos[alias.AliasName];
+        //    UnitInformation target = unit_infos[alias.AliasFor];
+        //    unit.Casts
+        //}
     }
 
     private static void GenerateSource(
         SourceProductionContext production_context,
         Dictionary<Identifier, QuantityInformation> quantity_infos,
         Dictionary<Identifier, UnitInformation> unit_infos,
-        List<StaticCreationMethod> static_infos,
         List<AliasInformation> alias_infos,
         bool disable_emitting_interfaces
     )
@@ -661,19 +666,14 @@ public sealed class QuantityDependencyGenerator
         using System;
 
 
-        namespace {{Identifier_ExtensionClass.Namespace}}
-        {
-            public static partial class {{Identifier_ExtensionClass.Name}}
-            {
-        """);
-
-        foreach (StaticCreationMethod static_info in static_infos)
-            AppendStatic(static_info);
-
-        sb.AppendLine($$"""
-        #line default
-            }
-        }
+        //namespace {{Identifier_GlobalExtensionClass.Namespace}}
+        //{
+        //    public static partial class {{Identifier_GlobalExtensionClass.Name}}
+        //    {
+        //        // TODO
+        //#line default
+        //    }
+        //}
         """);
 
 
@@ -721,9 +721,19 @@ public sealed class QuantityDependencyGenerator
                 if (EMIT_LINE_NUMBERS)
                     sb.AppendLine($"//#line {+1} \"...\" ");
 
+                sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) =>");
+
                 string scaling = cast.Scaling is { } s ? ' ' + s : "";
 
-                sb.AppendLine($"        public static {(cast.Implicit ? "im" : "ex")}plicit operator {cast.Result}({cast.Operand} unit) => {cast.Result}.FromScalar(unit.ToBaseUnit().Value{scaling});");
+                if (quantity_infos.ContainsKey(cast.Result))
+                    sb.AppendLine($"             {cast.Result}.FromScalar(unit.ToBaseUnit().Value{scaling});");
+                else
+                {
+                    UnitInformation result_unit = unit_infos[cast.Result];
+                    string src = unit_infos[cast.Operand].IsBaseUnit ? "unit" : $"unit.ToBaseUnit()";
+
+                    sb.AppendLine($"             {cast.Result}.FromBaseUnit(new {result_unit.BaseUnit}({src}.Value{scaling}));");
+                }
             }
         }
 
@@ -853,6 +863,17 @@ public sealed class QuantityDependencyGenerator
                         }
 
                         public static implicit operator {{name}}(string s) => Parse(s, null);
+                    }
+
+                    public static partial class {{name.Name}}{{Identifier_LocalExtensionClass}}
+                    {
+                """);
+
+                foreach (StaticCreationMethod static_info in quantity_info.StaticCreators)
+                    AppendStatic(static_info);
+
+                sb.AppendLine($$"""
+                #line default
                     }
                 """);
             }
@@ -1037,7 +1058,8 @@ public sealed record QuantityInformation(
     List<Identifier> KnownUnits,
     List<PropertyInfo> Properties,
     List<BinaryOperator> BinaryOperators,
-    List<CastOperator> Casts
+    List<CastOperator> Casts,
+    List<StaticCreationMethod> StaticCreators
 );
 
 public enum UnitType
