@@ -475,6 +475,8 @@ public record Spectrum
         _wintensity = λ => double.Max(0, intensities(λ.ComputeFrequency()));
     }
 
+    public override string ToString() => $"Spectrum{base.ToString()}";
+
     public double GetIntensityAt(double lerp)
     {
         if (lerp < 0 || lerp > 1)
@@ -675,7 +677,6 @@ public record Spectrum
     #endregion
 
 
-
     internal static double PiecewiseGaussian(Wavelength λ, double μ, double τ1, double τ2)
     {
         double x = λ.value.Value;
@@ -738,6 +739,8 @@ public record DisjointSpectrum
 
     private DisjointSpectrum(SpectralBand[] bands, Wavelength low, Wavelength high, Func<Wavelength, double> intensities)
         : base(low, high, intensities) => _spectral_bands = Clamp(bands, low, high);
+
+    public override string ToString() => $"Spectrum({string.Join(", ", _spectral_bands as IEnumerable<SpectralBand>)})";
 
     public override DisjointSpectrum Invert(double base_intensity)
     {

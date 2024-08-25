@@ -45,7 +45,7 @@
         <PackageId>Unknown6656.Units.SourceGenerators</PackageId>
         <IncludeSymbols>true</IncludeSymbols>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <!--<SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
         <RepositoryType>Git</RepositoryType>
         <Version>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</Version>
         <PackageVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</PackageVersion>
