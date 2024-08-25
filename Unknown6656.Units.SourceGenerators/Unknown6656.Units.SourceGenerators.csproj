@@ -30,7 +30,30 @@
 
         <Authors>Unknown6656</Authors>
         <Company>Unknown6656</Company>
+        <Product>Unknown6656.Units.SourceGenerators by Unknown6656</Product>
+        <Description>The source generators which are intended to be used in conjunction with 'Unknown6656.Units.Core'.</Description>
+        <Copyright>
+            Copyright © 2023-$([System.DateTime]::Today.ToString(yyyy)), unknown6656
+        </Copyright>
+        <PackageProjectUrl>https://github.com/Unknown6656-Megacorp/Unknown6656.Units</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Unknown6656-Megacorp/Unknown6656.Units</RepositoryUrl>
+        <PackageIcon>unknown6656-logo-1024.png</PackageIcon>
+        <PackageTags>
+            unknown6656;unit;physical;units;math;mathematics;physics
+        </PackageTags>
+
+        <PackageId>Unknown6656.Units.SourceGenerators</PackageId>
+        <IncludeSymbols>true</IncludeSymbols>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryType>Git</RepositoryType>
+        <Version>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</Version>
+        <PackageVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</PackageVersion>
+        <AssemblyVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</AssemblyVersion>
     </PropertyGroup>
+    <ItemGroup>
+        <None Include="unknown6656-logo-1024.png" Pack="true" PackagePath=""/>
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" PrivateAssets="all" />
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />

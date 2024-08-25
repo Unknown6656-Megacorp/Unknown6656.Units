@@ -30,10 +30,7 @@
         <Authors>Unknown6656</Authors>
         <Company>Unknown6656</Company>
         <Product>Unknown6656.Units.Core by Unknown6656</Product>
-        <Description>
-            A compact library for representing and using (physical) units in C#.
-            Note that this version of the library is compiled for the $(Scalar) precision.
-        </Description>
+        <Description>A compact core library for representing and using (physical) units in C#.</Description>
         <Copyright>
             Copyright © 2023-$([System.DateTime]::Today.ToString(yyyy)), unknown6656
         </Copyright>
