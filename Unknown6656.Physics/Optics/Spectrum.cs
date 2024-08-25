@@ -4,6 +4,8 @@ using System;
 
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
+using System.Collections.Immutable;
+using System.Collections;
 
 namespace Unknown6656.Physics.Optics;
 
@@ -125,6 +127,8 @@ public record SpectralBand
     public virtual SpectralBand? this[Frequency low, Frequency high] => Intersect((low, high));
 
     public virtual SpectralBand? this[Wavelength low, Wavelength high] => Intersect((low, high));
+
+    public virtual SpectralBand? this[SpectralBand band] => Intersect(band);
 
     #endregion
     #region INSTANCE METHODS
@@ -412,7 +416,6 @@ public record Spectrum
     protected readonly Func<Frequency, double> _fintensity;
     protected readonly Func<Wavelength, double> _wintensity;
 
-
     #region STATIC PROPERTIES
 
     public static Spectrum CIE_ChromaticResponseX { get; } = VisibleSpectralBand * ((Wavelength λ) => 1.056 * PiecewiseGaussian(λ, 599.8, 0.0264, 0.0323)
@@ -433,6 +436,8 @@ public record Spectrum
     public virtual double this[Frequency frequency] => frequency < LowestFrequency || frequency > HighestFrequency ? 0 : _fintensity(frequency);
 
     public virtual double this[Wavelength wavelength] => wavelength < LowestWavelength || wavelength > HighestWavelength ? 0 : _wintensity(wavelength);
+
+    public override Spectrum? this[SpectralBand band] => this[band.LowestWavelength, band.HighestWavelength];
 
     public override Spectrum? this[Frequency low, Frequency high] => Overlaps((low, high)) ? new(low, high, _fintensity) : null;
 
@@ -676,7 +681,6 @@ public record Spectrum
 
     #endregion
 
-
     internal static double PiecewiseGaussian(Wavelength λ, double μ, double τ1, double τ2)
     {
         double x = λ.value.Value;
@@ -717,11 +721,19 @@ public record DisjointSpectrum
         }
     }
 
+    public override DisjointSpectrum? this[SpectralBand band] => this[band.LowestWavelength, band.HighestWavelength];
+
     public override DisjointSpectrum? this[Frequency low, Frequency high] => Clamp(low, high);
 
     public override DisjointSpectrum? this[Wavelength low, Wavelength high] => Clamp(low, high);
 
-    public override bool IsSpectralLine => _spectral_bands.All(b => b.IsSpectralLine);
+    public virtual bool HasSpectralLines => IsSpectralLine || _spectral_bands.Any(b => b.IsSpectralLine);
+
+    public virtual bool HasContinuousSpectrum => !IsSpectralLine && _spectral_bands.Any(b => !b.IsSpectralLine);
+
+    public virtual bool IsContinuousSpectrum => !IsSpectralLine && !_spectral_bands.Any(b => b.IsSpectralLine);
+
+    public virtual bool HasDisjointSpectra => _spectral_bands.Length > 1;
 
     public override bool IsFullyVisible => _spectral_bands.All(b => b.IsFullyVisible);
 
@@ -734,10 +746,10 @@ public record DisjointSpectrum
     #endregion
     #region INSTANCE METHODS
 
-    private DisjointSpectrum(SpectralBand[] bands, Frequency low, Frequency high, Func<Frequency, double> intensities)
+    private protected DisjointSpectrum(SpectralBand[] bands, Frequency low, Frequency high, Func<Frequency, double> intensities)
         : base(low, high, intensities) => _spectral_bands = Clamp(bands, low, high);
 
-    private DisjointSpectrum(SpectralBand[] bands, Wavelength low, Wavelength high, Func<Wavelength, double> intensities)
+    private protected DisjointSpectrum(SpectralBand[] bands, Wavelength low, Wavelength high, Func<Wavelength, double> intensities)
         : base(low, high, intensities) => _spectral_bands = Clamp(bands, low, high);
 
     public override string ToString() => $"Spectrum({string.Join(", ", _spectral_bands as IEnumerable<SpectralBand>)})";
@@ -822,14 +834,14 @@ public record DisjointSpectrum
         return CreateFromBands(bands, (Wavelength λ) => bands.Any(b => b.Contains(λ)) ? _wintensity(λ) + other._wintensity(λ) : 0);
     }
 
-    public DisjointSpectrum? Clamp(Frequency low, Frequency high)
+    public virtual DisjointSpectrum? Clamp(Frequency low, Frequency high)
     {
         SpectralBand[] bands = Clamp(_spectral_bands, low, high);
 
         return bands.Length > 0 ? CreateFromBands(bands, _wintensity) : null;
     }
 
-    public DisjointSpectrum? Clamp(Wavelength low, Wavelength high)
+    public virtual DisjointSpectrum? Clamp(Wavelength low, Wavelength high)
     {
         SpectralBand[] bands = Clamp(_spectral_bands, low, high);
 
@@ -936,11 +948,299 @@ public record DisjointSpectrum
     #endregion
 }
 
+public record SparseSpectrum
+    : DisjointSpectrum
+{
+    private readonly IDictionary<Wavelength, double> _intensities;
 
+    #region INSTANCE PROPERTIES
+
+    public override double this[Frequency frequency] => this[frequency.ComputeWavelength()];
+
+    public override double this[Wavelength wavelength] => _intensities.TryGetValue(wavelength, out double intensity) ? intensity : 0;
+
+    public override SparseSpectrum? this[SpectralBand band] => this[band.LowestWavelength, band.HighestWavelength];
+
+    public override SparseSpectrum? this[Frequency low, Frequency high] => Clamp(low, high);
+
+    public override SparseSpectrum? this[Wavelength low, Wavelength high] => Clamp(low, high);
+
+    public override bool HasSpectralLines => _intensities.Count > 0;
+
+    public override bool HasContinuousSpectrum => false;
+
+    public override bool IsContinuousSpectrum => false;
+
+    public override bool HasDisjointSpectra => _intensities.Count > 1;
+
+    public Wavelength[] SpectralLines => [.. _intensities.Keys];
+
+    public (Wavelength Wavelength, double Intensity)[] Intensities => _intensities.Select(kvp => (kvp.Key, kvp.Value)).ToArray();
+
+    #endregion
+    #region INSTANCE METHODS
+
+    public SparseSpectrum(IDictionary<Frequency, double> intensities)
+        : this(intensities.Select(kvp => (kvp.Key.ComputeWavelength(), kvp.Value)))
+    {
+    }
+
+    public SparseSpectrum(IDictionary<Wavelength, double> intensities)
+        : this(intensities.Select(kvp => (kvp.Key, kvp.Value)))
+    {
+    }
+
+    public SparseSpectrum(IEnumerable<(Frequency Frequency, double Intensity)> intensities)
+        : this(intensities.Select(t => (t.Frequency.ComputeWavelength(), t.Intensity)))
+    {
+    }
+
+    public SparseSpectrum(IEnumerable<(Wavelength Wavelength, double Intensity)> intensities)
+        : this(intensities.Where(t => t.Intensity > 0).ToDictionary() is { Count: > 0 } arr ? arr : throw new ArgumentException("The spectrum must have at least one spectral line with an intensity greater than zero.", nameof(intensities)), null)
+    {
+    }
+
+    private SparseSpectrum(IDictionary<Wavelength, double> intensities, object? _/*dummy parameter*/)
+        : base(
+            [.. intensities.Keys.Select(t => (SpectralBand)t)],
+            intensities.Keys.Min()!,
+            intensities.Keys.Max()!,
+            λ => intensities.TryGetValue(λ, out double d) ? d : 0
+        ) => _intensities = intensities;
+
+    public override SparseSpectrum Invert(double base_intensity) => new(_intensities.ToDictionary(kvp => kvp.Key, kvp => base_intensity - kvp.Value));
+
+    public SparseSpectrum Normalize() => AmplifyIntensity(1 / _intensities.Values.Max());
+
+    public SparseSpectrum NormalizeVisible()
+    {
+        double max = 0;
+
+        foreach ((Wavelength λ, double intensity) in _intensities)
+            if (VisibleSpectralBand.Contains(λ))
+                max = Math.Max(max, intensity);
+
+        return max is 0 or 1 ? this : AmplifyIntensity(1 / max);
+    }
+
+    public SparseSpectrum? ToVisibleSpectrum() => this[VisibleSpectralBand];
+
+    public SparseSpectrum Add(SparseSpectrum other)
+    {
+        Dictionary<Wavelength, double> intensities = new(_intensities);
+
+        foreach ((Wavelength λ, double intensity) in other._intensities)
+            intensities[λ] = intensities.TryGetValue(λ, out double d) ? d + intensity : intensity;
+
+        return new(intensities);
+    }
+
+    public SparseSpectrum Subtract(SparseSpectrum other)
+    {
+        Dictionary<Wavelength, double> intensities = new(_intensities);
+
+        foreach ((Wavelength λ, double intensity) in other._intensities)
+            if (intensities.TryGetValue(λ, out double d))
+                intensities[λ] = Math.Max(d - intensity, 0);
+
+        return new(intensities);
+    }
+
+    public SparseSpectrum Max(SparseSpectrum other)
+    {
+        Dictionary<Wavelength, double> intensities = new(_intensities);
+
+        foreach ((Wavelength λ, double intensity) in other._intensities)
+            intensities[λ] = intensities.TryGetValue(λ, out double d) ? Math.Max(d, intensity) : intensity;
+
+        return new(intensities);
+    }
+
+    public SparseSpectrum Min(SparseSpectrum other)
+    {
+        Dictionary<Wavelength, double> intensities = new(_intensities);
+
+        foreach ((Wavelength λ, double intensity) in other._intensities)
+            intensities[λ] = intensities.TryGetValue(λ, out double d) ? Math.Min(d, intensity) : intensity;
+
+        return new(intensities);
+    }
+
+    public SparseSpectrum Multiply(SparseSpectrum other)
+    {
+        Dictionary<Wavelength, double> intensities = [];
+
+        foreach ((Wavelength λ, double intensity) in _intensities)
+            if (other._intensities.TryGetValue(λ, out double d))
+                intensities[λ] = intensity * d;
+
+        return new(intensities);
+    }
+
+    public override SparseSpectrum AmplifyIntensity(double factor) => new(_intensities.ToDictionary(kvp => kvp.Key, kvp => kvp.Value * factor));
+
+    public override SparseSpectrum ShiftIntensity(double offset) => new(_intensities.ToDictionary(kvp => kvp.Key, kvp => kvp.Value + offset));
+
+    public override SparseSpectrum ShiftSpectrumBy(Wavelength wavelength) => new(_intensities.ToDictionary(kvp => kvp.Key + wavelength, kvp => kvp.Value));
+
+    public override SparseSpectrum ShiftSpectrumBy(Frequency frequency) => ShiftSpectrumBy(frequency.ComputeWavelength());
+
+    public SparseSpectrum? Intersect(SparseSpectrum other)
+    {
+        IEnumerable<(Wavelength Key, double)> intensities = from kvp1 in _intensities
+                                                            from kvp2 in other._intensities
+                                                            where kvp1.Key == kvp2.Key
+                                                            select (kvp1.Key, kvp1.Value + kvp2.Value);
+
+        return intensities.Any() ? new(intensities.ToDictionary()) : null;
+    }
+
+    public SparseSpectrum Xor(SparseSpectrum other)
+    {
+        Dictionary<Wavelength, double> intensities = new(_intensities);
+
+        foreach ((Wavelength λ, double intensity) in other._intensities)
+            if (!intensities.Remove(λ))
+                intensities[λ] = intensity;
+
+        return new(intensities);
+    }
+
+    public override SparseSpectrum? Clamp(Frequency low, Frequency high) => Clamp(low.ComputeWavelength(), high.ComputeWavelength());
+
+    public override SparseSpectrum? Clamp(Wavelength low, Wavelength high)
+    {
+        Dictionary<Wavelength, double> intensities = [];
+
+        foreach ((Wavelength λ, double d) in _intensities)
+            if (λ >= low && λ <= high)
+                intensities[λ] = d;
+
+        return intensities.Count != 0 ? new(intensities) : null;
+    }
+
+    #endregion
+    #region STATIC METHODS
+
+    public static SparseSpectrum? Clamp(SparseSpectrum spectrum, Frequency low, Frequency high) => spectrum.Clamp(low, high);
+
+    public static SparseSpectrum? Clamp(SparseSpectrum spectrum, Wavelength low, Wavelength high) => spectrum.Clamp(low, high);
+
+    public static SparseSpectrum Create(Wavelength wavelength, double intensity = 1) => Create([wavelength], intensity);
+
+    public static SparseSpectrum Create(Frequency frequency, double intensity = 1) => Create([frequency], intensity);
+
+    public static SparseSpectrum Create(IEnumerable<Wavelength> wavelengths, double intensity = 1) => Create(wavelengths.ToDictionary(λ => λ, _ => intensity));
+
+    public static SparseSpectrum Create(IEnumerable<Frequency> frequencies, double intensity = 1) => Create(frequencies.ToDictionary(f => f, _ => intensity));
+
+    public static SparseSpectrum Create(IDictionary<Wavelength, double> intensities) => new(intensities);
+
+    public static SparseSpectrum Create(IDictionary<Frequency, double> intensities) => new(intensities);
+
+    public static SparseSpectrum Create(IEnumerable<(Frequency Frequency, double Intensity)> intensities) => new(intensities);
+
+    public static SparseSpectrum Create(IEnumerable<(Wavelength Wavelength, double Intensity)> intensities) => new(intensities);
+
+    #endregion
+    #region OPERATORS
+
+    public static implicit operator SparseSpectrum((Wavelength Wavelength, double Intensity)[] intensities) => new(intensities as IEnumerable<(Wavelength, double)>);
+
+    public static implicit operator SparseSpectrum((Frequency Frequency, double Intensity)[] intensities) => new(intensities as IEnumerable<(Frequency, double)>);
+
+    public static SparseSpectrum operator +(SparseSpectrum first, SparseSpectrum second) => first.Add(second);
+
+    public static SparseSpectrum operator -(SparseSpectrum first, SparseSpectrum second) => first.Subtract(second);
+
+    public static SparseSpectrum operator *(SparseSpectrum first, SparseSpectrum second) => first.Multiply(second);
+
+    public static SparseSpectrum operator +(SparseSpectrum spectrum, double shift) => spectrum.ShiftIntensity(shift);
+
+    public static SparseSpectrum operator +(double shift, SparseSpectrum spectrum) => spectrum.ShiftIntensity(shift);
+
+    public static SparseSpectrum operator -(SparseSpectrum spectrum, double shift) => spectrum.ShiftIntensity(-shift);
+
+    public static SparseSpectrum operator *(SparseSpectrum spectrum, double factor) => spectrum.AmplifyIntensity(factor);
+
+    public static SparseSpectrum operator *(double factor, SparseSpectrum spectrum) => spectrum.AmplifyIntensity(factor);
+
+    public static SparseSpectrum operator /(SparseSpectrum spectrum, double factor) => spectrum.AmplifyIntensity(1d / factor);
+
+    public static SparseSpectrum operator >>(SparseSpectrum spectrum, Wavelength wavelength) => spectrum.ShiftSpectrumBy(wavelength);
+
+    public static SparseSpectrum operator <<(SparseSpectrum spectrum, Wavelength wavelength) => spectrum.ShiftSpectrumBy(-wavelength);
+
+    public static SparseSpectrum operator >>(SparseSpectrum spectrum, Frequency frequency) => spectrum.ShiftSpectrumBy(frequency);
+
+    public static SparseSpectrum operator <<(SparseSpectrum spectrum, Frequency frequency) => spectrum.ShiftSpectrumBy(-frequency);
+
+    #endregion
+}
+
+// TODO : eye response spectrum
+// TODO : simulate color blindness transformations
+//      - protanopia
+//      - deuteranopia
+//      - tritanopia
+//      - protanomaly
+//      - deutanomaly
+//      - tritanomaly
 
 
 
 #if false // TODO : check if we need to implement any of the following code
+
+class SparseSpectrum
+{
+    public HDRColor ToVisibleColor() => ToVisibleColor(1);
+
+    public HDRColor ToVisibleColor(double α) => ToVisibleColor(Wavelength.LowestVisibleWavelength, Wavelength.HighestVisibleWavelength, 0, α);
+
+    public override HDRColor ToVisibleColor(Wavelength lowest, Wavelength highest, double _ignored_, double α)
+    {
+        if (lowest > highest)
+            (lowest, highest) = (highest, lowest);
+
+        HDRColor color = new();
+
+        foreach (KeyValuePair<Wavelength, double> kvp in Intensities)
+            if (kvp.Key.IsVisible && kvp.Key >= lowest && kvp.Key <= highest)
+                color += kvp.Value * kvp.Key.ToColor();
+
+        return color;
+    }
+
+    public ColorPalette ToColorPalette() => new(Intensities.Keys.Select(λ => (RGBAColor)λ.ToColor()));
+
+    public DiscreteColorMap ToColorMap()
+    {
+        if (Intensities.Keys.OrderBy(λ => λ.InNanometers).ToArray() is { Length: > 0 } wavelengths)
+        {
+            Scalar min = wavelengths[^1].InNanometers;
+            Scalar max = wavelengths[0].InNanometers;
+
+            return new(wavelengths.Select(λ => ((λ.InNanometers - min) / (max - min), (RGBAColor)λ.ToColor())));
+        }
+        else
+            throw new InvalidOperationException("The spectrum must not be empty.");
+    }
+
+    public override string ToString() => $"{Intensities.Count} Wavelengths: [{string.Join(", ", Intensities.Select(kvp => $"{kvp.Key.InNanometers}nm:{kvp.Value}"))}]";
+
+    public IEnumerator<(Wavelength Wavelength, double Intensity)> GetEnumerator() => Intensities.Select(kvp => (kvp.Key, kvp.Value)).GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+
+    public static implicit operator ColorPalette(DiscreteSpectrum spectrum) => spectrum.ToColorPalette();
+
+    public static implicit operator DiscreteColorMap(DiscreteSpectrum spectrum) => spectrum.ToColorMap();
+
+    public static implicit operator ContinuousSpectrum(DiscreteSpectrum spectrum) => spectrum.ToContinuous();
+
+    public static implicit operator HDRColor(DiscreteSpectrum spectrum) => spectrum.ToVisibleColor();
+}
 
 public abstract partial class __Spectrum
 {
