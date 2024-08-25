@@ -3,6 +3,7 @@
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Temporal;
+using Unknown6656.Units.Thermodynamics;
 
 namespace Unknown6656.Units.Euclidean;
 
@@ -50,6 +51,19 @@ public partial record Wavelength(Nanometer value)
     public KineticEnergy ComputePhotonEnergy() => ComputePhotonEnergy(Speed.C0);
 
     public KineticEnergy ComputePhotonEnergy(Speed lightspeed) => ComputeFrequency(lightspeed).PhotonEnergy;
+
+    /// <summary>
+    /// Computes the emittance of a black body at the given temperature for the given wavelength.
+    /// </summary>
+    /// <param name="wavelength">Wavelength of the black body radiation.</param>
+    /// <param name="temperature">Black body temperature.</param>
+    /// <returns>Black body emittance.</returns>
+    public HeatFlux GetBlackBodyEmittance(Wavelength wavelength, Temperature temperature)
+    {
+        double λm = ((Length)wavelength).Meter.Value;
+
+        return new WattPerSquareMeter(3.74183e-16 * Math.Pow(λm, -5.0) / Math.Exp(1.4388e-2 / (λm * temperature) - 1.0));
+    }
 }
 
 [MultiplicativeRelationship<Area, Length, Volume, SquareMeter, Meter, CubicMeter, Scalar>]
