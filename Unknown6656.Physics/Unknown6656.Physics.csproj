@@ -53,7 +53,7 @@
         <AssemblyVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</AssemblyVersion>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="unknown6656-logo-1024.png" />
+        <None Include="unknown6656-logo-1024.png" Pack="true" PackagePath="" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Unknown6656.Units\Unknown6656.Units.csproj" />

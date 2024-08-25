@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unknown6656.Units.SourceGen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unknown6656.Units.Core", "Unknown6656.Units.Core\Unknown6656.Units.Core.csproj", "{73FEA015-492E-4AB8-82B4-062107C874FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unknown6656.Physics", "Unknown6656.Physics\Unknown6656.Physics.csproj", "{0FD3D8A4-4BC6-46B4-B3E2-4228DC57D75B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unknown6656.Physics", "Unknown6656.Physics\Unknown6656.Physics.csproj", "{0FD3D8A4-4BC6-46B4-B3E2-4228DC57D75B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3447C4B5-3A50-4AD8-BB43-6AD8DC3E991F}"
+	ProjectSection(SolutionItems) = preProject
+		version.txt = version.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
