@@ -4,8 +4,6 @@ using System;
 
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
-using System.Collections.Immutable;
-using System.Collections;
 
 namespace Unknown6656.Physics.Optics;
 
@@ -14,7 +12,8 @@ public record SpectralBand
 {
     #region STATIC PROPERTIES
 
-    public static SpectralBand VisibleSpectralBand { get; } = new(380d.Nanometer(), 720d.Nanometer());
+    public static SpectralBand VisibleSpectralBand { get; } = new(380d.Nanometer(), 750d.Nanometer());
+    public static SpectralBand ExtendedVisibleSpectralBand { get; } = new(310d.Nanometer(), 1100d.Nanometer());
     public static SpectralBand UltravioletA { get; } = new(315d.Nanometer(), 400d.Nanometer());
     public static SpectralBand UltravioletB { get; } = new(280d.Nanometer(), 315d.Nanometer());
     public static SpectralBand UltravioletC { get; } = new(100d.Nanometer(), 280d.Nanometer());
@@ -431,7 +430,7 @@ public record Spectrum
     #endregion
     #region INSTANCE PROPERTIES
 
-    public Spectrum? VisibleSubSpectrum => Intersect(VisibleSpectralBand) is { } band ? Create(band, _wintensity) : null;
+    public virtual Spectrum? VisibleSubSpectrum => Intersect(VisibleSpectralBand) is { } band ? Create(band, _wintensity) : null;
 
     public virtual double this[Frequency frequency] => frequency < LowestFrequency || frequency > HighestFrequency ? 0 : _fintensity(frequency);
 
@@ -727,6 +726,8 @@ public record DisjointSpectrum
 
     public override DisjointSpectrum? this[Wavelength low, Wavelength high] => Clamp(low, high);
 
+    public override DisjointSpectrum? VisibleSubSpectrum => this[VisibleSpectralBand];
+
     public virtual bool HasSpectralLines => IsSpectralLine || _spectral_bands.Any(b => b.IsSpectralLine);
 
     public virtual bool HasContinuousSpectrum => !IsSpectralLine && _spectral_bands.Any(b => !b.IsSpectralLine);
@@ -965,6 +966,8 @@ public record SparseSpectrum
 
     public override SparseSpectrum? this[Wavelength low, Wavelength high] => Clamp(low, high);
 
+    public override SparseSpectrum? VisibleSubSpectrum => this[VisibleSpectralBand];
+
     public override bool HasSpectralLines => _intensities.Count > 0;
 
     public override bool HasContinuousSpectrum => false;
@@ -1007,6 +1010,8 @@ public record SparseSpectrum
             intensities.Keys.Max()!,
             λ => intensities.TryGetValue(λ, out double d) ? d : 0
         ) => _intensities = intensities;
+
+    public override string ToString() => $"{_intensities.Count} Wavelengths: [{string.Join(", ", _intensities.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}]";
 
     public override SparseSpectrum Invert(double base_intensity) => new(_intensities.ToDictionary(kvp => kvp.Key, kvp => base_intensity - kvp.Value));
 
@@ -1186,156 +1191,3 @@ public record SparseSpectrum
 //      - protanomaly
 //      - deutanomaly
 //      - tritanomaly
-
-
-
-#if false // TODO : check if we need to implement any of the following code
-
-class SparseSpectrum
-{
-    public HDRColor ToVisibleColor() => ToVisibleColor(1);
-
-    public HDRColor ToVisibleColor(double α) => ToVisibleColor(Wavelength.LowestVisibleWavelength, Wavelength.HighestVisibleWavelength, 0, α);
-
-    public override HDRColor ToVisibleColor(Wavelength lowest, Wavelength highest, double _ignored_, double α)
-    {
-        if (lowest > highest)
-            (lowest, highest) = (highest, lowest);
-
-        HDRColor color = new();
-
-        foreach (KeyValuePair<Wavelength, double> kvp in Intensities)
-            if (kvp.Key.IsVisible && kvp.Key >= lowest && kvp.Key <= highest)
-                color += kvp.Value * kvp.Key.ToColor();
-
-        return color;
-    }
-
-    public ColorPalette ToColorPalette() => new(Intensities.Keys.Select(λ => (RGBAColor)λ.ToColor()));
-
-    public DiscreteColorMap ToColorMap()
-    {
-        if (Intensities.Keys.OrderBy(λ => λ.InNanometers).ToArray() is { Length: > 0 } wavelengths)
-        {
-            Scalar min = wavelengths[^1].InNanometers;
-            Scalar max = wavelengths[0].InNanometers;
-
-            return new(wavelengths.Select(λ => ((λ.InNanometers - min) / (max - min), (RGBAColor)λ.ToColor())));
-        }
-        else
-            throw new InvalidOperationException("The spectrum must not be empty.");
-    }
-
-    public override string ToString() => $"{Intensities.Count} Wavelengths: [{string.Join(", ", Intensities.Select(kvp => $"{kvp.Key.InNanometers}nm:{kvp.Value}"))}]";
-
-    public IEnumerator<(Wavelength Wavelength, double Intensity)> GetEnumerator() => Intensities.Select(kvp => (kvp.Key, kvp.Value)).GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-
-    public static implicit operator ColorPalette(DiscreteSpectrum spectrum) => spectrum.ToColorPalette();
-
-    public static implicit operator DiscreteColorMap(DiscreteSpectrum spectrum) => spectrum.ToColorMap();
-
-    public static implicit operator ContinuousSpectrum(DiscreteSpectrum spectrum) => spectrum.ToContinuous();
-
-    public static implicit operator HDRColor(DiscreteSpectrum spectrum) => spectrum.ToVisibleColor();
-}
-
-public abstract partial class __Spectrum
-{
-    //public virtual ContinuousColorMap ToColorMap(Wavelength lowest, Wavelength highest)
-    //{
-    //    if (lowest > highest)
-    //        (lowest, highest) = (highest, lowest);
-    //
-    //    double dist = (highest - lowest).InNanometers;
-    //
-    //    return new(s => GetIntensity(s * dist + lowest.InNanometers));
-    //
-    //}
-    //
-    //public ContinuousColorMap ToVisibleColorMap() => ToColorMap(Wavelength.LowestVisibleWavelength, Wavelength.HighestVisibleWavelength);
-
-    public HDRColor ToVisibleColor(Wavelength lowest, Wavelength highest, double wavelength_resolution_in_nm) =>
-        ToVisibleColor(lowest, highest, wavelength_resolution_in_nm, 1);
-
-    public virtual HDRColor ToVisibleColor(Wavelength lowest, Wavelength highest, double wavelength_resolution_in_nm, double α)
-    {
-        if (lowest > highest)
-            (lowest, highest) = (highest, lowest);
-
-        wavelength_resolution_in_nm = Math.Max(wavelength_resolution_in_nm, Scalar.ComputationalEpsilon);
-
-        HDRColor color = new();
-
-        for (Wavelength nm = lowest; nm <= highest; nm += wavelength_resolution_in_nm)
-            if (nm.IsVisible)
-                color += GetIntensity(nm) * nm.ToColor();
-
-        return color;
-    }
-}
-
-public readonly struct __Wavelength
-{
-    public readonly HDRColor ToColor() => HDRColor.FromWavelength(in this);
-
-    public readonly HDRColor ToColor(double α) => HDRColor.FromWavelength(in this, α);
-
-    public readonly RGBAColor ToRGBAColor() => ToColor();
-
-    public readonly RGBAColor ToRGBAColor(double α) => ToColor(α);
-
-
-    public static implicit operator HDRColor(Wavelength wavelength) => wavelength.ToColor();
-
-    public static implicit operator RGBAColor(Wavelength wavelength) => wavelength.ToRGBAColor();
-}
-
-public class DiscreteSpectrum
-    : Spectrum
-    , IEnumerable<(Wavelength Wavelength, double Intensity)>
-{
-    public DiscreteSpectrum ToVisibleSpectrum() => new(Intensities.Where(kvp => kvp.Key.IsVisible).ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
-
-    public HDRColor ToVisibleColor() => ToVisibleColor(1);
-
-    public HDRColor ToVisibleColor(double α) => ToVisibleColor(Wavelength.LowestVisibleWavelength, Wavelength.HighestVisibleWavelength, 0, α);
-
-    public override HDRColor ToVisibleColor(Wavelength lowest, Wavelength highest, double _ignored_, double α)
-    {
-        if (lowest > highest)
-            (lowest, highest) = (highest, lowest);
-
-        HDRColor color = new();
-
-        foreach (KeyValuePair<Wavelength, double> kvp in Intensities)
-            if (kvp.Key.IsVisible && kvp.Key >= lowest && kvp.Key <= highest)
-                color += kvp.Value * kvp.Key.ToColor();
-
-        return color;
-    }
-
-    public ColorPalette ToColorPalette() => new(Intensities.Keys.Select(λ => (RGBAColor)λ.ToColor()));
-
-    public DiscreteColorMap ToColorMap()
-    {
-        if (Intensities.Keys.OrderBy(λ => λ.InNanometers).ToArray() is { Length: > 0 } wavelengths)
-        {
-            Scalar min = wavelengths[^1].InNanometers;
-            Scalar max = wavelengths[0].InNanometers;
-
-            return new(wavelengths.Select(λ => ((λ.InNanometers - min) / (max - min), (RGBAColor)λ.ToColor())));
-        }
-        else
-            throw new InvalidOperationException("The spectrum must not be empty.");
-    }
-
-
-    public static implicit operator ColorPalette(DiscreteSpectrum spectrum) => spectrum.ToColorPalette();
-
-    public static implicit operator HDRColor(DiscreteSpectrum spectrum) => spectrum.ToVisibleColor();
-}
-
-#endif

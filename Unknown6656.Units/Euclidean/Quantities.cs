@@ -44,6 +44,12 @@ public partial record Wavelength(Nanometer value)
 #else
     public static string QuantitySymbol { get; } = "λ";
 #endif
+
+    public bool IsVisible => value >= 380 && value <= 750;
+
+    public bool IsExtendedVisible => value >= 310 && value <= 1100;
+
+
     public Frequency ComputeFrequency() => ComputeFrequency(Speed.C0);
 
     public Frequency ComputeFrequency(Speed wavespeed) => wavespeed / (Length)this;
