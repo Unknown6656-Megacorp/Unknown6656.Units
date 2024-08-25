@@ -894,6 +894,10 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public static TUnit FromScalar(TScalar value) => _constructor(value);
 
+    public static TUnit Min(TUnit first, TUnit second) => first.CompareTo(second) <= 0 ? first : second;
+
+    public static TUnit Max(TUnit first, TUnit second) => first.CompareTo(second) >= 0 ? first : second;
+
     #region INUMBERBASE<> MEMBERS
 
     public static TUnit Abs(TUnit value) => FromScalar(TScalar.Abs(value.Value));
