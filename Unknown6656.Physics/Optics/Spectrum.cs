@@ -201,6 +201,62 @@ public record SpectralBand
         return LowestFrequency + lerp * FrequencyRange;
     }
 
+    public Wavelength[] GetWavelengths(int count)
+    {
+        if (count <= 0)
+            return [];
+        else if (count == 1)
+            return [CenterWavelength];
+        else
+            return GetWavelengths(WavelengthRange / (count - 1));
+    }
+
+    public Wavelength[] GetWavelengths(Wavelength stepsize)
+    {
+        List<Wavelength> wavelengths = [];
+
+        for (Wavelength λ = LowestWavelength; λ <= HighestWavelength; λ += stepsize)
+            wavelengths.Add(λ);
+
+        return [.. wavelengths];
+    }
+
+    public Frequency[] GetFrequencies(int count)
+    {
+        if (count <= 0)
+            return [];
+        else if (count == 1)
+            return [CenterFrequency];
+        else
+            return GetFrequencies(FrequencyRange / (count - 1));
+    }
+
+    public Frequency[] GetFrequencies(Frequency stepsize)
+    {
+        List<Frequency> frequencies = [];
+
+        for (Frequency λ = LowestFrequency; λ <= HighestFrequency; λ += stepsize)
+            frequencies.Add(λ);
+
+        return [.. frequencies];
+    }
+
+    public double GetWavelengthPoint(Wavelength wavelength)
+    {
+        if (wavelength < LowestWavelength || wavelength > HighestWavelength)
+            throw new ArgumentOutOfRangeException(nameof(wavelength), "The given wavelength must be within the spectral band.");
+
+        return (wavelength - LowestWavelength) / WavelengthRange;
+    }
+
+    public double GetFrequencyPoint(Frequency frequency)
+    {
+        if (frequency < LowestFrequency || frequency > HighestFrequency)
+            throw new ArgumentOutOfRangeException(nameof(frequency), "The given frequency must be within the spectral band.");
+
+        return (frequency - LowestFrequency) / FrequencyRange;
+    }
+
     public bool Contains(Wavelength wavelength)
     {
         if (this is DisjointSpectrum disjoint)
