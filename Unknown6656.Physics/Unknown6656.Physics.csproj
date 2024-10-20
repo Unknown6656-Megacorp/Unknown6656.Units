@@ -56,6 +56,7 @@
         <None Include="unknown6656-logo-1024.png" Pack="true" PackagePath="" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Unknown6656.Units\Unknown6656.Units.csproj" />
+        <ProjectReference Include="..\Unknown6656.Units\Unknown6656.Units.csproj" />
+        <PackageReference Include="Unknown6656.Generics" Version="1.0.15" />
     </ItemGroup>
 </Project>
