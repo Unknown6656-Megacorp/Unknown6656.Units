@@ -6,7 +6,9 @@
         <!--<Scalar>F32</Scalar>-->
         <Scalar>F64</Scalar>
         <!--<Scalar>D128</Scalar>-->
-        <DefineConstants>$(DefineConstants);$(Scalar);USE_DIACRITICS<!--;USE_PURE_ASCII--></DefineConstants>
+        <DefineConstants>
+            $(DefineConstants);$(Scalar);USE_DIACRITICS<!--;USE_PURE_ASCII-->
+        </DefineConstants>
     </PropertyGroup>
     <!--<Target Name="BuildOthers" BeforeTargets="DispatchToInnerBuilds" Condition="'$(Scalar)' == ''">-->
     <Target Name="BuildOthers" BeforeTargets="CoreBuild" Condition="'$(Scalar)' == ''">
@@ -72,6 +74,7 @@
         <AssemblyVersion>$([System.IO.File]::ReadAllText("$(SolutionDir)version.txt"))</AssemblyVersion>
     </PropertyGroup>
     <ItemGroup>
+        <!--<PackageReference Include="Unknown6656.Generics" Version="1.0.15" />-->
         <ProjectReference Include="..\Unknown6656.Units.Core\Unknown6656.Units.Core.csproj" />
         <ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj" OutputItemType="Analyzer" />
         <!--<ProjectReference Include="..\Unknown6656.Units.SourceGenerators\Unknown6656.Units.SourceGenerators.csproj"/>-->
