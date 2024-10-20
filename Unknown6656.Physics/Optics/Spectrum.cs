@@ -1071,7 +1071,9 @@ public record SparseSpectrum
 
     public override SparseSpectrum Invert(double base_intensity) => new(_intensities.ToDictionary(kvp => kvp.Key, kvp => base_intensity - kvp.Value));
 
-    public SparseSpectrum Normalize() => AmplifyIntensity(1 / _intensities.Values.Max());
+    public SparseSpectrum NormalizeMax() => AmplifyIntensity(1 / _intensities.Values.Max());
+
+    public SparseSpectrum NormalizeSum() => AmplifyIntensity(1 / _intensities.Values.Sum());
 
     public SparseSpectrum NormalizeVisible()
     {
