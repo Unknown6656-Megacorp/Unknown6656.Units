@@ -855,7 +855,15 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale) => Unit.Format(Value, TUnit.UnitSymbol, format, formatProvider, TUnit.UnitDisplay, scale);
 
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider) => throw new NotImplementedException();
+    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    {
+        string result = ToString(new(format), provider);
+
+        charsWritten = Math.Min(result.Length, destination.Length);
+        result.CopyTo(destination[..charsWritten]);
+
+        return charsWritten == result.Length;
+    }
 
     #endregion
     #region PARSING
