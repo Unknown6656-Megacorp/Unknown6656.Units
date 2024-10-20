@@ -2,6 +2,7 @@
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Matter;
+using System;
 
 namespace Unknown6656.Units.Thermodynamics;
 
@@ -10,8 +11,29 @@ public partial record Temperature(Kelvin value)
     : Quantity<Temperature, Kelvin, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "T";
-    public static Kelvin AbsoluteZero { get; } = new((Scalar)0);
-    public static Kelvin AbsoluteHot { get; } = new((Scalar)1.416808338416e32);
+    public static Temperature AbsoluteZero { get; } = new Kelvin((Scalar)0);
+    public static Temperature AbsoluteHot { get; } = new Kelvin((Scalar)1.416808338416e32);
+    public static Temperature RoomTemperature { get; } = new Celsius((Scalar)20);
+}
+
+public record PressureTemperaturePoint(Pressure Pressure, Temperature Temperature)
+    : IFormattable
+{
+    public static PressureTemperaturePoint NormalNTP { get; } = new(Atmosphere.One, Temperature.RoomTemperature);
+
+
+    public PressureTemperaturePoint(Temperature Temperature, Pressure Pressure)
+        : this(Pressure, Temperature)
+    {
+    }
+
+    public override string ToString() => $"{Temperature:F3} / {Pressure:F3}";
+
+    public string ToString(string? format, IFormatProvider? formatProvider) => $"{Temperature.ToString(format, formatProvider)} / {Pressure.ToString(format, formatProvider)}";
+
+    public static implicit operator PressureTemperaturePoint((Pressure Pressure, Temperature Temperature) point) => new(point.Pressure, point.Temperature);
+
+    public static implicit operator PressureTemperaturePoint((Temperature Temperature, Pressure Pressure) point) => new(point.Pressure, point.Temperature);
 }
 
 // HeatFlux = kg * s^-3
