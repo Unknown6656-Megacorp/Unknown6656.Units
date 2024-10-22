@@ -1,19 +1,21 @@
 ﻿using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
+using Unknown6656.Units.Kinematics;
 
 namespace Unknown6656.Units.Energy;
 
 
-// TODO : implement shit like  E = 1/2 * m * v^2
 // TODO : implement gravitational energy    E = - g1 * g2 * m1 * m2 / r     or    E = m * g * h
 [MultiplicativeRelationship<Pressure, Volume, KineticEnergy, Pascal, CubicMeter, Joule, Scalar>]
+[MultiplicativeRelationship<Impulse, Speed, KineticEnergy, NewtonSecond, MeterPerSecond, Joule, Scalar>] // <-- todo : verify this
 public partial record KineticEnergy(Joule value)
     : Quantity<KineticEnergy, Joule, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "E";
 }
 
+[MultiplicativeRelationship<Speed, SpecificEnergy, MeterPerSecond, JoulePerKilogram, Scalar>]
 [MultiplicativeRelationship<SpecificEnergy, Mass, KineticEnergy, JoulePerKilogram, Kilogram, Joule, Scalar>]
 public partial record SpecificEnergy(JoulePerKilogram value)
     : Quantity<SpecificEnergy, JoulePerKilogram, Scalar>(value)
