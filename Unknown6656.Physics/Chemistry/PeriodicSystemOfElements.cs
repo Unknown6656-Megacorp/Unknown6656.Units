@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System;
 
@@ -140,15 +140,15 @@ public class Element
     public uint ProtonCount => AtomicNumber;
     public ElementCategory Category { get; }
     public ThermodynamicElementProperties ThermodynamicProperties { get; }
-
-    // public double Electronegativity { get; }
-    // public double IonizationEnergy { get; }
-    // public double ElectronAffinity { get; }
-    // public double AtomicRadius { get; }
-
+    public double? ElectroNegativity { get; }
+    public ChemicalPotential IonizationEnergy { get; }
+    public Length CovalentRadius { get; }
+    public Length VanDerWaalsRadius { get; }
+    public Speed SpeedOfSound { get; }
+    public ChemicalPotential HeatOfFusion { get; }
+    public ChemicalPotential HeatOfVaporization { get; }
     public Spectrum? EmissionSpectrum { get; }
     public Spectrum? AbsorptionSpectrum { get; }
-
     public Isotope MostAbundantIsotope => _isotopes.OrderByDescending(x => x.Abundance).First();
     public Isotope[] KnownIsotopes => [.. _isotopes];
     public bool IsStable => MostAbundantIsotope.IsStable;
@@ -174,13 +174,13 @@ public class Element
         uint atomic_number,
         ElementCategory category,
         ThermodynamicElementProperties thermodynamic_properties,
-        double? Electronegativity,
-        ChemicalPotential IonizationEnergy,
-        Length CovalentRadius,
-        Length VanDerWaalsRadius,
-        Speed SpeedOfSound,
-        ChemicalPotential HeatOfFusion,
-        ChemicalPotential HeatOfVaporization,
+        double? electro_negativity,
+        ChemicalPotential ionization_energy,
+        Length covalent_radius,
+        Length van_der_waals_radius,
+        Speed speed_of_sound,
+        ChemicalPotential heat_of_fusion,
+        ChemicalPotential heat_of_vaporization,
         Spectrum? emission,
         Spectrum? absorption
     )
@@ -190,6 +190,13 @@ public class Element
         AtomicNumber = atomic_number;
         ThermodynamicProperties = thermodynamic_properties;
         Category = category;
+        ElectroNegativity = electro_negativity;
+        IonizationEnergy = ionization_energy;
+        CovalentRadius = covalent_radius;
+        VanDerWaalsRadius = van_der_waals_radius;
+        SpeedOfSound = speed_of_sound;
+        HeatOfFusion = heat_of_fusion;
+        HeatOfVaporization = heat_of_vaporization;
         EmissionSpectrum = emission;
         AbsorptionSpectrum = absorption;
     }
