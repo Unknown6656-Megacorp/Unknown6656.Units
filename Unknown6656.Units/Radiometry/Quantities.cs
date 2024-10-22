@@ -3,10 +3,10 @@ using System;
 
 using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Kinematics;
+using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Matter;
-using Unknown6656.Units.Euclidean;
 
 namespace Unknown6656.Units.Radiometry;
 

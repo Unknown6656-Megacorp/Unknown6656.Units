@@ -103,16 +103,34 @@ public partial record SpecificEntropy(JoulePerKilogramKelvin value)
 #endif
 }
 
+[InverseRelationship<ThermalExpansion, Temperature, InverseKelvin, Kelvin, Scalar>]
+[MultiplicativeRelationship<KineticEnergy, ThermalEntropy, ThermalExpansion, Joule, JoulePerKelvin, InverseKelvin, Scalar>]
+[MultiplicativeRelationship<ThermodynamicEntropy, ChemicalPotential, ThermalExpansion, JoulePerMolKelvin, JoulePerMol, InverseKelvin, Scalar>]
+public partial record ThermalExpansion(InverseKelvin value)
+    : Quantity<ThermalExpansion, InverseKelvin, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "a";
+#else
+    public static string QuantitySymbol { get; } = "α";
+#endif
+}
+
 // TODO : Negentropy
 // TODO : free entropy https://en.wikipedia.org/wiki/Free_entropy
 // TODO : https://en.wikipedia.org/wiki/Entropy_(statistical_thermodynamics)
-// TODO : heat capacity == entropy ?
+// TODO : specific heat capacity https://en.wikipedia.org/wiki/Specific_heat_capacity
 // TODO : specific enthalpy == j/kg
 
-public partial record HeatTransferCoefficient
-{
-    // TODO
-}
+//public partial record HeatTransferCoefficient
+//{
+//    // TODO
+//}
+
+//public partial record ThermalDiffusivity //  m^2/s
+//{
+//    // TODO
+//}
 
 // W/m/K * m/s = W/K/s = J/K/s^2
 [MultiplicativeRelationship<ThermalConductivity, Absement, ThermalEntropy, WattPerMeterKelvin, MeterSecond, JoulePerKelvin, Scalar>]
@@ -137,15 +155,3 @@ public partial record ThermalResistivity(KelvinMeterPerWatt value)
     public static string QuantitySymbol { get; } = "ρ";
 #endif
 }
-
-public partial record ThermalDiffusivity //  m^2/s
-{
-    // TODO
-}
-
-public partial record ThermalExpansion //  1/K
-{
-    // TODO
-}
-
-// TODO : specific heat capacity https://en.wikipedia.org/wiki/Specific_heat_capacity
