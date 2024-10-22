@@ -116,6 +116,44 @@ public partial record ThermalExpansion(InverseKelvin value)
 #endif
 }
 
+[MultiplicativeRelationship<LinearThermalExpansion, Temperature, Length, MeterPerKelvin, Kelvin, Meter, Scalar>]
+[MultiplicativeRelationship<LinearEnergyTransfer, LinearThermalExpansion, ThermalEntropy, JoulePerMeter, MeterPerKelvin, JoulePerKelvin, Scalar>]
+public partial record LinearThermalExpansion(MeterPerKelvin value)
+    : Quantity<LinearThermalExpansion, MeterPerKelvin, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "a_L";
+#else
+    public static string QuantitySymbol { get; } = "α_L";
+#endif
+}
+
+[MultiplicativeRelationship<AreaThermalExpansion, Temperature, Area, SquareMeterPerKelvin, Kelvin, SquareMeter, Scalar>]
+[MultiplicativeRelationship<AreaThermalExpansion, Length, LinearThermalExpansion, SquareMeterPerKelvin, Meter, MeterPerKelvin, Scalar>]
+public partial record AreaThermalExpansion(SquareMeterPerKelvin value)
+    : Quantity<AreaThermalExpansion, SquareMeterPerKelvin, Scalar>(value)
+{
+
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "a_A";
+#else
+    public static string QuantitySymbol { get; } = "α_A";
+#endif
+}
+
+[MultiplicativeRelationship<VolumetricThermalExpansion, Temperature, Volume, CubicMeterPerKelvin, Kelvin, CubicMeter, Scalar>]
+[MultiplicativeRelationship<VolumetricThermalExpansion, Area, LinearThermalExpansion, CubicMeterPerKelvin, SquareMeter, MeterPerKelvin, Scalar>]
+[MultiplicativeRelationship<VolumetricThermalExpansion, Length, AreaThermalExpansion, CubicMeterPerKelvin, Meter, SquareMeterPerKelvin, Scalar>]
+public partial record VolumetricThermalExpansion(CubicMeterPerKelvin value)
+    : Quantity<VolumetricThermalExpansion, CubicMeterPerKelvin, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "a_V";
+#else
+    public static string QuantitySymbol { get; } = "α_V";
+#endif
+}
+
 // TODO : Negentropy
 // TODO : free entropy https://en.wikipedia.org/wiki/Free_entropy
 // TODO : https://en.wikipedia.org/wiki/Entropy_(statistical_thermodynamics)
