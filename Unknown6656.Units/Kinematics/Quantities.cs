@@ -12,7 +12,7 @@ public partial record Speed(MeterPerSecond value)
     : Quantity<Speed, MeterPerSecond, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "v";
-    public static SpeedOfLightVacuum C0 { get; } = new(1);
+    public static Speed C0 { get; } = new SpeedOfLightVacuum(1);
 }
 
 [MultiplicativeRelationship<Acceleration, Time, Speed, MeterPerSecondSquared, Second, MeterPerSecond, Scalar>]

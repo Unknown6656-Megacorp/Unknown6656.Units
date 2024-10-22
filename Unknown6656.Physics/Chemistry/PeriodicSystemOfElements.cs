@@ -1,275 +1,20 @@
-using System.Collections.Generic;
-using System.Linq;
-using System;
-
-using Unknown6656.Units.Thermodynamics;
+﻿using Unknown6656.Units.Thermodynamics;
+using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
-using Unknown6656.Common;
-using Unknown6656.Units.Kinematics;
-using System.Drawing;
+
 using Unknown6656.Physics.Optics;
 
 namespace Unknown6656.Physics.Chemistry;
 
 
-
-public enum DecayMode
-{
-    Stable = 0,
-    Alpha = 1,
-    BetaMinus = 2,
-    BetaPlus = 3,
-    ElectronCapture = 4,
-    IsomericTransition = 5,
-    SpontaneousFission = 6,
-    ClusterDecay = 7,
-    NeutronEmission = 8,
-    ProtonEmission = 9,
-    DoubleBetaDecay = 10,
-    DoubleElectronCapture = 11,
-    DoubleBetaPlusDecay = 12,
-    BetaGammaDecay = 13,
-    InternalConversion = 14,
-    Gamma = 15,
-    PositronEmission = 16,
-    NeutronCapture = 17,
-    Spallation = 18,
-    Photodisintegration = 19,
-    Photofission = 20,
-}
-
-public enum ElementCategory
-{
-    Unknown = 0,
-    AlkaliMetal = 1,
-    AlkalineEarthMetal = 2,
-    Lanthanide = 3,
-    Actinide = 4,
-    TransitionMetal = 5,
-    PostTransitionMetal = 6,
-    Metalloid = 7,
-    NonMetal = 8,
-    Halogen = 9,
-    NobleGas = 10,
-}
-
-public enum FundamentalState
-{
-    Solid = 0,
-    Liquid = 1,
-    Gas = 2,
-    Plasma = 3,
-}
-
-public record ThermodynamicElementProperties(
-    Temperature MeltingPoint,
-    Temperature BoilingPoint,
-    PressureTemperaturePoint TriplePoint,
-    PressureTemperaturePoint CriticalPoint,
-    VolumetricMassDensity StandardDensity
-)
-{
-    public FundamentalState State => GetFundamentalStateAt(PressureTemperaturePoint.NormalNTP);
-
-
-    public FundamentalState GetFundamentalStateAt(PressureTemperaturePoint point) => GetFundamentalStateAt(point.Temperature, point.Pressure);
-
-    public FundamentalState GetFundamentalStateAt(Pressure pressure, Temperature temperature) => GetFundamentalStateAt(temperature, pressure);
-
-    public FundamentalState GetFundamentalStateAt(Temperature temperature, Pressure pressure)
-    {
-        throw null;
-
-        //= MeltingPoint >= Temperature.RoomTemperature ? FundamentalState.Solid
-        //                                   : BoilingPoint <= Temperature.RoomTemperature ? FundamentalState.Gas : FundamentalState.Liquid;
-    }
-}
-
-public enum PeriodicTableBlock
-{
-    S = 1,
-    P = 2,
-    D = 3,
-    F = 4,
-}
-
-public class Element
-{
-    private readonly HashSet<Isotope> _isotopes = [];
-
-    public string Name { get; }
-    public string Symbol { get; }
-    public uint ElementPeriod => AtomicNumber switch
-    {
-        < 1 => 0,
-        <= 2 => 1,
-        <= 10 => 2,
-        <= 18 => 3,
-        <= 36 => 4,
-        <= 54 => 5,
-        <= 86 => 6,
-        <= 118 => 7,
-        _ => throw new NotImplementedException($"Unknown atomic element {this}")
-    };
-    public uint? ElementGroup => AtomicNumber switch
-    {
-        0 => 0,
-        2 => 18,
-        1 or 3 or 11 or 19 or 37 or 55 or 87 => 1,
-        4 or 12 or 20 or 38 or 56 or 88 => 2,
-        (>= 57 and <= 70) or (>= 89 and <= 102) => null,
-        >= 21 and <= 36 => AtomicNumber - 18,
-        >= 39 and <= 54 => AtomicNumber - 36,
-        >= 71 and <= 86 => AtomicNumber - 68,
-        >= 103 and <= 118 => AtomicNumber - 100,
-        <= 10 => AtomicNumber + 8,
-        <= 18 => AtomicNumber,
-        _ => throw new NotImplementedException($"Unknown atomic element {this}")
-    };
-    public PeriodicTableBlock ElementBlock => AtomicNumber switch
-    {
-        (>= 5 and <= 10) or (>= 13 and <= 18) or (>= 31 and <= 36) or (>= 49 and <= 54) or (>= 81 and <= 86) or (>= 113 and <= 118) => PeriodicTableBlock.P,
-        (>= 21 and <= 30) or (>= 39 and <= 48) or (>= 71 and <= 80) or (>= 103 and <= 112) => PeriodicTableBlock.D,
-        (>= 57 and <= 70) or (>= 89 and <= 102) => PeriodicTableBlock.F,
-        <= 88 => PeriodicTableBlock.S,
-        _ => throw new NotImplementedException($"Unknown atomic element {this}")
-    };
-    public uint AtomicNumber { get; }
-    public uint ProtonCount => AtomicNumber;
-    public ElementCategory Category { get; }
-    public ThermodynamicElementProperties ThermodynamicProperties { get; }
-    public double? ElectroNegativity { get; }
-    public ChemicalPotential IonizationEnergy { get; }
-    public Length CovalentRadius { get; }
-    public Length VanDerWaalsRadius { get; }
-    public Speed SpeedOfSound { get; }
-    public ChemicalPotential HeatOfFusion { get; }
-    public ChemicalPotential HeatOfVaporization { get; }
-    public Spectrum? EmissionSpectrum { get; }
-    public Spectrum? AbsorptionSpectrum { get; }
-    public Isotope MostAbundantIsotope => _isotopes.OrderByDescending(x => x.Abundance).First();
-    public Isotope[] KnownIsotopes => [.. _isotopes];
-    public bool IsStable => MostAbundantIsotope.IsStable;
-
-    public Dalton StandardAtomicMass
-    {
-        get
-        {
-            Dalton mass = Dalton.Zero;
-
-            foreach (Isotope isotope in _isotopes)
-                mass += isotope.AtomicMass * isotope.Abundance;
-
-            return mass;
-        }
-    }
-
-
-
-    public Element(
-        string name,
-        string symbol,
-        uint atomic_number,
-        ElementCategory category,
-        ThermodynamicElementProperties thermodynamic_properties,
-        double? electro_negativity,
-        ChemicalPotential ionization_energy,
-        Length covalent_radius,
-        Length van_der_waals_radius,
-        Speed speed_of_sound,
-        ChemicalPotential heat_of_fusion,
-        ChemicalPotential heat_of_vaporization,
-        Spectrum? emission,
-        Spectrum? absorption
-    )
-    {
-        Name = name;
-        Symbol = symbol;
-        AtomicNumber = atomic_number;
-        ThermodynamicProperties = thermodynamic_properties;
-        Category = category;
-        ElectroNegativity = electro_negativity;
-        IonizationEnergy = ionization_energy;
-        CovalentRadius = covalent_radius;
-        VanDerWaalsRadius = van_der_waals_radius;
-        SpeedOfSound = speed_of_sound;
-        HeatOfFusion = heat_of_fusion;
-        HeatOfVaporization = heat_of_vaporization;
-        EmissionSpectrum = emission;
-        AbsorptionSpectrum = absorption;
-    }
-
-    internal Element AddIsotope(uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays = null) => AddIsotope(null, neutron_count, abundance, decays);
-
-    internal Element AddIsotope(string? name, uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays = null)
-    {
-        _isotopes.Add(new(this, name, neutron_count, abundance, decays));
-
-        return this;
-    }
-
-    internal Element AddIsotopes(IEnumerable<(uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays)> isotopes)
-    {
-        foreach ((uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays) in isotopes)
-            AddIsotope(neutron_count, abundance, decays);
-
-        return this;
-    }
-
-    internal Element AddIsotopes(IEnumerable<(string? name, uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays)> isotopes)
-    {
-        foreach ((string? name, uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays) in isotopes)
-            AddIsotope(name, neutron_count, abundance, decays);
-
-        return this;
-    }
-
-    public override int GetHashCode() => (int)AtomicNumber;
-
-    public override bool Equals(object? obj) => obj is Element other && other.AtomicNumber == AtomicNumber;
-
-    public override string ToString() => $"{Name} ({AtomicNumber}, {Symbol})";
-}
-
-public record IsotopeDecay(DecayMode Mode, Time HalfTime, Temperature Temperature)
-{
-    // public override string ToString() => ;
-}
-
-public class Isotope
-{
-    public string Name { get; }
-    public Element Element { get; }
-    public uint NeutronCount { get; }
-    public Dalton AtomicMass { get; }
-    public double Abundance { get; }
-    public IsotopeDecay[] KnownDecays { get; }
-    public bool IsStable => KnownDecays.Length == 0;
-
-
-    internal Isotope(Element element, string? override_name, uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays = null)
-    {
-        Element = element;
-        Name = override_name ?? element.Name;
-        NeutronCount = neutron_count;
-        AtomicMass = Mass.AtomicMass(element.ProtonCount, neutron_count);
-        Abundance = double.Clamp(abundance, 0, 1);
-        KnownDecays = decays?.ToArray() ?? [];
-    }
-
-    public override int GetHashCode() => HashCode.Combine(Element.ProtonCount, NeutronCount);
-
-    public override bool Equals(object? obj) => obj is Isotope other && other.Element == Element && other.NeutronCount == NeutronCount;
-
-    public override string ToString() => $"{Name} ({Element.AtomicNumber}, {Element.Symbol}-{Element.AtomicNumber + NeutronCount})";
-}
-
 public static class PeriodicTableOfElements
 {
+    #region 1 H  - HYDROGEN
+
     public static Element Hydrogen { get; } = new Element(
-        "Hydrogen",
+        nameof(Hydrogen),
         "H",
         1,
         ElementCategory.NonMetal,
@@ -397,8 +142,11 @@ public static class PeriodicTableOfElements
         ("Tritium", 2, .0000000000001, [new(DecayMode.BetaMinus, 12.32.SolarYear(), 0d.Kelvin())])
     ]);
 
+    #endregion
+    #region 2 He - HELIUM
+
     public static Element Helium { get; } = new Element(
-        "Helium",
+        nameof(Helium),
         "He",
         2,
         ElementCategory.NobleGas,
@@ -569,5 +317,118 @@ public static class PeriodicTableOfElements
         (4, .999998, [])
     ]);
 
-    // TODO : all other elements
+    #endregion
+    #region 3 Li - LITHIUM
+
+    public static Element Lithium { get; } = new Element(
+        nameof(Lithium),
+        "Li",
+        3,
+        ElementCategory.AlkaliMetal,
+        new ThermodynamicElementProperties(
+            453.65.Kelvin(),
+            1_603d.Kelvin(),
+            null,
+            (3_220d.Kelvin(), 67e6.Pascal()),
+            0.5334.GramPerCubicCentimeter()
+        ),
+        0.98,
+        520.2e3.JoulePerMol(),
+        128e-12.Meter(),
+        182e-12.Meter(),
+        6_000d.MeterPerSecond(),
+        3_000d.JoulePerMol(),
+        136_000d.JoulePerMol(),
+        new SparseSpectrum([
+            (149.293d.Nanometer(), 0.0008333333333333334),
+            (149.297d.Nanometer(), 0.001388888888888889),
+            (149.304d.Nanometer(), 0.0002777777777777778),
+            (165.308d.Nanometer(), 0.0008333333333333334),
+            (165.313d.Nanometer(), 0.001388888888888889),
+            (165.321d.Nanometer(), 0.0002777777777777778),
+            (233.688d.Nanometer(), 0.0008333333333333334),
+            (233.691d.Nanometer(), 0.001388888888888889),
+            (233.7d.Nanometer(), 0.0005555555555555556),
+            (239.439d.Nanometer(), 0.0002777777777777778),
+            (242.543d.Nanometer(), 0.0008333333333333334),
+            (247.506d.Nanometer(), 0.002777777777777778),
+            (255.17d.Nanometer(), 0.006666666666666667),
+            (256.231d.Nanometer(), 0.004166666666666667),
+            (265.729d.Nanometer(), 0.0005555555555555556),
+            (265.73d.Nanometer(), 0.0008333333333333334),
+            (272.829d.Nanometer(), 0.001388888888888889),
+            (272.832d.Nanometer(), 0.0005555555555555556),
+            (273.047d.Nanometer(), 0.0008333333333333334),
+            (273.055d.Nanometer(), 0.0002777777777777778),
+            (274.12d.Nanometer(), 0.001388888888888889),
+            (293.402d.Nanometer(), 0.0005555555555555556),
+            (293.407d.Nanometer(), 0.0005555555555555556),
+            (293.412d.Nanometer(), 0.001388888888888889),
+            (293.425d.Nanometer(), 0.0002777777777777778),
+            (302.912d.Nanometer(), 0.0008333333333333334),
+            (302.914d.Nanometer(), 0.0008333333333333334),
+            (315.531d.Nanometer(), 0.0008333333333333334),
+            (315.533d.Nanometer(), 0.0011111111111111111),
+            (319.626d.Nanometer(), 0.0002777777777777778),
+            (319.633d.Nanometer(), 0.0025),
+            (319.636d.Nanometer(), 0.0011111111111111111),
+            (319.933d.Nanometer(), 0.001388888888888889),
+            (319.943d.Nanometer(), 0.0005555555555555556),
+            (323.266d.Nanometer(), 0.004722222222222222),
+            (371.4d.Nanometer(), 0.0002777777777777778),
+            (371.416d.Nanometer(), 0.001388888888888889),
+            (371.427d.Nanometer(), 0.0016666666666666668),
+            (371.429d.Nanometer(), 0.0022222222222222222),
+            (371.44d.Nanometer(), 0.0019444444444444444),
+            (371.441d.Nanometer(), 0.002777777777777778),
+            (371.451d.Nanometer(), 0.0002777777777777778),
+            (371.87d.Nanometer(), 0.0008333333333333334),
+            (379.472d.Nanometer(), 0.0016666666666666668),
+            (391.53d.Nanometer(), 0.005555555555555556),
+            (391.535d.Nanometer(), 0.005555555555555556),
+            (398.548d.Nanometer(), 0.002777777777777778),
+            (398.554d.Nanometer(), 0.002777777777777778),
+            (413.256d.Nanometer(), 0.011111111111111112),
+            (413.262d.Nanometer(), 0.011111111111111112),
+            (427.307d.Nanometer(), 0.005555555555555556),
+            (427.313d.Nanometer(), 0.005555555555555556),
+            (432.542d.Nanometer(), 0.001388888888888889),
+            (432.547d.Nanometer(), 0.001388888888888889),
+            (432.554d.Nanometer(), 0.0002777777777777778),
+            (460.283d.Nanometer(), 0.003611111111111111),
+            (460.289d.Nanometer(), 0.003611111111111111),
+            (467.165d.Nanometer(), 0.0016666666666666668),
+            (467.17d.Nanometer(), 0.0005555555555555556),
+            (467.806d.Nanometer(), 0.0008333333333333334),
+            (467.829d.Nanometer(), 0.0002777777777777778),
+            (488.132d.Nanometer(), 0.0011111111111111111),
+            (488.139d.Nanometer(), 0.0011111111111111111),
+            (488.149d.Nanometer(), 0.0002777777777777778),
+            (497.166d.Nanometer(), 0.0022222222222222222),
+            (497.175d.Nanometer(), 0.0022222222222222222),
+            (548.355d.Nanometer(), 0.16666666666666666),
+            (548.565d.Nanometer(), 0.16666666666666666),
+            (610.354d.Nanometer(), 0.08888888888888889),
+            (610.365d.Nanometer(), 0.08888888888888889),
+            (670.776d.Nanometer(), 1),
+            (670.791d.Nanometer(), 1),
+            (812.623d.Nanometer(), 0.013333333333333334),
+            (812.645d.Nanometer(), 0.013333333333333334),
+        ]),
+        null
+    ).AddIsotopes([
+
+    ]);
+
+    #endregion
+    #region 4 Be - BERYLLIUM
+    #endregion
+    #region 5 B  - BORON
+    #endregion
+    #region 6 C  - CARBON
+    #endregion
+    #region 7 N  - NITROGEN
+    #endregion
+    #region 8 O  - OXYGEN
+    #endregion
 }
