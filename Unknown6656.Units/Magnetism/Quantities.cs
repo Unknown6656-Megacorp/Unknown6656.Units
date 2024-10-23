@@ -3,6 +3,7 @@ using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Energy;
+using Unknown6656.Units.Matter;
 
 namespace Unknown6656.Units.Magnetism;
 
@@ -31,6 +32,7 @@ public partial record MagneticFlux(Weber value)
 // T = V/m/(m/s)
 // T = N/A/m
 // T = J/A/m^2
+
 public partial record MagneticFluxDensity(Tesla value)
     : Quantity<MagneticFluxDensity, Tesla, Scalar>(value)
 {
@@ -44,7 +46,29 @@ public partial record MagneticFieldStrength(AmpèrePerMeter value)
     public static string QuantitySymbol { get; } = "H";
 }
 
+[MultiplicativeRelationship<MolarMagneticSusceptibility, Amount, Volume, CubicMeterPerMol, Mol, CubicMeter, Scalar>]
+[MultiplicativeRelationship<MolarMagneticSusceptibility, VolumetricMassDensity, MolarMass, CubicMeterPerMol, KilogramPerCubicMeter, KilogramPerMol, Scalar>]
+public partial record MolarMagneticSusceptibility(CubicMeterPerMol value)
+    : Quantity<MolarMagneticSusceptibility, CubicMeterPerMol, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "χₘ";
+#else
+    public static string QuantitySymbol { get; } = "Chi_m";
+#endif
+}
 
+[MultiplicativeRelationship<MassMagneticSusceptibility, Mass, Volume, CubicMeterPerKilogram, Kilogram, CubicMeter, Scalar>]
+[InverseRelationship<MassMagneticSusceptibility, VolumetricMassDensity, CubicMeterPerKilogram, KilogramPerCubicMeter, Scalar>]
+public partial record MassMagneticSusceptibility(CubicMeterPerKilogram value)
+    : Quantity<MassMagneticSusceptibility, CubicMeterPerKilogram, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "χₚ";
+#else
+    public static string QuantitySymbol { get; } = "Chi_rho";
+#endif
+}
 
 /*
 TODO:
@@ -67,5 +91,11 @@ TODO:
 //      - H/m
 // - magnetic reluctance
 //      - A/V
+
+// [magn.moment] / [flux.density] = [magnetizability]
+
+// [magnetic.dipole.moment] / [volume] = [magnetization]
+// [volumetric magnetic susceptibility] = [magn.field.strength] / [magnetization]
+//                                      = [magn.field.strength] / [magnetic.dipole.moment] * [volume]
 
  */
