@@ -1,5 +1,7 @@
 ﻿using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Energy;
+using Unknown6656.Units.Euclidean;
+using Unknown6656.Units.Magnetism;
 
 namespace Unknown6656.Units.Electricity;
 
@@ -89,11 +91,32 @@ public partial record Inductance(Henry value)
     public static string QuantitySymbol { get; } = "L";
 }
 
+[MultiplicativeRelationship<Length, Resistance, Resistivity, Meter, Ohm, OhmMeter, Scalar>]
+[MultiplicativeRelationship<Conductance, Resistivity, Length, Siemens, OhmMeter, Meter, Scalar>]
+[MultiplicativeRelationship<MagneticFieldStrength, Resistivity, Potential, AmpèrePerMeter, OhmMeter, Volt, Scalar>]
+public partial record Resistivity(OhmMeter value)
+    : Quantity<Resistivity, OhmMeter, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "rho";
+#else
+    public static string QuantitySymbol { get; } = "ρ";
+#endif
+}
 
-
+[InverseRelationship<Resistivity, Conductivity, OhmMeter, SiemensPerMeter, Scalar>]
+[MultiplicativeRelationship<Conductivity, Length, Conductance, SiemensPerMeter, Meter, Siemens, Scalar>]
+public partial record Conductivity(SiemensPerMeter value)
+    : Quantity<Conductivity, SiemensPerMeter, Scalar>(value)
+{
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = "sigma";
+#else
+    public static string QuantitySymbol { get; } = "σ";
+#endif
+}
 
 // TODO:
-// - resistivity
 // - permittivity
 // - electrostatic units
 //      - esu
