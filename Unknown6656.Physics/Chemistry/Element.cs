@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System;
 
 using Unknown6656.Units.Thermodynamics;
 using Unknown6656.Units.Kinematics;
+using Unknown6656.Units.Magnetism;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 
 using Unknown6656.Physics.Optics;
+using Unknown6656.Common;
 
 namespace Unknown6656.Physics.Chemistry;
 
@@ -67,11 +70,12 @@ public record ThermodynamicElementProperties
     public required Temperature BoilingPoint { get; init; }
     public required PressureTemperaturePoint? TriplePoint { get; init; }
     public required PressureTemperaturePoint? CriticalPoint { get; init; }
-    public required ChemicalPotential IonizationEnergy { get; init; }
+    public required ChemicalPotential[] IonizationEnergies { get; init; }
     public required ChemicalPotential HeatOfFusion { get; init; }
     public required ChemicalPotential HeatOfVaporization { get; init; }
-    public required ThermalExpansion ThermalExpansion { get; init; }
+    public required ThermalExpansion? ThermalExpansion { get; init; }
     public required ThermalConductivity ThermalConductivity { get; init; }
+    public required ThermodynamicEntropy ThermalCapacity { get; init; }
 
 
     public FundamentalState State => GetFundamentalStateAt(PressureTemperaturePoint.NormalNTP);
@@ -102,19 +106,76 @@ public record OpticalElementProperties
     public bool CreatesCherenkovRadiation(Speed speed) => SpeedOfLight is Speed c && speed > c;
 }
 
+public enum MagneticOrdering
+{
+    Diamagnetic,
+    Paramagnetic,
+    Ferromagnetic,
+}
+
 public record ElectromagneticalElementProperties
 {
     public required ElectricalResistivity ElectricalResistivity { get; init; }
-    public required MolarMagneticSusceptibility MolarMagneticSusceptibility { get; init; }
-    public required Pressure YoungModulus { get; init; }
-    public required Pressure ShearModulus { get; init; }
-    public required Pressure BulkModulus { get; init; }
-    public required Pressure BrinellHardness { get; init; }
+    public required MolarMagneticSusceptibility MagneticSusceptibility { get; init; }
+    public required MagneticOrdering MagneticOrdering { get; init; }
+    public required Temperature? CurieTemperature { get; init; }
+}
+
+public enum ElectronOrbital
+{
+    S = 1,
+    P = 2,
+    D = 3,
+    F = 4,
+    G = 5,
+    H = 6,
+}
+
+public record ElectronOrbitalConfiguration(ElectronOrbital Orbital, uint Subshell, uint Electrons)
+{
+#if USE_PURE_ASCII
+    public override string ToString() => $"{Subshell}{Orbital}^{Electrons}";
+#else
+    public override string ToString() => $"{Subshell}{Orbital}{Electrons.ToString().ToSuperScript()}";
+#endif
+
+    public ElectronOrbitalConfiguration(uint Subshell, ElectronOrbital Orbital, uint Electrons)
+        : this(Orbital, Subshell, Electrons)
+    {
+    }
+}
+
+public record ElectronConfiguration(IEnumerable<ElectronOrbitalConfiguration> Shells)
+    : IEnumerable<ElectronOrbitalConfiguration>
+{
+    public override string ToString() => $"[{string.Join(" ", Shells)}]";
+
+
+    public IEnumerator<ElectronOrbitalConfiguration> GetEnumerator() => Shells.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Shells).GetEnumerator();
+}
+
+public record ChemicalBondingElementProperties
+{
+    /// <summary>
+    /// The element's electronegativity on the Pauling scale.
+    /// </summary>
+    public required double? ElectroNegativity { get; init; } = null;
+    public required int[] OxidationStates { get; init; } = [0];
+    public required Length CovalentRadius { get; init; }
+    public required Length VanDerWaalsRadius { get; init; }
+    public required Length? MeanAtomicRadius { get; init; }
+    public required ElectronConfiguration ElectronConfiguration { get; init; }
 }
 
 public record KinematicElementProperties
 {
     public required Speed SpeedOfSound { get; init; }
+    public required Pressure? YoungModulus { get; init; }
+    public required Pressure? ShearModulus { get; init; }
+    public required Pressure? BulkModulus { get; init; }
+    public required Pressure? BrinellHardness { get; init; }
 }
 
 
@@ -198,18 +259,6 @@ public class Element
     /// </summary>
     public uint ProtonCount => AtomicNumber;
 
-
-    /// <summary>
-    /// The element's electronegativity on the Pauling scale.
-    /// </summary>
-    public required double? ElectroNegativity { get; init; } = null;
-
-    public required int OxidationState { get; init; } = 0;
-
-    public required Length CovalentRadius { get; init; }
-
-    public required Length VanDerWaalsRadius { get; init; }
-
     public required ThermodynamicElementProperties Thermodynamics { get; init; }
 
     public required OpticalElementProperties Optics { get; init; }
@@ -218,9 +267,9 @@ public class Element
 
     public required KinematicElementProperties Kinematics { get; init; }
 
+    public required ChemicalBondingElementProperties ChemicalBonding { get; init; }
 
     public required VolumetricMassDensity StandardDensity { get; init; }
-
 
     /// <summary>
     /// The most abundant <see cref="Isotope"/> of the element.
