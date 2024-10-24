@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Unknown6656.Units.Thermodynamics;
 using Unknown6656.Units.Electricity;
@@ -13,11 +14,51 @@ using Unknown6656.Physics.Optics;
 namespace Unknown6656.Physics.Chemistry;
 
 
-public static class PeriodicTableOfElements
+public sealed class PeriodicTableOfElements
 {
+    private readonly Dictionary<uint, Element> _elements = [];
+
+
+    public static PeriodicTableOfElements Table { get; } = new();
+
+    public Element this[int atomicNumber] => this[(uint)atomicNumber];
+
+    public Element this[uint atomicNumber] => _elements[atomicNumber];
+
+    public Isotope? this[int protons, int neutrons] => GetIsotope(protons, neutrons);
+
+    public Isotope? this[uint protons, uint neutrons] => GetIsotope(protons, neutrons);
+
+
+    private PeriodicTableOfElements()
+    {
+    }
+
+    private Element RegisterElement(Element element) => _elements[element.AtomicNumber] = element;
+
+    public Element GetElement(int atomicNumber) => GetElement((uint)atomicNumber);
+
+    public Element GetElement(uint atomicNumber) => this[atomicNumber];
+
+    public Isotope? GetIsotope(int protons, int neutrons) => GetIsotope((uint)protons, (uint)neutrons);
+
+    public Isotope? GetIsotope(uint protons, uint neutrons) => GetElement(protons).GetIsotopeByNeutronCount(neutrons);
+
+    public Isotope? GetIsotopeByHadrons(int hadrons, int protons) => GetIsotopeByHadrons((uint)hadrons, (uint)protons);
+
+    public Isotope? GetIsotopeByHadrons(uint hadrons, uint protons) => GetIsotope(protons, hadrons - protons);
+
+    public Isotope[] GetIsotopesByHadrons(int hadrons) => GetIsotopesByHadrons((uint)hadrons);
+
+    public Isotope[] GetIsotopesByHadrons(uint hadrons) => [..from elem in _elements.Values
+                                                              from iso in elem.KnownIsotopes
+                                                              where iso.HadronCount == hadrons
+                                                              select iso];
+
+
     #region 1 H  - HYDROGEN
 
-    public static Element Hydrogen { get; } = new Element()
+    public static Element Hydrogen { get; } = Table.RegisterElement(new(Table)
     {
         Name = nameof(Hydrogen),
         Symbol = "H",
@@ -173,16 +214,55 @@ public static class PeriodicTableOfElements
             AbsorptionSpectrum = null,
         },
         StandardDensity = 0.08988.GramPerLiter(),
-    }.AddIsotopes([
-        ("Protium", 0, .999885, []),
-        ("Deuterium", 1, .000115, []),
-        ("Tritium", 2, .0000000000001, [new(DecayMode.BetaMinus, 12.32.SolarYear(), 0d.Kelvin())])
+    }).AddIsotopes([
+        new()
+        {
+            Name = "Protium",
+            NeutronCount = 0,
+            Abundance = 0.999885,
+            Spin = .5,
+            Decays = [],
+        },
+        new()
+        {
+            Name = "Deuterium",
+            NeutronCount = 1,
+            Abundance = 0.000115,
+            Spin = 1,
+            Decays = [],
+        },
+        new()
+        {
+            Name = "Tritium",
+            NeutronCount = 2,
+            Abundance = 0.0000000000001,
+            Spin = .5,
+            Decays = [
+                new(DecayMode.Beta, 12.32.SolarYear()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 3,
+            Spin = 2,
+            Decays = [
+                new(DecayMode.NeutronEmission, 139e-24.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 4,
+            Spin = 3,
+            Decays = [
+                new(DecayMode.DoubleNeutronEmission, 86e-24.Second()),
+            ],
+        },
     ]);
 
     #endregion
     #region 2 He - HELIUM
 
-    public static Element Helium { get; } = new Element()
+    public static Element Helium { get; } = Table.RegisterElement(new(Table)
     {
         Name = nameof(Helium),
         Symbol = "He",
@@ -383,15 +463,85 @@ public static class PeriodicTableOfElements
             ]),
             AbsorptionSpectrum = null,
         },
-    }.AddIsotopes([
-        (3, .000002, []),
-        (4, .999998, [])
+    }).AddIsotopes([
+        new()
+        {
+            NeutronCount = 0,
+            Spin = 0,
+            Decays = [
+                new(DecayMode.ProtonEmission, 1e15.Second(), .9999),
+                new(DecayMode.PositronEmission, 1e15.Second(), .0001),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 1,
+            Spin = .5,
+            Decays = [],
+        },
+        new()
+        {
+            NeutronCount = 2,
+            Spin = 0,
+            Decays = [],
+        },
+        new()
+        {
+            NeutronCount = 3,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.NeutronEmission, 6.02e-22.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 4,
+            Spin = 0,
+            Decays = [
+                new(DecayMode.Beta, .80692.Second(), .99999722),
+                new(DecayMode.BetaDeuteronEmission, .80692.Second(), .00000278),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 5,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.NeutronEmission, 2.51e-21.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 6,
+            Spin = 0,
+            Decays = [
+                new(DecayMode.Beta, .1195.Second(), .831),
+                new(DecayMode.BetaNeutronEmission, .1195.Second(), .16),
+                new(DecayMode.BetaTritonEmission, .1195.Second(), .9),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 7,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.NeutronEmission, 2.5e-21.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 8,
+            Spin = 0,
+            Decays = [
+                new(DecayMode.DoubleNeutronEmission, 2.6e-22.Second()),
+            ],
+        },
     ]);
 
     #endregion
     #region 3 Li - LITHIUM
 
-    public static Element Lithium { get; } = new Element()
+    public static Element Lithium { get; } = Table.RegisterElement(new(Table)
     {
         Name = nameof(Lithium),
         Symbol = "Li",
@@ -523,8 +673,76 @@ public static class PeriodicTableOfElements
             ]),
             AbsorptionSpectrum = null,
         },
-    }.AddIsotopes([
-
+    }).AddIsotopes([
+        new()
+        {
+            NeutronCount = 1,
+            Spin = 2,
+            Decays = [
+                new(DecayMode.ProtonEmission, 91e-24.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 2,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.ProtonEmission, 370e-24.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 3,
+            Spin = 1,
+            Decays = [],
+            Abundance = .019,
+        },
+        new()
+        {
+            NeutronCount = 4,
+            Spin = 0,
+            Decays = [],
+            Abundance = .922,
+        },
+        new()
+        {
+            NeutronCount = 5,
+            Spin = 2,
+            Decays = [
+                new(DecayMode.Beta, .8387.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 6,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.BetaNeutronEmission, .1782.Second(), 50.5),
+                new(DecayMode.Beta, .1782.Second(), 49.5),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 8,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.BetaNeutronEmission, .00875.Second(), .863),
+                new(DecayMode.Beta, .00875.Second(), .06),
+                new(DecayMode.BetaDoubleNeutronEmission, .00875.Second(), .041),
+                new(DecayMode.BetaTripleNeutronEmission, .00875.Second(), .019),
+                new(DecayMode.BetaAlpha, .00875.Second(), .017),
+                new(DecayMode.BetaDeuteronEmission, .00875.Second(), .013),
+                new(DecayMode.BetaTritonEmission, .00875.Second(), .0093),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 9,
+            Spin = 1,
+            Decays = [
+                new(DecayMode.NeutronEmission, 3e-9.Second()),
+            ],
+        },
     ]);
 
     #endregion
