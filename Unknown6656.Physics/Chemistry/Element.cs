@@ -36,8 +36,11 @@ public enum DecayMode
     /// <summary>
     /// Beta-minus decay, where a neutron is converted into a proton, an electron, and an antineutrino.
     /// </summary>
-    BetaMinus,
+    Beta,
+    BetaAlpha,
     BetaNeutronEmission,
+    BetaDoubleNeutronEmission,
+    BetaTripleNeutronEmission,
     DeuteronEmission,
     BetaDeuteronEmission,
     BetaTritonEmission,
@@ -586,13 +589,18 @@ public class IsotopeDecay
             DecayMode.NeutronCapture => (0, 1),
             DecayMode.ElectronCapture or
             DecayMode.PositronEmission => (-1, 1),
-            DecayMode.BetaMinus or
+            DecayMode.Beta or
             DecayMode.BetaGammaDecay => (1, -1),
             DecayMode.DoubleBetaDecay => (2, -2),
             DecayMode.DoublePositronEmission => (-2, 2),
             DecayMode.DeuteronEmission => (-1, -1),
+            DecayMode.BetaAlpha => (-1, -3),
             DecayMode.BetaTritonEmission => (0, -3),
             DecayMode.BetaNeutronEmission => (1, -2),
+            DecayMode.BetaDoubleNeutronEmission => (1, -3),
+            DecayMode.BetaTripleNeutronEmission => (1, -4),
+
+
 
             //DecayMode.ClusterDecay => (, ),
             //DecayMode.SpontaneousFission => (, ),
