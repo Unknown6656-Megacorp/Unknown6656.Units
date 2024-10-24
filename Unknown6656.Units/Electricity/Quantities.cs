@@ -1,7 +1,7 @@
 ﻿using Unknown6656.Units.Temporal;
-using Unknown6656.Units.Energy;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Magnetism;
+using Unknown6656.Units.Energy;
 
 namespace Unknown6656.Units.Electricity;
 

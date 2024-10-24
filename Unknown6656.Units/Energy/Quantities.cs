@@ -39,7 +39,6 @@ public partial record Power(Watt value)
     public static string QuantitySymbol { get; } = "P";
 }
 
-
 // J*s / W = s^2
 
 [MultiplicativeRelationship<KineticEnergy, Time, Action, Joule, Second, JouleSecond, Scalar>]
