@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System;
@@ -11,7 +11,9 @@ using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 
+using Unknown6656.Physics.Nuclear;
 using Unknown6656.Physics.Optics;
+
 using Unknown6656.Generics;
 using Unknown6656.Common;
 
@@ -30,83 +32,71 @@ public enum DecayMode
     /// <summary>
     /// Alpha decay, where the nucleus emits an alpha particle (2 protons and 2 neutrons).
     /// </summary>
-    Alpha = 1,
+    Alpha,
     /// <summary>
     /// Beta-minus decay, where a neutron is converted into a proton, an electron, and an antineutrino.
     /// </summary>
-    BetaMinus = 2,
+    BetaMinus,
+    BetaNeutronEmission,
+    DeuteronEmission,
+    BetaDeuteronEmission,
+    BetaTritonEmission,
     /// <summary>
     /// Beta-plus decay, where a proton is converted into a neutron, a positron, and a neutrino.
     /// </summary>
-    BetaPlus = 3,
+    PositronEmission,
     /// <summary>
     /// Electron capture, where an inner orbital electron is captured by the nucleus.
     /// </summary>
-    ElectronCapture = 4,
+    ElectronCapture,
     /// <summary>
     /// Isomeric transition, where the nucleus changes from a higher to a lower energy state.
     /// </summary>
-    IsomericTransition = 5,
+    IsomericTransition,
     /// <summary>
     /// Spontaneous fission, where the nucleus splits into two or more smaller nuclei and other particles.
     /// </summary>
-    SpontaneousFission = 6,
+    SpontaneousFission,
     /// <summary>
     /// Cluster decay, where the nucleus emits a small "cluster" of neutrons and protons.
     /// </summary>
-    ClusterDecay = 7,
+    ClusterDecay,
     /// <summary>
     /// Neutron emission, where the nucleus emits a neutron.
     /// </summary>
-    NeutronEmission = 8,
+    NeutronEmission,
+    /// <summary>
+    /// Double neutron emission, where two neutrons are emitted by the nucleus.
+    /// </summary>
+    DoubleNeutronEmission,
     /// <summary>
     /// Proton emission, where the nucleus emits a proton.
     /// </summary>
-    ProtonEmission = 9,
+    ProtonEmission,
+    /// <summary>
+    /// Double proton emission, where two protons are emitted by the nucleus.
+    /// </summary>
+    DoubleProtonEmission,
     /// <summary>
     /// Double beta decay, where two neutrons are converted into two protons, two electrons, and two antineutrinos.
     /// </summary>
-    DoubleBetaDecay = 10,
-    /// <summary>
-    /// Double electron capture, where two inner orbital electrons are captured by the nucleus.
-    /// </summary>
-    DoubleElectronCapture = 11,
+    DoubleBetaDecay,
     /// <summary>
     /// Double beta-plus decay, where two protons are converted into two neutrons, two positrons, and two neutrinos.
     /// </summary>
-    DoubleBetaPlusDecay = 12,
+    DoublePositronEmission,
     /// <summary>
     /// Beta-gamma decay, where beta decay is followed by gamma emission.
     /// </summary>
-    BetaGammaDecay = 13,
-    /// <summary>
-    /// Internal conversion, where an excited nucleus transfers its energy to an orbital electron.
-    /// </summary>
-    InternalConversion = 14,
+    BetaGammaDecay,
     /// <summary>
     /// Gamma decay, where the nucleus emits a gamma ray.
     /// </summary>
-    Gamma = 15,
-    /// <summary>
-    /// Positron emission, where the nucleus emits a positron.
-    /// </summary>
-    PositronEmission = 16,
+    Gamma,
     /// <summary>
     /// Neutron capture, where the nucleus captures a neutron.
     /// </summary>
-    NeutronCapture = 17,
-    /// <summary>
-    /// Spallation, where the nucleus is hit by a high-energy particle and breaks into several smaller particles.
-    /// </summary>
-    Spallation = 18,
-    /// <summary>
-    /// Photodisintegration, where the nucleus absorbs a high-energy photon and emits a particle.
-    /// </summary>
-    Photodisintegration = 19,
-    /// <summary>
-    /// Photofission, where the nucleus absorbs a high-energy photon and splits into two or more smaller nuclei.
-    /// </summary>
-    Photofission = 20,
+    NeutronCapture,
 }
 
 /// <summary>
@@ -311,29 +301,14 @@ public record OpticalElementProperties
     public bool CreatesCherenkovRadiation(Speed speed) => SpeedOfLight is Speed c && speed > c;
 }
 
-public enum MagneticOrdering
-{
-    Diamagnetic,
-    Paramagnetic,
-    Ferromagnetic,
-}
-
 public record ElectromagneticalElementProperties
 {
-    public required ElectricalResistivity ElectricalResistivity { get; init; }
+    public required Resistivity? ElectricalResistivity { get; init; }
     public required MolarMagneticSusceptibility MagneticSusceptibility { get; init; }
     public required MagneticOrdering MagneticOrdering { get; init; }
     public required Temperature? CurieTemperature { get; init; }
-}
 
-public enum ElectronOrbital
-{
-    S = 1,
-    P = 2,
-    D = 3,
-    F = 4,
-    G = 5,
-    H = 6,
+    public Conductivity? ElectricalConductivity => ElectricalResistivity is { } r ? 1 / r : null;
 }
 
 public record ElectronOrbitalConfiguration(ElectronOrbital Orbital, uint Subshell, uint Electrons)
@@ -383,13 +358,15 @@ public record KinematicElementProperties
     public required Pressure? BrinellHardness { get; init; }
 }
 
+public record IsotopeDecayConfig(DecayMode Mode, Time HalfTime, double Probability = 1);
 
-    public enum PeriodicTableBlock
+public record IsotopeConfig
 {
-    S = 1,
-    P = 2,
-    D = 3,
-    F = 4,
+    public required uint NeutronCount { get; init; }
+    public required IEnumerable<IsotopeDecayConfig>? Decays { get; init; }
+    public string? Name { get; init; } = null;
+    public double Abundance { get; init; } = 0;
+    public required Spin Spin { get; init; }
 }
 
 /// <summary>
@@ -399,6 +376,8 @@ public class Element
 {
     private readonly HashSet<Isotope> _isotopes = [];
 
+
+    public PeriodicTableOfElements PeriodicTable { get; }
 
     /// <summary>
     /// The name of the element.
@@ -508,32 +487,28 @@ public class Element
         }
     }
 
+    public Isotope? this[uint neutron_or_hadron_count] => GetIsotopeByNeutronCount(neutron_or_hadron_count) ?? GetIsotopeByHadronCount(neutron_or_hadron_count);
 
 
-    internal Element AddIsotope(uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays = null) => AddIsotope(null, neutron_count, abundance, decays);
+    internal Element(PeriodicTableOfElements table) => PeriodicTable = table;
 
-    internal Element AddIsotope(string? name, uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays = null)
+    internal Element AddIsotope(IsotopeConfig isotope)
     {
-        _isotopes.Add(new(this, name, neutron_count, abundance, decays));
+        _isotopes.Add(new(this, isotope));
 
         return this;
     }
 
-    internal Element AddIsotopes(IEnumerable<(uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays)> isotopes)
+    internal Element AddIsotopes(IEnumerable<IsotopeConfig> isotopes)
     {
-        foreach ((uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays) in isotopes)
-            AddIsotope(neutron_count, abundance, decays);
+        isotopes.Do(AddIsotope);
 
         return this;
     }
 
-    internal Element AddIsotopes(IEnumerable<(string? name, uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays)> isotopes)
-    {
-        foreach ((string? name, uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays) in isotopes)
-            AddIsotope(name, neutron_count, abundance, decays);
+    public Isotope? GetIsotopeByHadronCount(uint hadron_count) => _isotopes.FirstOrDefault(x => x.HadronCount == hadron_count);
 
-        return this;
-    }
+    public Isotope? GetIsotopeByNeutronCount(uint neutron_count) => _isotopes.FirstOrDefault(x => x.NeutronCount == neutron_count);
 
     public override int GetHashCode() => (int)AtomicNumber;
 
@@ -542,30 +517,29 @@ public class Element
     public override string ToString() => $"{Name} ({AtomicNumber}, {Symbol})";
 }
 
-public record IsotopeDecay(DecayMode Mode, Time HalfTime, Temperature Temperature)
-{
-    // public override string ToString() => ;
-}
-
 public class Isotope
 {
     public string Name { get; }
     public Element Element { get; }
+    public PeriodicTableOfElements PeriodicTable => Element.PeriodicTable;
     public uint NeutronCount { get; }
     public Dalton AtomicMass { get; }
     public double Abundance { get; }
-    public IsotopeDecay[] KnownDecays { get; }
-    public bool IsStable => KnownDecays.Length == 0;
+    public uint HadronCount => NeutronCount + Element.ProtonCount;
+    public Spin Spin { get; }
+    public IsotopeDecayConfig[] KnownDecays { get; }
+    public bool IsStable => KnownDecays.Count(d => d.Mode != DecayMode.Stable) > 0;
 
 
-    internal Isotope(Element element, string? override_name, uint neutron_count, double abundance, IEnumerable<IsotopeDecay>? decays = null)
+    internal Isotope(Element element, IsotopeConfig config)
     {
         Element = element;
-        Name = override_name ?? element.Name;
-        NeutronCount = neutron_count;
-        AtomicMass = Mass.AtomicMass(element.ProtonCount, neutron_count);
-        Abundance = double.Clamp(abundance, 0, 1);
-        KnownDecays = decays?.ToArray() ?? [];
+        Spin = config.Spin;
+        Name = config.Name ?? element.Name;
+        NeutronCount = config.NeutronCount;
+        AtomicMass = Mass.AtomicMass(element.ProtonCount, config.NeutronCount);
+        Abundance = double.Clamp(config.Abundance, 0, 1);
+        KnownDecays = config.Decays?.ToArray() ?? [];
     }
 
     public override int GetHashCode() => HashCode.Combine(Element.ProtonCount, NeutronCount);
@@ -573,4 +547,61 @@ public class Isotope
     public override bool Equals(object? obj) => obj is Isotope other && other.Element == Element && other.NeutronCount == NeutronCount;
 
     public override string ToString() => $"{Name} ({Element.AtomicNumber}, {Element.Symbol}-{Element.AtomicNumber + NeutronCount})";
+}
+
+public class IsotopeDecay
+{
+    private readonly (int P, int N) _target;
+
+    public Isotope SourceIsotope { get; }
+    public DecayMode Mode { get; }
+    public Time HalfTime { get; }
+    public double Probability { get; }
+    public Element SourceElement => SourceIsotope.Element;
+    public Isotope? TargetIsotope => PeriodicTable[_target.P, _target.N];
+    public Element? TargetElement => TargetIsotope?.Element;
+    public PeriodicTableOfElements PeriodicTable => SourceElement.PeriodicTable;
+    public int ProtonDifference => _target.P - (int)SourceElement.ProtonCount;
+    public int NeutronDifference => _target.N - (int)SourceIsotope.NeutronCount;
+    public int HadronDifference => ProtonDifference + NeutronDifference;
+
+
+    internal IsotopeDecay(Isotope source, IsotopeDecayConfig config)
+    {
+        Mode = config.Mode;
+        HalfTime = config.HalfTime;
+        Probability = config.Probability;
+        SourceIsotope = source;
+
+        (int P, int N) = config.Mode switch
+        {
+            DecayMode.Stable or
+            DecayMode.IsomericTransition => (0, 0),
+            DecayMode.Alpha => (-2, -2),
+            DecayMode.ProtonEmission => (-1, 0),
+            DecayMode.DoubleProtonEmission => (-2, 0),
+            DecayMode.NeutronEmission => (0, -1),
+            DecayMode.DoubleNeutronEmission or
+            DecayMode.BetaDeuteronEmission => (0, -2),
+            DecayMode.NeutronCapture => (0, 1),
+            DecayMode.ElectronCapture or
+            DecayMode.PositronEmission => (-1, 1),
+            DecayMode.BetaMinus or
+            DecayMode.BetaGammaDecay => (1, -1),
+            DecayMode.DoubleBetaDecay => (2, -2),
+            DecayMode.DoublePositronEmission => (-2, 2),
+            DecayMode.DeuteronEmission => (-1, -1),
+            DecayMode.BetaTritonEmission => (0, -3),
+            DecayMode.BetaNeutronEmission => (1, -2),
+
+            //DecayMode.ClusterDecay => (, ),
+            //DecayMode.SpontaneousFission => (, ),
+            //DecayMode.Gamma => (, ),
+        };
+
+        P += (int)source.Element.ProtonCount;
+        N += (int)source.NeutronCount;
+
+        _target = (P, N);
+    }
 }
