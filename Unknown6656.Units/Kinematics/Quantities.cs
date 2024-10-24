@@ -53,14 +53,32 @@ public partial record VolumetricFlowRate(CubicMeterPerSecond value)
     public static string QuantitySymbol { get; } = "Q";
 }
 
-// TODO : angular momentum
-// TODO : angular velocity
+[IdentityRelationship<Action, AngularMomentum, JouleSecond, KilogramSquareMeterPerSecond, Scalar>]
+[MultiplicativeRelationship<AngularMomentum, Time, MomentOfInertia, KilogramSquareMeterPerSecond, Second, KilogramSquareMeter, Scalar>]
+[MultiplicativeRelationship<Impulse, Length, AngularMomentum, KilogramMeterPerSecond, Meter, KilogramSquareMeterPerSecond, Scalar>]
+[MultiplicativeRelationship<MassFlowRate, Area, AngularMomentum, KilogramPerSecond, SquareMeter, KilogramSquareMeterPerSecond, Scalar>]
+[MultiplicativeRelationship<Mass, KinematicViscosity, AngularMomentum, Kilogram, SquareMeterPerSecond, KilogramSquareMeterPerSecond, Scalar>]
+public partial record AngularMomentum(KilogramSquareMeterPerSecond value)
+    : Quantity<AngularMomentum, KilogramSquareMeterPerSecond, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "L";
 
-//public partial record MomentOfInertia(KilogramSquareMeter value)
-//      : Quantity<MomentOfInerta, KilogramSquareMeter, Scalar>(value)
-// {
-//     public static string QuantitySymbol { get; } = ;
-// }
+    public static AngularMomentum PlanckConstant => (AngularMomentum)Action.PlanckConstant;
+    public static AngularMomentum ReducedPlanckConstant => (AngularMomentum)Action.ReducedPlanckConstant;
+}
+
+[MultiplicativeRelationship<Mass, Area, MomentOfInertia, Kilogram, SquareMeter, KilogramSquareMeter, Scalar>]
+public partial record MomentOfInertia(KilogramSquareMeter value)
+      : Quantity<MomentOfInertia, KilogramSquareMeter, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "I";
+}
+
+
+// (N * s / kg) * (kg * m^2 / s) / m = N * m
+// specificimpulse * AngularMomentum / length = torque
+
+// TODO : angular velocity
 
 // TODO : mass flux https://en.wikipedia.org/wiki/Mass_flux
 // kg / m^2 / s
