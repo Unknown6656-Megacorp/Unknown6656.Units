@@ -12,57 +12,261 @@ using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 
 using Unknown6656.Physics.Optics;
+using Unknown6656.Generics;
 using Unknown6656.Common;
 
 namespace Unknown6656.Physics.Chemistry;
 
 
+/// <summary>
+/// Represents the various modes of radioactive decay.
+/// </summary>
 public enum DecayMode
 {
+    /// <summary>
+    /// Indicates that the element is stable and does not undergo radioactive decay.
+    /// </summary>
     Stable = 0,
+    /// <summary>
+    /// Alpha decay, where the nucleus emits an alpha particle (2 protons and 2 neutrons).
+    /// </summary>
     Alpha = 1,
+    /// <summary>
+    /// Beta-minus decay, where a neutron is converted into a proton, an electron, and an antineutrino.
+    /// </summary>
     BetaMinus = 2,
+    /// <summary>
+    /// Beta-plus decay, where a proton is converted into a neutron, a positron, and a neutrino.
+    /// </summary>
     BetaPlus = 3,
+    /// <summary>
+    /// Electron capture, where an inner orbital electron is captured by the nucleus.
+    /// </summary>
     ElectronCapture = 4,
+    /// <summary>
+    /// Isomeric transition, where the nucleus changes from a higher to a lower energy state.
+    /// </summary>
     IsomericTransition = 5,
+    /// <summary>
+    /// Spontaneous fission, where the nucleus splits into two or more smaller nuclei and other particles.
+    /// </summary>
     SpontaneousFission = 6,
+    /// <summary>
+    /// Cluster decay, where the nucleus emits a small "cluster" of neutrons and protons.
+    /// </summary>
     ClusterDecay = 7,
+    /// <summary>
+    /// Neutron emission, where the nucleus emits a neutron.
+    /// </summary>
     NeutronEmission = 8,
+    /// <summary>
+    /// Proton emission, where the nucleus emits a proton.
+    /// </summary>
     ProtonEmission = 9,
+    /// <summary>
+    /// Double beta decay, where two neutrons are converted into two protons, two electrons, and two antineutrinos.
+    /// </summary>
     DoubleBetaDecay = 10,
+    /// <summary>
+    /// Double electron capture, where two inner orbital electrons are captured by the nucleus.
+    /// </summary>
     DoubleElectronCapture = 11,
+    /// <summary>
+    /// Double beta-plus decay, where two protons are converted into two neutrons, two positrons, and two neutrinos.
+    /// </summary>
     DoubleBetaPlusDecay = 12,
+    /// <summary>
+    /// Beta-gamma decay, where beta decay is followed by gamma emission.
+    /// </summary>
     BetaGammaDecay = 13,
+    /// <summary>
+    /// Internal conversion, where an excited nucleus transfers its energy to an orbital electron.
+    /// </summary>
     InternalConversion = 14,
+    /// <summary>
+    /// Gamma decay, where the nucleus emits a gamma ray.
+    /// </summary>
     Gamma = 15,
+    /// <summary>
+    /// Positron emission, where the nucleus emits a positron.
+    /// </summary>
     PositronEmission = 16,
+    /// <summary>
+    /// Neutron capture, where the nucleus captures a neutron.
+    /// </summary>
     NeutronCapture = 17,
+    /// <summary>
+    /// Spallation, where the nucleus is hit by a high-energy particle and breaks into several smaller particles.
+    /// </summary>
     Spallation = 18,
+    /// <summary>
+    /// Photodisintegration, where the nucleus absorbs a high-energy photon and emits a particle.
+    /// </summary>
     Photodisintegration = 19,
+    /// <summary>
+    /// Photofission, where the nucleus absorbs a high-energy photon and splits into two or more smaller nuclei.
+    /// </summary>
     Photofission = 20,
 }
 
+/// <summary>
+/// Represents the category of a chemical element.
+/// </summary>
 public enum ElementCategory
 {
+    /// <summary>
+    /// The category of the element is unknown.
+    /// </summary>
     Unknown = 0,
+
+    /// <summary>
+    /// Alkali metal.
+    /// </summary>
     AlkaliMetal = 1,
+
+    /// <summary>
+    /// Alkaline earth metal.
+    /// </summary>
     AlkalineEarthMetal = 2,
+
+    /// <summary>
+    /// Lanthanide.
+    /// </summary>
     Lanthanide = 3,
+
+    /// <summary>
+    /// Actinide.
+    /// </summary>
     Actinide = 4,
+
+    /// <summary>
+    /// Transition metal.
+    /// </summary>
     TransitionMetal = 5,
+
+    /// <summary>
+    /// Post-transition metal.
+    /// </summary>
     PostTransitionMetal = 6,
+
+    /// <summary>
+    /// Metalloid.
+    /// </summary>
     Metalloid = 7,
+
+    /// <summary>
+    /// Non-metal.
+    /// </summary>
     NonMetal = 8,
+
+    /// <summary>
+    /// Halogen.
+    /// </summary>
     Halogen = 9,
+
+    /// <summary>
+    /// Noble gas.
+    /// </summary>
     NobleGas = 10,
 }
 
+/// <summary>
+/// Represents the fundamental state of matter.
+/// </summary>
 public enum FundamentalState
 {
+    /// <summary>
+    /// Solid state.
+    /// </summary>
     Solid = 0,
+
+    /// <summary>
+    /// Liquid state.
+    /// </summary>
     Liquid = 1,
+
+    /// <summary>
+    /// Gaseous state.
+    /// </summary>
     Gas = 2,
+
+    /// <summary>
+    /// Plasma state.
+    /// </summary>
     Plasma = 3,
+}
+
+/// <summary>
+/// Represents the magnetic ordering of a material.
+/// </summary>
+public enum MagneticOrdering
+{
+    /// <summary>
+    /// Material is diamagnetic.
+    /// </summary>
+    Diamagnetic,
+    /// <summary>
+    /// Material is paramagnetic.
+    /// </summary>
+    Paramagnetic,
+    /// <summary>
+    /// Material is ferromagnetic.
+    /// </summary>
+    Ferromagnetic,
+}
+
+/// <summary>
+/// Represents the electron orbitals.
+/// </summary>
+public enum ElectronOrbital
+{
+    /// <summary>
+    /// S orbital.
+    /// </summary>
+    S = 1,
+    /// <summary>
+    /// P orbital.
+    /// </summary>
+    P = 2,
+    /// <summary>
+    /// D orbital.
+    /// </summary>
+    D = 3,
+    /// <summary>
+    /// F orbital.
+    /// </summary>
+    F = 4,
+    /// <summary>
+    /// G orbital.
+    /// </summary>
+    G = 5,
+    /// <summary>
+    /// H orbital.
+    /// </summary>
+    H = 6,
+}
+
+/// <summary>
+/// Represents the blocks of the periodic table.
+/// </summary>
+public enum PeriodicTableBlock
+{
+    /// <summary>
+    /// S block.
+    /// </summary>
+    S = 1,
+    /// <summary>
+    /// P block.
+    /// </summary>
+    P = 2,
+    /// <summary>
+    /// D block.
+    /// </summary>
+    D = 3,
+    /// <summary>
+    /// F block.
+    /// </summary>
+    F = 4,
 }
 
 public record ThermodynamicElementProperties
