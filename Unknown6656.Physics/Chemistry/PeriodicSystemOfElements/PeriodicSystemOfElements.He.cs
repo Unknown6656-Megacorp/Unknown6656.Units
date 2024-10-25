@@ -1,0 +1,285 @@
+﻿using Unknown6656.Units.Thermodynamics;
+using Unknown6656.Units.Kinematics;
+using Unknown6656.Units.Euclidean;
+using Unknown6656.Units.Magnetism;
+using Unknown6656.Units.Temporal;
+using Unknown6656.Units.Matter;
+
+using Unknown6656.Physics.Optics;
+
+namespace Unknown6656.Physics.Chemistry;
+
+
+public sealed partial class PeriodicTableOfElements
+{
+    public static Element Helium { get; } = Table.RegisterElement(new(Table)
+    {
+        Name = nameof(Helium),
+        Symbol = "He",
+        AtomicNumber = 2,
+        Category = ElementCategory.NobleGas,
+        Thermodynamics = new()
+        {
+            MeltingPoint = 0.95.Kelvin(),
+            BoilingPoint = 4.222.Kelvin(),
+            TriplePoint = (2.177.Kelvin(), 5.043e3.Pascal()),
+            CriticalPoint = (5.1953.Kelvin(), 227.46e3.Pascal()),
+            IonizationEnergies = [
+                2372.3e3.JoulePerMol(),
+                5250.5e3.JoulePerMol(),
+            ],
+            HeatOfFusion = 13.8.JoulePerMol(),
+            HeatOfVaporization = 82.9.JoulePerMol(),
+            ThermalCapacity = 20.78.JoulePerMolKelvin(),
+            ThermalConductivity = 0.1513.WattPerMeterKelvin(),
+            ThermalExpansion = null,
+        },
+        Kinematics = new()
+        {
+            SpeedOfSound = 972d.MeterPerSecond(),
+        },
+        ChemicalBonding = new()
+        {
+            CovalentRadius = 28e-12.Meter(),
+            VanDerWaalsRadius = 140e-12.Meter(),
+            MeanAtomicRadius = null,
+            ElectroNegativity = null,
+            OxidationStates = [],
+            ElectronConfiguration = new([
+                new(1, ElectronOrbital.S, 2),
+            ]),
+        },
+        Electromagnetics = new()
+        {
+            CurieTemperature = null,
+            ElectricalResistivity = null,
+            MagneticOrdering = MagneticOrdering.Diamagnetic,
+            MagneticSusceptibility = -1.88e-6.CubicCentimeterPerMol(),
+        },
+        StandardDensity = 0.1786.GramPerLiter(),
+        Optics = new()
+        {
+            RefractiveIndex = 1.000036,
+            EmissionSpectrum = new SparseSpectrum([
+                (32.02926d.Nanometer(), 0.005),
+                (50.561d.Nanometer(), 0.001),
+                (50.575d.Nanometer(), 0.0015),
+                (50.59d.Nanometer(), 0.002),
+                (50.631d.Nanometer(), 0.0025),
+                (50.656d.Nanometer(), 0.0035),
+                (50.708d.Nanometer(), 0.005),
+                (50.771d.Nanometer(), 0.0075),
+                (50.863d.Nanometer(), 0.01),
+                (50.997d.Nanometer(), 0.0125),
+                (51.207d.Nanometer(), 0.0175),
+                (51.5596d.Nanometer(), 0.025),
+                (52.2186d.Nanometer(), 0.05),
+                (53.70293d.Nanometer(), 0.2),
+                (58.43339d.Nanometer(), 0.5),
+                (59.14121d.Nanometer(), 0.025),
+                (257.76d.Nanometer(), 0.025),
+                (267.7135d.Nanometer(), 0.0005),
+                (269.6119d.Nanometer(), 0.0005),
+                (272.3191d.Nanometer(), 0.0005),
+                (276.3801583d.Nanometer(), 0.001),
+                (276.3803097d.Nanometer(), 0.001),
+                (276.3803221d.Nanometer(), 0.001),
+                (281.82d.Nanometer(), 0.005),
+                (282.9078411d.Nanometer(), 0.002),
+                (282.9080951d.Nanometer(), 0.002),
+                (282.9081157d.Nanometer(), 0.002),
+                (294.5106d.Nanometer(), 0.005),
+                (301.37d.Nanometer(), 0.02),
+                (318.7745d.Nanometer(), 0.01),
+                (325.8275d.Nanometer(), 0.0005),
+                (335.4555098d.Nanometer(), 0.0005),
+                (344.7589034d.Nanometer(), 0.001),
+                (355.4415d.Nanometer(), 0.0005),
+                (358.727d.Nanometer(), 0.0005),
+                (361.3643d.Nanometer(), 0.0015),
+                (363.4230767d.Nanometer(), 0.001),
+                (363.4231071d.Nanometer(), 0.001),
+                (363.4231092d.Nanometer(), 0.001),
+                (363.4240864d.Nanometer(), 0.001),
+                (363.4241168d.Nanometer(), 0.001),
+                (365.199d.Nanometer(), 0.0005),
+                (370.5005d.Nanometer(), 0.0015),
+                (373.2863477d.Nanometer(), 0.0005),
+                (373.287413d.Nanometer(), 0.0005),
+                (381.96074d.Nanometer(), 0.005),
+                (381.975731d.Nanometer(), 0.0005),
+                (386.7472343d.Nanometer(), 0.0015),
+                (386.7483778d.Nanometer(), 0.0015),
+                (386.7631595d.Nanometer(), 0.0005),
+                (387.1791d.Nanometer(), 0.0005),
+                (388.8648d.Nanometer(), 0.25),
+                (392.6544387d.Nanometer(), 0.0005),
+                (396.47291d.Nanometer(), 0.01),
+                (400.9256516d.Nanometer(), 0.0005),
+                (402.3973d.Nanometer(), 0.0005),
+                (402.61914d.Nanometer(), 0.025),
+                (402.6356959d.Nanometer(), 0.0025),
+                (412.08154d.Nanometer(), 0.006),
+                (412.0991564d.Nanometer(), 0.001),
+                (414.3761d.Nanometer(), 0.0015),
+                (416.8967d.Nanometer(), 0.0005),
+                (438.79296d.Nanometer(), 0.005),
+                (443.7551d.Nanometer(), 0.0015),
+                (447.14802d.Nanometer(), 0.1),
+                (447.1683251d.Nanometer(), 0.0125),
+                (471.31457d.Nanometer(), 0.015),
+                (471.3375684d.Nanometer(), 0.002),
+                (492.19313d.Nanometer(), 0.01),
+                (501.56783d.Nanometer(), 0.05),
+                (504.7738d.Nanometer(), 0.005),
+                (587.5621d.Nanometer(), 0.25),
+                (587.596628d.Nanometer(), 0.05),
+                (667.8151d.Nanometer(), 0.05),
+                (706.519d.Nanometer(), 0.1),
+                (706.571d.Nanometer(), 0.015),
+                (728.1349d.Nanometer(), 0.025),
+                (781.612468d.Nanometer(), 0.0005),
+                (781.61368d.Nanometer(), 0.0005),
+                (781.613778d.Nanometer(), 0.0005),
+                (836.171342d.Nanometer(), 0.001),
+                (836.173561d.Nanometer(), 0.001),
+                (836.173742d.Nanometer(), 0.001),
+                (906.328214d.Nanometer(), 0.001),
+                (906.328403d.Nanometer(), 0.001),
+                (906.328417d.Nanometer(), 0.001),
+                (906.330021d.Nanometer(), 0.001),
+                (906.33021d.Nanometer(), 0.001),
+                (921.0337d.Nanometer(), 0.001),
+                (946.353679d.Nanometer(), 0.005),
+                (946.358646d.Nanometer(), 0.005),
+                (946.359051d.Nanometer(), 0.005),
+                (951.65622d.Nanometer(), 0.002),
+                (951.656532d.Nanometer(), 0.002),
+                (951.656554d.Nanometer(), 0.002),
+                (951.658212d.Nanometer(), 0.002),
+                (951.658524d.Nanometer(), 0.002),
+                (951.682735d.Nanometer(), 0.0005),
+                (952.617d.Nanometer(), 0.0015),
+                (952.927d.Nanometer(), 0.0005),
+                (960.344084d.Nanometer(), 0.0005),
+                (970.261409d.Nanometer(), 0.0015),
+                (970.26348d.Nanometer(), 0.0015),
+                (1002.773d.Nanometer(), 0.003),
+                (1003.116d.Nanometer(), 0.001),
+                (1013.842357d.Nanometer(), 0.0005),
+                (1031.12211d.Nanometer(), 0.005),
+                (1031.122691d.Nanometer(), 0.005),
+                (1031.122731d.Nanometer(), 0.005),
+                (1031.124448d.Nanometer(), 0.005),
+                (1031.125029d.Nanometer(), 0.005),
+                (1031.153237d.Nanometer(), 0.001),
+                (1066.766206d.Nanometer(), 0.0015),
+                (1066.768709d.Nanometer(), 0.0015),
+                (1082.909115d.Nanometer(), 0.15),
+                (1083.025011d.Nanometer(), 0.5),
+                (1083.033978d.Nanometer(), 1),
+                (1091.292d.Nanometer(), 0.006),
+                (1091.305d.Nanometer(), 0.0045),
+                (1091.71d.Nanometer(), 0.0015),
+                (1101.307135d.Nanometer(), 0.001),
+                (1104.498297d.Nanometer(), 0.001),
+                (1196.904506d.Nanometer(), 0.022),
+                (1196.905861d.Nanometer(), 0.022),
+                (1196.905953d.Nanometer(), 0.022),
+                (1196.907657d.Nanometer(), 0.022),
+                (1196.912d.Nanometer(), 0.015),
+                (1252.752d.Nanometer(), 0.01),
+                (1278.479d.Nanometer(), 0.0405),
+                (1278.499d.Nanometer(), 0.025),
+                (1279.057d.Nanometer(), 0.01),
+                (1284.596d.Nanometer(), 0.0035),
+                (1296.845d.Nanometer(), 0.005),
+                (1298.489d.Nanometer(), 0.001),
+                (1508.364d.Nanometer(), 0.006),
+                (1700.247d.Nanometer(), 0.1),
+                (1855.557348d.Nanometer(), 0.0005),
+                (1868.534d.Nanometer(), 0.25),
+                (1869.723d.Nanometer(), 0.1),
+                (1908.938d.Nanometer(), 0.05),
+                (1954.308d.Nanometer(), 0.01),
+                (2058.692d.Nanometer(), 0.5),
+                (2112.583d.Nanometer(), 0.04),
+                (2112.72d.Nanometer(), 0.005),
+                (2113.78d.Nanometer(), 0.01),
+            ]),
+        },
+    }).AddIsotopes([
+        new()
+        {
+            NeutronCount = 0,
+            Spin = 0,
+            Decays = [
+                new(DecayMode.ProtonEmission, 1e15.Second(), .9999),
+                new(DecayMode.PositronEmission, 1e15.Second(), .0001),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 1,
+            Spin = .5,
+            Decays = [],
+        },
+        new()
+        {
+            NeutronCount = 2,
+            Spin = 0,
+            Decays = [],
+        },
+        new()
+        {
+            NeutronCount = 3,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.NeutronEmission, 6.02e-22.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 4,
+            Spin = 0,
+            Decays = [
+                new(DecayMode.Beta, .80692.Second(), .99999722),
+                new(DecayMode.BetaDeuteronEmission, .80692.Second(), .00000278),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 5,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.NeutronEmission, 2.51e-18.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 6,
+            Spin = 0,
+            Decays = [
+                new(DecayMode.Beta, .1195.Second(), .831),
+                new(DecayMode.BetaNeutronEmission, .1195.Second(), .16),
+                new(DecayMode.BetaTritonEmission, .1195.Second(), .9),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 7,
+            Spin = 1.5,
+            Decays = [
+                new(DecayMode.NeutronEmission, 2.5e-18.Second()),
+            ],
+        },
+        new()
+        {
+            NeutronCount = 8,
+            Spin = 0,
+            Decays = [
+                new(DecayMode.DoubleNeutronEmission, 2.6e-22.Second()),
+            ],
+        },
+    ]);
+}
