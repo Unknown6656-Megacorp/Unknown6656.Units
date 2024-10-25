@@ -607,8 +607,6 @@ public class IsotopeDecay
             DecayMode.BetaTripleNeutronEmission => (1, -4),
             DecayMode.BetaQuadrupleNeutronEmission => (1, -5),
 
-
-
             //DecayMode.ClusterDecay => (, ),
             //DecayMode.SpontaneousFission => (, ),
             //DecayMode.Gamma => (, ),

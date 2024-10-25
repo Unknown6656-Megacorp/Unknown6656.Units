@@ -54,9 +54,8 @@ public partial record VolumetricFlowRate(CubicMeterPerSecond value)
 }
 
 [IdentityRelationship<Action, AngularMomentum, JouleSecond, KilogramSquareMeterPerSecond, Scalar>]
-[MultiplicativeRelationship<AngularMomentum, Time, MomentOfInertia, KilogramSquareMeterPerSecond, Second, KilogramSquareMeter, Scalar>]
-[MultiplicativeRelationship<Impulse, Length, AngularMomentum, KilogramMeterPerSecond, Meter, KilogramSquareMeterPerSecond, Scalar>]
 [MultiplicativeRelationship<MassFlowRate, Area, AngularMomentum, KilogramPerSecond, SquareMeter, KilogramSquareMeterPerSecond, Scalar>]
+[MultiplicativeRelationship<AngularMomentum, Time, MomentOfInertia, KilogramSquareMeterPerSecond, Second, KilogramSquareMeter, Scalar>]
 [MultiplicativeRelationship<Mass, KinematicViscosity, AngularMomentum, Kilogram, SquareMeterPerSecond, KilogramSquareMeterPerSecond, Scalar>]
 public partial record AngularMomentum(KilogramSquareMeterPerSecond value)
     : Quantity<AngularMomentum, KilogramSquareMeterPerSecond, Scalar>(value)
@@ -132,119 +131,119 @@ public partial record Impulse(NewtonSecond value)
     public static string QuantitySymbol { get; } = "J";
 }
 
-[IdentityRelationship<SpecificImpulse, Time, NewtonSecondPerKilogram, Second, Scalar>(Acceleration.G0)]
+[IdentityRelationship<SpecificImpulse, Speed, NewtonSecondPerKilogram, MeterPerSecond, Scalar>(Acceleration.G0)]
 [MultiplicativeRelationship<SpecificImpulse, Mass, Impulse, NewtonSecondPerKilogram, Kilogram, NewtonSecond, Scalar>]
-[MultiplicativeRelationship<SpecificImpulse, Acceleration, Speed, NewtonSecondPerKilogram, MeterPerSecondSquared, MeterPerSecond, Scalar>(1 / Acceleration.G0)]
 public partial record SpecificImpulse(NewtonSecondPerKilogram value)
      : Quantity<SpecificImpulse, NewtonSecondPerKilogram, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "I_sp";
 
-    public static SpecificImpulse AerojetRocketdyneRL10B2 { get; } = (NewtonSecondPerKilogram)465.5d.Second();
-    public static SpecificImpulse AerojetRocketdyneRS25_Engine { get; } = (NewtonSecondPerKilogram)453d.Second();
-    public static SpecificImpulse AviadvigatelPD14_Engine { get; } = (NewtonSecondPerKilogram)6840d.Second();
-    public static SpecificImpulse AviadvigatelPS90A1_Engine { get; } = (NewtonSecondPerKilogram)6050d.Second();
-    public static SpecificImpulse AvioP80_Engine { get; } = (NewtonSecondPerKilogram)280d.Second();
-    public static SpecificImpulse AvioZefiro23_Engine { get; } = (NewtonSecondPerKilogram)287.5d.Second();
-    public static SpecificImpulse AvioZefiro9A_Engine { get; } = (NewtonSecondPerKilogram)295.2d.Second();
-    public static SpecificImpulse CFECFE73811_Engine { get; } = (NewtonSecondPerKilogram)5580d.Second();
-    public static SpecificImpulse CFMCFM562A2_Engine { get; } = (NewtonSecondPerKilogram)5450d.Second();
-    public static SpecificImpulse CFMCFM562B1_Engine { get; } = (NewtonSecondPerKilogram)5540d.Second();
-    public static SpecificImpulse CFMCFM562C1_Engine { get; } = (NewtonSecondPerKilogram)5370d.Second();
-    public static SpecificImpulse CFMCFM563C1_Engine { get; } = (NewtonSecondPerKilogram)5400d.Second();
-    public static SpecificImpulse CFMCFM565A1_Engine { get; } = (NewtonSecondPerKilogram)6040d.Second();
-    public static SpecificImpulse CFMCFM565B4_Engine { get; } = (NewtonSecondPerKilogram)6610d.Second();
-    public static SpecificImpulse CFMCFM565C2_Engine { get; } = (NewtonSecondPerKilogram)6610d.Second();
-    public static SpecificImpulse CFMCFM567B24_Engine { get; } = (NewtonSecondPerKilogram)5740d.Second();
-    public static SpecificImpulse CFMLEAP1A_Engine { get; } = (NewtonSecondPerKilogram)7100d.Second();
-    public static SpecificImpulse CFMLEAP1B_Engine { get; } = (NewtonSecondPerKilogram)6800d.Second();
-    public static SpecificImpulse CFMLEAP1C_Engine { get; } = (NewtonSecondPerKilogram)7100d.Second();
-    public static SpecificImpulse EAGP7270_Engine { get; } = (NewtonSecondPerKilogram)12000d.Second();
-    public static SpecificImpulse EurojetEJ200_Engine { get; } = (NewtonSecondPerKilogram)4900d.Second();
-    public static SpecificImpulse GECF3410A_Engine { get; } = (NewtonSecondPerKilogram)5540d.Second();
-    public static SpecificImpulse GECF3410E_Engine { get; } = (NewtonSecondPerKilogram)5600d.Second();
-    public static SpecificImpulse GECF343_Engine { get; } = (NewtonSecondPerKilogram)5220d.Second();
-    public static SpecificImpulse GECF348C_Engine { get; } = (NewtonSecondPerKilogram)52000d.Second();
-    public static SpecificImpulse GECF348E_Engine { get; } = (NewtonSecondPerKilogram)5290d.Second();
-    public static SpecificImpulse GECF680C2_Engine { get; } = (NewtonSecondPerKilogram)11700d.Second();
-    public static SpecificImpulse GECF680C2B1F_Engine { get; } = (NewtonSecondPerKilogram)5950d.Second();
-    public static SpecificImpulse GECF680C2B2_Engine { get; } = (NewtonSecondPerKilogram)6250d.Second();
-    public static SpecificImpulse GEF101GE102_Engine { get; } = (NewtonSecondPerKilogram)6410d.Second();
-    public static SpecificImpulse GEF110GE129_Engine { get; } = (NewtonSecondPerKilogram)5600d.Second();
-    public static SpecificImpulse GEF110GE132_Engine { get; } = (NewtonSecondPerKilogram)5600d.Second();
-    public static SpecificImpulse GEF118GE100_Engine { get; } = (NewtonSecondPerKilogram)9600d.Second();
-    public static SpecificImpulse GEF118GE101_Engine { get; } = (NewtonSecondPerKilogram)9600d.Second();
-    public static SpecificImpulse GEF404GE402_Engine { get; } = (NewtonSecondPerKilogram)2070d.Second();
-    public static SpecificImpulse GEF414GE400_Engine { get; } = (NewtonSecondPerKilogram)4970d.Second();
-    public static SpecificImpulse GEGE9085B_Engine { get; } = (NewtonSecondPerKilogram)6920d.Second();
-    public static SpecificImpulse GEGE9094B_Engine { get; } = (NewtonSecondPerKilogram)12100d.Second();
-    public static SpecificImpulse GEGEnx1B70_Engine { get; } = (NewtonSecondPerKilogram)12650d.Second();
-    public static SpecificImpulse GEGEnx1B76_Engine { get; } = (NewtonSecondPerKilogram)7030d.Second();
-    public static SpecificImpulse GEJ79GE15_Engine { get; } = (NewtonSecondPerKilogram)4240d.Second();
-    public static SpecificImpulse GEJ85GE21_Engine { get; } = (NewtonSecondPerKilogram)2900d.Second();
-    public static SpecificImpulse GeneralElectricCF650C2_Engine { get; } = (NewtonSecondPerKilogram)5710d.Second();
-    public static SpecificImpulse GETF34GE100_Engine { get; } = (NewtonSecondPerKilogram)9700d.Second();
-    public static SpecificImpulse HoneywellALF502R5_Engine { get; } = (NewtonSecondPerKilogram)5000d.Second();
-    public static SpecificImpulse HoneywellITECF124_Engine { get; } = (NewtonSecondPerKilogram)4440d.Second();
-    public static SpecificImpulse HoneywellITECF125_Engine { get; } = (NewtonSecondPerKilogram)4500d.Second();
-    public static SpecificImpulse HoneywellTFE73160_Engine { get; } = (NewtonSecondPerKilogram)5300d.Second();
-    public static SpecificImpulse IAEV2525D5_Engine { get; } = (NewtonSecondPerKilogram)6270d.Second();
-    public static SpecificImpulse IAEV2533A5_Engine { get; } = (NewtonSecondPerKilogram)6270d.Second();
-    public static SpecificImpulse IHIF3_Engine { get; } = (NewtonSecondPerKilogram)5140d.Second();
-    public static SpecificImpulse J58_Engine { get; } = (NewtonSecondPerKilogram)1895d.Second();
-    public static SpecificImpulse KlimovRD33_Engine { get; } = (NewtonSecondPerKilogram)4680d.Second();
-    public static SpecificImpulse KuznetsovNK32_Engine { get; } = (NewtonSecondPerKilogram)5000d.Second();
-    public static SpecificImpulse KuznetsovNK33_Engine { get; } = (NewtonSecondPerKilogram)331d.Second();
-    public static SpecificImpulse LE5B2_Engine { get; } = (NewtonSecondPerKilogram)447d.Second();
-    public static SpecificImpulse LE7A_Engine { get; } = (NewtonSecondPerKilogram)438d.Second();
-    public static SpecificImpulse LyulkaAL21F3_Engine { get; } = (NewtonSecondPerKilogram)4190d.Second();
-    public static SpecificImpulse NPOEnergomashRD171M_Engine { get; } = (NewtonSecondPerKilogram)337d.Second();
-    public static SpecificImpulse PowerJetSaM146_Engine { get; } = (NewtonSecondPerKilogram)5720d.Second();
-    public static SpecificImpulse ProgressD18T_Engine { get; } = (NewtonSecondPerKilogram)6590d.Second();
-    public static SpecificImpulse PW1127GGTF_Engine { get; } = (NewtonSecondPerKilogram)7780d.Second();
-    public static SpecificImpulse PWF117PW100_Engine { get; } = (NewtonSecondPerKilogram)10600d.Second();
-    public static SpecificImpulse PWF119PW100_Engine { get; } = (NewtonSecondPerKilogram)5900d.Second();
-    public static SpecificImpulse PWJ52P408_Engine { get; } = (NewtonSecondPerKilogram)4560d.Second();
-    public static SpecificImpulse PWJT8D9_Engine { get; } = (NewtonSecondPerKilogram)4500d.Second();
-    public static SpecificImpulse PWPW1400GGTFMC21_Engine { get; } = (NewtonSecondPerKilogram)7100d.Second();
-    public static SpecificImpulse PWPW2040_Engine { get; } = (NewtonSecondPerKilogram)6190d.Second();
-    public static SpecificImpulse PWPW4098_Engine { get; } = (NewtonSecondPerKilogram)6200d.Second();
-    public static SpecificImpulse PWTF33P3_Engine { get; } = (NewtonSecondPerKilogram)6920d.Second();
-    public static SpecificImpulse RD843_Engine { get; } = (NewtonSecondPerKilogram)315.5d.Second();
-    public static SpecificImpulse RRAE3007H_Engine { get; } = (NewtonSecondPerKilogram)9200d.Second();
-    public static SpecificImpulse RRBR710_Engine { get; } = (NewtonSecondPerKilogram)5600d.Second();
-    public static SpecificImpulse RRBR715_Engine { get; } = (NewtonSecondPerKilogram)5810d.Second();
-    public static SpecificImpulse RRBR725_Engine { get; } = (NewtonSecondPerKilogram)5480d.Second();
-    public static SpecificImpulse RRPegasus1161_Engine { get; } = (NewtonSecondPerKilogram)4740d.Second();
-    public static SpecificImpulse RRSnecma_Engine { get; } = (NewtonSecondPerKilogram)3010d.Second();
-    public static SpecificImpulse RRSpeyRB168_Engine { get; } = (NewtonSecondPerKilogram)5450d.Second();
-    public static SpecificImpulse RRTayRB183_Engine { get; } = (NewtonSecondPerKilogram)5220d.Second();
-    public static SpecificImpulse RRTrent1000_Engine { get; } = (NewtonSecondPerKilogram)7110d.Second();
-    public static SpecificImpulse RRTrent1000C_Engine { get; } = (NewtonSecondPerKilogram)13200d.Second();
-    public static SpecificImpulse RRTrent500_Engine { get; } = (NewtonSecondPerKilogram)6640d.Second();
-    public static SpecificImpulse RRTrent700_Engine { get; } = (NewtonSecondPerKilogram)6410d.Second();
-    public static SpecificImpulse RRTrent7000_Engine { get; } = (NewtonSecondPerKilogram)7110d.Second();
-    public static SpecificImpulse RRTrent800_Engine { get; } = (NewtonSecondPerKilogram)6430d.Second();
-    public static SpecificImpulse RRTrent900_Engine { get; } = (NewtonSecondPerKilogram)6900d.Second();
-    public static SpecificImpulse RRTrent97084_Engine { get; } = (NewtonSecondPerKilogram)12200d.Second();
-    public static SpecificImpulse RRTrentXWB97_Engine { get; } = (NewtonSecondPerKilogram)7530d.Second();
-    public static SpecificImpulse RRTurbomecaAdour_Engine { get; } = (NewtonSecondPerKilogram)4400d.Second();
-    public static SpecificImpulse SaturnAL31F_Engine { get; } = (NewtonSecondPerKilogram)5410d.Second();
-    public static SpecificImpulse SaturnAL41F1S_Engine { get; } = (NewtonSecondPerKilogram)4560d.Second();
-    public static SpecificImpulse SnecmaAtar08K50_Engine { get; } = (NewtonSecondPerKilogram)3710d.Second();
-    public static SpecificImpulse SnecmaAtar09C_Engine { get; } = (NewtonSecondPerKilogram)3560d.Second();
-    public static SpecificImpulse SnecmaAtar09K50_Engine { get; } = (NewtonSecondPerKilogram)3670d.Second();
-    public static SpecificImpulse SnecmaHM7B_Engine { get; } = (NewtonSecondPerKilogram)444.6d.Second();
-    public static SpecificImpulse SnecmaLarzac_Engine { get; } = (NewtonSecondPerKilogram)5030d.Second();
-    public static SpecificImpulse SnecmaM53P2_Engine { get; } = (NewtonSecondPerKilogram)4240d.Second();
-    public static SpecificImpulse SnecmaM882_Engine { get; } = (NewtonSecondPerKilogram)4600d.Second();
-    public static SpecificImpulse SolovievD30F6_Engine { get; } = (NewtonSecondPerKilogram)5030d.Second();
-    public static SpecificImpulse SolovievD30KP2_Engine { get; } = (NewtonSecondPerKilogram)5030d.Second();
-    public static SpecificImpulse SolovievD30KU154_Engine { get; } = (NewtonSecondPerKilogram)5110d.Second();
-    public static SpecificImpulse SpaceXMerlin1D_Engine { get; } = (NewtonSecondPerKilogram)310d.Second();
-    public static SpecificImpulse TumanskyR25300_Engine { get; } = (NewtonSecondPerKilogram)3750d.Second();
-    public static SpecificImpulse TurboUnionRB199_Engine { get; } = (NewtonSecondPerKilogram)5650d.Second();
-    public static SpecificImpulse VolvoRM12_Engine { get; } = (NewtonSecondPerKilogram)4370d.Second();
+    public static SpecificImpulse Engine_AerojetRocketdyneRL10B2 { get; } = (NewtonSecondPerKilogram)4565d.MeterPerSecond();
+    public static SpecificImpulse Engine_AerojetRocketdyneRS25 { get; } = (NewtonSecondPerKilogram)4440d.MeterPerSecond();
+    public static SpecificImpulse Engine_AviadvigatelPD14 { get; } = (NewtonSecondPerKilogram)67100d.MeterPerSecond();
+    public static SpecificImpulse Engine_AviadvigatelPS90A1 { get; } = (NewtonSecondPerKilogram)59300d.MeterPerSecond();
+    public static SpecificImpulse Engine_AvioP80 { get; } = (NewtonSecondPerKilogram)2700d.MeterPerSecond();
+    public static SpecificImpulse Engine_AvioZefiro23 { get; } = (NewtonSecondPerKilogram)2819d.MeterPerSecond();
+    public static SpecificImpulse Engine_AvioZefiro9A { get; } = (NewtonSecondPerKilogram)2895d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFECFE73811B { get; } = (NewtonSecondPerKilogram)54700d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMCFM562A2 { get; } = (NewtonSecondPerKilogram)53500d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMCFM562B1 { get; } = (NewtonSecondPerKilogram)54300d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMCFM562C1 { get; } = (NewtonSecondPerKilogram)52600d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMCFM563C1 { get; } = (NewtonSecondPerKilogram)52900d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMCFM565A1 { get; } = (NewtonSecondPerKilogram)59200d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMCFM565B4 { get; } = (NewtonSecondPerKilogram)64800d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMCFM565C2 { get; } = (NewtonSecondPerKilogram)64800d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMCFM567B24 { get; } = (NewtonSecondPerKilogram)56300d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMLEAP1A { get; } = (NewtonSecondPerKilogram)69000d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMLEAP1B { get; } = (NewtonSecondPerKilogram)67000d.MeterPerSecond();
+    public static SpecificImpulse Engine_CFMLEAP1C { get; } = (NewtonSecondPerKilogram)69000d.MeterPerSecond();
+    public static SpecificImpulse Engine_EAGP7270 { get; } = (NewtonSecondPerKilogram)118000d.MeterPerSecond();
+    public static SpecificImpulse Engine_EurojetEJ200 { get; } = (NewtonSecondPerKilogram)48000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GECF3410A { get; } = (NewtonSecondPerKilogram)54300d.MeterPerSecond();
+    public static SpecificImpulse Engine_GECF3410E { get; } = (NewtonSecondPerKilogram)55000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GECF343 { get; } = (NewtonSecondPerKilogram)51200d.MeterPerSecond();
+    public static SpecificImpulse Engine_GECF348C { get; } = (NewtonSecondPerKilogram)53000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GECF348E { get; } = (NewtonSecondPerKilogram)51900d.MeterPerSecond();
+    public static SpecificImpulse Engine_GECF680C2 { get; } = (NewtonSecondPerKilogram)115000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GECF680C2B1F { get; } = (NewtonSecondPerKilogram)58400d.MeterPerSecond();
+    public static SpecificImpulse Engine_GECF680C2B2 { get; } = (NewtonSecondPerKilogram)61300d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEF101GE102 { get; } = (NewtonSecondPerKilogram)62800d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEF110GE129 { get; } = (NewtonSecondPerKilogram)55000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEF110GE132 { get; } = (NewtonSecondPerKilogram)55000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEF118GE100 { get; } = (NewtonSecondPerKilogram)94000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEF118GE101 { get; } = (NewtonSecondPerKilogram)94000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEF404GE402 { get; } = (NewtonSecondPerKilogram)20300d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEF414GE400 { get; } = (NewtonSecondPerKilogram)48800d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEGE9085B { get; } = (NewtonSecondPerKilogram)67900d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEGE9094B { get; } = (NewtonSecondPerKilogram)118700d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEGEnx1B70 { get; } = (NewtonSecondPerKilogram)124100d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEGEnx1B76 { get; } = (NewtonSecondPerKilogram)69000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEJ79GE15 { get; } = (NewtonSecondPerKilogram)41500d.MeterPerSecond();
+    public static SpecificImpulse Engine_GEJ85GE21 { get; } = (NewtonSecondPerKilogram)28500d.MeterPerSecond();
+    public static SpecificImpulse Engine_GeneralElectricCF650C2 { get; } = (NewtonSecondPerKilogram)56000d.MeterPerSecond();
+    public static SpecificImpulse Engine_GETF34GE100 { get; } = (NewtonSecondPerKilogram)95000d.MeterPerSecond();
+    public static SpecificImpulse Engine_HoneywellALF502R5 { get; } = (NewtonSecondPerKilogram)49000d.MeterPerSecond();
+    public static SpecificImpulse Engine_HoneywellITECF124 { get; } = (NewtonSecondPerKilogram)43600d.MeterPerSecond();
+    public static SpecificImpulse Engine_HoneywellITECF125 { get; } = (NewtonSecondPerKilogram)44100d.MeterPerSecond();
+    public static SpecificImpulse Engine_HoneywellTFE73160 { get; } = (NewtonSecondPerKilogram)52000d.MeterPerSecond();
+    public static SpecificImpulse Engine_IAEV2525D5 { get; } = (NewtonSecondPerKilogram)61500d.MeterPerSecond();
+    public static SpecificImpulse Engine_IAEV2533A5 { get; } = (NewtonSecondPerKilogram)61500d.MeterPerSecond();
+    public static SpecificImpulse Engine_IHIF3 { get; } = (NewtonSecondPerKilogram)50400d.MeterPerSecond();
+    public static SpecificImpulse Engine_J58 { get; } = (NewtonSecondPerKilogram)18580d.MeterPerSecond();
+    public static SpecificImpulse Engine_KlimovRD33 { get; } = (NewtonSecondPerKilogram)45800d.MeterPerSecond();
+    public static SpecificImpulse Engine_KuznetsovNK32 { get; } = (NewtonSecondPerKilogram)49000d.MeterPerSecond();
+    public static SpecificImpulse Engine_KuznetsovNK33 { get; } = (NewtonSecondPerKilogram)3250d.MeterPerSecond();
+    public static SpecificImpulse Engine_LE5B2 { get; } = (NewtonSecondPerKilogram)4380d.MeterPerSecond();
+    public static SpecificImpulse Engine_LE7A { get; } = (NewtonSecondPerKilogram)4300d.MeterPerSecond();
+    public static SpecificImpulse Engine_LyulkaAL21F3 { get; } = (NewtonSecondPerKilogram)41100d.MeterPerSecond();
+    public static SpecificImpulse Engine_Merlin1D { get; } = (NewtonSecondPerKilogram)3000d.MeterPerSecond();
+    public static SpecificImpulse Engine_NPOEnergomashRD171M { get; } = (NewtonSecondPerKilogram)3300d.MeterPerSecond();
+    public static SpecificImpulse Engine_PowerJetSaM146 { get; } = (NewtonSecondPerKilogram)56100d.MeterPerSecond();
+    public static SpecificImpulse Engine_ProgressD18T { get; } = (NewtonSecondPerKilogram)64700d.MeterPerSecond();
+    public static SpecificImpulse Engine_PW1127G { get; } = (NewtonSecondPerKilogram)76300d.MeterPerSecond();
+    public static SpecificImpulse Engine_PWF117PW100 { get; } = (NewtonSecondPerKilogram)104000d.MeterPerSecond();
+    public static SpecificImpulse Engine_PWF119PW100 { get; } = (NewtonSecondPerKilogram)57900d.MeterPerSecond();
+    public static SpecificImpulse Engine_PWJ52P408 { get; } = (NewtonSecondPerKilogram)44700d.MeterPerSecond();
+    public static SpecificImpulse Engine_PWJT8D9 { get; } = (NewtonSecondPerKilogram)44100d.MeterPerSecond();
+    public static SpecificImpulse Engine_PWPW1400G { get; } = (NewtonSecondPerKilogram)69000d.MeterPerSecond();
+    public static SpecificImpulse Engine_PWPW2040 { get; } = (NewtonSecondPerKilogram)60700d.MeterPerSecond();
+    public static SpecificImpulse Engine_PWPW4098 { get; } = (NewtonSecondPerKilogram)60800d.MeterPerSecond();
+    public static SpecificImpulse Engine_PWTF33P3 { get; } = (NewtonSecondPerKilogram)67900d.MeterPerSecond();
+    public static SpecificImpulse Engine_Ramjet { get; } = (NewtonSecondPerKilogram)7800d.MeterPerSecond();
+    public static SpecificImpulse Engine_RD843 { get; } = (NewtonSecondPerKilogram)3094d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRAE3007H { get; } = (NewtonSecondPerKilogram)91000d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRBR710 { get; } = (NewtonSecondPerKilogram)55000d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRBR715 { get; } = (NewtonSecondPerKilogram)56900d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRBR725 { get; } = (NewtonSecondPerKilogram)53700d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRPegasus1161 { get; } = (NewtonSecondPerKilogram)46500d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRSnecmaOlympus { get; } = (NewtonSecondPerKilogram)29500d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRSpeyRB168 { get; } = (NewtonSecondPerKilogram)53500d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTayRB183 { get; } = (NewtonSecondPerKilogram)51200d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrent1000 { get; } = (NewtonSecondPerKilogram)69800d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrent1000C { get; } = (NewtonSecondPerKilogram)129000d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrent500 { get; } = (NewtonSecondPerKilogram)65100d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrent700 { get; } = (NewtonSecondPerKilogram)62800d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrent7000 { get; } = (NewtonSecondPerKilogram)69800d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrent800 { get; } = (NewtonSecondPerKilogram)63000d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrent900 { get; } = (NewtonSecondPerKilogram)67600d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrent97084 { get; } = (NewtonSecondPerKilogram)119700d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTrentXWB97 { get; } = (NewtonSecondPerKilogram)73900d.MeterPerSecond();
+    public static SpecificImpulse Engine_RRTurbomecaAdour { get; } = (NewtonSecondPerKilogram)44000d.MeterPerSecond();
+    public static SpecificImpulse Engine_SaturnAL31F { get; } = (NewtonSecondPerKilogram)53000d.MeterPerSecond();
+    public static SpecificImpulse Engine_SaturnAL41F1S { get; } = (NewtonSecondPerKilogram)44700d.MeterPerSecond();
+    public static SpecificImpulse Engine_SnecmaAtar08K50 { get; } = (NewtonSecondPerKilogram)36400d.MeterPerSecond();
+    public static SpecificImpulse Engine_SnecmaAtar09C { get; } = (NewtonSecondPerKilogram)35000d.MeterPerSecond();
+    public static SpecificImpulse Engine_SnecmaAtar09K50 { get; } = (NewtonSecondPerKilogram)36000d.MeterPerSecond();
+    public static SpecificImpulse Engine_SnecmaHM7B { get; } = (NewtonSecondPerKilogram)4360d.MeterPerSecond();
+    public static SpecificImpulse Engine_SnecmaLarzac { get; } = (NewtonSecondPerKilogram)49300d.MeterPerSecond();
+    public static SpecificImpulse Engine_SnecmaM53P2 { get; } = (NewtonSecondPerKilogram)41500d.MeterPerSecond();
+    public static SpecificImpulse Engine_SnecmaM882 { get; } = (NewtonSecondPerKilogram)45100d.MeterPerSecond();
+    public static SpecificImpulse Engine_SolovievD30F6 { get; } = (NewtonSecondPerKilogram)49300d.MeterPerSecond();
+    public static SpecificImpulse Engine_SolovievD30KP2 { get; } = (NewtonSecondPerKilogram)49400d.MeterPerSecond();
+    public static SpecificImpulse Engine_SolovievD30KU154 { get; } = (NewtonSecondPerKilogram)50100d.MeterPerSecond();
+    public static SpecificImpulse Engine_TumanskyR25300 { get; } = (NewtonSecondPerKilogram)36700d.MeterPerSecond();
+    public static SpecificImpulse Engine_TurboUnionRB199 { get; } = (NewtonSecondPerKilogram)55400d.MeterPerSecond();
+    public static SpecificImpulse Engine_VolvoRM12 { get; } = (NewtonSecondPerKilogram)42800d.MeterPerSecond();
 }
 
 [MultiplicativeRelationship<Mass, Acceleration, Force, Kilogram, MeterPerSecondSquared, Newton, Scalar>]

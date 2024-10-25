@@ -67,8 +67,9 @@ public partial record Wavelength(Nanometer value)
     public HeatFlux GetBlackBodyEmittance(Wavelength wavelength, Temperature temperature)
     {
         double λm = ((Length)wavelength).Meter.Value;
+        double K = temperature.Value.Value;
 
-        return new WattPerSquareMeter(3.74183e-16 * Math.Pow(λm, -5.0) / Math.Exp(1.4388e-2 / (λm * temperature) - 1.0));
+        return new WattPerSquareMeter(3.74183e-16 * Math.Pow(λm, -5.0) / Math.Exp(1.4388e-2 / (λm * K) - 1.0));
     }
 }
 
