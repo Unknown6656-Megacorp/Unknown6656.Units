@@ -273,7 +273,7 @@ public record ThermodynamicElementProperties
     public required ChemicalPotential HeatOfVaporization { get; init; }
     public required ThermalExpansion? ThermalExpansion { get; init; }
     public required ThermalConductivity ThermalConductivity { get; init; }
-    public required ThermodynamicEntropy ThermalCapacity { get; init; }
+    public required ThermodynamicEntropy? ThermalCapacity { get; init; }
 
 
     public FundamentalState State => GetFundamentalStateAt(PressureTemperaturePoint.NormalNTP);
@@ -295,8 +295,8 @@ public record ThermodynamicElementProperties
 public record OpticalElementProperties
 {
     public required Spectrum? EmissionSpectrum { get; init; }
-    public required Spectrum? AbsorptionSpectrum { get; init; }
-    public required double? RefractiveIndex { get; init; }
+    //public required Spectrum? AbsorptionSpectrum { get; init; }
+    public required double? RefractiveIndex { get; init; } = null;
 
     public Speed? SpeedOfLight => RefractiveIndex is double n ? Speed.C0 / n : null;
 
@@ -355,10 +355,12 @@ public record ChemicalBondingElementProperties
 public record KinematicElementProperties
 {
     public required Speed SpeedOfSound { get; init; }
-    public required Pressure? YoungModulus { get; init; }
-    public required Pressure? ShearModulus { get; init; }
-    public required Pressure? BulkModulus { get; init; }
-    public required Pressure? BrinellHardness { get; init; }
+    public Pressure? YoungModulus { get; init; } = null;
+    public Pressure? ShearModulus { get; init; } = null;
+    public Pressure? BulkModulus { get; init; } = null;
+    public Pressure? BrinellHardness { get; init; } = null;
+    public Pressure? VickersHardness { get; init; } = null;
+    public double? PoissonRatio { get; init; } = null;
 }
 
 public record IsotopeDecayConfig(DecayMode Mode, Time HalfTime, double Probability = 1);
