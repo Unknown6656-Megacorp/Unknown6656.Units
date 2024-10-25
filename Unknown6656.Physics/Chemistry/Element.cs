@@ -41,6 +41,7 @@ public enum DecayMode
     BetaNeutronEmission,
     BetaDoubleNeutronEmission,
     BetaTripleNeutronEmission,
+    BetaQuadrupleNeutronEmission,
     DeuteronEmission,
     BetaDeuteronEmission,
     BetaTritonEmission,
@@ -48,6 +49,7 @@ public enum DecayMode
     /// Beta-plus decay, where a proton is converted into a neutron, a positron, and a neutrino.
     /// </summary>
     PositronEmission,
+    AlphaPositronEmission,
     /// <summary>
     /// Electron capture, where an inner orbital electron is captured by the nucleus.
     /// </summary>
@@ -297,6 +299,7 @@ public record OpticalElementProperties
     public required Spectrum? EmissionSpectrum { get; init; }
     //public required Spectrum? AbsorptionSpectrum { get; init; }
     public required double? RefractiveIndex { get; init; } = null;
+    public double? ExtinctionCoefficient { get; init; } = null;
 
     public Speed? SpeedOfLight => RefractiveIndex is double n ? Speed.C0 / n : null;
 
@@ -583,6 +586,7 @@ public class IsotopeDecay
             DecayMode.Stable or
             DecayMode.IsomericTransition => (0, 0),
             DecayMode.Alpha => (-2, -2),
+            DecayMode.AlphaPositronEmission => (-3, -1),
             DecayMode.ProtonEmission => (-1, 0),
             DecayMode.DoubleProtonEmission => (-2, 0),
             DecayMode.NeutronEmission => (0, -1),
@@ -601,6 +605,7 @@ public class IsotopeDecay
             DecayMode.BetaNeutronEmission => (1, -2),
             DecayMode.BetaDoubleNeutronEmission => (1, -3),
             DecayMode.BetaTripleNeutronEmission => (1, -4),
+            DecayMode.BetaQuadrupleNeutronEmission => (1, -5),
 
 
 

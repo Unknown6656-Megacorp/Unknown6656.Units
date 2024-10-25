@@ -67,6 +67,7 @@ public sealed partial class PeriodicTableOfElements
         Optics = new()
         {
             RefractiveIndex = 1.000057,
+            ExtinctionCoefficient = 1.7522,
             EmissionSpectrum = new SparseSpectrum([
                 (149.293d.Nanometer(), 0.0008333333333333334),
                 (149.297d.Nanometer(), 0.001388888888888889),
