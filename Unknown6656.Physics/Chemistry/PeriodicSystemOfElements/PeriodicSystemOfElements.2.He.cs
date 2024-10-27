@@ -43,7 +43,7 @@ public sealed partial class PeriodicTableOfElements
         {
             CovalentRadius = 28e-12.Meter(),
             VanDerWaalsRadius = 140e-12.Meter(),
-            MeanAtomicRadius = null,
+            MeanAtomicRadius = 120e-12.Meter(),
             ElectroNegativity = null,
             OxidationStates = [],
             ElectronConfiguration = new([

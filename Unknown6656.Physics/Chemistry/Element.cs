@@ -358,7 +358,7 @@ public record ChemicalBondingElementProperties
     public required int[] OxidationStates { get; init; } = [0];
     public required Length CovalentRadius { get; init; }
     public required Length VanDerWaalsRadius { get; init; }
-    public required Length? MeanAtomicRadius { get; init; }
+    public required Length MeanAtomicRadius { get; init; }
     public required ElectronConfiguration ElectronConfiguration { get; init; }
 }
 
