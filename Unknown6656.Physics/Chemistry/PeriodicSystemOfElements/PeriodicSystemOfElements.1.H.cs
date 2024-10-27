@@ -20,8 +20,9 @@ public sealed partial class PeriodicTableOfElements
         Category = ElementCategory.NonMetal,
         Thermodynamics = new()
         {
-            MeltingPoint = 13.99.Kelvin(),
-            BoilingPoint = 20.271.Kelvin(),
+            StandardDensity = 0.08988.GramPerLiter(),
+            STPMeltingPoint = 13.99.Kelvin(),
+            STPBoilingPoint = 20.271.Kelvin(),
             TriplePoint = (13.8033.Kelvin(), 7_041d.Pascal()),
             CriticalPoint = (32.938.Kelvin(), 1_285_800d.Pascal()),
             IonizationEnergies = [
@@ -162,7 +163,6 @@ public sealed partial class PeriodicTableOfElements
                 (169423d.Nanometer(), 1.9047619047619046E-05),
             ]),
         },
-        StandardDensity = 0.08988.GramPerLiter(),
     }).AddIsotopes([
         new()
         {
@@ -186,25 +186,19 @@ public sealed partial class PeriodicTableOfElements
             NeutronCount = 2,
             Abundance = 0.0000000000001,
             Spin = .5,
-            Decays = [
-                new(DecayMode.Beta, 12.32.SolarYear()),
-            ],
+            Decays = [new(DecayMode.Beta, 12.32.SolarYear())],
         },
         new()
         {
             NeutronCount = 3,
             Spin = 2,
-            Decays = [
-                new(DecayMode.NeutronEmission, 139e-24.Second()),
-            ],
+            Decays = [new(DecayMode.NeutronEmission, 139e-24.Second())],
         },
         new()
         {
             NeutronCount = 4,
             Spin = 3,
-            Decays = [
-                new(DecayMode.DoubleNeutronEmission, 86e-24.Second()),
-            ],
+            Decays = [new(DecayMode.DoubleNeutronEmission, 86e-24.Second())],
         },
     ]);
 }

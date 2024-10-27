@@ -49,7 +49,8 @@ public enum DecayMode
     /// Beta-plus decay, where a proton is converted into a neutron, a positron, and a neutrino.
     /// </summary>
     PositronEmission,
-    AlphaPositronEmission,
+    PositronProtonEmission,
+    PositronAlphaEmission,
     /// <summary>
     /// Electron capture, where an inner orbital electron is captured by the nucleus.
     /// </summary>
@@ -266,10 +267,12 @@ public enum PeriodicTableBlock
 
 public record ThermodynamicElementProperties
 {
-    public required Temperature MeltingPoint { get; init; }
-    public required Temperature BoilingPoint { get; init; }
+    public Temperature? STPMeltingPoint { get; init; } = null;
+    public Temperature? STPBoilingPoint { get; init; } = null;
+    public Temperature? STPSublimationPoint { get; init; } = null;
     public required PressureTemperaturePoint? TriplePoint { get; init; }
     public required PressureTemperaturePoint? CriticalPoint { get; init; }
+    public required VolumetricMassDensity StandardDensity { get; init; }
     public required ChemicalPotential[] IonizationEnergies { get; init; }
     public required ChemicalPotential HeatOfFusion { get; init; }
     public required ChemicalPotential HeatOfVaporization { get; init; }
@@ -287,6 +290,10 @@ public record ThermodynamicElementProperties
 
     public FundamentalState GetFundamentalStateAt(Temperature temperature, Pressure pressure)
     {
+        // TODO : implement sublimation
+        // TODO : implement triple point
+        // TODO : implement critical point
+
         throw null;
 
         //= MeltingPoint >= Temperature.RoomTemperature ? FundamentalState.Solid
@@ -299,7 +306,7 @@ public record OpticalElementProperties
     public required Spectrum? EmissionSpectrum { get; init; }
     //public required Spectrum? AbsorptionSpectrum { get; init; }
     public required double? RefractiveIndex { get; init; } = null;
-    public double? ExtinctionCoefficient { get; init; } = null;
+    public double ExtinctionCoefficient { get; init; } = 0;
 
     public Speed? SpeedOfLight => RefractiveIndex is double n ? Speed.C0 / n : null;
 
@@ -461,8 +468,6 @@ public class Element
 
     public required ChemicalBondingElementProperties ChemicalBonding { get; init; }
 
-    public required VolumetricMassDensity StandardDensity { get; init; }
-
     /// <summary>
     /// The most abundant <see cref="Isotope"/> of the element.
     /// </summary>
@@ -504,6 +509,8 @@ public class Element
     {
         _isotopes.Add(new(this, isotope));
 
+#warning TODO : normalize abundances
+
         return this;
     }
 
@@ -535,7 +542,7 @@ public class Isotope
     public double Abundance { get; }
     public uint HadronCount => NeutronCount + Element.ProtonCount;
     public Spin Spin { get; }
-    public IsotopeDecayConfig[] KnownDecays { get; }
+    public IsotopeDecay[] KnownDecays { get; }
     public bool IsStable => KnownDecays.Count(d => d.Mode != DecayMode.Stable) > 0;
 
 
@@ -547,7 +554,13 @@ public class Isotope
         NeutronCount = config.NeutronCount;
         AtomicMass = Mass.AtomicMass(element.ProtonCount, config.NeutronCount);
         Abundance = double.Clamp(config.Abundance, 0, 1);
-        KnownDecays = config.Decays?.ToArray() ?? [];
+
+        double total_prob = config.Decays?.Sum(d => d.Probability) ?? 0;
+
+        if (total_prob <= 0)
+            total_prob = 1; // prevent div by zero
+
+        KnownDecays = config.Decays?.Select(d => new IsotopeDecay(this, d with { Probability = d.Probability / total_prob }))?.ToArray() ?? [];
     }
 
     public override int GetHashCode() => HashCode.Combine(Element.ProtonCount, NeutronCount);
@@ -586,7 +599,8 @@ public class IsotopeDecay
             DecayMode.Stable or
             DecayMode.IsomericTransition => (0, 0),
             DecayMode.Alpha => (-2, -2),
-            DecayMode.AlphaPositronEmission => (-3, -1),
+            DecayMode.PositronAlphaEmission => (-3, -1),
+            DecayMode.PositronProtonEmission => (-2, -1),
             DecayMode.ProtonEmission => (-1, 0),
             DecayMode.DoubleProtonEmission => (-2, 0),
             DecayMode.NeutronEmission => (0, -1),
@@ -610,6 +624,8 @@ public class IsotopeDecay
             //DecayMode.ClusterDecay => (, ),
             //DecayMode.SpontaneousFission => (, ),
             //DecayMode.Gamma => (, ),
+
+            _ => throw new NotImplementedException($"I'm terribly sorry, but I haven't yet implemented the decay mode {config.Mode}. it's on my TODO list.")
         };
 
         P += (int)source.Element.ProtonCount;
@@ -618,3 +634,28 @@ public class IsotopeDecay
         _target = (P, N);
     }
 }
+
+/* DECAY MODES:
+
+  \ P|     |     |     |     |     |     |     |     |
+ N \ |  -4 |  -3 |  -2 |  -1 |  0  |  +1 |  +2 |  +3 |
+----\+-----+-----+-----+-----+-----+-----+-----+-----+
+  -5 |     |     |     |     |     | β4n |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  -4 |     |     |     |     |     | β3n |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  -3 |     |     |     |  βα |  βt | β2n |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  -2 |     |     |  α  |     |2n,βd|  βn |  2β |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  -1 |     | β+α | β+p |β+,>ε|  n  |  β  |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+   0 |     |     |  2p |  p  | S,IT|     |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  +1 |     |     |     |  d  |  >n |     |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  +2 |     |     | 2β+ |     |     |     |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  +3 |     |     |     |     |     |     |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+*/

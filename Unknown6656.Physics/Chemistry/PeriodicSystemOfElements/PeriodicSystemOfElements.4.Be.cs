@@ -21,8 +21,9 @@ public sealed partial class PeriodicTableOfElements
         Category = ElementCategory.AlkalineEarthMetal,
         Thermodynamics = new()
         {
-            MeltingPoint = 1556d.Kelvin(),
-            BoilingPoint = 2742d.Kelvin(),
+            StandardDensity = 1.845.GramPerCubicCentimeter(),
+            STPMeltingPoint = 1556d.Kelvin(),
+            STPBoilingPoint = 2742d.Kelvin(),
             TriplePoint = null,
             CriticalPoint = (5205d.Kelvin(), 1.44e7.Pascal()),
             HeatOfFusion = 12.2e3.JoulePerMol(),
@@ -37,7 +38,6 @@ public sealed partial class PeriodicTableOfElements
             ThermalConductivity = 200d.WattPerMeterKelvin(),
             ThermalExpansion = 10.98e-6.InverseKelvin(),
         },
-        StandardDensity = 1.845.GramPerCubicCentimeter(),
         Kinematics = new()
         {
             BrinellHardness = 5.8e9.Pascal(),
@@ -437,25 +437,19 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 2,
             Spin = 0,
-            Decays = [
-                new(DecayMode.DoubleProtonEmission, 5e-21.Second()),
-            ],
+            Decays = [new(DecayMode.DoubleProtonEmission, 5e-21.Second())],
         },
         new()
         {
             NeutronCount = 3,
             Spin = 1.5,
-            Decays = [
-                new(DecayMode.ElectronCapture, 53.22.StandardDay()),
-            ],
+            Decays = [new(DecayMode.ElectronCapture, 53.22.StandardDay())],
         },
         new()
         {
             NeutronCount = 4,
             Spin = 0,
-            Decays = [
-                new(DecayMode.Alpha, 81.9e-21.Second()),
-            ],
+            Decays = [new(DecayMode.Alpha, 81.9e-21.Second())],
         },
         new()
         {
@@ -468,9 +462,7 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 6,
             Spin = 0,
-            Decays = [
-                new(DecayMode.Beta, 1.25e-21.Second()),
-            ],
+            Decays = [new(DecayMode.Beta, 1.25e-21.Second())],
         },
         new()
         {
@@ -495,9 +487,7 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 9,
             Spin = .5,
-            Decays = [
-                new(DecayMode.NeutronEmission, 1e-24.Second()),
-            ],
+            Decays = [new(DecayMode.NeutronEmission, 1e-24.Second())],
         },
         new()
         {
@@ -515,17 +505,13 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 11,
             Spin = 2.5,
-            Decays = [
-                new(DecayMode.NeutronEmission, 790e-24.Second()),
-            ],
+            Decays = [new(DecayMode.NeutronEmission, 790e-24.Second())],
         },
         new()
         {
             NeutronCount = 12,
             Spin = 0,
-            Decays = [
-                new(DecayMode.DoubleNeutronEmission, 650e-24.Second()),
-            ],
+            Decays = [new(DecayMode.DoubleNeutronEmission, 650e-24.Second())],
         },
     ]);
 }

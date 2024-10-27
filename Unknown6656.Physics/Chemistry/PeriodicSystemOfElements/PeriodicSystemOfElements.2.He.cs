@@ -20,8 +20,9 @@ public sealed partial class PeriodicTableOfElements
         Category = ElementCategory.NobleGas,
         Thermodynamics = new()
         {
-            MeltingPoint = 0.95.Kelvin(),
-            BoilingPoint = 4.222.Kelvin(),
+            StandardDensity = 0.1786.GramPerLiter(),
+            STPMeltingPoint = 0.95.Kelvin(),
+            STPBoilingPoint = 4.222.Kelvin(),
             TriplePoint = (2.177.Kelvin(), 5.043e3.Pascal()),
             CriticalPoint = (5.1953.Kelvin(), 227.46e3.Pascal()),
             IonizationEnergies = [
@@ -56,7 +57,6 @@ public sealed partial class PeriodicTableOfElements
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -1.88e-6.CubicCentimeterPerMol(),
         },
-        StandardDensity = 0.1786.GramPerLiter(),
         Optics = new()
         {
             RefractiveIndex = 1.000036,
@@ -234,9 +234,7 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 3,
             Spin = 1.5,
-            Decays = [
-                new(DecayMode.NeutronEmission, 6.02e-22.Second()),
-            ],
+            Decays = [new(DecayMode.NeutronEmission, 6.02e-22.Second())],
         },
         new()
         {
@@ -251,9 +249,7 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 5,
             Spin = 1.5,
-            Decays = [
-                new(DecayMode.NeutronEmission, 2.51e-18.Second()),
-            ],
+            Decays = [new(DecayMode.NeutronEmission, 2.51e-18.Second())],
         },
         new()
         {
@@ -269,17 +265,13 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 7,
             Spin = 1.5,
-            Decays = [
-                new(DecayMode.NeutronEmission, 2.5e-18.Second()),
-            ],
+            Decays = [new(DecayMode.NeutronEmission, 2.5e-18.Second())],
         },
         new()
         {
             NeutronCount = 8,
             Spin = 0,
-            Decays = [
-                new(DecayMode.DoubleNeutronEmission, 2.6e-22.Second()),
-            ],
+            Decays = [new(DecayMode.DoubleNeutronEmission, 2.6e-22.Second())],
         },
     ]);
 }
