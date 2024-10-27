@@ -8,7 +8,7 @@ using Unknown6656.Generics;
 
 
 
-string url = "https://en.wikipedia.org/wiki/Isotopes_of_nitrogen";
+string url = "https://en.wikipedia.org/wiki/Isotopes_of_fluorine";
 HtmlDocument html = new();
 
 using (HttpClient client = new())
@@ -16,6 +16,7 @@ using (HttpClient client = new())
 
 string isotopes = "";
 Regex re_sigma = new(@"\s*\(\s*\d+(\s*\.\s*\d+)?\s*\)\s*", RegexOptions.Compiled);
+Regex re_ev = new(@"\s*\[\s*\d+(\s*\.\s*\d+)?\s*[kM]?eV\s*\]\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.sortable").Select(ProcessTable))
 {
@@ -23,7 +24,7 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
     const int col_halflife = 4;
     const int col_mode = 5;
     const int col_spin = 7;
-    const int col_abundance = 9;
+    const int col_abundance = 8;
 
     foreach (IGrouping<string, IList<HtmlNode>>? g in from row in table.QuerySelectorAll("tr")
                                                       let cells = row.QuerySelectorAll("td")
@@ -35,7 +36,7 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
     {
         int N = int.Parse(g.Key);
         IList<HtmlNode> first = g.First();
-        string halflife = first[col_halflife].InnerText.Trim().Replace("&#160;", "");
+        string halflife = first[col_halflife].InnerText.Trim().ToLower();
         string spin = first[col_spin].InnerText.Trim();
         string abundance = first[col_abundance].InnerText.Trim();
 
@@ -51,6 +52,27 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
 
         if (abundance.Length > 0)
             abundance = $"\n    Abundance = {abundance},";
+
+        if (halflife.EndsWith("ys"))
+            halflife = $"{halflife[..^2]}e-24.Second()";
+        else if (halflife.EndsWith("zs"))
+            halflife = $"{halflife[..^2]}e-21.Second()";
+        else if (halflife.EndsWith("as"))
+            halflife = $"{halflife[..^2]}e-18.Second()";
+        else if (halflife.EndsWith("fs"))
+            halflife = $"{halflife[..^2]}e-15.Second()";
+        else if (halflife.EndsWith("ps"))
+            halflife = $"{halflife[..^2]}e-12.Second()";
+        else if (halflife.EndsWith("ns"))
+            halflife = $"{halflife[..^2]}e-9.Second()";
+        else if (halflife.EndsWith("μs"))
+            halflife = $"{halflife[..^2]}e-6.Second()";
+        else if (halflife.EndsWith("ms"))
+            halflife = $"{halflife[..^2]}e-3.Second()";
+        else if (halflife.EndsWith('s'))
+            halflife = $"{halflife[..^1]}.Second()";
+        else if (halflife.EndsWith("min"))
+            halflife += $"{halflife[..^3]}.Minute()";
 
         List<string> decays = [];
 
@@ -74,7 +96,7 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
                        .Replace(".n", "NeutronEmission")
                        ;
 
-            decays.Add($"\n                new(DecayMode.{mode}, {halflife}.Second())");
+            decays.Add($"\n                new(DecayMode.{mode}, {halflife})");
         }
 
         if (halflife.Contains("stable", StringComparison.OrdinalIgnoreCase))
@@ -91,7 +113,11 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
     }
 }
 
-isotopes = re_sigma.Replace(isotopes, "");
+isotopes = re_sigma.Replace(isotopes, "")
+                   .Replace("&#160;", "")
+                   .Replace("&#91;", "")
+                   .Replace("&#93;", "");
+isotopes = re_ev.Replace(isotopes, "");
 
 Console.WriteLine(isotopes);
 
@@ -179,3 +205,68 @@ static HtmlNode ProcessTable(HtmlNode tableNode)
 
     return ret;
 }
+
+
+#if false
+
+Dictionary<string, Dictionary<double, double>> dic = [];
+
+foreach (string file in Directory.GetFiles("D:\\DEV\\Unknown6656.Units\\Unknown6656.Physics\\Chemistry", "*.csv"))
+{
+    string[] lines = File.ReadAllText(file).Replace("\r\n", "\n").Trim().Split('\n');
+    string[] header = lines[0].Split(',');
+
+    int col_elem = header.IndexOf("element");
+    int col_intens = header.IndexOf("intens");
+    var col_wl = header.WithIndex().SelectWhere(t => t.Item.Contains("_wl") && t.Item.Contains("nm"), t => t.Index);
+    bool missing_elem = col_elem < 0;
+
+    foreach (string line in lines)
+        if (!line.Contains("intens") && !string.IsNullOrWhiteSpace(line))
+        {
+            string[] cells = line.Split(',');
+            string elem = missing_elem ? Path.GetFileNameWithoutExtension(file) : cells[col_elem];
+
+            if (!dic.TryGetValue(elem, out var itens))
+                itens = [];
+
+            string wl = col_wl.Select(i => cells[i]).FirstOrDefault(c => !string.IsNullOrWhiteSpace(c)) ?? "";
+            var it = cells[col_intens];
+
+            wl = new(wl.Where(c => char.IsDigit(c) || c is '.').ToArray());
+            it = new(it.Where(c => char.IsDigit(c) || c is '.').ToArray());
+
+            double wl_d = double.Parse(wl);
+            double it_d = double.Parse(it);
+
+            itens[wl_d] = it_d;
+            dic[elem] = itens;
+        }
+}
+
+StringBuilder sb1 = new();
+StringBuilder sb2 = new();
+
+sb2.AppendLine("element,wavelength,intensity");
+
+foreach ((string elem, var list) in dic)
+{
+    double max = list.Values.Max();
+
+    sb1.AppendLine($"""
+    //--------------- {elem} ---------------//
+            new SparseSpectrum([
+    """);
+
+    foreach ((double wl, double intens) in list)
+    {
+        sb1.AppendLine($"            ({wl}d.Nanometer(), {intens / max}),");
+        sb2.AppendLine($"{elem},{wl},{intens / max}");
+    }
+
+    sb1.AppendLine("        ]),");
+}
+
+File.WriteAllText("D:\\DEV\\Unknown6656.Units\\Unknown6656.Physics\\Chemistry\\spectra.txt", sb1.ToString());
+File.WriteAllText("D:\\DEV\\Unknown6656.Units\\Unknown6656.Physics\\Chemistry\\spectra.csv", sb2.ToString());
+#endif
