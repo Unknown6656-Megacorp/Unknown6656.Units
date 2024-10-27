@@ -633,6 +633,38 @@ public class IsotopeDecay
 
         _target = (P, N);
     }
+
+    public override string ToString() => $"{SourceIsotope} --[{Mode switch
+    {
+        DecayMode.Stable => "stable",
+        DecayMode.IsomericTransition => "IT",
+        DecayMode.Alpha => "α",
+        DecayMode.PositronAlphaEmission => "β⁺α",
+        DecayMode.PositronProtonEmission => "β⁺p",
+        DecayMode.ProtonEmission => "p",
+        DecayMode.DoubleProtonEmission => "2p",
+        DecayMode.NeutronEmission => "n",
+        DecayMode.DoubleNeutronEmission => "2n",
+        DecayMode.BetaDeuteronEmission => "β⁻d",
+        DecayMode.NeutronCapture => "η",
+        DecayMode.ElectronCapture => "ε",
+        DecayMode.PositronEmission => "β⁺",
+        DecayMode.Beta => "β⁻",
+        DecayMode.BetaGammaDecay => "β⁻γ",
+        DecayMode.DoubleBetaDecay => "2β⁻",
+        DecayMode.DoublePositronEmission => "2β⁺",
+        DecayMode.DeuteronEmission => "d",
+        DecayMode.BetaAlpha => "β⁻α",
+        DecayMode.BetaTritonEmission => "β⁻t",
+        DecayMode.BetaNeutronEmission => "β⁻n",
+        DecayMode.BetaDoubleNeutronEmission => "β⁻2n",
+        DecayMode.BetaTripleNeutronEmission => "β⁻3n",
+        DecayMode.BetaQuadrupleNeutronEmission => "β⁻4n",
+        DecayMode.SpontaneousFission => "SF",
+        DecayMode.ClusterDecay => "CD",
+        DecayMode.Gamma => "γ",
+        _ => "(?)"
+    }}, {HalfTime}, {Probability:P2}]--> {TargetIsotope}";
 }
 
 /* DECAY MODES:
@@ -645,14 +677,14 @@ public class IsotopeDecay
   -4 |     |     |     |     |     | β3n |     |     |
 -----+-----+-----+-----+-----+-----+-----+-----+-----+
   -3 |     |     |     |  βα |  βt | β2n |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  -2 |     |     |  α  |     |2n,βd|  βn |  2β |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  -1 |     | β+α | β+p |β+,>ε|  n  |  β  |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-   0 |     |     |  2p |  p  | S,IT|     |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  +1 |     |     |     |  d  |  >n |     |     |     |
+-----+-----+-----+-----+-----+--+--+-----+-----+-----+
+  -2 |     |     |  α  |     |2n|βd|  βn |  2β |     |
+-----+-----+-----+-----+--+--+--+--+-----+-----+-----+
+  -1 |     | β+α | β+p |β+| ε|  n  |  β  |     |     |
+-----+-----+-----+-----+--+--+--+--+-----+-----+-----+
+   0 |     |     |  2p |  p  | S|IT|     |     |     |
+-----+-----+-----+-----+-----+--+--+-----+-----+-----+
+  +1 |     |     |     |  d  |  η  |     |     |     |
 -----+-----+-----+-----+-----+-----+-----+-----+-----+
   +2 |     |     | 2β+ |     |     |     |     |     |
 -----+-----+-----+-----+-----+-----+-----+-----+-----+
