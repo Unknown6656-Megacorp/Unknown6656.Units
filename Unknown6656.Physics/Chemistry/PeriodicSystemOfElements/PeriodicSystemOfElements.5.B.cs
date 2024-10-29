@@ -641,7 +641,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 2,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [new(DecayMode.ProtonEmission, 570e-24.Second())],
         },
         new()
@@ -653,7 +653,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 4,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [new(DecayMode.ProtonEmission, 800e-24.Second())],
         },
         new()
@@ -666,7 +666,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 6,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [],
             Abundance = .796,
         },
@@ -682,7 +682,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 8,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [
                 new(DecayMode.Beta, .01716.Second(), .99734),
                 new(DecayMode.BetaNeutronEmission, .01716.Second(), .00266),
@@ -691,7 +691,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 9,
-            Spin = 2,
+            Spin = -2,
             Decays = [
                 new(DecayMode.Beta, .1236.Second(), .9396),
                 new(DecayMode.BetaNeutronEmission, .1236.Second(), .0604),
@@ -701,7 +701,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 10,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [
                 new(DecayMode.BetaNeutronEmission, .01018.Second(), .987),
                 new(DecayMode.Beta, .01018.Second(), .013),
@@ -711,7 +711,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 12,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [
                 new(DecayMode.BetaNeutronEmission, .00508.Second(), .63),
                 new(DecayMode.Beta, .00508.Second(), .211),
@@ -723,13 +723,13 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 13,
-            Spin = 2,
+            Spin = -2,
             Decays = [new(DecayMode.NeutronEmission, 26e-9.Second())],
         },
         new()
         {
             NeutronCount = 14,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [
                 new(DecayMode.BetaNeutronEmission, .00292.Second(), .71),
                 new(DecayMode.BetaDoubleNeutronEmission, .00292.Second(), .17),
@@ -740,13 +740,13 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 15,
-            Spin = 1,
+            Spin = -1,
             Decays = [new(DecayMode.NeutronEmission, 912.4e-24.Second())],
         },
         new()
         {
             NeutronCount = 16,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [new(DecayMode.DoubleNeutronEmission, 760.4e-24.Second())],
         },
     ]);

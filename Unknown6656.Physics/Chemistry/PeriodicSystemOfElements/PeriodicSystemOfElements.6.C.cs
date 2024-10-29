@@ -535,7 +535,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 3,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [
                 new(DecayMode.PositronEmission, .1265.Second(), .541),
                 new(DecayMode.PositronAlphaEmission, .1265.Second(), .384),
@@ -551,7 +551,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 5,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [new(DecayMode.PositronEmission, 20.3402.Minute())],
         },
         new()
@@ -564,7 +564,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 7,
-            Spin = 0.5,
+            Spin = -.5,
             Decays = [],
             Abundance = .0096,
         },

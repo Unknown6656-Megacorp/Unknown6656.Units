@@ -233,7 +233,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 3,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [new(DecayMode.NeutronEmission, 6.02e-22.Second())],
         },
         new()
@@ -248,7 +248,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 5,
-            Spin = 1.5,
+            Spin = -1.5,
             Decays = [new(DecayMode.NeutronEmission, 2.51e-18.Second())],
         },
         new()
