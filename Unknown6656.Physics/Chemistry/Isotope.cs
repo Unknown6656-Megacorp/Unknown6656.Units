@@ -1,12 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Data;
 using System;
 
 using Unknown6656.Physics.Nuclear;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
+using Unknown6656.Generics;
+using System.Text;
 
 namespace Unknown6656.Physics.Chemistry;
+
+
+/* DECAY MODES:
+
+  \ P|     |     |     |     |     |     |     |     |
+ N \ |  -4 |  -3 |  -2 |  -1 |  0  |  +1 |  +2 |  +3 |
+----\+-----+-----+-----+-----+-----+-----+-----+-----+
+  -5 |     |     |     |     |     | β4n |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  -4 |     |     |     |     |     | β3n |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  -3 |     |     |     |  βα |  βt | β2n |     |     |
+-----+-----+-----+-----+-----+--+--+-----+-----+-----+
+  -2 |     |     |  α  |     |2n|βd|  βn |  2β |     |
+-----+-----+-----+-----+--+--+--+--+-----+-----+-----+
+  -1 |     | β+α | β+p |β+| ε|  n  |  β  |     |     |
+-----+-----+-----+-----+--+--+--+--+-----+-----+-----+
+   0 |     |     |  2p |  p  | S|IT|     |     |     |
+-----+-----+-----+-----+-----+--+--+-----+-----+-----+
+  +1 |     |     |     |  d  |  η  |     |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  +2 |     |     | 2β+ |     |     |     |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  +3 |     |     |     |     |     |     |     |     |
+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+*/
 
 
 /// <summary>
@@ -107,6 +136,8 @@ public record IsotopeConfig
 
 public class Isotope
 {
+    private IsotopeDecayChain[]? _chains = null;
+
     public string Name { get; }
     public Element Element { get; }
     public PeriodicTableOfElements PeriodicTable => Element.PeriodicTable;
@@ -116,7 +147,8 @@ public class Isotope
     public uint HadronCount => NeutronCount + Element.ProtonCount;
     public Spin Spin { get; }
     public IsotopeDecay[] KnownDecays { get; }
-    public bool IsStable => KnownDecays.Count(d => d.Mode != DecayMode.Stable) > 0;
+    public IsotopeDecayChain[] KnownDecayChains  => _chains ??= BuildDecayChains();
+    public bool IsStable => !KnownDecays.Any(d => d.Mode != DecayMode.Stable);
 
 
     internal Isotope(Element element, IsotopeConfig config)
@@ -134,13 +166,36 @@ public class Isotope
             total_prob = 1; // prevent div by zero
 
         KnownDecays = config.Decays?.Select(d => new IsotopeDecay(this, d with { Probability = d.Probability / total_prob }))?.ToArray() ?? [];
+
+        if (KnownDecays.Length == 0)
+            _chains = [];
     }
 
     public override int GetHashCode() => HashCode.Combine(Element.ProtonCount, NeutronCount);
 
     public override bool Equals(object? obj) => obj is Isotope other && other.Element == Element && other.NeutronCount == NeutronCount;
 
-    public override string ToString() => $"{Name} ({Element.AtomicNumber}, {Element.Symbol}-{Element.AtomicNumber + NeutronCount})";
+    public override string ToString() => $"{Name} ({Element.AtomicNumber}, {Element.Symbol}-{HadronCount})";
+
+    private IsotopeDecayChain[] BuildDecayChains()
+    {
+        IEnumerable<IsotopeDecayChain> build(Isotope source)
+        {
+            foreach (IsotopeDecay decay in source.KnownDecays)
+                if (decay.TargetIsotope is { } target)
+                {
+                    if (target.IsStable)
+                        yield return new([decay]);
+                    else
+                        foreach (IsotopeDecayChain chain in build(decay.TargetIsotope))
+                            yield return new(chain.Decays.Prepend(decay));
+                }
+                else
+                    continue; // TODO : handle decay modes that don't result in a new isotope
+        }
+
+        return [.. build(this)];
+    }
 }
 
 public class IsotopeDecay
@@ -207,7 +262,7 @@ public class IsotopeDecay
         _target = (P, N);
     }
 
-    public override string ToString() => $"{SourceIsotope} --[{Mode switch
+    internal string DecayModeString() => Mode switch
     {
         DecayMode.Stable => "stable",
         DecayMode.IsomericTransition => "IT",
@@ -237,30 +292,42 @@ public class IsotopeDecay
         DecayMode.ClusterDecay => "CD",
         DecayMode.Gamma => "γ",
         _ => "(?)"
-    }}, {HalfTime}, {Probability:P2}]--> {TargetIsotope}";
+    };
+
+    public override string ToString() => $"{SourceIsotope} --[{DecayModeString()}, {HalfTime}, {Probability:P2}]--> {TargetIsotope}";
 }
 
-/* DECAY MODES:
+public class IsotopeDecayChain
+{
+    public IsotopeDecay[] Decays { get; }
+    public Isotope[] Steps { get; }
+    public Isotope SourceIsotope => Steps[0];
+    public Isotope TargetIsotope => Steps[^1];
+    public int Length => Decays.Length;
+    public double Probability { get; }
 
-  \ P|     |     |     |     |     |     |     |     |
- N \ |  -4 |  -3 |  -2 |  -1 |  0  |  +1 |  +2 |  +3 |
-----\+-----+-----+-----+-----+-----+-----+-----+-----+
-  -5 |     |     |     |     |     | β4n |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  -4 |     |     |     |     |     | β3n |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  -3 |     |     |     |  βα |  βt | β2n |     |     |
------+-----+-----+-----+-----+--+--+-----+-----+-----+
-  -2 |     |     |  α  |     |2n|βd|  βn |  2β |     |
------+-----+-----+-----+--+--+--+--+-----+-----+-----+
-  -1 |     | β+α | β+p |β+| ε|  n  |  β  |     |     |
------+-----+-----+-----+--+--+--+--+-----+-----+-----+
-   0 |     |     |  2p |  p  | S|IT|     |     |     |
------+-----+-----+-----+-----+--+--+-----+-----+-----+
-  +1 |     |     |     |  d  |  η  |     |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  +2 |     |     | 2β+ |     |     |     |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  +3 |     |     |     |     |     |     |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-*/
+
+    internal IsotopeDecayChain(IEnumerable<IsotopeDecay> decays)
+    {
+        Decays = decays as IsotopeDecay[] ?? decays.ToArray();
+        Steps = [
+            ..Decays.Select(c => c.SourceIsotope),
+            Decays[^1].TargetIsotope ?? throw new InvalidOperationException("The decay chain is incomplete.")
+        ];
+        Probability = Decays.Aggregate(1.0, (p, d) => p * d.Probability);
+    }
+
+    public override string ToString()
+    {
+        static string display(Isotope? i) => i is null ? "???" : $"{i.Element.Symbol}-{i.HadronCount}";
+
+        StringBuilder sb = new();
+
+        sb.Append(display(SourceIsotope));
+
+        foreach (IsotopeDecay decay in Decays)
+            sb.Append($" --[{decay.DecayModeString()}]--> {display(decay.TargetIsotope)}");
+
+        return sb.ToString();
+    }
+}
