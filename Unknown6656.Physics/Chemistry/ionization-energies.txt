@@ -1,0 +1,1144 @@
+﻿actinium
+	.499e6.JoulePerMol(),
+	1.17e6.JoulePerMol(),
+	1.9e6.JoulePerMol(),
+	4.7e6.JoulePerMol(),
+	
+aluminium
+	42.647e6.JoulePerMol(),
+	201.266e6.JoulePerMol(),
+	222.316e6.JoulePerMol(),
+	.5775e6.JoulePerMol(),
+	1.8167e6.JoulePerMol(),
+	2.7448e6.JoulePerMol(),
+	11.577e6.JoulePerMol(),
+	14.842e6.JoulePerMol(),
+	18.379e6.JoulePerMol(),
+	23.326e6.JoulePerMol(),
+	27.465e6.JoulePerMol(),
+	31.853e6.JoulePerMol(),
+	38.473e6.JoulePerMol(),
+	
+americium
+	.578e6.JoulePerMol(),
+	1.158e6.JoulePerMol(),
+	2.132e6.JoulePerMol(),
+	3.493e6.JoulePerMol(),
+	
+antimony
+	.834e6.JoulePerMol(),
+	1.5949e6.JoulePerMol(),
+	2.44e6.JoulePerMol(),
+	4.26e6.JoulePerMol(),
+	5.4e6.JoulePerMol(),
+	10.4e6.JoulePerMol(),
+	
+argon
+	1.5206e6.JoulePerMol(),
+	2.6658e6.JoulePerMol(),
+	3.931e6.JoulePerMol(),
+	5.771e6.JoulePerMol(),
+	7.238e6.JoulePerMol(),
+	8.781e6.JoulePerMol(),
+	11.995e6.JoulePerMol(),
+	13.842e6.JoulePerMol(),
+	40.76e6.JoulePerMol(),
+	46.186e6.JoulePerMol(),
+	
+argon
+	52.002e6.JoulePerMol(),
+	59.653e6.JoulePerMol(),
+	66.199e6.JoulePerMol(),
+	72.918e6.JoulePerMol(),
+	82.473e6.JoulePerMol(),
+	88.576e6.JoulePerMol(),
+	397.605e6.JoulePerMol(),
+	427.066e6.JoulePerMol(),
+	
+arsenic
+	.947e6.JoulePerMol(),
+	1.798e6.JoulePerMol(),
+	2.735e6.JoulePerMol(),
+	4.837e6.JoulePerMol(),
+	6.043e6.JoulePerMol(),
+	12.31e6.JoulePerMol(),
+	
+astatine
+	.899003e6.JoulePerMol(),
+	
+barium
+	.5029e6.JoulePerMol(),
+	.9652e6.JoulePerMol(),
+	3.6e6.JoulePerMol(),
+	
+berkelium
+	.601e6.JoulePerMol(),
+	1.186e6.JoulePerMol(),
+	2.152e6.JoulePerMol(),
+	3.434e6.JoulePerMol(),
+	
+beryllium
+	.8995e6.JoulePerMol(),
+	1.7571e6.JoulePerMol(),
+	14.8487e6.JoulePerMol(),
+	21.0066e6.JoulePerMol(),
+	
+bismuth
+	.703e6.JoulePerMol(),
+	1.61e6.JoulePerMol(),
+	2.466e6.JoulePerMol(),
+	4.37e6.JoulePerMol(),
+	5.4e6.JoulePerMol(),
+	8.52e6.JoulePerMol(),
+	
+bohrium
+	.74e6.JoulePerMol(),
+	1.69e6.JoulePerMol(),
+	2.57e6.JoulePerMol(),
+	3.6e6.JoulePerMol(),
+	4.73e6.JoulePerMol(),
+	5.99e6.JoulePerMol(),
+	7.23e6.JoulePerMol(),
+	
+boron
+	.8006e6.JoulePerMol(),
+	2.4271e6.JoulePerMol(),
+	3.6597e6.JoulePerMol(),
+	25.0258e6.JoulePerMol(),
+	32.8267e6.JoulePerMol(),
+	
+bromine
+	1.1399e6.JoulePerMol(),
+	2.103e6.JoulePerMol(),
+	3.47e6.JoulePerMol(),
+	4.56e6.JoulePerMol(),
+	5.76e6.JoulePerMol(),
+	8.55e6.JoulePerMol(),
+	9.94e6.JoulePerMol(),
+	18.6e6.JoulePerMol(),
+	
+cadmium
+	.8678e6.JoulePerMol(),
+	1.6314e6.JoulePerMol(),
+	3.616e6.JoulePerMol(),
+	
+caesium
+	.3757e6.JoulePerMol(),
+	2.2343e6.JoulePerMol(),
+	3.4e6.JoulePerMol(),
+	
+calcium
+	57.11e6.JoulePerMol(),
+	63.41e6.JoulePerMol(),
+	70.11e6.JoulePerMol(),
+	78.89e6.JoulePerMol(),
+	86.31e6.JoulePerMol(),
+	94e6.JoulePerMol(),
+	104.9e6.JoulePerMol(),
+	111.711e6.JoulePerMol(),
+	494.85e6.JoulePerMol(),
+	527.762e6.JoulePerMol(),
+	.5898e6.JoulePerMol(),
+	1.1454e6.JoulePerMol(),
+	4.9124e6.JoulePerMol(),
+	6.491e6.JoulePerMol(),
+	8.153e6.JoulePerMol(),
+	10.496e6.JoulePerMol(),
+	12.27e6.JoulePerMol(),
+	14.206e6.JoulePerMol(),
+	18.191e6.JoulePerMol(),
+	20.385e6.JoulePerMol(),
+	
+californium
+	.608e6.JoulePerMol(),
+	1.206e6.JoulePerMol(),
+	2.267e6.JoulePerMol(),
+	3.599e6.JoulePerMol(),
+	
+carbon
+	1.0865e6.JoulePerMol(),
+	2.3526e6.JoulePerMol(),
+	4.6205e6.JoulePerMol(),
+	6.2227e6.JoulePerMol(),
+	37.831e6.JoulePerMol(),
+	47.277e6.JoulePerMol(),
+	
+cerium
+	.5344e6.JoulePerMol(),
+	1.05e6.JoulePerMol(),
+	1.949e6.JoulePerMol(),
+	3.547e6.JoulePerMol(),
+	6.325e6.JoulePerMol(),
+	7.49e6.JoulePerMol(),
+	
+chlorine
+	1.2512e6.JoulePerMol(),
+	2.298e6.JoulePerMol(),
+	3.822e6.JoulePerMol(),
+	5.1586e6.JoulePerMol(),
+	6.542e6.JoulePerMol(),
+	9.362e6.JoulePerMol(),
+	11.018e6.JoulePerMol(),
+	33.604e6.JoulePerMol(),
+	38.6e6.JoulePerMol(),
+	43.961e6.JoulePerMol(),
+	51.068e6.JoulePerMol(),
+	57.119e6.JoulePerMol(),
+	63.363e6.JoulePerMol(),
+	72.341e6.JoulePerMol(),
+	78.095e6.JoulePerMol(),
+	352.994e6.JoulePerMol(),
+	380.76e6.JoulePerMol(),
+	
+chromium
+	157.7e6.JoulePerMol(),
+	166.09e6.JoulePerMol(),
+	721.87e6.JoulePerMol(),
+	761.733e6.JoulePerMol(),
+	26.13e6.JoulePerMol(),
+	28.75e6.JoulePerMol(),
+	34.23e6.JoulePerMol(),
+	37.066e6.JoulePerMol(),
+	97.51e6.JoulePerMol(),
+	105.8e6.JoulePerMol(),
+	114.3e6.JoulePerMol(),
+	125.3e6.JoulePerMol(),
+	134.7e6.JoulePerMol(),
+	144.3e6.JoulePerMol(),
+	.6529e6.JoulePerMol(),
+	1.5906e6.JoulePerMol(),
+	2.987e6.JoulePerMol(),
+	4.743e6.JoulePerMol(),
+	6.702e6.JoulePerMol(),
+	8.7449e6.JoulePerMol(),
+	15.455e6.JoulePerMol(),
+	17.82e6.JoulePerMol(),
+	20.19e6.JoulePerMol(),
+	23.58e6.JoulePerMol(),
+	
+cobalt
+	167.4e6.JoulePerMol(),
+	178.1e6.JoulePerMol(),
+	189.3e6.JoulePerMol(),
+	204.5e6.JoulePerMol(),
+	214.1e6.JoulePerMol(),
+	920.87e6.JoulePerMol(),
+	966.023e6.JoulePerMol(),
+	29.4e6.JoulePerMol(),
+	32.4e6.JoulePerMol(),
+	36.6e6.JoulePerMol(),
+	39.7e6.JoulePerMol(),
+	42.8e6.JoulePerMol(),
+	49.396e6.JoulePerMol(),
+	52.737e6.JoulePerMol(),
+	134.81e6.JoulePerMol(),
+	145.17e6.JoulePerMol(),
+	154.7e6.JoulePerMol(),
+	.7604e6.JoulePerMol(),
+	1.648e6.JoulePerMol(),
+	3.232e6.JoulePerMol(),
+	4.95e6.JoulePerMol(),
+	7.67e6.JoulePerMol(),
+	9.84e6.JoulePerMol(),
+	12.44e6.JoulePerMol(),
+	15.23e6.JoulePerMol(),
+	17.959e6.JoulePerMol(),
+	26.57e6.JoulePerMol(),
+	
+copernicium
+	1.155e6.JoulePerMol(),
+	2.17e6.JoulePerMol(),
+	3.16e6.JoulePerMol(),
+	4.2e6.JoulePerMol(),
+	5.5e6.JoulePerMol(),
+	
+copper
+	174.1e6.JoulePerMol(),
+	184.9e6.JoulePerMol(),
+	198.8e6.JoulePerMol(),
+	210.5e6.JoulePerMol(),
+	222.7e6.JoulePerMol(),
+	239.1e6.JoulePerMol(),
+	249.66e6.JoulePerMol(),
+	1.067358e9
+	1.116105e9
+	25.6e6.JoulePerMol(),
+	35.6e6.JoulePerMol(),
+	38.7e6.JoulePerMol(),
+	42e6.JoulePerMol(),
+	46.7e6.JoulePerMol(),
+	50.2e6.JoulePerMol(),
+	53.7e6.JoulePerMol(),
+	61.1e6.JoulePerMol(),
+	64.702e6.JoulePerMol(),
+	163.7e6.JoulePerMol(),
+	.7455e6.JoulePerMol(),
+	1.9579e6.JoulePerMol(),
+	3.555e6.JoulePerMol(),
+	5.536e6.JoulePerMol(),
+	7.7e6.JoulePerMol(),
+	9.9e6.JoulePerMol(),
+	13.4e6.JoulePerMol(),
+	16e6.JoulePerMol(),
+	19.2e6.JoulePerMol(),
+	22.4e6.JoulePerMol(),
+	
+curium
+	.581e6.JoulePerMol(),
+	1.196e6.JoulePerMol(),
+	2.026e6.JoulePerMol(),
+	3.55e6.JoulePerMol(),
+	
+darmstadtium
+	.96e6.JoulePerMol(),
+	1.89e6.JoulePerMol(),
+	3.03e6.JoulePerMol(),
+	4e6.JoulePerMol(),
+	5.1e6.JoulePerMol(),
+	
+dubnium
+	.665e6.JoulePerMol(),
+	1.547e6.JoulePerMol(),
+	2.378e6.JoulePerMol(),
+	3.299e6.JoulePerMol(),
+	4.305e6.JoulePerMol(),
+	
+dysprosium
+	.573e6.JoulePerMol(),
+	1.13e6.JoulePerMol(),
+	2.2e6.JoulePerMol(),
+	3.99e6.JoulePerMol(),
+	
+einsteinium
+	.619e6.JoulePerMol(),
+	1.216e6.JoulePerMol(),
+	2.334e6.JoulePerMol(),
+	3.734e6.JoulePerMol(),
+	
+erbium
+	.5893e6.JoulePerMol(),
+	1.15e6.JoulePerMol(),
+	2.194e6.JoulePerMol(),
+	4.12e6.JoulePerMol(),
+	
+europium
+	.5471e6.JoulePerMol(),
+	1.085e6.JoulePerMol(),
+	2.404e6.JoulePerMol(),
+	4.12e6.JoulePerMol(),
+	
+fermium
+	.629e6.JoulePerMol(),
+	1.225e6.JoulePerMol(),
+	2.363e6.JoulePerMol(),
+	3.792e6.JoulePerMol(),
+	
+flerovium
+	.8322e6.JoulePerMol(),
+	1.6e6.JoulePerMol(),
+	3.37e6.JoulePerMol(),
+	4.4e6.JoulePerMol(),
+	5.85e6.JoulePerMol(),
+	
+fluorine
+	1.681e6.JoulePerMol(),
+	3.3742e6.JoulePerMol(),
+	6.0504e6.JoulePerMol(),
+	8.4077e6.JoulePerMol(),
+	11.0227e6.JoulePerMol(),
+	15.1641e6.JoulePerMol(),
+	17.868e6.JoulePerMol(),
+	92.0381e6.JoulePerMol(),
+	106.4343e6.JoulePerMol(),
+	
+francium
+	.393e6.JoulePerMol(),
+	
+gadolinium
+	.5934e6.JoulePerMol(),
+	1.17e6.JoulePerMol(),
+	1.99e6.JoulePerMol(),
+	4.25e6.JoulePerMol(),
+	
+gallium
+	.5788e6.JoulePerMol(),
+	1.9793e6.JoulePerMol(),
+	2.963e6.JoulePerMol(),
+	6.18e6.JoulePerMol(),
+	
+germanium
+	.762e6.JoulePerMol(),
+	1.5375e6.JoulePerMol(),
+	3.3021e6.JoulePerMol(),
+	4.411e6.JoulePerMol(),
+	9.02e6.JoulePerMol(),
+	
+gold
+	.8901e6.JoulePerMol(),
+	1.98e6.JoulePerMol(),
+	
+hafnium
+	.6585e6.JoulePerMol(),
+	1.44e6.JoulePerMol(),
+	2.25e6.JoulePerMol(),
+	3.216e6.JoulePerMol(),
+	
+hassium
+	.73e6.JoulePerMol(),
+	1.76e6.JoulePerMol(),
+	2.83e6.JoulePerMol(),
+	3.64e6.JoulePerMol(),
+	4.94e6.JoulePerMol(),
+	6.18e6.JoulePerMol(),
+	7.54e6.JoulePerMol(),
+	8.86e6.JoulePerMol(),
+	
+helium
+	2.3723e6.JoulePerMol(),
+	5.2505e6.JoulePerMol(),
+	
+holmium
+	.581e6.JoulePerMol(),
+	1.14e6.JoulePerMol(),
+	2.204e6.JoulePerMol(),
+	4.1e6.JoulePerMol(),
+	
+hydrogen
+	1.312e6.JoulePerMol(),
+	
+indium
+	.5583e6.JoulePerMol(),
+	1.8207e6.JoulePerMol(),
+	2.704e6.JoulePerMol(),
+	5.21e6.JoulePerMol(),
+	
+iodine
+	1.0084e6.JoulePerMol(),
+	1.8459e6.JoulePerMol(),
+	3.18e6.JoulePerMol(),
+	
+iridium
+	.88e6.JoulePerMol(),
+	1.6e6.JoulePerMol(),
+	
+iron
+	163e6.JoulePerMol(),
+	173.6e6.JoulePerMol(),
+	188.1e6.JoulePerMol(),
+	195.2e6.JoulePerMol(),
+	851.8e6.JoulePerMol(),
+	895.161e6.JoulePerMol(),
+	28e6.JoulePerMol(),
+	31.92e6.JoulePerMol(),
+	34.83e6.JoulePerMol(),
+	37.84e6.JoulePerMol(),
+	44.1e6.JoulePerMol(),
+	47.206e6.JoulePerMol(),
+	122.2e6.JoulePerMol(),
+	131e6.JoulePerMol(),
+	140.5e6.JoulePerMol(),
+	152.6e6.JoulePerMol(),
+	.7625e6.JoulePerMol(),
+	1.5619e6.JoulePerMol(),
+	2.957e6.JoulePerMol(),
+	5.29e6.JoulePerMol(),
+	7.24e6.JoulePerMol(),
+	9.56e6.JoulePerMol(),
+	12.06e6.JoulePerMol(),
+	14.58e6.JoulePerMol(),
+	22.54e6.JoulePerMol(),
+	25.29e6.JoulePerMol(),
+	
+krypton
+	1.3508e6.JoulePerMol(),
+	2.3504e6.JoulePerMol(),
+	3.565e6.JoulePerMol(),
+	5.07e6.JoulePerMol(),
+	6.24e6.JoulePerMol(),
+	7.57e6.JoulePerMol(),
+	10.71e6.JoulePerMol(),
+	12.138e6.JoulePerMol(),
+	22.274e6.JoulePerMol(),
+	25.88e6.JoulePerMol(),
+	29.7e6.JoulePerMol(),
+	33.8e6.JoulePerMol(),
+	37.7e6.JoulePerMol(),
+	43.1e6.JoulePerMol(),
+	47.5e6.JoulePerMol(),
+	52.2e6.JoulePerMol(),
+	57.1e6.JoulePerMol(),
+	61.8e6.JoulePerMol(),
+	75.8e6.JoulePerMol(),
+	80.4e6.JoulePerMol(),
+	85.3e6.JoulePerMol(),
+	90.4e6.JoulePerMol(),
+	96.3e6.JoulePerMol(),
+	101.4e6.JoulePerMol(),
+	111.1e6.JoulePerMol(),
+	116.29e6.JoulePerMol(),
+	282.5e6.JoulePerMol(),
+	296.2e6.JoulePerMol(),
+	311.4e6.JoulePerMol(),
+	326.2e6.JoulePerMol(),
+	
+lanthanum
+	.5381e6.JoulePerMol(),
+	1.067e6.JoulePerMol(),
+	1.8503e6.JoulePerMol(),
+	4.819e6.JoulePerMol(),
+	5.94e6.JoulePerMol(),
+	
+lawrencium
+	.479e6.JoulePerMol(),
+	1.428e6.JoulePerMol(),
+	2.228e6.JoulePerMol(),
+	4.91e6.JoulePerMol(),
+	
+lead
+	.7156e6.JoulePerMol(),
+	1.4505e6.JoulePerMol(),
+	3.0815e6.JoulePerMol(),
+	4.083e6.JoulePerMol(),
+	6.64e6.JoulePerMol(),
+	
+lithium
+	.5202e6.JoulePerMol(),
+	7.2981e6.JoulePerMol(),
+	11.815e6.JoulePerMol(),
+	
+livermorium
+	.6639e6.JoulePerMol(),
+	1.33e6.JoulePerMol(),
+	2.85e6.JoulePerMol(),
+	3.81e6.JoulePerMol(),
+	6.08e6.JoulePerMol(),
+	
+lutetium
+	.5235e6.JoulePerMol(),
+	1.34e6.JoulePerMol(),
+	2.0223e6.JoulePerMol(),
+	4.37e6.JoulePerMol(),
+	6.445e6.JoulePerMol(),
+	
+magnesium
+	169.988e6.JoulePerMol(),
+	189.368e6.JoulePerMol(),
+	.7377e6.JoulePerMol(),
+	1.4507e6.JoulePerMol(),
+	7.7327e6.JoulePerMol(),
+	10.5425e6.JoulePerMol(),
+	13.63e6.JoulePerMol(),
+	18.02e6.JoulePerMol(),
+	21.711e6.JoulePerMol(),
+	25.661e6.JoulePerMol(),
+	31.653e6.JoulePerMol(),
+	35.458e6.JoulePerMol(),
+	
+manganese
+	158.6e6.JoulePerMol(),
+	172.5e6.JoulePerMol(),
+	181.38e6.JoulePerMol(),
+	785.45e6.JoulePerMol(),
+	827.067e6.JoulePerMol(),
+	27.59e6.JoulePerMol(),
+	30.33e6.JoulePerMol(),
+	33.15e6.JoulePerMol(),
+	38.88e6.JoulePerMol(),
+	41.987e6.JoulePerMol(),
+	109.48e6.JoulePerMol(),
+	118.1e6.JoulePerMol(),
+	127.1e6.JoulePerMol(),
+	138.6e6.JoulePerMol(),
+	148.5e6.JoulePerMol(),
+	.7173e6.JoulePerMol(),
+	1.509e6.JoulePerMol(),
+	3.248e6.JoulePerMol(),
+	4.94e6.JoulePerMol(),
+	6.99e6.JoulePerMol(),
+	9.22e6.JoulePerMol(),
+	11.5e6.JoulePerMol(),
+	18.77e6.JoulePerMol(),
+	21.4e6.JoulePerMol(),
+	23.96e6.JoulePerMol(),
+	
+meitnerium
+	.8e6.JoulePerMol(),
+	1.82e6.JoulePerMol(),
+	2.9e6.JoulePerMol(),
+	3.9e6.JoulePerMol(),
+	4.9e6.JoulePerMol(),
+	
+mendelevium
+	.636e6.JoulePerMol(),
+	1.235e6.JoulePerMol(),
+	2.47e6.JoulePerMol(),
+	3.84e6.JoulePerMol(),
+	
+mercury
+	1.0071e6.JoulePerMol(),
+	1.81e6.JoulePerMol(),
+	3.3e6.JoulePerMol(),
+	
+molybdenum
+	20.19e6.JoulePerMol(),
+	22.219e6.JoulePerMol(),
+	26.93e6.JoulePerMol(),
+	29.196e6.JoulePerMol(),
+	52.49e6.JoulePerMol(),
+	55e6.JoulePerMol(),
+	61.4e6.JoulePerMol(),
+	67.7e6.JoulePerMol(),
+	74e6.JoulePerMol(),
+	80.4e6.JoulePerMol(),
+	.6843e6.JoulePerMol(),
+	1.56e6.JoulePerMol(),
+	2.618e6.JoulePerMol(),
+	4.48e6.JoulePerMol(),
+	5.257e6.JoulePerMol(),
+	6.6408e6.JoulePerMol(),
+	12.125e6.JoulePerMol(),
+	13.86e6.JoulePerMol(),
+	15.835e6.JoulePerMol(),
+	17.98e6.JoulePerMol(),
+	87e6.JoulePerMol(),
+	93.4e6.JoulePerMol(),
+	98.42e6.JoulePerMol(),
+	104.4e6.JoulePerMol(),
+	121.9e6.JoulePerMol(),
+	127.7e6.JoulePerMol(),
+	133.8e6.JoulePerMol(),
+	139.8e6.JoulePerMol(),
+	148.1e6.JoulePerMol(),
+	154.5e6.JoulePerMol(),
+	
+moscovium
+	.5383e6.JoulePerMol(),
+	1.76e6.JoulePerMol(),
+	2.65e6.JoulePerMol(),
+	4.68e6.JoulePerMol(),
+	5.72e6.JoulePerMol(),
+	
+neodymium
+	.5331e6.JoulePerMol(),
+	1.04e6.JoulePerMol(),
+	2.13e6.JoulePerMol(),
+	3.9e6.JoulePerMol(),
+	
+	
+neptunium
+	.6045e6.JoulePerMol(),
+	1.128e6.JoulePerMol(),
+	1.997e6.JoulePerMol(),
+	3.242e6.JoulePerMol(),
+	
+nickel
+	169.4e6.JoulePerMol(),
+	182.7e6.JoulePerMol(),
+	194e6.JoulePerMol(),
+	205.6e6.JoulePerMol(),
+	221.4e6.JoulePerMol(),
+	231.49e6.JoulePerMol(),
+	992.718e6.JoulePerMol(),
+	1.039668e9
+	30.97e6.JoulePerMol(),
+	34e6.JoulePerMol(),
+	37.1e6.JoulePerMol(),
+	41.5e6.JoulePerMol(),
+	44.8e6.JoulePerMol(),
+	48.1e6.JoulePerMol(),
+	55.101e6.JoulePerMol(),
+	58.57e6.JoulePerMol(),
+	148.7e6.JoulePerMol(),
+	159e6.JoulePerMol(),
+	.7371e6.JoulePerMol(),
+	1.753e6.JoulePerMol(),
+	3.395e6.JoulePerMol(),
+	5.3e6.JoulePerMol(),
+	7.339e6.JoulePerMol(),
+	10.4e6.JoulePerMol(),
+	12.8e6.JoulePerMol(),
+	15.6e6.JoulePerMol(),
+	18.6e6.JoulePerMol(),
+	21.67e6.JoulePerMol(),
+	
+nihonium
+	.7072e6.JoulePerMol(),
+	2.309e6.JoulePerMol(),
+	3.02e6.JoulePerMol(),
+	4.382e6.JoulePerMol(),
+	5.638e6.JoulePerMol(),
+	
+niobium
+	.6521e6.JoulePerMol(),
+	1.38e6.JoulePerMol(),
+	2.416e6.JoulePerMol(),
+	3.7e6.JoulePerMol(),
+	4.877e6.JoulePerMol(),
+	9.847e6.JoulePerMol(),
+	12.1e6.JoulePerMol(),
+	
+nitrogen
+	1.4023e6.JoulePerMol(),
+	2.856e6.JoulePerMol(),
+	4.5781e6.JoulePerMol(),
+	7.475e6.JoulePerMol(),
+	9.4449e6.JoulePerMol(),
+	53.2666e6.JoulePerMol(),
+	64.36e6.JoulePerMol(),
+	
+nobelium
+	.639e6.JoulePerMol(),
+	1.254e6.JoulePerMol(),
+	2.643e6.JoulePerMol(),
+	3.956e6.JoulePerMol(),
+	
+oganesson
+	.8601e6.JoulePerMol(),
+	1.56e6.JoulePerMol(),
+	
+osmium
+	.84e6.JoulePerMol(),
+	1.6e6.JoulePerMol(),
+	
+oxygen
+	1.3139e6.JoulePerMol(),
+	3.3883e6.JoulePerMol(),
+	5.3005e6.JoulePerMol(),
+	7.4692e6.JoulePerMol(),
+	10.9895e6.JoulePerMol(),
+	13.3265e6.JoulePerMol(),
+	71.33e6.JoulePerMol(),
+	84.078e6.JoulePerMol(),
+	
+palladium
+	.8044e6.JoulePerMol(),
+	1.87e6.JoulePerMol(),
+	3.177e6.JoulePerMol(),
+	
+phosphorus
+	1.0118e6.JoulePerMol(),
+	1.907e6.JoulePerMol(),
+	2.9141e6.JoulePerMol(),
+	4.9636e6.JoulePerMol(),
+	6.2739e6.JoulePerMol(),
+	21.267e6.JoulePerMol(),
+	25.431e6.JoulePerMol(),
+	29.872e6.JoulePerMol(),
+	35.905e6.JoulePerMol(),
+	40.95e6.JoulePerMol(),
+	
+phosphorus
+	46.261e6.JoulePerMol(),
+	54.11e6.JoulePerMol(),
+	59.024e6.JoulePerMol(),
+	271.791e6.JoulePerMol(),
+	296.195e6.JoulePerMol(),
+	
+platinum
+	.87e6.JoulePerMol(),
+	1.791e6.JoulePerMol(),
+	
+plutonium
+	.5847e6.JoulePerMol(),
+	1.128e6.JoulePerMol(),
+	2.084e6.JoulePerMol(),
+	3.338e6.JoulePerMol(),
+	
+polonium
+	.8121e6.JoulePerMol(),
+	
+potassium
+	.4188e6.JoulePerMol(),
+	3.052e6.JoulePerMol(),
+	4.42e6.JoulePerMol(),
+	5.877e6.JoulePerMol(),
+	7.975e6.JoulePerMol(),
+	9.59e6.JoulePerMol(),
+	11.343e6.JoulePerMol(),
+	14.944e6.JoulePerMol(),
+	16.9637e6.JoulePerMol(),
+	48.61e6.JoulePerMol(),
+	
+potassium
+	54.49e6.JoulePerMol(),
+	60.73e6.JoulePerMol(),
+	68.95e6.JoulePerMol(),
+	75.9e6.JoulePerMol(),
+	83.08e6.JoulePerMol(),
+	93.4e6.JoulePerMol(),
+	99.71e6.JoulePerMol(),
+	444.88e6.JoulePerMol(),
+	476.063e6.JoulePerMol(),
+	
+praseodymium
+	.527e6.JoulePerMol(),
+	1.02e6.JoulePerMol(),
+	2.086e6.JoulePerMol(),
+	3.761e6.JoulePerMol(),
+	5.551e6.JoulePerMol(),
+	
+promethium
+	.54e6.JoulePerMol(),
+	1.05e6.JoulePerMol(),
+	2.15e6.JoulePerMol(),
+	3.97e6.JoulePerMol(),
+	
+protactinium
+	.568e6.JoulePerMol(),
+	1.128e6.JoulePerMol(),
+	1.814e6.JoulePerMol(),
+	2.991e6.JoulePerMol(),
+	
+radium
+	.5093e6.JoulePerMol(),
+	.979e6.JoulePerMol(),
+	
+radon
+	1.037e6.JoulePerMol(),
+	
+rhenium
+	.76e6.JoulePerMol(),
+	1.26e6.JoulePerMol(),
+	2.51e6.JoulePerMol(),
+	3.64e6.JoulePerMol(),
+	
+rhodium
+	.7197e6.JoulePerMol(),
+	1.74e6.JoulePerMol(),
+	2.997e6.JoulePerMol(),
+	
+roentgenium
+	1.02e6.JoulePerMol(),
+	2.07e6.JoulePerMol(),
+	3.08e6.JoulePerMol(),
+	4.1e6.JoulePerMol(),
+	5.3e6.JoulePerMol(),
+	
+rubidium
+	.403e6.JoulePerMol(),
+	2.633e6.JoulePerMol(),
+	3.86e6.JoulePerMol(),
+	5.08e6.JoulePerMol(),
+	6.85e6.JoulePerMol(),
+	8.14e6.JoulePerMol(),
+	9.57e6.JoulePerMol(),
+	13.12e6.JoulePerMol(),
+	14.5e6.JoulePerMol(),
+	26.74e6.JoulePerMol(),
+	
+ruthenium
+	.7102e6.JoulePerMol(),
+	1.62e6.JoulePerMol(),
+	2.747e6.JoulePerMol(),
+	
+rutherfordium
+	.58e6.JoulePerMol(),
+	1.39e6.JoulePerMol(),
+	2.3e6.JoulePerMol(),
+	3.08e6.JoulePerMol(),
+	
+samarium
+	.5445e6.JoulePerMol(),
+	1.07e6.JoulePerMol(),
+	2.26e6.JoulePerMol(),
+	3.99e6.JoulePerMol(),
+	
+scandium
+	24.102e6.JoulePerMol(),
+	66.32e6.JoulePerMol(),
+	73.01e6.JoulePerMol(),
+	80.16e6.JoulePerMol(),
+	89.49e6.JoulePerMol(),
+	97.4e6.JoulePerMol(),
+	105.6e6.JoulePerMol(),
+	117e6.JoulePerMol(),
+	124.27e6.JoulePerMol(),
+	547.53e6.JoulePerMol(),
+	582.163e6.JoulePerMol(),
+	.6331e6.JoulePerMol(),
+	1.235e6.JoulePerMol(),
+	2.3886e6.JoulePerMol(),
+	7.0906e6.JoulePerMol(),
+	8.843e6.JoulePerMol(),
+	10.679e6.JoulePerMol(),
+	13.31e6.JoulePerMol(),
+	15.25e6.JoulePerMol(),
+	17.37e6.JoulePerMol(),
+	21.726e6.JoulePerMol(),
+	
+seaborgium
+	.757e6.JoulePerMol(),
+	1.733e6.JoulePerMol(),
+	2.484e6.JoulePerMol(),
+	3.416e6.JoulePerMol(),
+	4.562e6.JoulePerMol(),
+	5.716e6.JoulePerMol(),
+	
+selenium
+	.941e6.JoulePerMol(),
+	2.045e6.JoulePerMol(),
+	2.9737e6.JoulePerMol(),
+	4.144e6.JoulePerMol(),
+	6.59e6.JoulePerMol(),
+	7.88e6.JoulePerMol(),
+	14.99e6.JoulePerMol(),
+	
+silicon
+	45.962e6.JoulePerMol(),
+	50.502e6.JoulePerMol(),
+	235.196e6.JoulePerMol(),
+	257.923e6.JoulePerMol(),
+	
+silicon
+	.7865e6.JoulePerMol(),
+	1.5771e6.JoulePerMol(),
+	3.2316e6.JoulePerMol(),
+	4.3555e6.JoulePerMol(),
+	16.091e6.JoulePerMol(),
+	19.805e6.JoulePerMol(),
+	23.78e6.JoulePerMol(),
+	29.287e6.JoulePerMol(),
+	33.878e6.JoulePerMol(),
+	38.726e6.JoulePerMol(),
+	
+silver
+	.731e6.JoulePerMol(),
+	2.07e6.JoulePerMol(),
+	3.361e6.JoulePerMol(),
+	
+sodium
+	159.076e6.JoulePerMol(),
+	.4958e6.JoulePerMol(),
+	4.562e6.JoulePerMol(),
+	6.9103e6.JoulePerMol(),
+	9.543e6.JoulePerMol(),
+	13.354e6.JoulePerMol(),
+	16.613e6.JoulePerMol(),
+	20.117e6.JoulePerMol(),
+	25.496e6.JoulePerMol(),
+	28.932e6.JoulePerMol(),
+	141.362e6.JoulePerMol(),
+	
+strontium
+	31.27e6.JoulePerMol(),
+	.5495e6.JoulePerMol(),
+	1.0642e6.JoulePerMol(),
+	4.138e6.JoulePerMol(),
+	5.5e6.JoulePerMol(),
+	6.91e6.JoulePerMol(),
+	8.76e6.JoulePerMol(),
+	10.23e6.JoulePerMol(),
+	11.8e6.JoulePerMol(),
+	15.6e6.JoulePerMol(),
+	17.1e6.JoulePerMol(),
+	
+sulfur
+	48.71e6.JoulePerMol(),
+	54.46e6.JoulePerMol(),
+	62.93e6.JoulePerMol(),
+	68.216e6.JoulePerMol(),
+	311.048e6.JoulePerMol(),
+	337.138e6.JoulePerMol(),
+	
+sulfur
+	.9996e6.JoulePerMol(),
+	2.252e6.JoulePerMol(),
+	3.357e6.JoulePerMol(),
+	4.556e6.JoulePerMol(),
+	7.0043e6.JoulePerMol(),
+	8.4958e6.JoulePerMol(),
+	27.107e6.JoulePerMol(),
+	31.719e6.JoulePerMol(),
+	36.621e6.JoulePerMol(),
+	43.177e6.JoulePerMol(),
+	
+tantalum
+	.761e6.JoulePerMol(),
+	1.5e6.JoulePerMol(),
+	
+technetium
+	.6869e6.JoulePerMol(),
+	1.47e6.JoulePerMol(),
+	2.85e6.JoulePerMol(),
+	
+tellurium
+	.8693e6.JoulePerMol(),
+	1.79e6.JoulePerMol(),
+	2.698e6.JoulePerMol(),
+	3.61e6.JoulePerMol(),
+	5.668e6.JoulePerMol(),
+	6.82e6.JoulePerMol(),
+	13.2e6.JoulePerMol(),
+	
+tennessine
+	.7369e6.JoulePerMol(),
+	1.4354e6.JoulePerMol(),
+	2.1619e6.JoulePerMol(),
+	4.0129e6.JoulePerMol(),
+	5.0764e6.JoulePerMol(),
+	
+terbium
+	.5658e6.JoulePerMol(),
+	1.11e6.JoulePerMol(),
+	2.114e6.JoulePerMol(),
+	3.839e6.JoulePerMol(),
+	
+thallium
+	.5894e6.JoulePerMol(),
+	1.971e6.JoulePerMol(),
+	2.878e6.JoulePerMol(),
+	
+thorium
+	.587e6.JoulePerMol(),
+	1.11e6.JoulePerMol(),
+	1.978e6.JoulePerMol(),
+	2.78e6.JoulePerMol(),
+	
+thulium
+	.5967e6.JoulePerMol(),
+	1.16e6.JoulePerMol(),
+	2.285e6.JoulePerMol(),
+	4.12e6.JoulePerMol(),
+	
+tin
+	.7086e6.JoulePerMol(),
+	1.4118e6.JoulePerMol(),
+	2.943e6.JoulePerMol(),
+	3.9303e6.JoulePerMol(),
+	7.456e6.JoulePerMol(),
+	
+titanium
+	25.575e6.JoulePerMol(),
+	28.125e6.JoulePerMol(),
+	76.015e6.JoulePerMol(),
+	83.28e6.JoulePerMol(),
+	90.88e6.JoulePerMol(),
+	100.7e6.JoulePerMol(),
+	109.1e6.JoulePerMol(),
+	117.8e6.JoulePerMol(),
+	129.9e6.JoulePerMol(),
+	137.53e6.JoulePerMol(),
+	602.93e6.JoulePerMol(),
+	639.294e6.JoulePerMol(),
+	.6588e6.JoulePerMol(),
+	1.3098e6.JoulePerMol(),
+	2.6525e6.JoulePerMol(),
+	4.1746e6.JoulePerMol(),
+	9.581e6.JoulePerMol(),
+	11.533e6.JoulePerMol(),
+	13.59e6.JoulePerMol(),
+	16.44e6.JoulePerMol(),
+	18.53e6.JoulePerMol(),
+	20.833e6.JoulePerMol(),
+	
+tungsten
+	.77e6.JoulePerMol(),
+	1.7e6.JoulePerMol(),
+	
+unbibium
+	.545e6.JoulePerMol(),
+	1.09e6.JoulePerMol(),
+	1.848e6.JoulePerMol(),
+	2.52e6.JoulePerMol(),
+	
+unbinilium
+	.5633e6.JoulePerMol(),
+	.919e6.JoulePerMol(),
+	
+unbiunium
+	.4294e6.JoulePerMol(),
+	1.11e6.JoulePerMol(),
+	1.71e6.JoulePerMol(),
+	4.27e6.JoulePerMol(),
+	
+ununennium
+	.4631e6.JoulePerMol(),
+	1.7e6.JoulePerMol(),
+	
+uranium
+	.5976e6.JoulePerMol(),
+	1.42e6.JoulePerMol(),
+	1.9e6.JoulePerMol(),
+	3.145e6.JoulePerMol(),
+	
+vanadium
+	151.44e6.JoulePerMol(),
+	661.05e6.JoulePerMol(),
+	699.144e6.JoulePerMol(),
+	24.67e6.JoulePerMol(),
+	29.73e6.JoulePerMol(),
+	32.446e6.JoulePerMol(),
+	86.45e6.JoulePerMol(),
+	94.17e6.JoulePerMol(),
+	102.3e6.JoulePerMol(),
+	112.7e6.JoulePerMol(),
+	121.6e6.JoulePerMol(),
+	130.7e6.JoulePerMol(),
+	143.4e6.JoulePerMol(),
+	.6509e6.JoulePerMol(),
+	1.414e6.JoulePerMol(),
+	2.83e6.JoulePerMol(),
+	4.507e6.JoulePerMol(),
+	6.2987e6.JoulePerMol(),
+	12.363e6.JoulePerMol(),
+	14.53e6.JoulePerMol(),
+	16.73e6.JoulePerMol(),
+	19.86e6.JoulePerMol(),
+	22.24e6.JoulePerMol(),
+	
+xenon
+	1.1704e6.JoulePerMol(),
+	2.0464e6.JoulePerMol(),
+	3.0994e6.JoulePerMol(),
+	
+ytterbium
+	.6034e6.JoulePerMol(),
+	1.1748e6.JoulePerMol(),
+	2.417e6.JoulePerMol(),
+	4.203e6.JoulePerMol(),
+	
+yttrium
+	19.9e6.JoulePerMol(),
+	36.09e6.JoulePerMol(),
+	.6e6.JoulePerMol(),
+	1.18e6.JoulePerMol(),
+	1.98e6.JoulePerMol(),
+	5.847e6.JoulePerMol(),
+	7.43e6.JoulePerMol(),
+	8.97e6.JoulePerMol(),
+	11.19e6.JoulePerMol(),
+	12.45e6.JoulePerMol(),
+	14.11e6.JoulePerMol(),
+	18.4e6.JoulePerMol(),
+	
+zinc
+	179.1e6.JoulePerMol(),
+	26.4e6.JoulePerMol(),
+	29.99e6.JoulePerMol(),
+	40.49e6.JoulePerMol(),
+	43.8e6.JoulePerMol(),
+	47.3e6.JoulePerMol(),
+	52.3e6.JoulePerMol(),
+	55.9e6.JoulePerMol(),
+	59.7e6.JoulePerMol(),
+	67.3e6.JoulePerMol(),
+	71.2e6.JoulePerMol(),
+	.9064e6.JoulePerMol(),
+	1.7333e6.JoulePerMol(),
+	3.833e6.JoulePerMol(),
+	5.731e6.JoulePerMol(),
+	7.97e6.JoulePerMol(),
+	10.4e6.JoulePerMol(),
+	12.9e6.JoulePerMol(),
+	16.8e6.JoulePerMol(),
+	19.6e6.JoulePerMol(),
+	23e6.JoulePerMol(),
+	
+zirconium
+	.6401e6.JoulePerMol(),
+	1.27e6.JoulePerMol(),
+	2.218e6.JoulePerMol(),
+	3.313e6.JoulePerMol(),
+	7.752e6.JoulePerMol(),
+	9.5e6.JoulePerMol(),
+	
