@@ -19,6 +19,7 @@ using Unknown6656.Common;
 
 namespace Unknown6656.Physics.Chemistry;
 
+
 /// <summary>
 /// Represents the category of a chemical element.
 /// </summary>
@@ -78,6 +79,22 @@ public enum ElementCategory
     /// Noble gas.
     /// </summary>
     NobleGas = 10,
+}
+
+public enum ElementOccurence
+{
+    /// <summary>
+    /// The element is a primordial nuclide, i.e. it is stable and has existed since the formation of the universe.
+    /// </summary>
+    Primordial = 0,
+    /// <summary>
+    /// The element is a transient nuclide, i.e. it is radioactive and has a half-life shorter than the age of the universe.
+    /// </summary>
+    Transient = 1,
+    /// <summary>
+    /// The element is a synthetic nuclide, i.e. it is radioactive and/or has been artificially created.
+    /// </summary>
+    Synthetic = 2,
 }
 
 /// <summary>
@@ -271,6 +288,7 @@ public record ChemicalBondingElementProperties
     public required double? PaulingElectronegativity { get; init; } = null;
     public required double AllenElectronegativity { get; init; }
     public required int[] OxidationStates { get; init; }
+    public required int[] CommonOxidationStates { get; init; }
     public required Length CovalentRadius { get; init; }
     public required Length VanDerWaalsRadius { get; init; }
     public required Length MeanAtomicRadius { get; init; }
@@ -350,6 +368,8 @@ public class Element
     /// The category of the element, e.g. metal, non-metal, etc.
     /// </summary>
     public required ElementCategory Category { get; init; }
+
+    public required ElementOccurence Occurence { get; init; }
 
     /// <summary>
     /// The element's atomic number. This is equivalent to the number of protons in the element's nucleus.

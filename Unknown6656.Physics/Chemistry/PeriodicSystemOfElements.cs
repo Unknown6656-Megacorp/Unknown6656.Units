@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Unknown6656.Physics.Chemistry;
 
@@ -10,6 +11,8 @@ public sealed partial class PeriodicTableOfElements
 
 
     public static PeriodicTableOfElements Table { get; } = new();
+
+    public Element? this[string name_or_symbol] => TryGetElement(name_or_symbol);
 
     public Element this[int atomicNumber] => this[(uint)atomicNumber];
 
@@ -25,6 +28,19 @@ public sealed partial class PeriodicTableOfElements
     }
 
     private Element RegisterElement(Element element) => _elements[element.AtomicNumber] = element;
+
+    public Element? TryGetElement(string name_or_symbol)
+    {
+        name_or_symbol = name_or_symbol.Trim();
+
+        if (int.TryParse(name_or_symbol, out int atomicNumber))
+            return GetElement(atomicNumber);
+
+        // TODO : parse isotope/hardron notation
+
+        return _elements.Values.FirstOrDefault(e => e.Name.Equals(name_or_symbol, StringComparison.OrdinalIgnoreCase)
+                                                 || e.Symbol.Equals(name_or_symbol, StringComparison.OrdinalIgnoreCase));
+    }
 
     public Element GetElement(int atomicNumber) => GetElement((uint)atomicNumber);
 
