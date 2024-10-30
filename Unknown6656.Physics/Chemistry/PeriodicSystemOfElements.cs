@@ -2,6 +2,9 @@
 using System.Linq;
 using System;
 
+using Unknown6656.Generics;
+using Unknown6656.Common;
+
 namespace Unknown6656.Physics.Chemistry;
 
 
@@ -31,15 +34,18 @@ public sealed partial class PeriodicTableOfElements
 
     public Element? TryGetElement(string name_or_symbol)
     {
-        name_or_symbol = name_or_symbol.Trim();
+        name_or_symbol = new(name_or_symbol.RemoveDiacritics()
+                                           .Where(char.IsAsciiLetterOrDigit)
+                                           .ToArray(char.ToLowerInvariant));
 
         if (int.TryParse(name_or_symbol, out int atomicNumber))
             return GetElement(atomicNumber);
 
         // TODO : parse isotope/hardron notation
 
-        return _elements.Values.FirstOrDefault(e => e.Name.Equals(name_or_symbol, StringComparison.OrdinalIgnoreCase)
-                                                 || e.Symbol.Equals(name_or_symbol, StringComparison.OrdinalIgnoreCase));
+        return _elements.Values.FirstOrDefault(e => e.AlternateNames.Prepend(e.Name.ToLowerInvariant())
+                                                                    .Append(e.Symbol.ToLowerInvariant())
+                                                                    .Contains(name_or_symbol));
     }
 
     public Element GetElement(int atomicNumber) => GetElement((uint)atomicNumber);

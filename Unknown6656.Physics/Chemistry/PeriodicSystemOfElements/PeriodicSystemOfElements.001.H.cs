@@ -15,6 +15,7 @@ public sealed partial class PeriodicTableOfElements
     public static Element Hydrogen { get; } = Table.RegisterElement(new(Table)
     {
         Name = nameof(Hydrogen),
+        AlternateNames = ["protium", "deuterium", "tritium"],
         Symbol = "H",
         AtomicNumber = 1,
         Category = ElementCategory.NonMetal,

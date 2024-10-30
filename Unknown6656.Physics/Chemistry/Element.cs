@@ -321,6 +321,8 @@ public class Element
     /// </summary>
     public required string Name { get; init; }
 
+    internal IEnumerable<string> AlternateNames { get; init; } = [];
+
     /// <summary>
     /// The element's chemical symbol.
     /// </summary>
