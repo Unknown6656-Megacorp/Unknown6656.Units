@@ -1,4 +1,6 @@
-﻿namespace Unknown6656.Units.Matter;
+﻿using Unknown6656.Units.Energy;
+
+namespace Unknown6656.Units.Matter;
 
 
 [KnownBaseUnit<Mass, Kilogram, Scalar>]
@@ -146,6 +148,8 @@ public partial record ElectronVoltMassEquivalent
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["eV", "electron volt"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricUseSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)5.60958864983476645299741629583157968944023663372081019062242e35;
+
+    public KineticEnergy EnergyEquivalent => (Mass)this * SpecificEnergy.C0;
 }
 
 [KnownUnit<Mass, DutchOunce, Kilogram, Scalar>(KnownUnitType.Linear)]

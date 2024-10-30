@@ -1,5 +1,6 @@
-﻿using Unknown6656.Units.Euclidean;
-using Unknown6656.Units.Kinematics;
+﻿using Unknown6656.Units.Kinematics;
+using Unknown6656.Units.Euclidean;
+using Unknown6656.Units.Energy;
 
 namespace Unknown6656.Units.Matter;
 
@@ -24,6 +25,8 @@ public partial record Mass(Kilogram value)
     public static ElectronVoltMassEquivalent MassOfNeutron { get; } = new(939_565_420.5254);
     public static ElectronVoltMassEquivalent MassOfDeuteron { get; } = new(1_875_610_000);
     public static ElectronVoltMassEquivalent MassOfAlphaParticle { get; } = new(3_727_380_000);
+
+    public KineticEnergy EnergyEquivalent => this * SpecificEnergy.C0;
 
 
     public static Dalton AtomicMass(uint protons, uint neutrons) => AtomicMass(protons, neutrons, protons);

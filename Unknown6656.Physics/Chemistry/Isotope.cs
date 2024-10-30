@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 using System.Text;
@@ -150,6 +150,7 @@ public class Isotope
     public IsotopeDecay[] KnownDecays { get; }
     public IsotopeDecayChain[] KnownDecayChains  => _chains ??= BuildDecayChains();
     public bool IsStable => !KnownDecays.Any(d => d.Mode != DecayMode.Stable);
+    public ElectronVoltMassEquivalent Energy => Mass.MassOfNeutron - AtomicMass / HadronCount;
 
 
     internal Isotope(Element element, IsotopeConfig config)

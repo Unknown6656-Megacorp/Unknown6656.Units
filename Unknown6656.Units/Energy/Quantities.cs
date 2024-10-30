@@ -13,14 +13,21 @@ public partial record KineticEnergy(Joule value)
     : Quantity<KineticEnergy, Joule, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "E";
+
+    public Mass MassEquivalent => this / SpecificEnergy.C0;
 }
 
 [MultiplicativeRelationship<Speed, SpecificEnergy, MeterPerSecond, JoulePerKilogram, Scalar>]
 [MultiplicativeRelationship<SpecificEnergy, Mass, KineticEnergy, JoulePerKilogram, Kilogram, Joule, Scalar>]
+[MultiplicativeRelationship<Jerk, Absement, SpecificEnergy, MeterPerSecondCubed, MeterSecond, JoulePerKilogram, Scalar>]
+[MultiplicativeRelationship<Acceleration, Length, SpecificEnergy, MeterPerSecondSquared, Meter, JoulePerKilogram, Scalar>]
+[MultiplicativeRelationship<SpecificEnergy, Time, KinematicViscosity, JoulePerKilogram, Second, SquareMeterPerSecond, Scalar>]
 public partial record SpecificEnergy(JoulePerKilogram value)
     : Quantity<SpecificEnergy, JoulePerKilogram, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "e";
+
+    public static SpecificEnergy C0 { get; } = (Speed.C0 * Speed.C0).SpecificEnergy;
 }
 
 [MultiplicativeRelationship<EnergyDensity, Volume, KineticEnergy, JoulePerCubicMeter, CubicMeter, Joule, Scalar>]
