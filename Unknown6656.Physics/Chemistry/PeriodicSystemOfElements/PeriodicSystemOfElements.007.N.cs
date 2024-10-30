@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "N",
         AtomicNumber = 7,
         Category = ElementCategory.NonMetal,
+        Occurence = ElementOccurence.Primordial,
         Thermodynamics = new()
         {
             StandardDensity = 1.2506.GramPerLiter(),
@@ -49,7 +50,9 @@ public sealed partial class PeriodicTableOfElements
                 new(2, ElectronOrbital.P, 3),
             ]),
             OxidationStates = [-3, 3, 5, -2, -1, 0, 1, 2, 4],
-            ElectroNegativity = 3.04,
+            CommonOxidationStates = [-3, 3, 5],
+            PaulingElectronegativity = 3.04,
+            AllenElectronegativity = 3.066,
             CovalentRadius = 71e-12.Meter(),
             VanDerWaalsRadius = 155e-12.Meter(),
             MeanAtomicRadius = 65e-12.Meter(),

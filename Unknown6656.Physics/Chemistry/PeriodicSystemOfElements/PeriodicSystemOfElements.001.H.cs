@@ -18,6 +18,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "H",
         AtomicNumber = 1,
         Category = ElementCategory.NonMetal,
+        Occurence = ElementOccurence.Primordial,
         Thermodynamics = new()
         {
             StandardDensity = 0.08988.GramPerLiter(),
@@ -40,11 +41,13 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
-            ElectroNegativity = 2.20,
+            PaulingElectronegativity = 2.2,
+            AllenElectronegativity = 2.3,
             CovalentRadius = 31e-12.Meter(),
             VanDerWaalsRadius = 120e-12.Meter(),
             MeanAtomicRadius = 25e-12.Meter(),
             OxidationStates = [1, -1],
+            CommonOxidationStates = [1, -1],
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 1),
             ])

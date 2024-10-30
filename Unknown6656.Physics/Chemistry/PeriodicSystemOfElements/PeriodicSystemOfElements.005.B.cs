@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "B",
         AtomicNumber = 5,
         Category = ElementCategory.Metalloid,
+        Occurence = ElementOccurence.Primordial,
         Thermodynamics = new()
         {
             StandardDensity = 2.08.GramPerCubicCentimeter(),
@@ -44,8 +45,10 @@ public sealed partial class PeriodicTableOfElements
             CovalentRadius = 84e-12.Meter(),
             VanDerWaalsRadius = 192e-12.Meter(),
             MeanAtomicRadius = 90e-12.Meter(),
-            ElectroNegativity = 2.04,
+            PaulingElectronegativity = 2.04,
+            AllenElectronegativity = 2.051,
             OxidationStates = [3, -5, -1, 0, 1, 2],
+            CommonOxidationStates = [3],
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.S, 2),

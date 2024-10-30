@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "Li",
         AtomicNumber = 3,
         Category = ElementCategory.AlkaliMetal,
+        Occurence = ElementOccurence.Primordial,
         Thermodynamics = new()
         {
             StandardDensity = 0.5334.GramPerCubicCentimeter(),
@@ -50,8 +51,10 @@ public sealed partial class PeriodicTableOfElements
             CovalentRadius = 128e-12.Meter(),
             VanDerWaalsRadius = 182e-12.Meter(),
             MeanAtomicRadius = 152e-12.Meter(),
-            ElectroNegativity = 0.98,
+            PaulingElectronegativity = 0.98,
+            AllenElectronegativity = 0.912,
             OxidationStates = [1, 0],
+            CommonOxidationStates = [1],
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.S, 1),

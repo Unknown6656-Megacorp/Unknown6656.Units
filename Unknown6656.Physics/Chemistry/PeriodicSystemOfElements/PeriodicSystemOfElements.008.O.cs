@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "O",
         AtomicNumber = 8,
         Category = ElementCategory.NonMetal,
+        Occurence = ElementOccurence.Primordial,
         Thermodynamics = new()
         {
             STPMeltingPoint = 54.36.Kelvin(),
@@ -50,7 +51,9 @@ public sealed partial class PeriodicTableOfElements
                 new(2, ElectronOrbital.P, 4),
             ]),
             OxidationStates = [-2, -1, 0, 1, 2],
-            ElectroNegativity = 3.44,
+            CommonOxidationStates = [-2],
+            PaulingElectronegativity = 3.44,
+            AllenElectronegativity = 3.61,
             CovalentRadius = 66e-12.Meter(),
             VanDerWaalsRadius = 152e-12.Meter(),
             MeanAtomicRadius = 60e-12.Meter(),

@@ -18,6 +18,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "He",
         AtomicNumber = 2,
         Category = ElementCategory.NobleGas,
+        Occurence = ElementOccurence.Primordial,
         Thermodynamics = new()
         {
             StandardDensity = 0.1786.GramPerLiter(),
@@ -44,8 +45,10 @@ public sealed partial class PeriodicTableOfElements
             CovalentRadius = 28e-12.Meter(),
             VanDerWaalsRadius = 140e-12.Meter(),
             MeanAtomicRadius = 120e-12.Meter(),
-            ElectroNegativity = null,
+            PaulingElectronegativity = null,
+            AllenElectronegativity = 4.160,
             OxidationStates = [],
+            CommonOxidationStates = [],
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 2),
             ]),

@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "C",
         AtomicNumber = 6,
         Category = ElementCategory.NonMetal,
+        Occurence = ElementOccurence.Primordial,
         Thermodynamics = new()
         {
             StandardDensity = 2.266.GramPerCubicCentimeter(),
@@ -46,8 +47,10 @@ public sealed partial class PeriodicTableOfElements
                 new(2, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.P, 2),
             ]),
-            OxidationStates = [-4, 4, -3, -2, -1, 0, 2, 3],
-            ElectroNegativity = 2.55,
+            OxidationStates = [-4, -3, -2, -1, 0, 2, 3, 4],
+            CommonOxidationStates = [-4, 4],
+            PaulingElectronegativity = 2.55,
+            AllenElectronegativity = 2.544,
             CovalentRadius = 77e-12.Meter(),
             VanDerWaalsRadius = 170e-12.Meter(),
             MeanAtomicRadius = 70e-12.Meter(),

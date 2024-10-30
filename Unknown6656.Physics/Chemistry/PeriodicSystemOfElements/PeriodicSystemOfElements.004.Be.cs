@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "Be",
         AtomicNumber = 4,
         Category = ElementCategory.AlkalineEarthMetal,
+        Occurence = ElementOccurence.Primordial,
         Thermodynamics = new()
         {
             StandardDensity = 1.845.GramPerCubicCentimeter(),
@@ -53,8 +54,10 @@ public sealed partial class PeriodicTableOfElements
             CovalentRadius = 96e-12.Meter(),
             VanDerWaalsRadius = 153e-12.Meter(),
             MeanAtomicRadius = 112e-12.Meter(),
-            ElectroNegativity = 1.57,
+            PaulingElectronegativity = 1.57,
+            AllenElectronegativity = 1.576,
             OxidationStates = [2, 0, 1],
+            CommonOxidationStates = [2],
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.S, 2),
