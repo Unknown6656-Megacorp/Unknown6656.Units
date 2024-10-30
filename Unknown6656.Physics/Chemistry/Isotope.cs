@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Data;
+using System.Text;
 using System;
 
 using Unknown6656.Physics.Nuclear;
+using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 using Unknown6656.Generics;
-using System.Text;
 
 namespace Unknown6656.Physics.Chemistry;
 
@@ -159,22 +160,16 @@ public class Isotope
         NeutronCount = config.NeutronCount;
         AtomicMass = Mass.AtomicMass(element.ProtonCount, config.NeutronCount);
         Abundance = double.Clamp(config.Abundance, 0, 1);
-
         double total_prob = config.Decays?.Sum(d => d.Probability) ?? 0;
-
         if (total_prob <= 0)
             total_prob = 1; // prevent div by zero
 
         KnownDecays = config.Decays?.Select(d => new IsotopeDecay(this, d with { Probability = d.Probability / total_prob }))?.ToArray() ?? [];
-
         if (KnownDecays.Length == 0)
             _chains = [];
     }
-
     public override int GetHashCode() => HashCode.Combine(Element.ProtonCount, NeutronCount);
-
     public override bool Equals(object? obj) => obj is Isotope other && other.Element == Element && other.NeutronCount == NeutronCount;
-
     public override string ToString() => $"{Name} ({Element.AtomicNumber}, {Element.Symbol}-{HadronCount})";
 
     private IsotopeDecayChain[] BuildDecayChains()

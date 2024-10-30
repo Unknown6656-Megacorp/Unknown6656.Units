@@ -268,8 +268,9 @@ public record ChemicalBondingElementProperties
     /// <summary>
     /// The element's electronegativity on the Pauling scale.
     /// </summary>
-    public required double? ElectroNegativity { get; init; } = null;
-    public required int[] OxidationStates { get; init; } = [0];
+    public required double? PaulingElectronegativity { get; init; } = null;
+    public required double AllenElectronegativity { get; init; }
+    public required int[] OxidationStates { get; init; }
     public required Length CovalentRadius { get; init; }
     public required Length VanDerWaalsRadius { get; init; }
     public required Length MeanAtomicRadius { get; init; }
@@ -381,10 +382,9 @@ public class Element
     /// </summary>
     public Isotope[] KnownIsotopes => [.. _isotopes];
 
-    /// <summary>
-    /// Indicates whether the element is stable.
-    /// </summary>
-    public bool IsStable => MostAbundantIsotope.IsStable;
+    public bool IsMonoisotopic => _isotopes.Count(x => x.IsStable) == 1;
+
+    public bool IsMononuclidic => _isotopes.Count(x => x.Abundance > 1e-9) == 1;
 
     /// <summary>
     /// The element's standard atomic weight.
