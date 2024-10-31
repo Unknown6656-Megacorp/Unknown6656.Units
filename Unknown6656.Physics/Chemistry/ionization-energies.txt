@@ -906,19 +906,6 @@ silver
 	2.07e6.JoulePerMol(),
 	3.361e6.JoulePerMol(),
 	
-sodium
-	159.076e6.JoulePerMol(),
-	.4958e6.JoulePerMol(),
-	4.562e6.JoulePerMol(),
-	6.9103e6.JoulePerMol(),
-	9.543e6.JoulePerMol(),
-	13.354e6.JoulePerMol(),
-	16.613e6.JoulePerMol(),
-	20.117e6.JoulePerMol(),
-	25.496e6.JoulePerMol(),
-	28.932e6.JoulePerMol(),
-	141.362e6.JoulePerMol(),
-	
 strontium
 	31.27e6.JoulePerMol(),
 	.5495e6.JoulePerMol(),
