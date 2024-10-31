@@ -2357,7 +2357,8 @@ public sealed partial class PeriodicTableOfElements
             Decays = [
                 new(DecayMode.Beta, 1e-4.Second()),
                 new(DecayMode.BetaNeutronEmission, 1e-4.Second()),
-                new(DecayMode.BetaDoubleNeutronEmission, 1e-4.Second()],
+                new(DecayMode.BetaDoubleNeutronEmission, 1e-4.Second())
+            ],
         },
         new()
         {

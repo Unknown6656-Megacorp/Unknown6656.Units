@@ -455,4 +455,11 @@ public class Element
     public override bool Equals(object? obj) => obj is Element other && other.AtomicNumber == AtomicNumber;
 
     public override string ToString() => $"{Name} ({AtomicNumber}, {Symbol})";
+
+    public static implicit operator Element(string name_or_symbol) =>
+        PeriodicTableOfElements.Table.TryGetElement(name_or_symbol) ?? throw new ArgumentException($"Unknown element '{name_or_symbol}'.", nameof(name_or_symbol));
+
+    public static implicit operator Element(int atomicNumber) => PeriodicTableOfElements.Table.GetElement(atomicNumber);
+
+    public static implicit operator Element(uint atomicNumber) => PeriodicTableOfElements.Table.GetElement(atomicNumber);
 }
