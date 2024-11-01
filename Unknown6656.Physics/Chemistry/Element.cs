@@ -404,6 +404,8 @@ public class Element
     /// </summary>
     public Isotope[] KnownIsotopes => [.. _isotopes];
 
+    public IsotopeDecayChain[] KnownDecayChains => [.. _isotopes.SelectMany(x => x.KnownDecayChains).Distinct()];
+
     public bool IsMonoisotopic => _isotopes.Count(x => x.IsStable) == 1;
 
     public bool IsMononuclidic => _isotopes.Count(x => x.Abundance > 1e-9) == 1;

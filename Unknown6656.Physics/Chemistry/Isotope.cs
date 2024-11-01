@@ -169,8 +169,11 @@ public class Isotope
         if (KnownDecays.Length == 0)
             _chains = [];
     }
+
     public override int GetHashCode() => HashCode.Combine(Element.ProtonCount, NeutronCount);
+
     public override bool Equals(object? obj) => obj is Isotope other && other.Element == Element && other.NeutronCount == NeutronCount;
+
     public override string ToString() => $"{Name} ({Element.AtomicNumber}, {Element.Symbol}-{HadronCount})";
 
     private IsotopeDecayChain[] BuildDecayChains()
@@ -190,7 +193,7 @@ public class Isotope
                     continue; // TODO : handle decay modes that don't result in a new isotope
         }
 
-        return [.. build(this)];
+        return [.. build(this).Distinct()];
     }
 }
 
@@ -294,6 +297,7 @@ public class IsotopeDecay
 }
 
 public class IsotopeDecayChain
+    : IEquatable<IsotopeDecayChain>
 {
     public IsotopeDecay[] Decays { get; }
     public Isotope[] Steps { get; }
@@ -311,6 +315,20 @@ public class IsotopeDecayChain
             Decays[^1].TargetIsotope ?? throw new InvalidOperationException("The decay chain is incomplete.")
         ];
         Probability = Decays.Aggregate(1.0, (p, d) => p * d.Probability);
+    }
+
+    public override bool Equals(object? obj) => obj is IsotopeDecayChain chain && Equals(chain);
+
+    public bool Equals(IsotopeDecayChain? other) => other is not null && Steps.SequenceEqual(other.Steps);
+
+    public override int GetHashCode()
+    {
+        int hc = Steps.Length;
+
+        foreach (Isotope i in Steps)
+            hc = HashCode.Combine(hc, i);
+
+        return hc;
     }
 
     public override string ToString()
