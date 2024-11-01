@@ -760,7 +760,8 @@ public sealed class QuantityDependencyGenerator
                     if (scaling is { })
                         scaling = $"{op} ({scaling})";
 
-                    results.Add((@operator.Result, $"{(@operator.IsScalar.result ? "" : "new " + @operator.Result)}({operand1} {op} {operand2} {scaling})", @operator.Location.GetLineSpan(), @operator.Location));
+                    if (!results.Any(r => r.result == @operator.Result))
+                        results.Add((@operator.Result, $"{(@operator.IsScalar.result ? "" : "new " + @operator.Result)}({operand1} {op} {operand2} {scaling})", @operator.Location.GetLineSpan(), @operator.Location));
                 }
 
                 if (results.Count == 1)
