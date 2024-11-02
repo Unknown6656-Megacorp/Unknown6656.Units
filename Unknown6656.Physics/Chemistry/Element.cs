@@ -81,7 +81,7 @@ public enum ElementCategory
     NobleGas = 10,
 }
 
-public enum ElementOccurence
+public enum ElementOccurrence
 {
     /// <summary>
     /// The element is a primordial nuclide, i.e. it is stable and has existed since the formation of the universe.
@@ -140,6 +140,22 @@ public enum MagneticOrdering
     /// Material is ferromagnetic.
     /// </summary>
     Ferromagnetic,
+}
+
+public enum ElectricalElementType
+{
+    /// <summary>
+    /// Material is an insulator.
+    /// </summary>
+    Insulator,
+    /// <summary>
+    /// Material is a semiconductor.
+    /// </summary>
+    Semiconductor,
+    /// <summary>
+    /// Material is a conductor.
+    /// </summary>
+    Conductor,
 }
 
 /// <summary>
@@ -248,9 +264,13 @@ public record OpticalElementProperties
 public record ElectromagneticalElementProperties
 {
     public required Resistivity? ElectricalResistivity { get; init; }
-    public required MolarMagneticSusceptibility MagneticSusceptibility { get; init; }
+    public required MassMagneticSusceptibility MassMagneticSusceptibility { get; init; }
+    public required MolarMagneticSusceptibility MolarMagneticSusceptibility { get; init; }
+    public required double VolumetricMagneticSusceptibility { get; init; }
     public required MagneticOrdering MagneticOrdering { get; init; }
-    public required Temperature? CurieTemperature { get; init; }
+    public required ElectricalElementType ElectricalType { get; init; }
+    public required Temperature? SuperconductingPoint { get; init; }
+    public required Temperature? CuriePoint { get; init; }
 
     public Conductivity? ElectricalConductivity => ElectricalResistivity is { } r ? 1 / r : null;
 }
@@ -287,6 +307,7 @@ public record ChemicalBondingElementProperties
     /// </summary>
     public required double? PaulingElectronegativity { get; init; } = null;
     public required double AllenElectronegativity { get; init; }
+    public required int Valence { get; init; }
     public required int[] OxidationStates { get; init; }
     public required int[] CommonOxidationStates { get; init; }
     public required Length CovalentRadius { get; init; }
@@ -306,6 +327,16 @@ public record KinematicElementProperties
     public double? PoissonRatio { get; init; } = null;
 }
 
+public record ElementAbundance
+{
+    public required double UniverseAbundance { get; init; }
+    public required double SunAbundance { get; init; }
+    public required double MeteoriteAbundance { get; init; }
+    public required double CrustalAbundance { get; init; }
+    public required double SeaWaterAbundance { get; init; }
+    public required double HumanBodyAbundance { get; init; }
+}
+
 /// <summary>
 /// Represents a chemical element.
 /// </summary>
@@ -320,6 +351,12 @@ public class Element
     /// The name of the element.
     /// </summary>
     public required string Name { get; init; }
+
+    public required string CASNumber { get; init; }
+
+    public required string CIDNumber { get; init; }
+
+    public required string RTECSNumber { get; init; }
 
     internal IEnumerable<string> AlternateNames { get; init; } = [];
 
@@ -371,7 +408,9 @@ public class Element
     /// </summary>
     public required ElementCategory Category { get; init; }
 
-    public required ElementOccurence Occurence { get; init; }
+    public required ElementOccurrence Occurrence { get; init; }
+
+    public required ElementAbundance Abundance { get; init; }
 
     /// <summary>
     /// The element's atomic number. This is equivalent to the number of protons in the element's nucleus.
