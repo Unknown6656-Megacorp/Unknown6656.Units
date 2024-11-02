@@ -520,20 +520,6 @@ lutetium
 	4.37e6.JoulePerMol(),
 	6.445e6.JoulePerMol(),
 	
-magnesium
-	169.988e6.JoulePerMol(),
-	189.368e6.JoulePerMol(),
-	.7377e6.JoulePerMol(),
-	1.4507e6.JoulePerMol(),
-	7.7327e6.JoulePerMol(),
-	10.5425e6.JoulePerMol(),
-	13.63e6.JoulePerMol(),
-	18.02e6.JoulePerMol(),
-	21.711e6.JoulePerMol(),
-	25.661e6.JoulePerMol(),
-	31.653e6.JoulePerMol(),
-	35.458e6.JoulePerMol(),
-	
 manganese
 	158.6e6.JoulePerMol(),
 	172.5e6.JoulePerMol(),
