@@ -8,13 +8,14 @@ using Unknown6656.Generics;
 
 
 
-string url = "https://en.wikipedia.org/wiki/Isotopes_of_fluorine";
+string url = "https://en.wikipedia.org/wiki/Isotopes_of_magnesium";
 HtmlDocument html = new();
 
 using (HttpClient client = new())
     html.LoadHtml(await client.GetStringAsync(url));
 
 string isotopes = "";
+Regex re_perc = new(@"(?<A>[^\n]+)\(\s*(?<P>\d+(.\d+)?)\s*%\s*\)\s*(?<B>[^\n]+)\n", RegexOptions.Compiled);
 Regex re_sigma = new(@"\s*\(\s*\d+(\s*\.\s*\d+)?\s*\)\s*", RegexOptions.Compiled);
 Regex re_ev = new(@"\s*\[\s*\d+(\s*\.\s*\d+)?\s*[kM]?eV\s*\]\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -44,7 +45,6 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
             spin = spin[1..^1];
 
         spin = spin.Replace('-', '-')
-                   .Replace("-", "")
                    .Replace("+", "")
                    .Replace("1/2", "0.5")
                    .Replace("3/2", "1.5")
@@ -116,8 +116,16 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
 isotopes = re_sigma.Replace(isotopes, "")
                    .Replace("&#160;", "")
                    .Replace("&#91;", "")
-                   .Replace("&#93;", "");
+                   .Replace("&#93;", "")
+                   .Replace("\r\n", "\n");
 isotopes = re_ev.Replace(isotopes, "");
+isotopes = re_perc.Replace(isotopes, m =>
+{
+    string s = new(m.Groups["P"].Value.ToArrayWhere(c => c is (>= '0' and <= '9') or '.'));
+    double d = double.Parse(s) * .01;
+
+    return $"{m.Groups["A"].Value}{m.Groups["B"].Value}  <- {d}\n";
+});
 
 Console.WriteLine(isotopes);
 
