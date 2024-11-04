@@ -7,6 +7,7 @@ using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 
 using Unknown6656.Physics.Optics;
+using System.ComponentModel.DataAnnotations;
 
 namespace Unknown6656.Physics.Chemistry;
 
@@ -17,9 +18,20 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Carbon),
         Symbol = "C",
+        CASNumber = "CAS7440-44-0",
+        CIDNumber = 5462310,
         AtomicNumber = 6,
         Category = ElementCategory.NonMetal,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = .005,
+            SolarAbundance = .003,
+            MeteoriteAbundance = 0.015,
+            CrustalAbundance = .0018,
+            OceanAbundance = .000028,
+            HumanBodyAbundance = .23,
+        },
         Thermodynamics = new()
         {
             StandardDensity = 2.266.GramPerCubicCentimeter(),
@@ -42,6 +54,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 4,
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.S, 2),
@@ -57,8 +70,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
+            SuperconductingPoint = 11.4.Kelvin(),
             ElectricalResistivity = 7.837e-6.OhmMeter(),
+            ElectricalType = ElectricalElementType.Conductor,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -5.9e-6.CubicCentimeterPerMol(),
         },

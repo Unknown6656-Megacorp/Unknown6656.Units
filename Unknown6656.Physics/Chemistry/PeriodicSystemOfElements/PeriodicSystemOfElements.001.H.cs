@@ -17,14 +17,25 @@ public sealed partial class PeriodicTableOfElements
         Name = nameof(Hydrogen),
         AlternateNames = ["protium", "deuterium", "tritium"],
         Symbol = "H",
+        CASNumber = "CAS1333-74-0",
+        CIDNumber = 783,
         AtomicNumber = 1,
         Category = ElementCategory.NonMetal,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = .75,
+            SolarAbundance = .75,
+            MeteoriteAbundance = .024,
+            CrustalAbundance = .0015,
+            OceanAbundance = .11,
+            HumanBodyAbundance = .1,
+        },
         Thermodynamics = new()
         {
             StandardDensity = 0.08988.GramPerLiter(),
-            STPMeltingPoint = 13.99.Kelvin(),
-            STPBoilingPoint = 20.271.Kelvin(),
+            MeltingPoint = 13.99.Kelvin(),
+            BoilingPoint = 20.271.Kelvin(),
             TriplePoint = (13.8033.Kelvin(), 7_041d.Pascal()),
             CriticalPoint = (32.938.Kelvin(), 1_285_800d.Pascal()),
             IonizationEnergies = [
@@ -42,6 +53,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 1,
             PaulingElectronegativity = 2.2,
             AllenElectronegativity = 2.3,
             CovalentRadius = 31e-12.Meter(),
@@ -55,10 +67,12 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
+            ElectricalType = ElectricalElementType.Insulator,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -3.98e-6.CubicCentimeterPerMol(),
+            SuperconductingPoint = null,
             ElectricalResistivity = null,
-            CurieTemperature = null,
+            CuriePoint = null,
         },
         Optics = new()
         {

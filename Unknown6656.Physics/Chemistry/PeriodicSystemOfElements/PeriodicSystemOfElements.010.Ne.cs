@@ -18,12 +18,23 @@ public sealed partial class PeriodicTableOfElements
         Name = nameof(Neon),
         Symbol = "Ne",
         AtomicNumber = 10,
+        CASNumber = "CAS7440-01-9",
+        CIDNumber = 23935,
         Category = ElementCategory.NobleGas,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = .0013,
+            SolarAbundance = .001,
+            MeteoriteAbundance = 0,
+            CrustalAbundance = 3e-9,
+            OceanAbundance = 1.2e-10,
+            HumanBodyAbundance = 0,
+        },
         Thermodynamics = new()
         {
-            STPMeltingPoint = 24.56.Kelvin(),
-            STPBoilingPoint = 27.104.Kelvin(),
+            MeltingPoint = 24.56.Kelvin(),
+            BoilingPoint = 27.104.Kelvin(),
             StandardDensity = 0.9002.GramPerLiter(),
             TriplePoint = (24.556.Kelvin(), 43.37e3.Pascal()),
             CriticalPoint = (44.4918.Kelvin(), 2.7686e6.Pascal()),
@@ -52,6 +63,7 @@ public sealed partial class PeriodicTableOfElements
                 new(2, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.P, 6),
             ]),
+            Valence = 0,
             OxidationStates = [],
             CommonOxidationStates = [],
             PaulingElectronegativity = null,
@@ -62,7 +74,9 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
+            SuperconductingPoint = null,
+            ElectricalType = ElectricalElementType.Insulator,
             ElectricalResistivity = null,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -6.74e-6.CubicCentimeterPerMol(),

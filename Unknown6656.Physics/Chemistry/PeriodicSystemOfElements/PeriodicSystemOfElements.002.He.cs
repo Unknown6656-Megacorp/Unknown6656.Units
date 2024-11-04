@@ -16,14 +16,25 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Helium),
         Symbol = "He",
+        CASNumber = "CAS7440-59-7",
+        CIDNumber = 23987,
         AtomicNumber = 2,
         Category = ElementCategory.NobleGas,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = .23,
+            SolarAbundance = .23,
+            MeteoriteAbundance = 0,
+            CrustalAbundance = 5.5e-9,
+            OceanAbundance = 7.2e-12,
+            HumanBodyAbundance = 0,
+        },
         Thermodynamics = new()
         {
             StandardDensity = 0.1786.GramPerLiter(),
-            STPMeltingPoint = 0.95.Kelvin(),
-            STPBoilingPoint = 4.222.Kelvin(),
+            MeltingPoint = 0.95.Kelvin(),
+            BoilingPoint = 4.222.Kelvin(),
             TriplePoint = (2.177.Kelvin(), 5.043e3.Pascal()),
             CriticalPoint = (5.1953.Kelvin(), 227.46e3.Pascal()),
             IonizationEnergies = [
@@ -42,6 +53,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 0,
             CovalentRadius = 28e-12.Meter(),
             VanDerWaalsRadius = 140e-12.Meter(),
             MeanAtomicRadius = 120e-12.Meter(),
@@ -55,8 +67,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
+            SuperconductingPoint = null,
             ElectricalResistivity = null,
+            ElectricalType = ElectricalElementType.Insulator,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -1.88e-6.CubicCentimeterPerMol(),
         },

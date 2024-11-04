@@ -7,6 +7,7 @@ using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 
 using Unknown6656.Physics.Optics;
+using System.ComponentModel.DataAnnotations;
 
 namespace Unknown6656.Physics.Chemistry;
 
@@ -18,13 +19,24 @@ public sealed partial class PeriodicTableOfElements
         Name = nameof(Sodium),
         AlternateNames = ["natrium"],
         Symbol = "Na",
+        CASNumber = "CAS7440-23-5",
+        CIDNumber = 5360545,
         AtomicNumber = 11,
         Category = ElementCategory.AlkaliMetal,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = .00002,
+            SolarAbundance = .00004,
+            MeteoriteAbundance = .0055,
+            CrustalAbundance = .023,
+            OceanAbundance = .011,
+            HumanBodyAbundance = .0014,
+        },
         Thermodynamics = new()
         {
-            STPMeltingPoint = 370.944.Kelvin(),
-            STPBoilingPoint = 1156.090.Kelvin(),
+            MeltingPoint = 370.944.Kelvin(),
+            BoilingPoint = 1156.090.Kelvin(),
             StandardDensity = 0.9688.GramPerCubicCentimeter(),
             TriplePoint = (370.98.Kelvin(), 1d.Pascal()),
             CriticalPoint = (2.573e3.Kelvin(), 35e6.Pascal()),
@@ -55,6 +67,7 @@ public sealed partial class PeriodicTableOfElements
                 new(2, ElectronOrbital.P, 6),
                 new(3, ElectronOrbital.S, 1),
             ]),
+            Valence = 1,
             OxidationStates = [-1, 0, 1],
             CommonOxidationStates = [1],
             PaulingElectronegativity = .93,
@@ -65,7 +78,9 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
+            SuperconductingPoint = null,
+            ElectricalType = ElectricalElementType.Conductor,
             ElectricalResistivity = 47.7e-9.OhmMeter(),
             MagneticOrdering = MagneticOrdering.Paramagnetic,
             MagneticSusceptibility = 16e-6.CubicCentimeterPerMol(),

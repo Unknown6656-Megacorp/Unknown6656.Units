@@ -17,13 +17,24 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Oxygen),
         Symbol = "O",
+        CASNumber = "CAS7782-44-7",
+        CIDNumber = 977,
         AtomicNumber = 8,
         Category = ElementCategory.NonMetal,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = .01,
+            SolarAbundance = .009,
+            MeteoriteAbundance = .4,
+            CrustalAbundance = .46,
+            OceanAbundance = .86,
+            HumanBodyAbundance = .61,
+        },
         Thermodynamics = new()
         {
-            STPMeltingPoint = 54.36.Kelvin(),
-            STPBoilingPoint = 90.188.Kelvin(),
+            MeltingPoint = 54.36.Kelvin(),
+            BoilingPoint = 90.188.Kelvin(),
             StandardDensity = 1.429.GramPerLiter(),
             TriplePoint = (54.361.Kelvin(), 146.3.Pascal()),
             CriticalPoint = (154.581.Kelvin(), 5043e3.Pascal()),
@@ -45,6 +56,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 2,
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.S, 2),
@@ -60,8 +72,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
             ElectricalResistivity = null,
+            SuperconductingPoint = null,
+            ElectricalType = ElectricalElementType.Insulator,
             MagneticOrdering = MagneticOrdering.Paramagnetic,
             MagneticSusceptibility = 3.449e-3.CubicCentimeterPerMol(),
         },

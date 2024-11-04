@@ -214,8 +214,8 @@ public enum PeriodicTableBlock
 
 public record ThermodynamicElementProperties
 {
-    public Temperature? STPMeltingPoint { get; init; } = null;
-    public Temperature? STPBoilingPoint { get; init; } = null;
+    public Temperature? MeltingPoint { get; init; } = null;
+    public Temperature? BoilingPoint { get; init; } = null;
     public Temperature? STPSublimationPoint { get; init; } = null;
     public required PressureTemperaturePoint? TriplePoint { get; init; }
     public required PressureTemperaturePoint? CriticalPoint { get; init; }
@@ -264,9 +264,7 @@ public record OpticalElementProperties
 public record ElectromagneticalElementProperties
 {
     public required Resistivity? ElectricalResistivity { get; init; }
-    public required MassMagneticSusceptibility MassMagneticSusceptibility { get; init; }
-    public required MolarMagneticSusceptibility MolarMagneticSusceptibility { get; init; }
-    public required double VolumetricMagneticSusceptibility { get; init; }
+    public required MolarMagneticSusceptibility MagneticSusceptibility { get; init; }
     public required MagneticOrdering MagneticOrdering { get; init; }
     public required ElectricalElementType ElectricalType { get; init; }
     public required Temperature? SuperconductingPoint { get; init; }
@@ -330,11 +328,20 @@ public record KinematicElementProperties
 public record ElementAbundance
 {
     public required double UniverseAbundance { get; init; }
-    public required double SunAbundance { get; init; }
+    public required double SolarAbundance { get; init; }
     public required double MeteoriteAbundance { get; init; }
     public required double CrustalAbundance { get; init; }
-    public required double SeaWaterAbundance { get; init; }
+    public required double OceanAbundance { get; init; }
     public required double HumanBodyAbundance { get; init; }
+
+    public override string ToString() => string.Join(", ", [
+        $"{UniverseAbundance:P} in Universe",
+        $"{SolarAbundance:P} in Sun",
+        $"{MeteoriteAbundance:P} in Meteorites",
+        $"{CrustalAbundance:P} in Earth's Crust",
+        $"{OceanAbundance:P} in Oceans",
+        $"{HumanBodyAbundance:P} in Humans",
+    ]);
 }
 
 /// <summary>
@@ -354,9 +361,7 @@ public class Element
 
     public required string CASNumber { get; init; }
 
-    public required string CIDNumber { get; init; }
-
-    public required string RTECSNumber { get; init; }
+    public required int CIDNumber { get; init; }
 
     internal IEnumerable<string> AlternateNames { get; init; } = [];
 

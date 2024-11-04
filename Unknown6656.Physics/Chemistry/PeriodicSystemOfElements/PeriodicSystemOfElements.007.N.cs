@@ -7,6 +7,7 @@ using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 
 using Unknown6656.Physics.Optics;
+using System.ComponentModel.DataAnnotations;
 
 namespace Unknown6656.Physics.Chemistry;
 
@@ -17,14 +18,25 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Nitrogen),
         Symbol = "N",
+        CASNumber = "CAS7727-37-9",
+        CIDNumber = 947,
         AtomicNumber = 7,
         Category = ElementCategory.NonMetal,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = .001,
+            SolarAbundance = .001,
+            MeteoriteAbundance = .0014,
+            CrustalAbundance = 2e-5,
+            OceanAbundance = 5e-7,
+            HumanBodyAbundance = .026,
+        },
         Thermodynamics = new()
         {
             StandardDensity = 1.2506.GramPerLiter(),
-            STPMeltingPoint = 63.23.Kelvin(),
-            STPBoilingPoint = 77.335.Kelvin(),
+            MeltingPoint = 63.23.Kelvin(),
+            BoilingPoint = 77.335.Kelvin(),
             TriplePoint = (63.151.Kelvin(), 12.52e3.Pascal()),
             CriticalPoint = (126.21.Kelvin(), 3.39e6.Pascal()),
             HeatOfFusion = 720d.JoulePerMol(),
@@ -44,6 +56,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 3,
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.S, 2),
@@ -59,8 +72,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
             ElectricalResistivity = null,
+            SuperconductingPoint = null,
+            ElectricalType = ElectricalElementType.Insulator,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = null,
         },

@@ -17,13 +17,24 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Magnesium),
         Symbol = "Mg",
+        CASNumber = "CAS7439-95-4",
+        CIDNumber = 5462224,
         AtomicNumber = 12,
         Category = ElementCategory.AlkalineEarthMetal,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = .00059,
+            SolarAbundance = .00076,
+            MeteoriteAbundance = .12,
+            CrustalAbundance = .029,
+            OceanAbundance = .00013,
+            HumanBodyAbundance = .00027,
+        },
         Thermodynamics = new()
         {
-            STPMeltingPoint = 923d.Kelvin(),
-            STPBoilingPoint = 1363d.Kelvin(),
+            MeltingPoint = 923d.Kelvin(),
+            BoilingPoint = 1363d.Kelvin(),
             StandardDensity = 1.737.GramPerCubicCentimeter(),
             TriplePoint = (992d.Kelvin(), 1e-4.Pascal()),
             CriticalPoint = (1.37e3.Kelvin(), 2.7e6.Pascal()),
@@ -55,6 +66,7 @@ public sealed partial class PeriodicTableOfElements
                 new(2, ElectronOrbital.P, 6),
                 new(3, ElectronOrbital.S, 2),
             ]),
+            Valence = 2,
             OxidationStates = [0, 1, 2],
             CommonOxidationStates = [2],
             PaulingElectronegativity = 1.31,
@@ -65,7 +77,9 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
+            SuperconductingPoint = null,
+            ElectricalType = ElectricalElementType.Conductor,
             ElectricalResistivity = 43.9e-9.OhmMeter(),
             MagneticOrdering = MagneticOrdering.Paramagnetic,
             MagneticSusceptibility = 13.1e-6.CubicCentimeterPerMol(),

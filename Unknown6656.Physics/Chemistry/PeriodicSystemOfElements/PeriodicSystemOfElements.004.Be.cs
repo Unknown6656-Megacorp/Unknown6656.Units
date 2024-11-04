@@ -17,14 +17,25 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Beryllium),
         Symbol = "Be",
+        CASNumber = "CAS7440-41-7",
+        CIDNumber = 5460467,
         AtomicNumber = 4,
         Category = ElementCategory.AlkalineEarthMetal,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = 1e-9,
+            SolarAbundance = 1e-10,
+            MeteoriteAbundance = 2.9e-8,
+            CrustalAbundance = 1.9e-5,
+            OceanAbundance = 6e-13,
+            HumanBodyAbundance = 4e-10,
+        },
         Thermodynamics = new()
         {
             StandardDensity = 1.845.GramPerCubicCentimeter(),
-            STPMeltingPoint = 1556d.Kelvin(),
-            STPBoilingPoint = 2742d.Kelvin(),
+            MeltingPoint = 1556d.Kelvin(),
+            BoilingPoint = 2742d.Kelvin(),
             TriplePoint = null,
             CriticalPoint = (5205d.Kelvin(), 1.44e7.Pascal()),
             HeatOfFusion = 12.2e3.JoulePerMol(),
@@ -51,6 +62,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 2,
             CovalentRadius = 96e-12.Meter(),
             VanDerWaalsRadius = 153e-12.Meter(),
             MeanAtomicRadius = 112e-12.Meter(),
@@ -65,8 +77,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
+            SuperconductingPoint = .026.Kelvin(),
             ElectricalResistivity = 36e-9.OhmMeter(),
+            ElectricalType = ElectricalElementType.Conductor,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -9e-6.CubicCentimeterPerMol(),
         },

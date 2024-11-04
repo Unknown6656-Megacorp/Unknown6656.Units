@@ -17,14 +17,25 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Lithium),
         Symbol = "Li",
+        CASNumber = "CAS7439-93-2",
+        CIDNumber = 3028194,
         AtomicNumber = 3,
         Category = ElementCategory.AlkaliMetal,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = 6e-9,
+            SolarAbundance = 6e-11,
+            MeteoriteAbundance = .0000017,
+            CrustalAbundance = .000017,
+            OceanAbundance = 1.8e-6,
+            HumanBodyAbundance = 3e-8,
+        },
         Thermodynamics = new()
         {
             StandardDensity = 0.5334.GramPerCubicCentimeter(),
-            STPMeltingPoint = 453.65.Kelvin(),
-            STPBoilingPoint = 1_603d.Kelvin(),
+            MeltingPoint = 453.65.Kelvin(),
+            BoilingPoint = 1_603d.Kelvin(),
             TriplePoint = null,
             CriticalPoint = (3_220d.Kelvin(), 67e6.Pascal()),
             HeatOfFusion = 3e3.JoulePerMol(),
@@ -48,6 +59,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 1,
             CovalentRadius = 128e-12.Meter(),
             VanDerWaalsRadius = 182e-12.Meter(),
             MeanAtomicRadius = 152e-12.Meter(),
@@ -62,8 +74,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
+            SuperconductingPoint = 4e-4.Kelvin(),
             ElectricalResistivity = 92.8e-9.OhmMeter(),
+            ElectricalType = ElectricalElementType.Conductor,
             MagneticOrdering = MagneticOrdering.Paramagnetic,
             MagneticSusceptibility = 14.2e6.CubicCentimeterPerMol(),
         },

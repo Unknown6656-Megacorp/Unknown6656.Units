@@ -17,13 +17,24 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Flourine),
         Symbol = "F",
+        CASNumber = "CAS7782-41-4",
+        CIDNumber = 24524,
         AtomicNumber = 9,
         Category = ElementCategory.Halogen,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = 4e-7,
+            SolarAbundance = 5e-7,
+            MeteoriteAbundance = 8.7e-5,
+            CrustalAbundance = 5.4e-4,
+            OceanAbundance = 1.3e-6,
+            HumanBodyAbundance = 3.7e-5,
+        },
         Thermodynamics = new()
         {
-            STPMeltingPoint = 53.48.Kelvin(),
-            STPBoilingPoint = 85.03.Kelvin(),
+            MeltingPoint = 53.48.Kelvin(),
+            BoilingPoint = 85.03.Kelvin(),
             StandardDensity = 1.696.GramPerLiter(),
             TriplePoint = (53.48.Kelvin(), 252d.Pascal()),
             CriticalPoint = (144.41.Kelvin(), 5.1724e6.Pascal()),
@@ -46,6 +57,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 1,
             ElectronConfiguration = new([
                 new(1, ElectronOrbital.S, 2),
                 new(2, ElectronOrbital.S, 2),
@@ -61,8 +73,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
             ElectricalResistivity = null,
+            SuperconductingPoint = null,
+            ElectricalType = ElectricalElementType.Insulator,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = null,
         },

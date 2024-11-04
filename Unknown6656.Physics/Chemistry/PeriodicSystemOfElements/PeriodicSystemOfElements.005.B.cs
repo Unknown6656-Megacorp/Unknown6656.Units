@@ -17,14 +17,25 @@ public sealed partial class PeriodicTableOfElements
     {
         Name = nameof(Boron),
         Symbol = "B",
+        CASNumber = "CAS7440-42-8",
+        CIDNumber = 5462311,
         AtomicNumber = 5,
         Category = ElementCategory.Metalloid,
-        Occurence = ElementOccurence.Primordial,
+        Occurrence = ElementOccurrence.Primordial,
+        Abundance = new()
+        {
+            UniverseAbundance = 1e-9,
+            SolarAbundance = 2e-9,
+            MeteoriteAbundance = 1.6e-5,
+            CrustalAbundance = 8.6e-5,
+            OceanAbundance = 4.4e-5,
+            HumanBodyAbundance = 7e-6,
+        },
         Thermodynamics = new()
         {
             StandardDensity = 2.08.GramPerCubicCentimeter(),
-            STPMeltingPoint = 2349d.Kelvin(),
-            STPBoilingPoint = 4200d.Kelvin(),
+            MeltingPoint = 2349d.Kelvin(),
+            BoilingPoint = 4200d.Kelvin(),
             TriplePoint = null,
             CriticalPoint = null,
             HeatOfFusion = 50.2e3.JoulePerMol(),
@@ -42,6 +53,7 @@ public sealed partial class PeriodicTableOfElements
         },
         ChemicalBonding = new()
         {
+            Valence = 3,
             CovalentRadius = 84e-12.Meter(),
             VanDerWaalsRadius = 192e-12.Meter(),
             MeanAtomicRadius = 90e-12.Meter(),
@@ -57,8 +69,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Electromagnetics = new()
         {
-            CurieTemperature = null,
+            CuriePoint = null,
+            SuperconductingPoint = null,
             ElectricalResistivity = 1e6.OhmMeter(),
+            ElectricalType = ElectricalElementType.Insulator,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -6.7e-6.CubicCentimeterPerMol(),
         },
