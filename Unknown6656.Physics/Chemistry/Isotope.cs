@@ -13,34 +13,32 @@ using Unknown6656.Generics;
 namespace Unknown6656.Physics.Chemistry;
 
 
-/* DECAY MODES:
-
-  \ P|     |     |     |     |     |     |     |     |
- N \ |  -4 |  -3 |  -2 |  -1 |  0  |  +1 |  +2 |  +3 |
-----\+-----+-----+-----+-----+-----+-----+-----+-----+
-  -5 |     |     |     |     |     | β4n |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  -4 |     |     |     |     |     | β3n |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  -3 |     |     |     |  βα |  βt | β2n |     |     |
------+-----+-----+-----+-----+--+--+-----+-----+-----+
-  -2 |     |     |  α  |     |2n|βd|  βn |  2β |     |
------+-----+-----+-----+--+--+--+--+-----+-----+-----+
-  -1 |     | β+α | β+p |β+| ε|  n  |  β  |     |     |
------+-----+-----+-----+--+--+--+--+-----+-----+-----+
-   0 |     |     |  2p |  p  | S|IT|     |     |     |
------+-----+-----+-----+-----+--+--+-----+-----+-----+
-  +1 |     |     |     |  d  |  η  |     |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  +2 |     |     | 2β+ |     |     |     |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-  +3 |     |     |     |     |     |     |     |     |
------+-----+-----+-----+-----+-----+-----+-----+-----+
-*/
-
-
 /// <summary>
 /// Represents the various modes of radioactive decay.
+/// <code>
+///   \ P┃     ╷     ╷     ╷     ╷     ╷     ╷     ╷     |
+///  N \ ┃  -4 |  -3 |  -2 |  -1 |  0  |  +1 |  +2 |  +3 |
+/// ━━━━━╋━━━━━┿━━━━━┿━━━━━┿━━━━━┿━━━━━┿━━━━━┿━━━━━┿━━━━━┥
+///   -5 ┃     │     |     |     |     | β4n |     |     |
+///  ────╂─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+///   -4 ┃     |     |     |     |     | β3n |     |     |
+///  ────╂─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+///   -3 ┃     |     |     |  βα |  βt | β2n |     |     |
+///  ────╂─────┼─────┼─────┼─────┼──┬──┼─────┼─────┼─────┤
+///   -2 ┃     |     |  α  |     |2n|βd|  βn |  2β |     |
+///  ────╂─────┼─────┼─────┼─────┼──┴──┼─────┼─────┼─────┤
+///   -1 ┃     | β+α |     |     |  n  |  β  |     |     |
+///  ────╂─────┼─────┼─────┼─────┼──┬──┼─────┼─────┼─────┤
+///    0 ┃     |     |  2p |  p  |St|IT|     |     |     |
+///  ────╂─────┼─────┼─────┼──┬──┼──┴──┼─────┼─────┼─────┤
+///   +1 ┃     | β+2p| β+p |β+| ε|  η  |     |     |     |
+///  ────╂─────┼─────┼─────┼──┴──┼─────┼─────┼─────┼─────┤
+///   +2 ┃     |     | 2β+ |     |     |     |     |     |
+///  ────╂─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+///   +3 ┃     |     |     |     |     |     |     |     |
+/// ─────┸─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┘
+/// </code>
+/// <i>Where</i> <c>P</c> <i>and</i> <c>N</c> <i>are the changes in the proton and neutron count, respectively.</i>
 /// </summary>
 public enum DecayMode
 {
@@ -69,6 +67,7 @@ public enum DecayMode
     /// </summary>
     PositronEmission,
     PositronProtonEmission,
+    PositronDoubleProtonEmission,
     PositronAlphaEmission,
     /// <summary>
     /// Electron capture, where an inner orbital electron is captured by the nucleus.
@@ -226,16 +225,17 @@ public class IsotopeDecay
             DecayMode.Stable or
             DecayMode.IsomericTransition => (0, 0),
             DecayMode.Alpha => (-2, -2),
+            DecayMode.ElectronCapture or
+            DecayMode.PositronEmission => (-1, 1),
             DecayMode.PositronAlphaEmission => (-3, -1),
-            DecayMode.PositronProtonEmission => (-2, -1),
+            DecayMode.PositronProtonEmission => (-2, 1),
+            DecayMode.PositronDoubleProtonEmission => (-3, 1),
             DecayMode.ProtonEmission => (-1, 0),
             DecayMode.DoubleProtonEmission => (-2, 0),
             DecayMode.NeutronEmission => (0, -1),
             DecayMode.DoubleNeutronEmission or
             DecayMode.BetaDeuteronEmission => (0, -2),
             DecayMode.NeutronCapture => (0, 1),
-            DecayMode.ElectronCapture or
-            DecayMode.PositronEmission => (-1, 1),
             DecayMode.Beta or
             DecayMode.BetaGammaDecay => (1, -1),
             DecayMode.DoubleBetaDecay => (2, -2),
@@ -268,6 +268,7 @@ public class IsotopeDecay
         DecayMode.Alpha => "α",
         DecayMode.PositronAlphaEmission => "β⁺α",
         DecayMode.PositronProtonEmission => "β⁺p",
+        DecayMode.PositronDoubleProtonEmission => "β⁺2p",
         DecayMode.ProtonEmission => "p",
         DecayMode.DoubleProtonEmission => "2p",
         DecayMode.NeutronEmission => "n",
