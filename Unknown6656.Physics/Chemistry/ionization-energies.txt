@@ -854,24 +854,6 @@ selenium
 	7.88e6.JoulePerMol(),
 	14.99e6.JoulePerMol(),
 	
-silicon
-	45.962e6.JoulePerMol(),
-	50.502e6.JoulePerMol(),
-	235.196e6.JoulePerMol(),
-	257.923e6.JoulePerMol(),
-	
-silicon
-	.7865e6.JoulePerMol(),
-	1.5771e6.JoulePerMol(),
-	3.2316e6.JoulePerMol(),
-	4.3555e6.JoulePerMol(),
-	16.091e6.JoulePerMol(),
-	19.805e6.JoulePerMol(),
-	23.78e6.JoulePerMol(),
-	29.287e6.JoulePerMol(),
-	33.878e6.JoulePerMol(),
-	38.726e6.JoulePerMol(),
-	
 silver
 	.731e6.JoulePerMol(),
 	2.07e6.JoulePerMol(),
