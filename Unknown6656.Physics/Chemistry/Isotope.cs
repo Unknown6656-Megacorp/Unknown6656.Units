@@ -123,7 +123,7 @@ public enum DecayMode
     NeutronCapture,
 }
 
-public record IsotopeDecayConfig(DecayMode Mode, Time HalfTime, double Probability = 1);
+public record IsotopeDecayConfig(DecayMode Mode, Time HalfTime, double Probability = 1e-6);
 
 public record IsotopeConfig
 {
@@ -160,11 +160,14 @@ public class Isotope
         NeutronCount = config.NeutronCount;
         AtomicMass = Mass.AtomicMass(element.ProtonCount, config.NeutronCount);
         Abundance = double.Clamp(config.Abundance, 0, 1);
+
         double total_prob = config.Decays?.Sum(d => d.Probability) ?? 0;
+
         if (total_prob <= 0)
             total_prob = 1; // prevent div by zero
 
         KnownDecays = config.Decays?.Select(d => new IsotopeDecay(this, d with { Probability = d.Probability / total_prob }))?.ToArray() ?? [];
+
         if (KnownDecays.Length == 0)
             _chains = [];
     }

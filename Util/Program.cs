@@ -8,7 +8,7 @@ using Unknown6656.Generics;
 
 
 
-string url = "https://en.wikipedia.org/wiki/Isotopes_of_magnesium";
+string url = "https://en.wikipedia.org/wiki/Isotopes_of_silicon";
 HtmlDocument html = new();
 
 using (HttpClient client = new())
@@ -37,7 +37,6 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
     {
         int N = int.Parse(g.Key);
         IList<HtmlNode> first = g.First();
-        string halflife = first[col_halflife].InnerText.Trim().ToLower();
         string spin = first[col_spin].InnerText.Trim();
         string abundance = first[col_abundance].InnerText.Trim();
 
@@ -46,9 +45,18 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
 
         spin = spin.Replace('-', '-')
                    .Replace("+", "")
+                   .Replace("#", "")
                    .Replace("1/2", "0.5")
                    .Replace("3/2", "1.5")
-                   .Replace("5/2", "2.5");
+                   .Replace("5/2", "2.5")
+                   .Replace("7/2", "2.5");
+
+        string halflife = first[col_halflife].InnerText
+                                             .Trim()
+                                             .ToLower()
+                                             .Replace(" ", "")
+                                             .Replace("&gt;", "")
+                                             .Replace("&lt;", "");
 
         if (abundance.Length > 0)
             abundance = $"\n    Abundance = {abundance},";
@@ -80,11 +88,15 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
         {
             string mode = '.' + cells[col_mode].InnerText.Trim();
 
-            mode = mode.Replace(".β+α", "PositronAlphaEmission")
+            mode = mode.Replace(" ", "")
+                       .Replace(".β+α", "PositronAlphaEmission")
                        .Replace(".β+p", "PositronProtonEmission")
+                       .Replace(".β+,p", "PositronProtonEmission")
+                       .Replace(".β+,2p", "PositronDoubleProtonEmission")
                        .Replace(".β+", "PositronEmission")
                        .Replace(".ε", "ElectronCapture")
                        .Replace(".β−α", "BetaAlpha")
+                       .Replace(".β−,n", "BetaNeutronEmission")
                        .Replace(".β−n", "BetaNeutronEmission")
                        .Replace(".β−2n", "BetaDoubleNeutronEmission")
                        .Replace(".β−3n", "BetaTripleNeutronEmission")
