@@ -71,6 +71,7 @@ public sealed partial class PeriodicTableOfElements
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -3.98e-6.CubicCentimeterPerMol(),
             SuperconductingPoint = null,
+            BandGap = null,
             ElectricalResistivity = null,
             CuriePoint = null,
         },

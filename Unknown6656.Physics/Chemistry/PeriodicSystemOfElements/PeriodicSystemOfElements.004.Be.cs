@@ -79,6 +79,7 @@ public sealed partial class PeriodicTableOfElements
         {
             CuriePoint = null,
             SuperconductingPoint = .026.Kelvin(),
+            BandGap = null,
             ElectricalResistivity = 36e-9.OhmMeter(),
             ElectricalType = ElectricalElementType.Conductor,
             MagneticOrdering = MagneticOrdering.Diamagnetic,

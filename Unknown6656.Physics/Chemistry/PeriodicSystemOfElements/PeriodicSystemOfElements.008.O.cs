@@ -73,6 +73,7 @@ public sealed partial class PeriodicTableOfElements
         Electromagnetics = new()
         {
             CuriePoint = null,
+            BandGap = null,
             ElectricalResistivity = null,
             SuperconductingPoint = null,
             ElectricalType = ElectricalElementType.Insulator,

@@ -20,8 +20,8 @@ public sealed partial class PeriodicTableOfElements
         AlternateNames = ["Aluminum"],
         CASNumber = "CAS7429-90-5",
         CIDNumber = 5359268,
-        AtomicNumber = 13,
-        Category = ElementCategory.Metalloid,
+        AtomicNumber = 14,
+        Category = ElementCategory.PostTransitionMetal,
         Occurrence = ElementOccurrence.Primordial,
         Abundance = new()
         {
@@ -81,8 +81,9 @@ public sealed partial class PeriodicTableOfElements
         Electromagnetics = new()
         {
             CuriePoint = null,
-            SuperconductingPoint = null,
+            SuperconductingPoint = 1.2.Kelvin(),
             ElectricalType = ElectricalElementType.Conductor,
+            BandGap = null,
             ElectricalResistivity = 26.5e-9.OhmMeter(),
             MagneticOrdering = MagneticOrdering.Paramagnetic,
             MagneticSusceptibility = 16.5e-6.CubicCentimeterPerMol(),

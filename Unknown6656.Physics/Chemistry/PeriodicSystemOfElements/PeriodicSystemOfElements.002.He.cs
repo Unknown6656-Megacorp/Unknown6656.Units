@@ -69,6 +69,7 @@ public sealed partial class PeriodicTableOfElements
         {
             CuriePoint = null,
             SuperconductingPoint = null,
+            BandGap = null,
             ElectricalResistivity = null,
             ElectricalType = ElectricalElementType.Insulator,
             MagneticOrdering = MagneticOrdering.Diamagnetic,

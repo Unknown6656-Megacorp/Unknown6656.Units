@@ -10,6 +10,7 @@ using Unknown6656.Units.Magnetism;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
+using Unknown6656.Units.Energy;
 
 using Unknown6656.Physics.Nuclear;
 using Unknown6656.Physics.Optics;
@@ -265,6 +266,7 @@ public record ElectromagneticalElementProperties
 {
     public required Resistivity? ElectricalResistivity { get; init; }
     public required MolarMagneticSusceptibility MagneticSusceptibility { get; init; }
+    public required KineticEnergy BandGap { get; init; }
     public required MagneticOrdering MagneticOrdering { get; init; }
     public required ElectricalElementType ElectricalType { get; init; }
     public required Temperature? SuperconductingPoint { get; init; }

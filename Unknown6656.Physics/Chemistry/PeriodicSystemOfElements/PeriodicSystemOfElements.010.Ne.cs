@@ -77,6 +77,7 @@ public sealed partial class PeriodicTableOfElements
             CuriePoint = null,
             SuperconductingPoint = null,
             ElectricalType = ElectricalElementType.Insulator,
+            BandGap = null,
             ElectricalResistivity = null,
             MagneticOrdering = MagneticOrdering.Diamagnetic,
             MagneticSusceptibility = -6.74e-6.CubicCentimeterPerMol(),
