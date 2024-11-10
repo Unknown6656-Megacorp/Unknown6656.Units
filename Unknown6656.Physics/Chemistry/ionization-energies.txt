@@ -4,21 +4,6 @@
 	1.9e6.JoulePerMol(),
 	4.7e6.JoulePerMol(),
 	
-aluminium
-	42.647e6.JoulePerMol(),
-	201.266e6.JoulePerMol(),
-	222.316e6.JoulePerMol(),
-	.5775e6.JoulePerMol(),
-	1.8167e6.JoulePerMol(),
-	2.7448e6.JoulePerMol(),
-	11.577e6.JoulePerMol(),
-	14.842e6.JoulePerMol(),
-	18.379e6.JoulePerMol(),
-	23.326e6.JoulePerMol(),
-	27.465e6.JoulePerMol(),
-	31.853e6.JoulePerMol(),
-	38.473e6.JoulePerMol(),
-	
 americium
 	.578e6.JoulePerMol(),
 	1.158e6.JoulePerMol(),
