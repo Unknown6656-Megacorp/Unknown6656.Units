@@ -15,6 +15,10 @@ public sealed partial class PeriodicTableOfElements
 
     public static PeriodicTableOfElements Table { get; } = new();
 
+    public Element[] ElementsByAtomicNumber => field ??= _elements.Values.OrderBy(e => e.AtomicNumber).ToArray();
+
+    // TODO : add more sorting/enumeration properties
+
     public Element? this[string name_or_symbol] => TryGetElement(name_or_symbol);
 
     public Element this[int atomicNumber] => this[(uint)atomicNumber];

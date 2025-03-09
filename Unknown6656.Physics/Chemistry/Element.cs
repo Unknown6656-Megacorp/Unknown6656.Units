@@ -295,6 +295,8 @@ public record ElectronConfiguration(IEnumerable<ElectronOrbitalConfiguration> Sh
     public override string ToString() => $"[{string.Join(" ", Shells)}]";
 
 
+    public (uint Subshell, uint Electrons)[] ElectronsPerShell { get; } = Shells.GroupBy(x => x.Subshell).ToArray(g => (g.Key, (uint)g.Sum(s => s.Electrons)));
+
     public IEnumerator<ElectronOrbitalConfiguration> GetEnumerator() => Shells.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Shells).GetEnumerator();
@@ -319,12 +321,13 @@ public record ChemicalBondingElementProperties
 public record KinematicElementProperties
 {
     public required Speed SpeedOfSound { get; init; }
-    public Pressure? YoungModulus { get; init; } = null;
-    public Pressure? ShearModulus { get; init; } = null;
-    public Pressure? BulkModulus { get; init; } = null;
-    public Pressure? BrinellHardness { get; init; } = null;
-    public Pressure? VickersHardness { get; init; } = null;
-    public double? PoissonRatio { get; init; } = null;
+    public required Pressure? YoungModulus { get; init; } = null;
+    public required Pressure? ShearModulus { get; init; } = null;
+    public required Pressure? BulkModulus { get; init; } = null;
+    public required Pressure? BrinellHardness { get; init; } = null;
+    public required Pressure? VickersHardness { get; init; } = null;
+    public required double? MohsHardness { get; init; } = null;
+    public required double? PoissonRatio { get; init; } = null;
 }
 
 public record ElementAbundance
