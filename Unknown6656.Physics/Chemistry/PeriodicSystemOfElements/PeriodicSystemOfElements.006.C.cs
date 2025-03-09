@@ -83,7 +83,11 @@ public sealed partial class PeriodicTableOfElements
             YoungModulus = 1.05e12.Pascal(),
             ShearModulus = 478e9.Pascal(),
             BulkModulus = 442e9.Pascal(),
+            BrinellHardness = null,
+            PoissonRatio = null,
+            VickersHardness = null,
             SpeedOfSound = 18_350d.MeterPerSecond(),
+            MohsHardness = .5,
         },
         Optics = new()
         {

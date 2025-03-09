@@ -97,6 +97,7 @@ public sealed partial class PeriodicTableOfElements
             PoissonRatio = .1,
             BrinellHardness = null,
             VickersHardness = 9.6301303e9.Pascal(),
+            MohsHardness = 6.5,
             SpeedOfSound = 8433d.MeterPerSecond(),
         },
         Optics = new()

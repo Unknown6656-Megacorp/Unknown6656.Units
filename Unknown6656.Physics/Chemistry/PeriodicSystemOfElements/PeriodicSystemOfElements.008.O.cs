@@ -82,6 +82,10 @@ public sealed partial class PeriodicTableOfElements
         },
         Kinematics = new()
         {
+            BrinellHardness = null,
+            VickersHardness = null,
+            MohsHardness = null,
+            PoissonRatio = null,
             YoungModulus = null,
             ShearModulus = null,
             BulkModulus = null,

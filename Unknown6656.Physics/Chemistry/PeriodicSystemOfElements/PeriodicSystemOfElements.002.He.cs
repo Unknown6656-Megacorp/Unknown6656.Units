@@ -49,6 +49,13 @@ public sealed partial class PeriodicTableOfElements
         },
         Kinematics = new()
         {
+            BrinellHardness = null,
+            VickersHardness = null,
+            MohsHardness = null,
+            PoissonRatio = null,
+            BulkModulus = null,
+            ShearModulus = null,
+            YoungModulus = null,
             SpeedOfSound = 972d.MeterPerSecond(),
         },
         ChemicalBonding = new()

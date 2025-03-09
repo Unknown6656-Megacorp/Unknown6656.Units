@@ -91,8 +91,9 @@ public sealed partial class PeriodicTableOfElements
         {
             YoungModulus = null,
             ShearModulus = null,
-            BulkModulus = 5e9.Pascal(),
+            BulkModulus = 11e9.Pascal(),
             PoissonRatio = null,
+            MohsHardness = null,
             BrinellHardness = null,
             VickersHardness = null,
             SpeedOfSound = null,

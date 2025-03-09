@@ -55,6 +55,9 @@ public sealed partial class PeriodicTableOfElements
             BulkModulus = 11e9.Pascal(),
             ShearModulus = 4.2e9.Pascal(),
             YoungModulus = 4.9e9.Pascal(),
+            MohsHardness = .6,
+            PoissonRatio = null,
+            VickersHardness = null,
             SpeedOfSound = 6_000d.MeterPerSecond(),
         },
         ChemicalBonding = new()

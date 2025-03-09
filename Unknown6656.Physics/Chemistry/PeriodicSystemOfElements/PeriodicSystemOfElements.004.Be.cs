@@ -59,6 +59,7 @@ public sealed partial class PeriodicTableOfElements
             SpeedOfSound = 12_890d.MeterPerSecond(),
             PoissonRatio = 0.032,
             VickersHardness = 1670e6.Pascal(),
+            MohsHardness = 5.5,
         },
         ChemicalBonding = new()
         {
