@@ -861,14 +861,6 @@ strontium
 	17.1e6.JoulePerMol(),
 	
 sulfur
-	48.71e6.JoulePerMol(),
-	54.46e6.JoulePerMol(),
-	62.93e6.JoulePerMol(),
-	68.216e6.JoulePerMol(),
-	311.048e6.JoulePerMol(),
-	337.138e6.JoulePerMol(),
-	
-sulfur
 	.9996e6.JoulePerMol(),
 	2.252e6.JoulePerMol(),
 	3.357e6.JoulePerMol(),
