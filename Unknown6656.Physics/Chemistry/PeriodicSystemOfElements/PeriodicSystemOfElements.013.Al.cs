@@ -20,7 +20,7 @@ public sealed partial class PeriodicTableOfElements
         AlternateNames = ["Aluminum"],
         CASNumber = "CAS7429-90-5",
         CIDNumber = 5359268,
-        AtomicNumber = 14,
+        AtomicNumber = 13,
         Category = ElementCategory.PostTransitionMetal,
         Occurrence = ElementOccurrence.Primordial,
         Abundance = new()

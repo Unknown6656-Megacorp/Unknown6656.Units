@@ -687,18 +687,6 @@ palladium
 	3.177e6.JoulePerMol(),
 	
 phosphorus
-	1.0118e6.JoulePerMol(),
-	1.907e6.JoulePerMol(),
-	2.9141e6.JoulePerMol(),
-	4.9636e6.JoulePerMol(),
-	6.2739e6.JoulePerMol(),
-	21.267e6.JoulePerMol(),
-	25.431e6.JoulePerMol(),
-	29.872e6.JoulePerMol(),
-	35.905e6.JoulePerMol(),
-	40.95e6.JoulePerMol(),
-	
-phosphorus
 	46.261e6.JoulePerMol(),
 	54.11e6.JoulePerMol(),
 	59.024e6.JoulePerMol(),
