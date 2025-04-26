@@ -18,28 +18,6 @@ antimony
 	5.4e6.JoulePerMol(),
 	10.4e6.JoulePerMol(),
 	
-argon
-	1.5206e6.JoulePerMol(),
-	2.6658e6.JoulePerMol(),
-	3.931e6.JoulePerMol(),
-	5.771e6.JoulePerMol(),
-	7.238e6.JoulePerMol(),
-	8.781e6.JoulePerMol(),
-	11.995e6.JoulePerMol(),
-	13.842e6.JoulePerMol(),
-	40.76e6.JoulePerMol(),
-	46.186e6.JoulePerMol(),
-	
-argon
-	52.002e6.JoulePerMol(),
-	59.653e6.JoulePerMol(),
-	66.199e6.JoulePerMol(),
-	72.918e6.JoulePerMol(),
-	82.473e6.JoulePerMol(),
-	88.576e6.JoulePerMol(),
-	397.605e6.JoulePerMol(),
-	427.066e6.JoulePerMol(),
-	
 arsenic
 	.947e6.JoulePerMol(),
 	1.798e6.JoulePerMol(),
@@ -155,25 +133,6 @@ cerium
 	3.547e6.JoulePerMol(),
 	6.325e6.JoulePerMol(),
 	7.49e6.JoulePerMol(),
-	
-chlorine
-	1.2512e6.JoulePerMol(),
-	2.298e6.JoulePerMol(),
-	3.822e6.JoulePerMol(),
-	5.1586e6.JoulePerMol(),
-	6.542e6.JoulePerMol(),
-	9.362e6.JoulePerMol(),
-	11.018e6.JoulePerMol(),
-	33.604e6.JoulePerMol(),
-	38.6e6.JoulePerMol(),
-	43.961e6.JoulePerMol(),
-	51.068e6.JoulePerMol(),
-	57.119e6.JoulePerMol(),
-	63.363e6.JoulePerMol(),
-	72.341e6.JoulePerMol(),
-	78.095e6.JoulePerMol(),
-	352.994e6.JoulePerMol(),
-	380.76e6.JoulePerMol(),
 	
 chromium
 	157.7e6.JoulePerMol(),
@@ -648,15 +607,6 @@ niobium
 	9.847e6.JoulePerMol(),
 	12.1e6.JoulePerMol(),
 	
-nitrogen
-	1.4023e6.JoulePerMol(),
-	2.856e6.JoulePerMol(),
-	4.5781e6.JoulePerMol(),
-	7.475e6.JoulePerMol(),
-	9.4449e6.JoulePerMol(),
-	53.2666e6.JoulePerMol(),
-	64.36e6.JoulePerMol(),
-	
 nobelium
 	.639e6.JoulePerMol(),
 	1.254e6.JoulePerMol(),
@@ -671,27 +621,10 @@ osmium
 	.84e6.JoulePerMol(),
 	1.6e6.JoulePerMol(),
 	
-oxygen
-	1.3139e6.JoulePerMol(),
-	3.3883e6.JoulePerMol(),
-	5.3005e6.JoulePerMol(),
-	7.4692e6.JoulePerMol(),
-	10.9895e6.JoulePerMol(),
-	13.3265e6.JoulePerMol(),
-	71.33e6.JoulePerMol(),
-	84.078e6.JoulePerMol(),
-	
 palladium
 	.8044e6.JoulePerMol(),
 	1.87e6.JoulePerMol(),
 	3.177e6.JoulePerMol(),
-	
-phosphorus
-	46.261e6.JoulePerMol(),
-	54.11e6.JoulePerMol(),
-	59.024e6.JoulePerMol(),
-	271.791e6.JoulePerMol(),
-	296.195e6.JoulePerMol(),
 	
 platinum
 	.87e6.JoulePerMol(),
@@ -859,18 +792,6 @@ strontium
 	11.8e6.JoulePerMol(),
 	15.6e6.JoulePerMol(),
 	17.1e6.JoulePerMol(),
-	
-sulfur
-	.9996e6.JoulePerMol(),
-	2.252e6.JoulePerMol(),
-	3.357e6.JoulePerMol(),
-	4.556e6.JoulePerMol(),
-	7.0043e6.JoulePerMol(),
-	8.4958e6.JoulePerMol(),
-	27.107e6.JoulePerMol(),
-	31.719e6.JoulePerMol(),
-	36.621e6.JoulePerMol(),
-	43.177e6.JoulePerMol(),
 	
 tantalum
 	.761e6.JoulePerMol(),
