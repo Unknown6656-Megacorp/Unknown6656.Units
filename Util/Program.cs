@@ -8,24 +8,41 @@ using Unknown6656.Generics;
 
 
 
-string url = "https://en.wikipedia.org/wiki/Isotopes_of_silicon";
-HtmlDocument html = new();
+string url = "https://en.wikipedia.org/wiki/Isotopes_of_calcium";
+string raw_html;
 
-using (HttpClient client = new())
-    html.LoadHtml(await client.GetStringAsync(url));
+try
+{
+    using (HttpClient client = new())
+    {
+        client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/536.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.42");
+        raw_html = await client.GetStringAsync(url);
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error fetching URL: {ex.Message}");
+    Console.WriteLine("\nPlease enter the raw HTML below:");
+
+    raw_html = Console.ReadLine() ?? "/invalid/";
+}
+
+HtmlDocument html = new();
+html.LoadHtml(raw_html);
 
 string isotopes = "";
 Regex re_perc = new(@"(?<A>[^\n]+)\(\s*(?<P>\d+(.\d+)?)\s*%\s*\)\s*(?<B>[^\n]+)\n", RegexOptions.Compiled);
 Regex re_sigma = new(@"\s*\(\s*\d+(\s*\.\s*\d+)?\s*\)\s*", RegexOptions.Compiled);
 Regex re_ev = new(@"\s*\[\s*\d+(\s*\.\s*\d+)?\s*[kM]?eV\s*\]\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+Regex re_citation = new(@"\s*\[\s*\d+\s*\]\s*", RegexOptions.Compiled);
 
 foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.sortable").Select(ProcessTable))
 {
     const int col_N = 2;
-    const int col_halflife = 4;
-    const int col_mode = 5;
-    const int col_spin = 7;
-    const int col_abundance = 8;
+    const int col_halflife = 5;
+    const int col_mode = 6;
+    const int col_spin = 8;
+    const int col_abundance = 9;
 
     foreach (IGrouping<string, IList<HtmlNode>>? g in from row in table.QuerySelectorAll("tr")
                                                       let cells = row.QuerySelectorAll("td")
@@ -38,28 +55,37 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
         int N = int.Parse(g.Key);
         IList<HtmlNode> first = g.First();
         string spin = first[col_spin].InnerText.Trim();
-        string abundance = first[col_abundance].InnerText.Trim();
+        string abundance = first[col_abundance].InnerText.Trim().Replace("×10", "e");
 
         if (spin is ['(', .., ')'])
             spin = spin[1..^1];
 
-        spin = spin.Replace('-', '-')
+        spin = spin.Replace('\u2212', '\x2d')
                    .Replace("+", "")
                    .Replace("#", "")
                    .Replace("1/2", "0.5")
                    .Replace("3/2", "1.5")
                    .Replace("5/2", "2.5")
-                   .Replace("7/2", "2.5");
+                   .Replace("7/2", "3.5");
+
+        if (spin.EndsWith("-"))
+            spin = '-' + spin[..^1];
+
+        if (spin == "-0")
+            spin = "0";
 
         string halflife = first[col_halflife].InnerText
                                              .Trim()
                                              .ToLower()
                                              .Replace(" ", "")
                                              .Replace("&gt;", "")
-                                             .Replace("&lt;", "");
+                                             .Replace("&lt;", "")
+                                             .Replace("×10", "e");
+        halflife = re_citation.Replace(halflife, "");
+        abundance = re_citation.Replace(abundance, "");
 
         if (abundance.Length > 0)
-            abundance = $"\n    Abundance = {abundance},";
+            abundance = $"\n            Abundance = {abundance},";
 
         if (halflife.EndsWith("ys"))
             halflife = $"{halflife[..^2]}e-24.Second()";
@@ -80,7 +106,13 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
         else if (halflife.EndsWith('s'))
             halflife = $"{halflife[..^1]}.Second()";
         else if (halflife.EndsWith("min"))
-            halflife += $"{halflife[..^3]}.Minute()";
+            halflife = $"{halflife[..^3]}.Minute()";
+        else if (halflife.EndsWith("h"))
+            halflife = $"{halflife[..^1]}.Hour()";
+        else if (halflife.EndsWith("d"))
+            halflife = $"{halflife[..^1]}.StandardDay()";
+        else if (halflife.EndsWith("y"))
+            halflife = $"{halflife[..^1]}.SolarYear()";
 
         List<string> decays = [];
 
@@ -88,18 +120,24 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
         {
             string mode = '.' + cells[col_mode].InnerText.Trim();
 
+            mode = re_citation.Replace(mode, "");
             mode = mode.Replace(" ", "")
+                       .Replace("?", "")
                        .Replace(".β+α", "PositronAlphaEmission")
                        .Replace(".β+p", "PositronProtonEmission")
                        .Replace(".β+,p", "PositronProtonEmission")
                        .Replace(".β+,2p", "PositronDoubleProtonEmission")
                        .Replace(".β+", "PositronEmission")
                        .Replace(".ε", "ElectronCapture")
+                       .Replace(".EC", "ElectronCapture")
                        .Replace(".β−α", "BetaAlpha")
                        .Replace(".β−,n", "BetaNeutronEmission")
                        .Replace(".β−n", "BetaNeutronEmission")
+                       .Replace(".β,−2n", "BetaDoubleNeutronEmission")
                        .Replace(".β−2n", "BetaDoubleNeutronEmission")
+                       .Replace(".β,−3n", "BetaTripleNeutronEmission")
                        .Replace(".β−3n", "BetaTripleNeutronEmission")
+                       .Replace(".β,−4n", "BetaQuadrupleNeutronEmission")
                        .Replace(".β−4n", "BetaQuadrupleNeutronEmission")
                        .Replace(".β−", "Beta")
                        .Replace(".2p", "DoubleProtonEmission")
@@ -108,18 +146,21 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
                        .Replace(".n", "NeutronEmission")
                        ;
 
-            decays.Add($"\n                new(DecayMode.{mode}, {halflife})");
+            decays.Add($"new(DecayMode.{mode}, {halflife})");
         }
 
         if (halflife.Contains("stable", StringComparison.OrdinalIgnoreCase))
             decays = [];
 
+        string decays_str = string.Join(",\n                ", decays);
+
+        decays_str = decays.Count < 2 ? $"[{decays_str}]" : $"[\n                {decays_str}\n            ]";
         isotopes += $$"""
                 new()
                 {
                     NeutronCount = {{N}},
                     Spin = {{spin}},{{abundance}}
-                    Decays = [{{string.Join(",", decays)}}],
+                    Decays = {{decays_str}},
                 },
         """ + '\n';
     }

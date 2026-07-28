@@ -130,3 +130,13 @@ public partial record LinearWavenumber(ReciprocalMeter value)
 // TODO : angular wavelength
 // TODO : angular frequency
 // TODO : angular period
+
+
+// TODO : https://en.wikipedia.org/wiki/Lugeon
+// 1 Lugeon = 1 L / min / m        (at 1 MPa)
+//          = 1e-3 m^3 / 60 s / m  (at 1 MPa)
+//          = 1e-3 m^2 / 60 s      (at 1 MPa)
+// 1 MPa-rel Lugeon = 1e-3 m^2 / 60 s / 1 MPa
+//                  = 1e-3 m^2 / 60 s / 1e6 (N / m^2)
+//                  = 1e-3 m^2 / 60 s / 1e6 N * m^2
+//                  = 1e-9 / (60 s * N)

@@ -9,6 +9,8 @@ using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 using Unknown6656.Generics;
+using System.Text.RegularExpressions;
+using System.Collections.Concurrent;
 
 namespace Unknown6656.Physics.Chemistry;
 
@@ -137,6 +139,7 @@ public record IsotopeConfig
 
 public class Isotope
 {
+    private static readonly ConcurrentDictionary<string, Isotope> _named_isotopes = new();
     private IsotopeDecayChain[]? _chains = null;
 
     public string Name { get; }
@@ -171,6 +174,15 @@ public class Isotope
 
         if (KnownDecays.Length == 0)
             _chains = [];
+
+        string? key = config.Name
+                           ?.ToLowerInvariant()
+                           ?.Trim()
+                           ?.Replace(" ", "")
+                           ?.Replace('_', '-');
+
+        if (key is { })
+            _named_isotopes[key] = this;
     }
 
     public override int GetHashCode() => HashCode.Combine(Element.ProtonCount, NeutronCount);
@@ -198,6 +210,62 @@ public class Isotope
 
         return [.. build(this).Distinct()];
     }
+
+    public static Isotope? TryGetIsotope(string name, bool fallback_to_element = false)
+    {
+        PeriodicTableOfElements table = PeriodicTableOfElements.Table;
+
+        name = name.Trim()
+                   .ToLowerInvariant()
+                   .Replace(" ", "")
+                   .Replace('_', '-');
+
+        if (_named_isotopes.TryGetValue(name, out Isotope? named_isotope))
+            return named_isotope;
+
+        if (uint.TryParse(name, out uint number))
+        {
+            Isotope[] isotopes = table.GetIsotopesByHadrons(number);
+
+            if (isotopes.Length == 1)
+                return isotopes[0];
+            else
+                return null; // ambiguous
+        }
+        else
+        {
+            Regex re_named_1 = new(@"(?<name>[a-z]+)\-?(?<num>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex re_named_2 = new(@"(?<num>\d+)\-?(?<name>[a-z]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex re_numbered = new(@"(?<prot>\d+)-(?<num>\d+)", RegexOptions.Compiled);
+            Element? element = null;
+
+            if (re_named_1.Match(name) is { Success: true, Groups: { } groups_1 })
+            {
+                element = table.TryGetElement(groups_1["name"].Value);
+                number = uint.Parse(groups_1["num"].Value);
+            }
+            else if (re_named_2.Match(name) is { Success: true, Groups: { } groups_2 })
+            {
+                element = table.TryGetElement(groups_2["name"].Value);
+                number = uint.Parse(groups_2["num"].Value);
+            }
+            else if (re_numbered.Match(name) is { Success: true, Groups: { } groups_numbered })
+            {
+                element = table.GetElement(int.Parse(groups_numbered["prot"].Value));
+                number = uint.Parse(groups_numbered["num"].Value);
+            }
+            else if (fallback_to_element)
+                return Element.TryGetElement(name)?.MostAbundantIsotope;
+
+            return element?.GetIsotopeByHadronCount(number) ??
+                   element?.GetIsotopeByNeutronCount(number);
+        }
+    }
+
+    public static implicit operator Isotope((Element Element, uint HadronCount) tuple) =>
+        tuple.Element.GetIsotopeByHadronCount(tuple.HadronCount) ?? throw new ArgumentException($"Element '{tuple.Element}' does not have an isotope with a hardron count of {tuple.HadronCount}.");
+
+    public static implicit operator Isotope(string name) => TryGetIsotope(name) ?? throw new ArgumentException($"Could not parse isotope from string '{name}'.");
 }
 
 public class IsotopeDecay

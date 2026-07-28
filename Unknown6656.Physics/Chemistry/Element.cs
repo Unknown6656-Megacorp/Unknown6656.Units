@@ -507,8 +507,9 @@ public class Element
 
     public override string ToString() => $"{Name} ({AtomicNumber}, {Symbol})";
 
-    public static implicit operator Element(string name_or_symbol) =>
-        PeriodicTableOfElements.Table.TryGetElement(name_or_symbol) ?? throw new ArgumentException($"Unknown element '{name_or_symbol}'.", nameof(name_or_symbol));
+    public static Element? TryGetElement(string name_or_symbol) => PeriodicTableOfElements.Table.TryGetElement(name_or_symbol);
+
+    public static implicit operator Element(string name_or_symbol) => TryGetElement(name_or_symbol) ?? throw new ArgumentException($"Unknown element '{name_or_symbol}'.", nameof(name_or_symbol));
 
     public static implicit operator Element(int atomicNumber) => PeriodicTableOfElements.Table.GetElement(atomicNumber);
 

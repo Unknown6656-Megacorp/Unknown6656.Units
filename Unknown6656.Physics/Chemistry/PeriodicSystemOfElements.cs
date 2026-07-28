@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System;
 
@@ -10,7 +11,7 @@ namespace Unknown6656.Physics.Chemistry;
 
 public sealed partial class PeriodicTableOfElements
 {
-    private readonly Dictionary<uint, Element> _elements = [];
+    private readonly ConcurrentDictionary<uint, Element> _elements = new();
 
 
     public static PeriodicTableOfElements Table { get; } = new();
@@ -55,6 +56,8 @@ public sealed partial class PeriodicTableOfElements
     public Element GetElement(int atomicNumber) => GetElement((uint)atomicNumber);
 
     public Element GetElement(uint atomicNumber) => this[atomicNumber];
+
+    public Isotope? TryGetIsotope(string name, bool fallback_to_element = false) => Isotope.TryGetIsotope(name, fallback_to_element);
 
     public Isotope? GetIsotope(int protons, int neutrons) => GetIsotope((uint)protons, (uint)neutrons);
 

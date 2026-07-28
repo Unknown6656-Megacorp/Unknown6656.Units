@@ -228,7 +228,7 @@ public sealed partial class PeriodicTableOfElements
             NeutronCount = 19,
             Spin = 1.5,
             Abundance = 1e-6,
-            Decays = [new(DecayMode.ElectronCapture, 35.011d)],
+            Decays = [new(DecayMode.ElectronCapture, 35.011.StandardDay())],
         },
         new()
         {
