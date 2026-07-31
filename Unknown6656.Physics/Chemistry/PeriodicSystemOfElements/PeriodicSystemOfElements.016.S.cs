@@ -21,6 +21,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "S",
         CASNumber = "CAS7704-34-9",
         CIDNumber = 5362487,
+        DiscoveryYear = -2_000,
         AtomicNumber = 16,
         Category = ElementCategory.NonMetal,
         Occurrence = ElementOccurrence.Primordial,

@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "Li",
         CASNumber = "CAS7439-93-2",
         CIDNumber = 3028194,
+        DiscoveryYear = 1817,
         AtomicNumber = 3,
         Category = ElementCategory.AlkaliMetal,
         Occurrence = ElementOccurrence.Primordial,

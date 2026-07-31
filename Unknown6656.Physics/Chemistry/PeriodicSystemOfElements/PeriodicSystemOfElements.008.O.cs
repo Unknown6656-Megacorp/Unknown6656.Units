@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "O",
         CASNumber = "CAS7782-44-7",
         CIDNumber = 977,
+        DiscoveryYear = 1771,
         AtomicNumber = 8,
         Category = ElementCategory.NonMetal,
         Occurrence = ElementOccurrence.Primordial,

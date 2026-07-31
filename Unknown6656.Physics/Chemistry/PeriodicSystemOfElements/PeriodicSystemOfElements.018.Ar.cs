@@ -20,6 +20,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "Ar",
         CASNumber = "CAS7440-37-1",
         CIDNumber = 23968,
+        DiscoveryYear = 1894,
         AtomicNumber = 18,
         Category = ElementCategory.NobleGas,
         Occurrence = ElementOccurrence.Primordial,

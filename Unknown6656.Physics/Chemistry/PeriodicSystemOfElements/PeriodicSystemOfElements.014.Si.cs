@@ -20,6 +20,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "Si",
         CASNumber = "CAS7440-21-3",
         CIDNumber = 5461123,
+        DiscoveryYear = 1739,
         AtomicNumber = 14,
         Category = ElementCategory.Metalloid,
         Occurrence = ElementOccurrence.Primordial,

@@ -17,9 +17,11 @@ public sealed partial class PeriodicTableOfElements
     public static Element Chlorine { get; } = Table.RegisterElement(new(Table)
     {
         Name = nameof(Chlorine),
+        AlternateNames = ["Muriaticum", "Clor"],
         Symbol = "Cl",
         CASNumber = "CAS7782-50-5",
         CIDNumber = 24526,
+        DiscoveryYear = 1774,
         AtomicNumber = 17,
         Category = ElementCategory.NonMetal,
         Occurrence = ElementOccurrence.Primordial,

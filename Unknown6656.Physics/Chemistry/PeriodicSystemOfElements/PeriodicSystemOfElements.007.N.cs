@@ -17,9 +17,11 @@ public sealed partial class PeriodicTableOfElements
     public static Element Nitrogen { get; } = Table.RegisterElement(new(Table)
     {
         Name = nameof(Nitrogen),
+        AlternateNames = ["Azote"],
         Symbol = "N",
         CASNumber = "CAS7727-37-9",
         CIDNumber = 947,
+        DiscoveryYear = 1772,
         AtomicNumber = 7,
         Category = ElementCategory.NonMetal,
         Occurrence = ElementOccurrence.Primordial,

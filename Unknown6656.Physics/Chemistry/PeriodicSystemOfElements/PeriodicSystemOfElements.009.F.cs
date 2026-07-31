@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "F",
         CASNumber = "CAS7782-41-4",
         CIDNumber = 24524,
+        DiscoveryYear = 1771,
         AtomicNumber = 9,
         Category = ElementCategory.Halogen,
         Occurrence = ElementOccurrence.Primordial,

@@ -20,6 +20,7 @@ public sealed partial class PeriodicTableOfElements
         AtomicNumber = 10,
         CASNumber = "CAS7440-01-9",
         CIDNumber = 23935,
+        DiscoveryYear = 1898,
         Category = ElementCategory.NobleGas,
         Occurrence = ElementOccurrence.Primordial,
         Abundance = new()

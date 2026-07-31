@@ -31,7 +31,7 @@ namespace Unknown6656.Physics.Chemistry;
 ///  ────╂─────┼─────┼─────┼─────┼──┴──┼─────┼─────┘     |
 ///   -1 ┃     |β+,α |     |     |  n  |  β  |           |
 ///  ────╂─────┼─────┼─────┼─────┼──┬──┼─────┘           |
-///    0 ┃     |     |  2p |  p  |St|IT|                 |
+///    0 ┃     |     |  2p |  p  |IT|<i>St</i>|                 |
 ///  ────╂─────┼─────┼─────┼──┬──┼──┴──┤                 |
 ///   +1 ┃β+,3p|β,+2p|β+,p |β+| ε|  η  |                 |
 ///  ────╂─────┼─────┼─────┼──┴──┴─────┘                 |
@@ -220,7 +220,9 @@ public class Isotope
                    .Replace(" ", "")
                    .Replace('_', '-');
 
-        if (_named_isotopes.TryGetValue(name, out Isotope? named_isotope))
+        if (name is "-" or "0")
+            return PeriodicTableOfElements.Neutronium.MostAbundantIsotope;
+        else if (_named_isotopes.TryGetValue(name, out Isotope? named_isotope))
             return named_isotope;
 
         if (uint.TryParse(name, out uint number))
@@ -234,8 +236,10 @@ public class Isotope
         }
         else
         {
-            Regex re_named_1 = new(@"(?<name>[a-z]+)\-?(?<num>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            Regex re_named_2 = new(@"(?<num>\d+)\-?(?<name>[a-z]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            // TODO : AZE name parsing
+
+            Regex re_named_1 = new(@"(?<name>[a-z]+)\-?(?<num>\d+)m?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex re_named_2 = new(@"(?<num>\d+)(m?\-)?(?<name>[a-z]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             Regex re_numbered = new(@"(?<prot>\d+)-(?<num>\d+)", RegexOptions.Compiled);
             Element? element = null;
 
@@ -251,8 +255,14 @@ public class Isotope
             }
             else if (re_numbered.Match(name) is { Success: true, Groups: { } groups_numbered })
             {
-                element = table.GetElement(int.Parse(groups_numbered["prot"].Value));
+                int protons = int.Parse(groups_numbered["prot"].Value);
+
                 number = uint.Parse(groups_numbered["num"].Value);
+                element = table.TryGetElement(protons);
+
+                return element?.GetIsotopeByHadronCount(number) ??
+                       element?.GetIsotopeByNeutronCount(number) ??
+                       table.TryGetElement(number)?.GetIsotopeByHadronCount((uint)protons) /* <- user swapped the two numbers */;
             }
             else if (fallback_to_element)
                 return Element.TryGetElement(name)?.MostAbundantIsotope;
@@ -270,19 +280,29 @@ public class Isotope
 
 public class IsotopeDecay
 {
-    private readonly (int P, int N) _target;
+    private readonly (int P, int N)? _target;
 
     public Isotope SourceIsotope { get; }
+
     public DecayMode Mode { get; }
+
     public Time HalfTime { get; }
+
     public double Probability { get; }
+
     public Element SourceElement => SourceIsotope.Element;
-    public Isotope? TargetIsotope => PeriodicTable[_target.P, _target.N];
+
+    public Isotope? TargetIsotope => _target is (int P, int N) ? PeriodicTable[P, N] : null;
+
     public Element? TargetElement => TargetIsotope?.Element;
+
     public PeriodicTableOfElements PeriodicTable => SourceElement.PeriodicTable;
-    public int ProtonDifference => _target.P - (int)SourceElement.ProtonCount;
-    public int NeutronDifference => _target.N - (int)SourceIsotope.NeutronCount;
-    public int HadronDifference => ProtonDifference + NeutronDifference;
+
+    public int? ProtonDifference => _target is (int P, _) ? P - (int)SourceElement.ProtonCount : null;
+
+    public int? NeutronDifference => _target is (_, int N) ? N - (int)SourceIsotope.NeutronCount : null;
+
+    public int? HadronDifference => _target is (int P, int N) ? P + N - (int)SourceIsotope.HadronCount : null;
 
 
     internal IsotopeDecay(Isotope source, IsotopeDecayConfig config)
@@ -292,7 +312,7 @@ public class IsotopeDecay
         Probability = config.Probability;
         SourceIsotope = source;
 
-        (int P, int N) = config.Mode switch
+        (int? P, int? N) = config.Mode switch
         {
             DecayMode.Stable or
             DecayMode.IsomericTransition => (0, 0),
@@ -322,16 +342,20 @@ public class IsotopeDecay
             DecayMode.BetaQuadrupleNeutronEmission => (1, -5),
 
             //DecayMode.ClusterDecay => (, ),
-            //DecayMode.SpontaneousFission => (, ),
             //DecayMode.Gamma => (, ),
-
+            DecayMode.SpontaneousFission => ((int?, int?))(null, null),
             _ => throw new NotImplementedException($"I'm terribly sorry, but I haven't yet implemented the decay mode {config.Mode}. it's on my TODO list.")
         };
 
-        P += (int)source.Element.ProtonCount;
-        N += (int)source.NeutronCount;
+        if (P is null || N is null)
+            _target = null;
+        else
+        {
+            P += (int)source.Element.ProtonCount;
+            N += (int)source.NeutronCount;
 
-        _target = (P, N);
+            _target = (P.Value, N.Value);
+        }
     }
 
     internal string DecayModeString() => Mode switch
@@ -368,7 +392,7 @@ public class IsotopeDecay
         _ => "(?)"
     };
 
-    public override string ToString() => $"{SourceIsotope} --[{DecayModeString()}, {HalfTime}, {Probability:P2}]--> {TargetIsotope}";
+    public override string ToString() => $"{SourceIsotope} --[{DecayModeString()}, {HalfTime}, {Probability:P2}]--> {TargetIsotope?.ToString() ?? "(varying)"}";
 }
 
 public class IsotopeDecayChain

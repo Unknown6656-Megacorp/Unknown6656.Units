@@ -21,6 +21,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "K",
         CASNumber = "CAS7440-09-7",
         CIDNumber = 5462222,
+        DiscoveryYear = 1702,
         AtomicNumber = 19,
         Category = ElementCategory.AlkaliMetal,
         Occurrence = ElementOccurrence.Primordial,

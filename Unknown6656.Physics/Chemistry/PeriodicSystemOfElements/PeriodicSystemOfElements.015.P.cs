@@ -21,6 +21,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "P",
         CASNumber = "CAS7723-14-0",
         CIDNumber = 5462309,
+        DiscoveryYear = 1669,
         AtomicNumber = 15,
         Category = ElementCategory.NonMetal,
         Occurrence = ElementOccurrence.Primordial,

@@ -196,21 +196,25 @@ public enum ElectronOrbital
 public enum PeriodicTableBlock
 {
     /// <summary>
-    /// S block.
+    /// The PSE's S-block.
     /// </summary>
-    S = 1,
+    Sharp = 1,
     /// <summary>
-    /// P block.
+    /// The PSE's P-block.
     /// </summary>
-    P = 2,
+    Principal = 2,
     /// <summary>
-    /// D block.
+    /// The PSE's D-block.
     /// </summary>
-    D = 3,
+    Diffuse = 3,
     /// <summary>
-    /// F block.
+    /// The PSE's F-block.
     /// </summary>
-    F = 4,
+    Fundamental = 4,
+    /// <summary>
+    /// The PSE's G-block.
+    /// </summary>
+    G = 5,
 }
 
 public record ThermodynamicElementProperties
@@ -251,6 +255,14 @@ public record ThermodynamicElementProperties
 
 public record OpticalElementProperties
 {
+    public static OpticalElementProperties Unknown => new()
+    {
+        EmissionSpectrum = null,
+        RefractiveIndex = null,
+        ExtinctionCoefficient = 1,
+    };
+
+
     public required Spectrum? EmissionSpectrum { get; init; }
     //public required Spectrum? AbsorptionSpectrum { get; init; }
     public required double? RefractiveIndex { get; init; } = null;
@@ -264,6 +276,18 @@ public record OpticalElementProperties
 
 public record ElectromagneticalElementProperties
 {
+    public static ReadOnlyIndexer<ElectricalElementType, ElectromagneticalElementProperties> Unknown { get; } = new(c => new()
+    {
+        CuriePoint = null,
+        SuperconductingPoint = null,
+        BandGap = null,
+        ElectricalResistivity = null,
+        ElectricalType = c,
+        MagneticOrdering = MagneticOrdering.Paramagnetic,
+        MagneticSusceptibility = null,
+    });
+
+
     public required Resistivity? ElectricalResistivity { get; init; }
     public required MolarMagneticSusceptibility MagneticSusceptibility { get; init; }
     public required KineticEnergy BandGap { get; init; }
@@ -308,7 +332,7 @@ public record ChemicalBondingElementProperties
     /// The element's electronegativity on the Pauling scale.
     /// </summary>
     public required double? PaulingElectronegativity { get; init; } = null;
-    public required double AllenElectronegativity { get; init; }
+    public required double? AllenElectronegativity { get; init; } = null;
     public required int Valence { get; init; }
     public required int[] OxidationStates { get; init; }
     public required int[] CommonOxidationStates { get; init; }
@@ -320,7 +344,19 @@ public record ChemicalBondingElementProperties
 
 public record KinematicElementProperties
 {
-    public required Speed SpeedOfSound { get; init; }
+    public static KinematicElementProperties Unknown => new()
+    {
+        SpeedOfSound = null,
+        YoungModulus = null,
+        ShearModulus = null,
+        BulkModulus = null,
+        BrinellHardness = null,
+        VickersHardness = null,
+        MohsHardness = null,
+        PoissonRatio = null,
+    };
+
+    public required Speed? SpeedOfSound { get; init; }
     public required Pressure? YoungModulus { get; init; } = null;
     public required Pressure? ShearModulus { get; init; } = null;
     public required Pressure? BulkModulus { get; init; } = null;
@@ -328,10 +364,30 @@ public record KinematicElementProperties
     public required Pressure? VickersHardness { get; init; } = null;
     public required double? MohsHardness { get; init; } = null;
     public required double? PoissonRatio { get; init; } = null;
+
+
+    public bool IsSubsonic(Speed speed) => SpeedOfSound is Speed c && speed < c;
+
+    public bool IsSupersonic(Speed speed) => SpeedOfSound is Speed c && speed > c;
+
+    public bool IsHypersonic(Speed speed, double mach_factor = 5) => SpeedOfSound is Speed c && speed > c * mach_factor;
+
+    public bool IsTransonic(Speed speed, double tolerance_factor = .15) =>
+        SpeedOfSound is Speed c && c * (1 - tolerance_factor) <= speed && speed <= c * (1 + tolerance_factor);
 }
 
 public record ElementAbundance
 {
+    public static ElementAbundance Zero { get; } = new()
+    {
+        UniverseAbundance = 0,
+        SolarAbundance = 0,
+        MeteoriteAbundance = 0,
+        CrustalAbundance = 0,
+        OceanAbundance = 0,
+        HumanBodyAbundance = 0,
+    };
+
     public required double UniverseAbundance { get; init; }
     public required double SolarAbundance { get; init; }
     public required double MeteoriteAbundance { get; init; }
@@ -364,9 +420,11 @@ public class Element
     /// </summary>
     public required string Name { get; init; }
 
-    public required string CASNumber { get; init; }
+    public required string? CASNumber { get; init; }
 
-    public required int CIDNumber { get; init; }
+    public required int? CIDNumber { get; init; }
+
+    public required int? DiscoveryYear { get; init; }
 
     internal IEnumerable<string> AlternateNames { get; init; } = [];
 
@@ -406,10 +464,34 @@ public class Element
 
     public PeriodicTableBlock ElementBlock => AtomicNumber switch
     {
-        (>= 5 and <= 10) or (>= 13 and <= 18) or (>= 31 and <= 36) or (>= 49 and <= 54) or (>= 81 and <= 86) or (>= 113 and <= 118) => PeriodicTableBlock.P,
-        (>= 21 and <= 30) or (>= 39 and <= 48) or (>= 71 and <= 80) or (>= 103 and <= 112) => PeriodicTableBlock.D,
-        (>= 57 and <= 70) or (>= 89 and <= 102) => PeriodicTableBlock.F,
-        <= 88 => PeriodicTableBlock.S,
+        (<= 4) or
+        11 or 12 or
+        19 or 20 or
+        37 or 38 or
+        55 or 56 or
+        87 or 88 or
+        119 or 120 => PeriodicTableBlock.Sharp,
+
+        (>= 5 and <= 10) or
+        (>= 13 and <= 18) or
+        (>= 31 and <= 36) or
+        (>= 49 and <= 54) or
+        (>= 81 and <= 86) or
+        (>= 113 and <= 118) or
+        (>= 163 and <= 168) => PeriodicTableBlock.Principal,
+
+        (>= 21 and <= 30) or
+        (>= 39 and <= 48) or
+        (>= 71 and <= 80) or
+        (>= 103 and <= 112) or
+        (>= 153 and <= 162) => PeriodicTableBlock.Diffuse,
+
+        (>= 57 and <= 70) or
+        (>= 89 and <= 102) or
+        (>= 139 and <= 152) => PeriodicTableBlock.Fundamental,
+
+        (>= 121 and <= 138) => PeriodicTableBlock.G,
+
         _ => throw new NotImplementedException($"Unknown atomic element {this}")
     };
 

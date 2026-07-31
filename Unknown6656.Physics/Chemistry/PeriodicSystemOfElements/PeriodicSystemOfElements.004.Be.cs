@@ -16,9 +16,11 @@ public sealed partial class PeriodicTableOfElements
     public static Element Beryllium { get; } = Table.RegisterElement(new(Table)
     {
         Name = nameof(Beryllium),
+        AlternateNames = ["Glucinium"],
         Symbol = "Be",
         CASNumber = "CAS7440-41-7",
         CIDNumber = 5460467,
+        DiscoveryYear = 1798,
         AtomicNumber = 4,
         Category = ElementCategory.AlkalineEarthMetal,
         Occurrence = ElementOccurrence.Primordial,

@@ -20,6 +20,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "C",
         CASNumber = "CAS7440-44-0",
         CIDNumber = 5462310,
+        DiscoveryYear = -26_000,
         AtomicNumber = 6,
         Category = ElementCategory.NonMetal,
         Occurrence = ElementOccurrence.Primordial,

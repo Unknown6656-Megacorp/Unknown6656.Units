@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "H",
         CASNumber = "CAS1333-74-0",
         CIDNumber = 783,
+        DiscoveryYear = 1671,
         AtomicNumber = 1,
         Category = ElementCategory.NonMetal,
         Occurrence = ElementOccurrence.Primordial,

@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "Mg",
         CASNumber = "CAS7439-95-4",
         CIDNumber = 5462224,
+        DiscoveryYear = 1755,
         AtomicNumber = 12,
         Category = ElementCategory.AlkalineEarthMetal,
         Occurrence = ElementOccurrence.Primordial,

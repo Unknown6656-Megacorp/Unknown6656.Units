@@ -18,6 +18,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "He",
         CASNumber = "CAS7440-59-7",
         CIDNumber = 23987,
+        DiscoveryYear = 1868,
         AtomicNumber = 2,
         Category = ElementCategory.NobleGas,
         Occurrence = ElementOccurrence.Primordial,

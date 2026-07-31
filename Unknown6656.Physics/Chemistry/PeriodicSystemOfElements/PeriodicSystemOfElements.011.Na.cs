@@ -17,10 +17,11 @@ public sealed partial class PeriodicTableOfElements
     public static Element Sodium { get; } = Table.RegisterElement(new(Table)
     {
         Name = nameof(Sodium),
-        AlternateNames = ["natrium"],
+        AlternateNames = ["Natrium"],
         Symbol = "Na",
         CASNumber = "CAS7440-23-5",
         CIDNumber = 5360545,
+        DiscoveryYear = 1702,
         AtomicNumber = 11,
         Category = ElementCategory.AlkaliMetal,
         Occurrence = ElementOccurrence.Primordial,

@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Name = nameof(Calcium),
         Symbol = "Ca",
         CASNumber = "CAS7440-70-2",
+        DiscoveryYear = 1739,
         CIDNumber = 5460341,
         AtomicNumber = 20,
         Category = ElementCategory.AlkalineEarthMetal,

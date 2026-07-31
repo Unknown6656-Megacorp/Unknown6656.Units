@@ -19,6 +19,7 @@ public sealed partial class PeriodicTableOfElements
         Symbol = "B",
         CASNumber = "CAS7440-42-8",
         CIDNumber = 5462311,
+        DiscoveryYear = 1787,
         AtomicNumber = 5,
         Category = ElementCategory.Metalloid,
         Occurrence = ElementOccurrence.Primordial,
