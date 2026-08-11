@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System;
 
@@ -8,11 +8,8 @@ using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Magnetism;
 using Unknown6656.Units.Euclidean;
-using Unknown6656.Units.Temporal;
-using Unknown6656.Units.Matter;
 using Unknown6656.Units.Energy;
-
-using Unknown6656.Physics.Nuclear;
+using Unknown6656.Units.Matter;
 using Unknown6656.Physics.Optics;
 
 using Unknown6656.Generics;
@@ -101,27 +98,24 @@ public enum ElementOccurrence
 /// <summary>
 /// Represents the fundamental state of matter.
 /// </summary>
+[Flags]
 public enum FundamentalState
 {
     /// <summary>
     /// Solid state.
     /// </summary>
-    Solid = 0,
-
+    Solid = 1,
     /// <summary>
     /// Liquid state.
     /// </summary>
-    Liquid = 1,
-
+    Liquid = 2,
     /// <summary>
     /// Gaseous state.
     /// </summary>
-    Gas = 2,
-
-    /// <summary>
-    /// Plasma state.
-    /// </summary>
-    Plasma = 3,
+    Gas = 4,
+    // Plasma = 8,
+    Triple = Gas | Liquid | Solid,
+    Supercritical = Gas | Liquid,
 }
 
 /// <summary>
@@ -232,24 +226,162 @@ public record ThermodynamicElementProperties
     public required ThermalConductivity ThermalConductivity { get; init; }
     public required ThermodynamicEntropy? ThermalCapacity { get; init; }
 
-
-    public FundamentalState State => GetFundamentalStateAt(PressureTemperaturePoint.NormalNTP);
-
-
-    public FundamentalState GetFundamentalStateAt(PressureTemperaturePoint point) => GetFundamentalStateAt(point.Temperature, point.Pressure);
-
-    public FundamentalState GetFundamentalStateAt(Pressure pressure, Temperature temperature) => GetFundamentalStateAt(temperature, pressure);
-
-    public FundamentalState GetFundamentalStateAt(Temperature temperature, Pressure pressure)
+    public ApproximatePhaseDiagram? PhaseDiagram
     {
-        // TODO : implement sublimation
-        // TODO : implement triple point
-        // TODO : implement critical point
+        get
+        {
+            if (field is null && MeltingPoint is Temperature tm && BoilingPoint is Temperature tb)
+                field = new ApproximatePhaseDiagram(tm, tb, STPSublimationPoint, CriticalPoint, TriplePoint);
 
-        throw null;
+            return field;
+        }
+    }
+}
 
-        //= MeltingPoint >= Temperature.RoomTemperature ? FundamentalState.Solid
-        //                                   : BoilingPoint <= Temperature.RoomTemperature ? FundamentalState.Gas : FundamentalState.Liquid;
+public class ApproximatePhaseDiagram
+{
+    private static readonly double _Pstandard_Pa = Pressure.StandardAtmosphere.Pascal.Value;
+
+    private readonly double _Tmelting_K;
+    private readonly double _Tboiling_K;
+    private readonly double? _Tsublimation_K;
+    private readonly double _Ttriple_K;
+    private readonly double _Ptriple_Pa;
+    private readonly double _Tcritical_K;
+    private readonly double _Pcritical_Pa;
+
+
+    public FundamentalState? State => field ??= GetFundamentalStateAt(PressureTemperaturePoint.NormalNTP);
+
+    public Pascal VaporPressure => field ??= GetVaporPressure(Temperature.RoomTemperature, FundamentalState.Liquid);
+
+    public Kelvin MeltingPoint => field ??= GetMeltingPoint(Pressure.StandardAtmosphere);
+
+    public Kelvin BoilingPoint => field ??= GetBoilingPoint(Pressure.StandardAtmosphere);
+
+    public FundamentalState? this[Pressure pressure] => GetFundamentalStateAt(pressure);
+
+    public FundamentalState? this[Temperature temperature] => GetFundamentalStateAt(temperature);
+
+    public FundamentalState? this[PressureTemperaturePoint point] => GetFundamentalStateAt(point);
+
+    public FundamentalState? this[Pressure pressure, Temperature temperature] => GetFundamentalStateAt(temperature, pressure);
+
+    public FundamentalState? this[Temperature temperature, Pressure pressure] => GetFundamentalStateAt(temperature, pressure);
+
+
+    public ApproximatePhaseDiagram(
+        Kelvin melting_point,
+        Kelvin boiling_point,
+        Kelvin? sublimation_point,
+        PressureTemperaturePoint? critical_point,
+        PressureTemperaturePoint? triple_point
+    )
+    {
+        _Tmelting_K = melting_point.Value;
+        _Tboiling_K = boiling_point.Value;
+
+        if (triple_point is { Pressure.Pascal.Value: double pt, Temperature.Kelvin.Value: double tt })
+            (_Ttriple_K, _Ptriple_Pa) = (tt, pt);
+        else
+        {
+            _Ptriple_Pa = 0.01 * _Pstandard_Pa;
+            _Ttriple_K = _Tmelting_K - 1;
+        }
+
+        if (critical_point is { Pressure.Pascal.Value: double pc, Temperature.Kelvin.Value: double tc })
+            (_Tcritical_K, _Pcritical_Pa) = (tc, pc);
+        else
+        {
+            _Pcritical_Pa = 50 * _Pstandard_Pa;
+            _Tcritical_K = _Tboiling_K * 1.5;
+        }
+
+        _Tsublimation_K = sublimation_point?.Value ?? (_Ptriple_Pa < _Pstandard_Pa ? _Ttriple_K : null);
+    }
+
+    private static double InverseLerp(double a, double b, double value) => (value - a) / (b - a);
+
+    private static double InverseLogLerp(double a, double b, double value) => InverseLerp(Math.Log(a), Math.Log(b), Math.Log(value));
+
+    public Kelvin GetMeltingPoint(Pressure pressure)
+    {
+        double temp = InverseLogLerp(_Pstandard_Pa, _Ptriple_Pa, pressure.Pascal.Value);
+
+        return new(double.Lerp(_Tmelting_K, _Ttriple_K, temp));
+    }
+
+    public Kelvin GetBoilingPoint(Pressure pressure)
+    {
+        double temp = InverseLogLerp(_Pstandard_Pa, _Pcritical_Pa, pressure.Pascal.Value);
+
+        return new(double.Lerp(_Tboiling_K, _Tcritical_K, temp));
+    }
+
+    public Pascal GetVaporPressure(FundamentalState condensed_phase = FundamentalState.Liquid) => GetVaporPressure(Temperature.RoomTemperature, condensed_phase);
+
+    public Pascal GetVaporPressure(Temperature temperature, FundamentalState condensed_phase = FundamentalState.Liquid)
+    {
+        if (temperature.Kelvin.Value >= _Tcritical_K)
+            return new(_Pcritical_Pa);
+
+        double log_pt = Math.Log(_Ptriple_Pa);
+        double log_pc = Math.Log(_Pcritical_Pa);
+        double log_pstd = Math.Log(_Pstandard_Pa);
+        double A, B;
+
+        if (condensed_phase >= FundamentalState.Liquid && temperature.Kelvin.Value >= _Ttriple_K)
+        {
+            B = (log_pc - log_pstd) / (1.0 / _Tboiling_K - 1.0 / _Tcritical_K);
+            A = log_pstd + B / _Tboiling_K;
+        }
+        else if (_Tsublimation_K is double t_sub && t_sub > _Ttriple_K)
+        {
+            B = (log_pstd - log_pt) / (1.0 / _Ttriple_K - 1.0 / t_sub);
+            A = log_pt + B / _Ttriple_K;
+        }
+        else
+        {
+            B = 5000.0;
+            A = log_pt + B / _Ttriple_K;
+        }
+
+        return new(Math.Exp(A - B / temperature.Kelvin.Value));
+    }
+
+    public FundamentalState? GetFundamentalStateAt(Temperature temperature) => GetFundamentalStateAt(temperature, Pressure.StandardAtmosphere);
+
+    public FundamentalState? GetFundamentalStateAt(Pressure pressure) => GetFundamentalStateAt(Temperature.RoomTemperature, pressure);
+
+    public FundamentalState? GetFundamentalStateAt(PressureTemperaturePoint point) => GetFundamentalStateAt(point.Temperature, point.Pressure);
+
+    public FundamentalState? GetFundamentalStateAt(Pressure pressure, Temperature temperature) => GetFundamentalStateAt(temperature, pressure);
+
+    public FundamentalState? GetFundamentalStateAt(Temperature temperature, Pressure pressure)
+    {
+        double T = temperature.Kelvin.Value;
+        double P = pressure.Pascal.Value;
+
+        if (Math.Abs(T - _Ttriple_K) < 0.1 && Math.Abs(P - _Ptriple_Pa) < 0.01 * _Ptriple_Pa)
+            return FundamentalState.Triple;
+
+        Pascal p_sat_solid = GetVaporPressure(temperature, FundamentalState.Solid);
+
+        if (T > _Tcritical_K && P > _Pcritical_Pa)
+            return FundamentalState.Supercritical;
+        else if (T > _Tcritical_K)
+            return FundamentalState.Gas;
+        else if (P < _Ptriple_Pa)
+            if (T < _Ttriple_K)
+                return pressure > p_sat_solid ? FundamentalState.Solid : FundamentalState.Gas;
+            else
+                return FundamentalState.Gas;
+        else if (temperature < GetMeltingPoint(pressure))
+            return pressure > p_sat_solid ? FundamentalState.Solid : FundamentalState.Gas;
+        else if (T >= _Ttriple_K && pressure > GetVaporPressure(temperature, FundamentalState.Liquid))
+            return FundamentalState.Liquid;
+        else
+            return FundamentalState.Gas;
     }
 }
 
@@ -567,14 +699,26 @@ public class Element
     {
         _isotopes.Add(new(this, isotope));
 
-#warning TODO : normalize abundances
+        double total_abundance = _isotopes.Sum(i => i._config.Abundance);
+
+        foreach (Isotope i in _isotopes)
+            i.Abundance = i._config.Abundance / total_abundance;
 
         return this;
     }
 
     internal Element AddIsotopes(IEnumerable<IsotopeConfig> isotopes)
     {
-        isotopes.Do(AddIsotope);
+        double total_abundance = 0;
+
+        foreach (IsotopeConfig isotope in isotopes)
+        {
+            _isotopes.Add(new(this, isotope));
+            total_abundance += isotope.Abundance;
+        }
+
+        foreach (Isotope isotope in _isotopes)
+            isotope.Abundance = isotope._config.Abundance / total_abundance;
 
         return this;
     }

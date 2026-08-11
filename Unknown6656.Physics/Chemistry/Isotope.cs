@@ -140,6 +140,7 @@ public record IsotopeConfig
 public class Isotope
 {
     private static readonly ConcurrentDictionary<string, Isotope> _named_isotopes = new();
+    internal readonly IsotopeConfig _config;
     private IsotopeDecayChain[]? _chains = null;
 
     public string Name { get; }
@@ -147,7 +148,7 @@ public class Isotope
     public PeriodicTableOfElements PeriodicTable => Element.PeriodicTable;
     public uint NeutronCount { get; }
     public Dalton AtomicMass { get; }
-    public double Abundance { get; }
+    public double Abundance { get; internal set; }
     public uint HadronCount => NeutronCount + Element.ProtonCount;
     public Spin Spin { get; }
     public IsotopeDecay[] KnownDecays { get; }
@@ -158,12 +159,15 @@ public class Isotope
 
     internal Isotope(Element element, IsotopeConfig config)
     {
+        config = config with { Abundance = double.Clamp(config.Abundance, 1e-10, 1) };
+
+        _config = config;
         Element = element;
         Spin = config.Spin;
         Name = config.Name ?? element.Name;
+        Abundance = config.Abundance;
         NeutronCount = config.NeutronCount;
         AtomicMass = Mass.AtomicMass(element.ProtonCount, config.NeutronCount);
-        Abundance = double.Clamp(config.Abundance, 0, 1);
 
         double total_prob = config.Decays?.Sum(d => d.Probability) ?? 0;
 
@@ -193,22 +197,17 @@ public class Isotope
 
     private IsotopeDecayChain[] BuildDecayChains()
     {
-        IEnumerable<IsotopeDecayChain> build(Isotope source)
+        static IEnumerable<IsotopeDecayChain> build(Isotope source)
         {
             foreach (IsotopeDecay decay in source.KnownDecays)
-                if (decay.TargetIsotope is { } target)
-                {
-                    if (target.IsStable)
-                        yield return new([decay]);
-                    else
-                        foreach (IsotopeDecayChain chain in build(decay.TargetIsotope))
-                            yield return new(chain.Decays.Prepend(decay));
-                }
+                if (decay.TargetIsotope is { IsStable: false } target)
+                    foreach (IsotopeDecayChain chain in build(target))
+                        yield return new(chain.Decays.Prepend(decay));
                 else
-                    continue; // TODO : handle decay modes that don't result in a new isotope
+                    yield return new([decay]);
         }
 
-        return [.. build(this).Distinct()];
+        return [.. build(this)];
     }
 
     public static Isotope? TryGetIsotope(string name, bool fallback_to_element = false)
@@ -393,46 +392,47 @@ public class IsotopeDecay
     };
 
     public override string ToString() => $"{SourceIsotope} --[{DecayModeString()}, {HalfTime}, {Probability:P2}]--> {TargetIsotope?.ToString() ?? "(varying)"}";
+
+    // TODO: hashcode & equality
 }
 
 public class IsotopeDecayChain
     : IEquatable<IsotopeDecayChain>
 {
     public IsotopeDecay[] Decays { get; }
-    public Isotope[] Steps { get; }
-    public Isotope SourceIsotope => Steps[0];
-    public Isotope TargetIsotope => Steps[^1];
+    public Isotope SourceIsotope { get; }
+    public Isotope? TargetIsotope { get; }
+    public Isotope[] IntermediateIsotopes { get; }
     public int Length => Decays.Length;
     public double Probability { get; }
 
 
     internal IsotopeDecayChain(IEnumerable<IsotopeDecay> decays)
     {
-        Decays = decays as IsotopeDecay[] ?? decays.ToArray();
-        Steps = [
-            ..Decays.Select(c => c.SourceIsotope),
-            Decays[^1].TargetIsotope ?? throw new InvalidOperationException("The decay chain is incomplete.")
-        ];
+        Decays = decays as IsotopeDecay[] ?? [.. decays];
         Probability = Decays.Aggregate(1.0, (p, d) => p * d.Probability);
+        SourceIsotope = Decays[0].SourceIsotope;
+        TargetIsotope = Decays[^1].TargetIsotope;
+        IntermediateIsotopes = Decays.Skip(1).ToArray(d => d.SourceIsotope);
     }
 
     public override bool Equals(object? obj) => obj is IsotopeDecayChain chain && Equals(chain);
 
-    public bool Equals(IsotopeDecayChain? other) => other is not null && Steps.SequenceEqual(other.Steps);
+    public bool Equals(IsotopeDecayChain? other) => other is not null && Decays.SequenceEqual(other.Decays);
 
     public override int GetHashCode()
     {
-        int hc = Steps.Length;
+        int hc = Length;
 
-        foreach (Isotope i in Steps)
-            hc = HashCode.Combine(hc, i);
+        foreach (IsotopeDecay d in Decays)
+            hc = HashCode.Combine(hc, d);
 
         return hc;
     }
 
     public override string ToString()
     {
-        static string display(Isotope? i) => i is null ? "???" : $"{i.Element.Symbol}-{i.HadronCount}";
+        static string display(Isotope? i) => i is null ? "(varying)" : $"{i.Element.Symbol}-{i.HadronCount}";
 
         StringBuilder sb = new();
 

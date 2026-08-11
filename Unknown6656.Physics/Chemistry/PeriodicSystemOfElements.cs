@@ -32,10 +32,10 @@ public sealed partial class PeriodicTableOfElements
 
     public Element[] ElementsByAtomicNumber => field ??= _elements.Values.OrderBy(e => e.AtomicNumber).ToArray();
 
-    public Isotope[] IsotopesByAtomicNumber => field ??= [..(from kvp in _elements
+    public Isotope[] IsotopesByAtomicNumber => field ??= [.. from kvp in _elements
                                                              from iso in kvp.Value.KnownIsotopes
                                                              orderby kvp.Key, iso.NeutronCount ascending
-                                                             select iso)];
+                                                             select iso];
 
     // TODO : add more sorting/enumeration properties
 
