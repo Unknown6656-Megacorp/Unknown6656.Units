@@ -728,18 +728,6 @@ public sealed class QuantityDependencyGenerator
         """);
 
 
-        void AppendStatic(StaticCreationMethod @static)
-        {
-            if (EMIT_LINE_NUMBERS)
-            {
-                FileLinePositionSpan location = @static.Location.GetLineSpan();
-
-                sb.AppendLine($"#line {location.StartLinePosition.Line + 1} \"{location.Path}\"");
-            }
-
-            sb.AppendLine($"        public static {@static.Result} {@static.Result.Name}(this {@static.Scalar} value) => new(value);");
-        }
-
         void AppendProperties(List<PropertyInfo> properties)
         {
             foreach (PropertyInfo property in from p in properties
@@ -864,6 +852,8 @@ public sealed class QuantityDependencyGenerator
         }
 
 
+        sb.AppendLine("\n/* * * * * * * * * * * * * QUANTITIES * * * * * * * * * * * * */");
+
         foreach (IGrouping<string, KeyValuePair<Identifier, QuantityInformation>> group in quantity_infos.GroupBy(info => info.Value.Name.Namespace))
         {
             sb.AppendLine($$""""
@@ -882,7 +872,7 @@ public sealed class QuantityDependencyGenerator
 
                 sb.AppendLine($$""""
                 {{(EMIT_LINE_NUMBERS ? $"\n#line {location.StartLinePosition.Line + 1} \"{location.Path}\"" : "")}}
-                    public partial record {{name.Name}} {{interfaces}}
+                    public partial record {{name.Name}}{{interfaces}}
                 #line default
                     {
                 """");
@@ -916,22 +906,45 @@ public sealed class QuantityDependencyGenerator
 
                         public static implicit operator {{name}}(string s) => Parse(s, null);
                     }
-
-                    public static partial class {{name.Name}}{{Identifier_LocalExtensionClass}}
-                    {
-                """);
-
-                foreach (StaticCreationMethod static_info in quantity_info.StaticCreators)
-                    AppendStatic(static_info);
-
-                sb.AppendLine($$"""
-                #line default
-                    }
                 """);
             }
 
-            sb.AppendLine("}");
+            sb.AppendLine($$"""
+
+                public static partial class {{group.Key.Split('.').Last()}}{{Identifier_LocalExtensionClass}}
+                {
+            """);
+
+            StringBuilder extensions_sb = new();
+
+            foreach (StaticCreationMethod static_info in group.SelectMany(q => q.Value.StaticCreators))
+            {
+                if (EMIT_LINE_NUMBERS)
+                {
+                    FileLinePositionSpan static_loc = static_info.Location.GetLineSpan();
+
+                    extensions_sb.AppendLine($"#line {static_loc.StartLinePosition.Line + 1} \"{static_loc.Path}\"");
+                }
+
+                extensions_sb.AppendLine($"            public {static_info.Result} {static_info.Result.Name} => new((Scalar)value);");
+            }
+
+            foreach (string numeric_type in new[] { "int", "uint", "short", "ushort", "System.Half", "float", "double", "decimal", "long", "ulong" })
+                sb.AppendLine($$"""
+                        extension ({{numeric_type}} value)
+                        {
+                {{extensions_sb}}
+                #line default
+                        }
+                """);
+
+            sb.AppendLine($$"""
+                }
+            }
+            """);
         }
+
+        sb.AppendLine("\n/* * * * * * * * * * * * *   UNITS   * * * * * * * * * * * * */");
 
         foreach (IGrouping<string, KeyValuePair<Identifier, UnitInformation>> group in unit_infos.GroupBy(info => info.Value.Name.Namespace))
         {
@@ -989,6 +1002,8 @@ public sealed class QuantityDependencyGenerator
 
             sb.AppendLine("}");
         }
+
+        sb.AppendLine("\n/* * * * * * * * * * * * *  ALIASES  * * * * * * * * * * * * */");
 
         foreach (IGrouping<string, AliasInformation> group in alias_infos.GroupBy(info => info.AliasName.Namespace))
         {

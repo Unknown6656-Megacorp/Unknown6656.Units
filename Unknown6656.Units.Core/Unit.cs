@@ -806,7 +806,11 @@ public static partial class Unit
                         , IUnit
         where TScalar : INumber<TScalar>
                       , ILogarithmicFunctions<TScalar>
-        => LinearInterpolate<TUnit, TBaseUnit, TScalar>((TUnit)TScalar.Log(first.Value), (TUnit)TScalar.Log(second.Value), factor);
+        => LinearInterpolate<TUnit, TBaseUnit, TScalar>(
+            (TUnit)(AbstractUnit<TUnit, TBaseUnit, TScalar>)TScalar.Log(first.Value),
+            (TUnit)(AbstractUnit<TUnit, TBaseUnit, TScalar>)TScalar.Log(second.Value),
+            factor
+        );
 
     public static TScalar InverseLinearInterpolate<TUnit, TBaseUnit, TScalar>(TUnit first, TUnit second, TUnit value)
         where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>

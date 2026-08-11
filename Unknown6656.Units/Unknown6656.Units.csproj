@@ -18,7 +18,7 @@
         <MSBuild Projects="$(MSBuildProjectFile)" Properties="Configuration=$(Configuration);Scalar=D128" />
     </Target>
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
 
         <LangVersion>preview</LangVersion>
         <EnablePreviewFeatures>True</EnablePreviewFeatures>
