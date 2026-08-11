@@ -12,35 +12,35 @@ public record SpectralBand
 {
     #region STATIC PROPERTIES
 
-    public static SpectralBand VisibleSpectralBand { get; } = new(380d.Nanometer, 750d.Nanometer);
-    public static SpectralBand ExtendedVisibleSpectralBand { get; } = new(310d.Nanometer, 1100d.Nanometer);
-    public static SpectralBand UltravioletA { get; } = new(315d.Nanometer, 400d.Nanometer);
-    public static SpectralBand UltravioletB { get; } = new(280d.Nanometer, 315d.Nanometer);
-    public static SpectralBand UltravioletC { get; } = new(100d.Nanometer, 280d.Nanometer);
-    public static SpectralBand NearUltraviolet { get; } = new(300d.Nanometer, 400d.Nanometer);
-    public static SpectralBand MiddleUltraviolet { get; } = new(200d.Nanometer, 300d.Nanometer);
-    public static SpectralBand FarUltraviolet { get; } = new(122d.Nanometer, 200d.Nanometer);
+    public static SpectralBand VisibleSpectralBand { get; } = new(380.Nanometer, 750.Nanometer);
+    public static SpectralBand ExtendedVisibleSpectralBand { get; } = new(310.Nanometer, 1100.Nanometer);
+    public static SpectralBand UltravioletA { get; } = new(315.Nanometer, 400.Nanometer);
+    public static SpectralBand UltravioletB { get; } = new(280.Nanometer, 315.Nanometer);
+    public static SpectralBand UltravioletC { get; } = new(100.Nanometer, 280.Nanometer);
+    public static SpectralBand NearUltraviolet { get; } = new(300.Nanometer, 400.Nanometer);
+    public static SpectralBand MiddleUltraviolet { get; } = new(200.Nanometer, 300.Nanometer);
+    public static SpectralBand FarUltraviolet { get; } = new(122.Nanometer, 200.Nanometer);
     public static Wavelength HydrogenLymanAlphaUltraviolet { get; } = 121.6.Nanometer;
-    public static SpectralBand ExtremeUltraviolet { get; } = new(10d.Nanometer, 121d.Nanometer);
-    public static SpectralBand VacuumUltraviolet { get; } = new(10d.Nanometer, 200d.Nanometer);
-    public static SpectralBand NearInfrared { get; } = new(750d.Nanometer, 1400d.Nanometer);
-    public static SpectralBand ShortwaveInfrared { get; } = new(1400d.Nanometer, 3000d.Nanometer);
-    public static SpectralBand MidwaveInfrared { get; } = new(3000d.Nanometer, 8000d.Nanometer);
-    public static SpectralBand LongwaveInfrared { get; } = new(8000d.Nanometer, 15000d.Nanometer);
-    public static SpectralBand FarInfrared { get; } = new(15000d.Nanometer, 1_000_000d.Nanometer);
-    public static SpectralBand CIE_IRABand { get; } = new(780d.Nanometer, 1400d.Nanometer);
-    public static SpectralBand CIE_IRBBand { get; } = new(1400d.Nanometer, 3000d.Nanometer);
-    public static SpectralBand CIE_IRCBand { get; } = new(3000d.Nanometer, 1_000_000d.Nanometer);
-    public static SpectralBand ISO20473_NIR { get; } = new(780d.Nanometer, 3000d.Nanometer);
-    public static SpectralBand ISO20473_MIR { get; } = new(3000d.Nanometer, 50_000d.Nanometer);
-    public static SpectralBand ISO20473_FIR { get; } = new(50_000d.Nanometer, 1_000_000d.Nanometer);
-    public static SpectralBand OpticalFiber_OBand { get; } = new(1260d.Nanometer, 1360d.Nanometer);
-    public static SpectralBand OpticalFiber_EBand { get; } = new(1360d.Nanometer, 1460d.Nanometer);
-    public static SpectralBand OpticalFiber_SBand { get; } = new(1460d.Nanometer, 1530d.Nanometer);
-    public static SpectralBand OpticalFiber_CBand { get; } = new(1530d.Nanometer, 1565d.Nanometer);
-    public static SpectralBand OpticalFiber_LBand { get; } = new(1565d.Nanometer, 1625d.Nanometer);
-    public static SpectralBand OpticalFiber_UBand { get; } = new(1625d.Nanometer, 1675d.Nanometer);
-    public static SpectralBand TerahertzGap { get; } = new(3_000_000d.Nanometer, 30_000d.Nanometer);
+    public static SpectralBand ExtremeUltraviolet { get; } = new(10.Nanometer, 121.Nanometer);
+    public static SpectralBand VacuumUltraviolet { get; } = new(10.Nanometer, 200.Nanometer);
+    public static SpectralBand NearInfrared { get; } = new(750.Nanometer, 1400.Nanometer);
+    public static SpectralBand ShortwaveInfrared { get; } = new(1400.Nanometer, 3000.Nanometer);
+    public static SpectralBand MidwaveInfrared { get; } = new(3000.Nanometer, 8000.Nanometer);
+    public static SpectralBand LongwaveInfrared { get; } = new(8000.Nanometer, 15000.Nanometer);
+    public static SpectralBand FarInfrared { get; } = new(15000.Nanometer, 1_000_000.Nanometer);
+    public static SpectralBand CIE_IRABand { get; } = new(780.Nanometer, 1400.Nanometer);
+    public static SpectralBand CIE_IRBBand { get; } = new(1400.Nanometer, 3000.Nanometer);
+    public static SpectralBand CIE_IRCBand { get; } = new(3000.Nanometer, 1_000_000.Nanometer);
+    public static SpectralBand ISO20473_NIR { get; } = new(780.Nanometer, 3000.Nanometer);
+    public static SpectralBand ISO20473_MIR { get; } = new(3000.Nanometer, 50_000.Nanometer);
+    public static SpectralBand ISO20473_FIR { get; } = new(50_000.Nanometer, 1_000_000.Nanometer);
+    public static SpectralBand OpticalFiber_OBand { get; } = new(1260.Nanometer, 1360.Nanometer);
+    public static SpectralBand OpticalFiber_EBand { get; } = new(1360.Nanometer, 1460.Nanometer);
+    public static SpectralBand OpticalFiber_SBand { get; } = new(1460.Nanometer, 1530.Nanometer);
+    public static SpectralBand OpticalFiber_CBand { get; } = new(1530.Nanometer, 1565.Nanometer);
+    public static SpectralBand OpticalFiber_LBand { get; } = new(1565.Nanometer, 1625.Nanometer);
+    public static SpectralBand OpticalFiber_UBand { get; } = new(1625.Nanometer, 1675.Nanometer);
+    public static SpectralBand TerahertzGap { get; } = new(3_000_000.Nanometer, 30_000.Nanometer);
     public static SpectralBand mmWaveBand => EHFBand;
     public static SpectralBand THFBand { get; } = new(3e11.Hertz, 3e12.Hertz);
     public static SpectralBand EHFBand { get; } = new(3e10.Hertz, 3e11.Hertz);
@@ -51,9 +51,9 @@ public record SpectralBand
     public static SpectralBand MFBand { get; } = new(3e5.Hertz, 3e6.Hertz);
     public static SpectralBand LFBand { get; } = new(3e4.Hertz, 3e5.Hertz);
     public static SpectralBand VLFBand { get; } = new(3e3.Hertz, 3e4.Hertz);
-    public static SpectralBand ULFBand { get; } = new(300d.Hertz, 3e3.Hertz);
-    public static SpectralBand SLFBand { get; } = new(30d.Hertz, 300d.Hertz);
-    public static SpectralBand ELFBand { get; } = new(3d.Hertz, 30d.Hertz);
+    public static SpectralBand ULFBand { get; } = new(300.Hertz, 3e3.Hertz);
+    public static SpectralBand SLFBand { get; } = new(30.Hertz, 300.Hertz);
+    public static SpectralBand ELFBand { get; } = new(3.Hertz, 30.Hertz);
     public static SpectralBand IEEE521_LBand { get; } = new(1e9.Hertz, 2e9.Hertz);
     public static SpectralBand IEEE521_SBand { get; } = new(2e9.Hertz, 4e9.Hertz);
     public static SpectralBand IEEE521_CBand { get; } = new(4e9.Hertz, 8e9.Hertz);
@@ -172,7 +172,7 @@ public record SpectralBand
 
     public override string ToString()
     {
-        bool fmt_wavelength = LowestWavelength < 30_000d.Nanometer;
+        bool fmt_wavelength = LowestWavelength < 30_000.Nanometer;
         string lower = fmt_wavelength ? LowestWavelength.ToString() : LowestFrequency.ToString();
 
         if (IsSpectralLine)

@@ -28,8 +28,8 @@ public sealed partial class PeriodicTableOfElements
         Abundance = ElementAbundance.Zero,
         Thermodynamics = new()
         {
-            MeltingPoint = 623d.Kelvin,
-            BoilingPoint = 883d.Kelvin,
+            MeltingPoint = 623.Kelvin,
+            BoilingPoint = 883.Kelvin,
             StandardDensity = 7.17.GramPerCubicCentimeter,
             TriplePoint = null,
             CriticalPoint = null,

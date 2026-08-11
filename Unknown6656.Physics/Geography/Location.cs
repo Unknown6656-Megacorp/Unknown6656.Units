@@ -212,9 +212,9 @@ public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum = WGSDat
 public record WGSLocation
     : Geolocation
 {
-    public static WGSLocation NullIsland { get; } = new(0d.Degree, 0d.Degree, 0d.Meter);
-    public static WGSLocation NorthPole { get; } = new(90d.Degree, 0d.Degree, 0d.Meter);
-    public static WGSLocation SouthPole { get; } = new(-90d.Degree, 0d.Degree, 0d.Meter);
+    public static WGSLocation NullIsland { get; } = new(0.Degree, 0.Degree, 0.Meter);
+    public static WGSLocation NorthPole { get; } = new(90.Degree, 0.Degree, 0.Meter);
+    public static WGSLocation SouthPole { get; } = new(-90.Degree, 0.Degree, 0.Meter);
 
 
     public Degree Latitude { get; }
@@ -230,14 +230,14 @@ public record WGSLocation
     public bool IsWest => Longitude < Angle.Zero;
     public bool IsEquator => Latitude == Degree.Zero;
     public bool IsPrimeMeridian => Longitude == Degree.Zero;
-    public bool IsAntiMeridian => Longitude == 180d.Degree || Longitude == -180d.Degree;
+    public bool IsAntiMeridian => Longitude == 180.Degree || Longitude == -180.Degree;
     public bool IsNullIsland => Latitude == Degree.Zero && Longitude == Degree.Zero;
     public bool IsUnderSeaLevel => Altitude < Meter.Zero;
     public bool IsOverSeaLevel => Altitude >= Meter.Zero;
 
 
     public WGSLocation(Angle latitude, Angle longitude, WGSDatum datum = WGSDatum.WGS84)
-        : this(latitude, longitude, 0d.Meter, datum)
+        : this(latitude, longitude, 0.Meter, datum)
     {
     }
 
@@ -454,13 +454,13 @@ public record WGSLocation
 public record SwissMNLocation(Meter East, Meter North, Meter Altitude, SwissDatum Datum = SwissDatum.LV95)
     : Geolocation
 {
-    public static SwissMNLocation Zero { get; } = new(0d.Meter, 0d.Meter, 0d.Meter);
-    public static SwissMNLocation ZimmerwaldObservatoryReferencePoint { get; } = new(2_602_030d.Meter, 1_191_775d.Meter, 898d.Meter);
-    public static SwissMNLocation BerneUniversityReferencePoint { get; } = new(2_600_000d.Meter, 1_200_000d.Meter, 554.2.Meter);
+    public static SwissMNLocation Zero { get; } = new(0.Meter, 0.Meter, 0.Meter);
+    public static SwissMNLocation ZimmerwaldObservatoryReferencePoint { get; } = new(2_602_030.Meter, 1_191_775.Meter, 898.Meter);
+    public static SwissMNLocation BerneUniversityReferencePoint { get; } = new(2_600_000.Meter, 1_200_000.Meter, 554.2.Meter);
 
 
     public SwissMNLocation(Meter east, Meter north, SwissDatum datum = SwissDatum.LV95)
-        : this(east, north, 0d.Meter, datum)
+        : this(east, north, 0.Meter, datum)
     {
     }
 
@@ -510,9 +510,9 @@ public record SwissMNLocation(Meter East, Meter North, Meter Altitude, SwissDatu
         if (datum == Datum)
             return this;
         else if (datum == SwissDatum.LV03 && Datum == SwissDatum.LV95)
-            return new(East - 2_000_000d.Meter, North - 1_000_000d.Meter, Altitude, datum);
+            return new(East - 2_000_000.Meter, North - 1_000_000.Meter, Altitude, datum);
         else if (datum == SwissDatum.LV95 && Datum == SwissDatum.LV03)
-            return new(East + 2_000_000d.Meter, North + 1_000_000d.Meter, Altitude, datum);
+            return new(East + 2_000_000.Meter, North + 1_000_000.Meter, Altitude, datum);
         else
             throw new NotImplementedException($"Conversion from {Datum} to {datum} is not defined.");
     }

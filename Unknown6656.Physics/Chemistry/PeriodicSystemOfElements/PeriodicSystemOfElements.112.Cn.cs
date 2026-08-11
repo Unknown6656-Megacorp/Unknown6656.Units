@@ -28,10 +28,10 @@ public sealed partial class PeriodicTableOfElements
         Abundance = ElementAbundance.Zero,
         Thermodynamics = new()
         {
-            MeltingPoint = 283d.Kelvin,
-            BoilingPoint = 340d.Kelvin,
-            StandardDensity = 14d.GramPerCubicCentimeter,
-            TriplePoint = (283d.Kelvin, 25e3.Pascal),
+            MeltingPoint = 283.Kelvin,
+            BoilingPoint = 340.Kelvin,
+            StandardDensity = 14.GramPerCubicCentimeter,
+            TriplePoint = (283.Kelvin, 25e3.Pascal),
             CriticalPoint = null,
             HeatOfFusion = null,
             HeatOfVaporization = null,
@@ -137,7 +137,7 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 173,
             Spin = 2.5,
-            Decays = [new(DecayMode.Alpha, 28d.Second)],
+            Decays = [new(DecayMode.Alpha, 28.Second)],
         },
         new()
         {

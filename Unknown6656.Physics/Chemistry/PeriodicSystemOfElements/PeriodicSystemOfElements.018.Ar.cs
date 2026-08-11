@@ -103,7 +103,7 @@ public sealed partial class PeriodicTableOfElements
             BrinellHardness = null,
             VickersHardness = null,
             MohsHardness = null,
-            SpeedOfSound = 319d.MeterPerSecond,
+            SpeedOfSound = 319.MeterPerSecond,
         },
         Optics = new()
         {
