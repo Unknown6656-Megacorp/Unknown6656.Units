@@ -19,7 +19,7 @@ public partial record Temperature(Kelvin value)
 public record PressureTemperaturePoint(Pressure Pressure, Temperature Temperature)
     : IFormattable
 {
-    public static PressureTemperaturePoint NormalNTP { get; } = new(Atmosphere.One, Temperature.RoomTemperature);
+    public static PressureTemperaturePoint NormalNTP { get; } = new(Pressure.StandardAtmosphere, Temperature.RoomTemperature);
 
 
     public PressureTemperaturePoint(Temperature Temperature, Pressure Pressure)

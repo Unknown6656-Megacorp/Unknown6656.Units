@@ -53,6 +53,32 @@ public partial record VolumetricFlowRate(CubicMeterPerSecond value)
     public static string QuantitySymbol { get; } = "Q";
 }
 
+[MultiplicativeRelationship<VolumetricFlowAcceleration, Time, VolumetricFlowRate, CubicMeterPerSecondSquared, Second, CubicMeterPerSecond, Scalar>]
+[MultiplicativeRelationship<Area, Acceleration, VolumetricFlowAcceleration, SquareMeter, MeterPerSecondSquared, CubicMeterPerSecondSquared, Scalar>]
+[MultiplicativeRelationship<KinematicViscosity, Speed, VolumetricFlowAcceleration, SquareMeterPerSecond, MeterPerSecond, CubicMeterPerSecondSquared, Scalar>]
+[MultiplicativeRelationship<VolumetricFlowRate, Frequency, VolumetricFlowAcceleration, CubicMeterPerSecond, Hertz, CubicMeterPerSecondSquared, Scalar>]
+[MultiplicativeRelationship<Length, SpecificEnergy, VolumetricFlowAcceleration, Meter, JoulePerKilogram, CubicMeterPerSecondSquared, Scalar>]
+// TODO: relationship with MeterPerSecondCubed ?
+public partial record VolumetricFlowAcceleration(CubicMeterPerSecondSquared value)
+    : Quantity<VolumetricFlowAcceleration, CubicMeterPerSecondSquared, Scalar>(value)
+{
+    public static string QuantitySymbol { get; } = "μ";
+
+    public static VolumetricFlowAcceleration SunGravity => 1.3271244004210101e20.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration MercuryGravity => 2.2031870799860860e13.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration VenusGravity => 3.2485859266666666e14.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration EarthGravity => 3.9860044188888888e14.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration MoonGravity => 4.902800118e12.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration MarsGravity => 4.282837222e13.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration CeresGravity => 6.26325e10.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration JupiterGravity => 1.266865349e17.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration SaturnGravity => 3.793118799e16.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration UranusGravity => 5.793939999e15.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration NeptuneGravity => 6.836529999e15.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration PlutoGravity => 8.719999999e11.CubicMeterPerSecondSquared();
+    public static VolumetricFlowAcceleration ErisGravity => 1.108999999e12.CubicMeterPerSecondSquared();
+}
+
 [IdentityRelationship<Action, AngularMomentum, JouleSecond, KilogramSquareMeterPerSecond, Scalar>]
 [MultiplicativeRelationship<MassFlowRate, Area, AngularMomentum, KilogramPerSecond, SquareMeter, KilogramSquareMeterPerSecond, Scalar>]
 [MultiplicativeRelationship<AngularMomentum, Time, MomentOfInertia, KilogramSquareMeterPerSecond, Second, KilogramSquareMeter, Scalar>]
@@ -72,6 +98,9 @@ public partial record MomentOfInertia(KilogramSquareMeter value)
 {
     public static string QuantitySymbol { get; } = "I";
 }
+
+
+
 
 
 // (N * s / kg) * (kg * m^2 / s) / m = N * m

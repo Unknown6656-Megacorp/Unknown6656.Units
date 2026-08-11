@@ -81,6 +81,8 @@ public partial record Pressure(Pascal value)
     : Quantity<Pressure, Pascal, Scalar>(value)
 {
     public static string QuantitySymbol { get; } = "p";
+
+    public static Atmosphere StandardAtmosphere { get; } = Atmosphere.One;
 }
 
 [InverseRelationship<Compressibility, Pressure, SquareMeterPerNewton, Pascal, Scalar>]
