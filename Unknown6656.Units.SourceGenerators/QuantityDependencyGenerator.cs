@@ -30,6 +30,7 @@ public sealed class QuantityDependencyGenerator
     public static readonly Identifier Identifier_ILinearUnit = "Unknown6656.Units.ILinearUnit";
     public static readonly Identifier Identifier_IQuantity = "Unknown6656.Units.IQuantity";
     public static readonly Identifier Identifier_GlobalExtensionClass = "Unknown6656.Units.Unit";
+    public static readonly Identifier Identifier_ForwardToUnits = "Unknown6656.Units.ForwardToUnits";
     public static readonly string Identifier_LocalExtensionClass = "Extensions";
     public static readonly Identifier Identifier_UnitDisplay = "Unknown6656.Units.UnitDisplay";
     public static readonly Identifier Identifier_IBaseUnit = "Unknown6656.Units.IBaseUnit";
@@ -119,8 +120,16 @@ public sealed class QuantityDependencyGenerator
     );
     private static readonly DiagnosticDescriptor _diagnostic_alias_name_literal = new(
         "U6656_010",
-        "An alias for the unit type must be provided using a compile-time constant string literal expression, not via composite or arbitrary expressions.",
-        "An alias for the unit type '{0}' must be provided using a compile-time constant string literal expression, not via composite or arbitrary expressions.",
+        "An alias for the unit type must be provided using a compile-time constant string literal expression, not via composite or arbitrary expressions",
+        "An alias for the unit type '{0}' must be provided using a compile-time constant string literal expression, not via composite or arbitrary expressions",
+        "Unknown6656.Units",
+        DiagnosticSeverity.Error,
+        true
+    );
+    private static readonly DiagnosticDescriptor _diagnostic_mising_base_unit = new(
+        "U6656_011",
+        "The quantity does not have any base unit",
+        "The quantity '{0}' does not have any base unit",
         "Unknown6656.Units",
         DiagnosticSeverity.Error,
         true
@@ -135,13 +144,13 @@ public sealed class QuantityDependencyGenerator
 
         try
         {
-
-            IncrementalValuesProvider<GenericAttributeClassUsage[]> multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeRelationship);
-            IncrementalValuesProvider<GenericAttributeClassUsage[]> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
-            IncrementalValuesProvider<GenericAttributeClassUsage[]> identity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_IdentityRelationship);
-            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
-            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_aliases = FetchTypeDeclarationsByAttribute(context, Identifier_KnownAlias);
-            IncrementalValuesProvider<GenericAttributeClassUsage[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
+            IncrementalValuesProvider<GenericAttributeUsage<TypeDeclarationSyntax> []> multiplicative_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_MultiplicativeRelationship);
+            IncrementalValuesProvider<GenericAttributeUsage<TypeDeclarationSyntax> []> inverse_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_InverseRelationship);
+            IncrementalValuesProvider<GenericAttributeUsage<TypeDeclarationSyntax> []> identity_dependencies = FetchTypeDeclarationsByAttribute(context, Identifier_IdentityRelationship);
+            IncrementalValuesProvider<GenericAttributeUsage<TypeDeclarationSyntax> []> known_base_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownBaseUnit);
+            IncrementalValuesProvider<GenericAttributeUsage<TypeDeclarationSyntax> []> known_aliases = FetchTypeDeclarationsByAttribute(context, Identifier_KnownAlias);
+            IncrementalValuesProvider<GenericAttributeUsage<TypeDeclarationSyntax>[]> known_units = FetchTypeDeclarationsByAttribute(context, Identifier_KnownUnit);
+            IncrementalValuesProvider<GenericAttributeUsage<MethodDeclarationSyntax>[]> forwarded_methods = FetchMethodDeclarationsByAttribute(context, Identifier_ForwardToUnits);
             IncrementalValuesProvider<bool> disable_emitting_iunit_interfaces = context.SyntaxProvider
                                                                                        .CreateSyntaxProvider(
                                                                                            predicate: static (s, _) => s is AttributeListSyntax { Attributes.Count: > 0 },
@@ -150,19 +159,22 @@ public sealed class QuantityDependencyGenerator
                                                                                        .Where(static x => x);
 
             // which idiot decided to name this stuff "left" and "right"? and not to provide an extension method for combining 3 or more IncrementalValueProvider<>?
-            var combined = context.CompilationProvider.Combine(multiplicative_dependencies.Collect())
-                                                      .Combine(inverse_dependencies.Collect())
-                                                      .Select(static (t, _) => (comp: t.Left.Left, mul: t.Left.Right, inv: t.Right))
-                                                      .Combine(identity_dependencies.Collect())
-                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, id: t.Right))
-                                                      .Combine(known_base_units.Collect())
-                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, base_units: t.Right))
-                                                      .Combine(known_units.Collect())
-                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, units: t.Right))
-                                                      .Combine(known_aliases.Collect())
-                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, aliases: t.Right))
-                                                      .Combine(disable_emitting_iunit_interfaces.Collect())
-                                                      .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, t.Left.aliases, disable: t.Right.Contains(true)));
+            var combined = context.CompilationProvider
+                                  .Combine(multiplicative_dependencies.Collect())
+                                  .Combine(inverse_dependencies.Collect())
+                                  .Select(static (t, _) => (comp: t.Left.Left, mul: t.Left.Right, inv: t.Right))
+                                  .Combine(identity_dependencies.Collect())
+                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, id: t.Right))
+                                  .Combine(known_base_units.Collect())
+                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, base_units: t.Right))
+                                  .Combine(known_units.Collect())
+                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, units: t.Right))
+                                  .Combine(known_aliases.Collect())
+                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, aliases: t.Right))
+                                  .Combine(disable_emitting_iunit_interfaces.Collect())
+                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, t.Left.aliases, disable: t.Right.Contains(true)))
+                                  .Combine(forwarded_methods.Collect())
+                                  .Select(static (t, _) => (t.Left.comp, t.Left.mul, t.Left.inv, t.Left.id, t.Left.base_units, t.Left.units, t.Left.aliases, t.Left.disable, forwarded: t.Right));
 
             context.RegisterSourceOutput(combined, (spc, source) => Execute(
                 context,
@@ -174,6 +186,7 @@ public sealed class QuantityDependencyGenerator
                 [.. source.base_units.SelectMany(x => x)],
                 [.. source.units.SelectMany(x => x)],
                 [.. source.aliases.SelectMany(x => x)],
+                [.. source.forwarded.SelectMany(x => x)],
                 source.disable
             ));
         }
@@ -181,14 +194,23 @@ public sealed class QuantityDependencyGenerator
         when (Debugger.IsAttached)
         {
             Debugger.Break();
+            Console.WriteLine(ex);
         }
     }
 
-    private static IncrementalValuesProvider<GenericAttributeClassUsage[]> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, Identifier attribute_name) => context.SyntaxProvider
-        .CreateSyntaxProvider(
-            predicate: static (s, _) => s is TypeDeclarationSyntax { AttributeLists.Count: > 0 },
-            transform: (ctx, _) => GetGenericAttributeClassUsage(ctx, attribute_name).ToArray()
-        );
+    private static IncrementalValuesProvider<GenericAttributeUsage<TypeDeclarationSyntax>[]> FetchTypeDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, Identifier attribute_name) =>
+        context.SyntaxProvider
+               .CreateSyntaxProvider(
+                   predicate: static (s, _) => s is TypeDeclarationSyntax { AttributeLists.Count: > 0 },
+                   transform: (ctx, _) => GetGenericAttributeClassUsage(ctx, attribute_name).ToArray()
+               );
+
+    private static IncrementalValuesProvider<GenericAttributeUsage<MethodDeclarationSyntax>[]> FetchMethodDeclarationsByAttribute(IncrementalGeneratorInitializationContext context, Identifier attribute_name) =>
+        context.SyntaxProvider
+               .CreateSyntaxProvider(
+                   predicate: static (s, _) => s is MethodDeclarationSyntax { AttributeLists.Count: > 0 },
+                   transform: (ctx, _) => GetGenericAttributeMethodUseage(ctx, attribute_name).ToArray()
+               );
 
     private static bool HasDisableEmittingIUnitInterfacesDefined(GeneratorSyntaxContext context)
     {
@@ -205,7 +227,7 @@ public sealed class QuantityDependencyGenerator
         return false;
     }
 
-    private static IEnumerable<GenericAttributeClassUsage> GetGenericAttributeClassUsage(GeneratorSyntaxContext context, Identifier attribute_name)
+    private static IEnumerable<GenericAttributeUsage<TypeDeclarationSyntax>> GetGenericAttributeClassUsage(GeneratorSyntaxContext context, Identifier attribute_name)
     {
         if (context.Node is TypeDeclarationSyntax node)
         {
@@ -225,16 +247,35 @@ public sealed class QuantityDependencyGenerator
         }
     }
 
+    private static IEnumerable<GenericAttributeUsage<MethodDeclarationSyntax>> GetGenericAttributeMethodUseage(GeneratorSyntaxContext context, Identifier attribute_name)
+    {
+        if (context.Node is MethodDeclarationSyntax node)
+        {
+            string @namespace = node.Ancestors().OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault()?.Name.ToString() ?? "";
+            foreach (AttributeListSyntax attributes in node.AttributeLists)
+                foreach (AttributeSyntax attribute in attributes.Attributes)
+                    if (attribute is { Name: GenericNameSyntax { TypeArgumentList.Arguments: { } raw_generic_arguments } })
+                        if (context.SemanticModel.GetSymbolInfo(attribute).Symbol is ISymbol { ContainingType: ITypeSymbol attr_type })
+                            if (attr_type.ToDisplayString().StartsWith(attribute_name + "<"))
+                            {
+                                string[] generic_arguments = raw_generic_arguments.Select(genarg => context.SemanticModel.GetSymbolInfo(genarg).Symbol?.ToDisplayString() ?? genarg.ToString())
+                                                                                  .ToArray();
+                                yield return new(context.SemanticModel, @namespace, attribute.GetLocation(), node, generic_arguments, attribute.ArgumentList?.Arguments.ToArray() ?? []);
+                            }
+        }
+    }
+
     private static void Execute(
         IncrementalGeneratorInitializationContext incremental_context,
         SourceProductionContext production_context,
         Compilation compilation,
-        GenericAttributeClassUsage[] multiplicative_relationships,
-        GenericAttributeClassUsage[] inverse_relationships,
-        GenericAttributeClassUsage[] identity_relationships,
-        GenericAttributeClassUsage[] known_base_units,
-        GenericAttributeClassUsage[] known_units,
-        GenericAttributeClassUsage[] known_aliases,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] multiplicative_relationships,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] inverse_relationships,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] identity_relationships,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] known_base_units,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] known_units,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] known_aliases,
+        GenericAttributeUsage<MethodDeclarationSyntax>[] forwarded_methods,
         bool disable_emitting_interfaces
     )
     {
@@ -249,11 +290,11 @@ public sealed class QuantityDependencyGenerator
             known_base_units,
             known_units,
             known_aliases,
+            forwarded_methods,
             out Dictionary<Identifier, QuantityInformation> quantity_infos,
             out Dictionary<Identifier, UnitInformation> unit_infos,
             out List<AliasInformation> alias_infos
         );
-
         GenerateSource(production_context, quantity_infos, unit_infos, alias_infos, disable_emitting_interfaces);
     }
 
@@ -262,12 +303,13 @@ public sealed class QuantityDependencyGenerator
         SourceProductionContext production_context,
         Compilation compilation,
         bool disable_emitting_interfaces,
-        GenericAttributeClassUsage[] multiplicative_relationships,
-        GenericAttributeClassUsage[] inverse_relationships,
-        GenericAttributeClassUsage[] identity_relationships,
-        GenericAttributeClassUsage[] known_base_units,
-        GenericAttributeClassUsage[] known_units,
-        GenericAttributeClassUsage[] known_aliases,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] multiplicative_relationships,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] inverse_relationships,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] identity_relationships,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] known_base_units,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] known_units,
+        GenericAttributeUsage<TypeDeclarationSyntax>[] known_aliases,
+        GenericAttributeUsage<MethodDeclarationSyntax>[] forwarded_methods,
         out Dictionary<Identifier, QuantityInformation> quantity_infos,
         out Dictionary<Identifier, UnitInformation> unit_infos,
         out List<AliasInformation> alias_infos
@@ -296,10 +338,10 @@ public sealed class QuantityDependencyGenerator
 
         alias_infos = [];
 
-        foreach (GenericAttributeClassUsage usage in known_units)
+        foreach (GenericAttributeUsage<TypeDeclarationSyntax> usage in known_units)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
-            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.Target.Identifier.ToString()]));
+            else if (usage.Target is not RecordDeclarationSyntax record)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
             else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
@@ -336,16 +378,16 @@ public sealed class QuantityDependencyGenerator
                 else
                     entry.units.Add(target_name);
 
-                locations[target_name] = usage.TargetType.GetLocation();
+                locations[target_name] = usage.Target.GetLocation();
                 known_units_dict[quantity] = entry;
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
                 unit_types[target_name] = Enum.TryParse(unit_type, true, out UnitType t) ? t : UnitType.Linear;
             }
 
-        foreach (GenericAttributeClassUsage usage in known_base_units)
+        foreach (GenericAttributeUsage<TypeDeclarationSyntax> usage in known_base_units)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
-            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.Target.Identifier.ToString()]));
+            else if (usage.Target is not RecordDeclarationSyntax record)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
             else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
@@ -374,15 +416,15 @@ public sealed class QuantityDependencyGenerator
                 else
                     entry.base_unit = target_name;
 
-                locations[target_name] = usage.TargetType.GetLocation();
+                locations[target_name] = usage.Target.GetLocation();
                 known_units_dict[quantity] = entry;
                 unit_scalar_mapper[target_name] = usage.GenericAttributeArguments.Last();
             }
 
-        foreach (GenericAttributeClassUsage usage in known_aliases)
+        foreach (GenericAttributeUsage<TypeDeclarationSyntax> usage in known_aliases)
             if (usage.TargetSymbol?.ToDisplayString() is not string alias_target_name)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
-            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.Target.Identifier.ToString()]));
+            else if (usage.Target is not RecordDeclarationSyntax record)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [alias_target_name]));
             else if (usage.GenericAttributeArguments.Length < 3 || usage.GenericAttributeArguments[1].ToString() != alias_target_name)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_unit_as_attribute_argument, usage.AttributeLocation, [alias_target_name]));
@@ -395,7 +437,7 @@ public sealed class QuantityDependencyGenerator
                 Identifier target_name = new(t_unit.Namespace, alias_name);
 
                 known_units_dict[t_quantity].units.Add(target_name);
-                locations[target_name] = usage.TargetType.GetLocation();
+                locations[target_name] = usage.Target.GetLocation();
                 unit_scalar_mapper[target_name] = unit_scalar_mapper[t_unit];
 
                 alias_infos.Add(new(
@@ -420,7 +462,7 @@ public sealed class QuantityDependencyGenerator
             if (kvp.Value.base_unit is { } base_unit)
                 units.Add(base_unit);
             else
-                ; // TODO : report error missing base unit
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_mising_base_unit, null, [quantity.FullName]));
 
             foreach (string unit in units)
             {
@@ -483,14 +525,23 @@ public sealed class QuantityDependencyGenerator
                        unit_scalar_mapper[i.Key],
                        i.Key
                    )
+                ],
+                [..from m in forwarded_methods
+                   // TODO : filter by quantity
+                   select new MethodInfo(
+                       m.AttributeLocation,
+                       m.Target.Identifier.Text,
+                       m.Target.ReturnType.ToFullString(),
+                       [.. m.Target.ParameterList.Parameters.Select(p => ((Identifier)(p.Type?.ToFullString() ?? ""), p.Identifier.Text))]
+                   )
                 ]
             );
         }
 
-        foreach (GenericAttributeClassUsage usage in multiplicative_relationships)
+        foreach (GenericAttributeUsage<TypeDeclarationSyntax> usage in multiplicative_relationships)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
-            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.Target.Identifier.ToString()]));
+            else if (usage.Target is not RecordDeclarationSyntax record)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
             else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
@@ -528,7 +579,7 @@ public sealed class QuantityDependencyGenerator
                 if (error)
                     continue;
                 else if (!locations.ContainsKey(target_name))
-                    locations[target_name] = usage.TargetType.GetLocation();
+                    locations[target_name] = usage.Target.GetLocation();
 
                 quantity_infos[t_quantity_in1].BinaryOperators.AddRange([
                     new BinaryOperator(usage.AttributeLocation, t_quantity_in1, t_quantity_in2, scaling, t_quantity_out, OperatorType.Multiply),
@@ -553,10 +604,10 @@ public sealed class QuantityDependencyGenerator
                     ]);
             }
 
-        foreach (GenericAttributeClassUsage usage in inverse_relationships)
+        foreach (GenericAttributeUsage<TypeDeclarationSyntax> usage in inverse_relationships)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
-            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.Target.Identifier.ToString()]));
+            else if (usage.Target is not RecordDeclarationSyntax record)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
             else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
@@ -571,7 +622,7 @@ public sealed class QuantityDependencyGenerator
                 //      add (C, D) -> B := C * D / (x * y)
 
                 if (!locations.ContainsKey(target_name))
-                    locations[target_name] = usage.TargetType.GetLocation();
+                    locations[target_name] = usage.Target.GetLocation();
 
                 string? scaling = usage.AttributeArguments.FirstOrDefault()?.ToString();
                 Identifier t_quantity_1 = usage.GenericAttributeArguments[0],
@@ -596,10 +647,10 @@ public sealed class QuantityDependencyGenerator
                 ]);
             }
 
-        foreach (GenericAttributeClassUsage usage in identity_relationships)
+        foreach (GenericAttributeUsage<TypeDeclarationSyntax> usage in identity_relationships)
             if (usage.TargetSymbol?.ToDisplayString() is not string target_name)
-                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.TargetType.Identifier.ToString()]));
-            else if (usage.TargetType is not RecordDeclarationSyntax record)
+                production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_unable_to_resolve_symbol, usage.AttributeLocation, [usage.Target.Identifier.ToString()]));
+            else if (usage.Target is not RecordDeclarationSyntax record)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_record, usage.AttributeLocation, [target_name]));
             else if (record.Modifiers.IndexOf(SyntaxKind.PartialKeyword) < 0)
                 production_context.ReportDiagnostic(Diagnostic.Create(_diagnostic_requires_partial, usage.AttributeLocation, [target_name]));
@@ -610,7 +661,7 @@ public sealed class QuantityDependencyGenerator
             else
             {
                 if (!locations.ContainsKey(target_name))
-                    locations[target_name] = usage.TargetType.GetLocation();
+                    locations[target_name] = usage.Target.GetLocation();
 
                 string? invscaling = null,
                         scaling = usage.AttributeArguments.FirstOrDefault()?.ToString();
@@ -917,9 +968,11 @@ public sealed class QuantityDependencyGenerator
                 {{(EMIT_LINE_NUMBERS ? $"\n#line {location.StartLinePosition.Line + 1} \"{location.Path}\"" : "")}}
                     public partial record {{name.Name}} {{interfaces}}{{(EMIT_LINE_NUMBERS ? "\n#line hidden" : "")}}
                     {
-                        public static implicit operator {{name}}({{unit_info.Quantity}} quantity) => {{name}}.FromBaseUnit(quantity.Value);
+                        [return: NotNullIfNotNull(nameof(quantity))]
+                        public static implicit operator {{name}}?({{unit_info.Quantity}}? quantity) => quantity is null ? null : {{name}}.FromBaseUnit(quantity.Value);
 
-                        public static implicit operator {{unit_info.Quantity}}({{name}} unit) => {{unit_info.Quantity}}.FromBaseUnit(unit.ToBaseUnit());
+                        [return: NotNullIfNotNull(nameof(unit))]
+                        public static implicit operator {{unit_info.Quantity}}?({{name}}? unit) => unit is null ? null : {{unit_info.Quantity}}.FromBaseUnit(unit.ToBaseUnit());
                 #line default
                 """");
 
@@ -1035,6 +1088,8 @@ public enum OperatorType
 
 public sealed record PropertyInfo(Location Location, string Name, Identifier Result);
 
+public sealed record MethodInfo(Location Location, string Name, Identifier Result, List<(Identifier Type, string Name)> Parameters);
+
 public sealed record CastOperator(Identifier Operand, Identifier Result, string? Scaling = null, bool Implicit = true);
 
 public sealed record StaticCreationMethod(Location Location, Identifier Scalar, Identifier Result);
@@ -1060,7 +1115,8 @@ public sealed record QuantityInformation(
     List<PropertyInfo> Properties,
     List<BinaryOperator> BinaryOperators,
     List<CastOperator> Casts,
-    List<StaticCreationMethod> StaticCreators
+    List<StaticCreationMethod> StaticCreators,
+    List<MethodInfo> ForwardedInstanceMethods
 );
 
 public enum UnitType
@@ -1083,16 +1139,18 @@ public sealed record UnitInformation(
     List<CastOperator> Casts
 );
 
-public sealed record GenericAttributeClassUsage(
+
+
+public sealed record GenericAttributeUsage<TSyntaxNode>(
     SemanticModel SemanticModel,
     string Namespace,
     Location AttributeLocation,
-    TypeDeclarationSyntax TargetType,
+    TSyntaxNode Target,
     string[] GenericAttributeArguments,
     AttributeArgumentSyntax[] AttributeArguments
-)
+) where TSyntaxNode : SyntaxNode
 {
-    public INamedTypeSymbol? TargetSymbol { get; } = SemanticModel.GetDeclaredSymbol(TargetType);
+    public ISymbol? TargetSymbol { get; } = SemanticModel.GetDeclaredSymbol(Target);
 
     public override string ToString()
     {
@@ -1102,3 +1160,23 @@ public sealed record GenericAttributeClassUsage(
             return AttributeLocation.ToString();
     }
 }
+
+//public sealed record GenericAttributeClassUsage(
+//    SemanticModel SemanticModel,
+//    string Namespace,
+//    Location AttributeLocation,
+//    TypeDeclarationSyntax TargetType,
+//    string[] GenericAttributeArguments,
+//    AttributeArgumentSyntax[] AttributeArguments
+//)
+//{
+//    public INamedTypeSymbol? TargetSymbol { get; } = SemanticModel.GetDeclaredSymbol(TargetType);
+//
+//    public override string ToString()
+//    {
+//        if (AttributeLocation.SourceTree?.ToString() is string source)
+//            return source.Substring(AttributeLocation.SourceSpan.Start, AttributeLocation.SourceSpan.Length);
+//        else
+//            return AttributeLocation.ToString();
+//    }
+//}
