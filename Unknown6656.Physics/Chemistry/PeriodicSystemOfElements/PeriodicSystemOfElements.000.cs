@@ -26,15 +26,15 @@ public sealed partial class PeriodicTableOfElements
         Abundance = ElementAbundance.Zero,
         Thermodynamics = new()
         {
-            StandardDensity = 4e14.GramPerCubicCentimeter(),
-            MeltingPoint = 5e9.Kelvin(),
+            StandardDensity = 4e14.GramPerCubicCentimeter,
+            MeltingPoint = 5e9.Kelvin,
             BoilingPoint = null,
             TriplePoint = null,
             CriticalPoint = null,
             IonizationEnergies = [],
             HeatOfFusion = null,
             HeatOfVaporization = null,
-            ThermalConductivity = 1e16.WattPerMeterKelvin(),
+            ThermalConductivity = 1e16.WattPerMeterKelvin,
             ThermalCapacity = null,
             ThermalExpansion = null,
         },
@@ -44,9 +44,9 @@ public sealed partial class PeriodicTableOfElements
             VickersHardness = null,
             MohsHardness = null,
             PoissonRatio = .5,
-            BulkModulus = 1e34.Pascal(),
-            ShearModulus = 1e29.Pascal(),
-            YoungModulus = 1e30.Pascal(),
+            BulkModulus = 1e34.Pascal,
+            ShearModulus = 1e29.Pascal,
+            YoungModulus = 1e30.Pascal,
             SpeedOfSound = Speed.C0 / double.Sqrt(3),
         },
         ChemicalBonding = new()
@@ -54,9 +54,9 @@ public sealed partial class PeriodicTableOfElements
             Valence = 1,
             PaulingElectronegativity = null,
             AllenElectronegativity = null,
-            CovalentRadius = .8e-15.Meter(),
-            VanDerWaalsRadius = .8e-15.Meter(),
-            MeanAtomicRadius = .8e-15.Meter(),
+            CovalentRadius = .8e-15.Meter,
+            VanDerWaalsRadius = .8e-15.Meter,
+            MeanAtomicRadius = .8e-15.Meter,
             OxidationStates = [1],
             CommonOxidationStates = [1],
             ElectronConfiguration = new([
@@ -80,7 +80,7 @@ public sealed partial class PeriodicTableOfElements
             Name = "Neutronium",
             NeutronCount = 1,
             Spin = .5,
-            Decays = [new(DecayMode.Beta, 879.4.Second(), 1)],
+            Decays = [new(DecayMode.Beta, 879.4.Second, 1)],
         },
     ]);
 }

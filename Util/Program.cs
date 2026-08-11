@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
@@ -8,7 +7,7 @@ using Unknown6656.Generics;
 
 
 
-string url = "https://en.wikipedia.org/wiki/Isotopes_of_calcium";
+string url = "https://en.wikipedia.org/wiki/Isotopes_of_copernicium";
 string raw_html;
 
 try
@@ -55,7 +54,7 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
         int N = int.Parse(g.Key);
         IList<HtmlNode> first = g.First();
         string spin = first[col_spin].InnerText.Trim();
-        string abundance = first[col_abundance].InnerText.Trim().Replace("×10", "e");
+        string abundance = first.Count > col_abundance ? first[col_abundance].InnerText.Trim().Replace("×10", "e") : "";
 
         if (spin is ['(', .., ')'])
             spin = spin[1..^1];
@@ -88,31 +87,31 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
             abundance = $"\n            Abundance = {abundance},";
 
         if (halflife.EndsWith("ys"))
-            halflife = $"{halflife[..^2]}e-24.Second()";
+            halflife = $"{halflife[..^2]}e-24.Second";
         else if (halflife.EndsWith("zs"))
-            halflife = $"{halflife[..^2]}e-21.Second()";
+            halflife = $"{halflife[..^2]}e-21.Second";
         else if (halflife.EndsWith("as"))
-            halflife = $"{halflife[..^2]}e-18.Second()";
+            halflife = $"{halflife[..^2]}e-18.Second";
         else if (halflife.EndsWith("fs"))
-            halflife = $"{halflife[..^2]}e-15.Second()";
+            halflife = $"{halflife[..^2]}e-15.Second";
         else if (halflife.EndsWith("ps"))
-            halflife = $"{halflife[..^2]}e-12.Second()";
+            halflife = $"{halflife[..^2]}e-12.Second";
         else if (halflife.EndsWith("ns"))
-            halflife = $"{halflife[..^2]}e-9.Second()";
+            halflife = $"{halflife[..^2]}e-9.Second";
         else if (halflife.EndsWith("μs"))
-            halflife = $"{halflife[..^2]}e-6.Second()";
+            halflife = $"{halflife[..^2]}e-6.Second";
         else if (halflife.EndsWith("ms"))
-            halflife = $"{halflife[..^2]}e-3.Second()";
+            halflife = $"{halflife[..^2]}e-3.Second";
         else if (halflife.EndsWith('s'))
-            halflife = $"{halflife[..^1]}.Second()";
+            halflife = $"{halflife[..^1]}.Second";
         else if (halflife.EndsWith("min"))
-            halflife = $"{halflife[..^3]}.Minute()";
+            halflife = $"{halflife[..^3]}.Minute";
         else if (halflife.EndsWith("h"))
-            halflife = $"{halflife[..^1]}.Hour()";
+            halflife = $"{halflife[..^1]}.Hour";
         else if (halflife.EndsWith("d"))
-            halflife = $"{halflife[..^1]}.StandardDay()";
+            halflife = $"{halflife[..^1]}.StandardDay";
         else if (halflife.EndsWith("y"))
-            halflife = $"{halflife[..^1]}.SolarYear()";
+            halflife = $"{halflife[..^1]}.SolarYear";
 
         List<string> decays = [];
 
@@ -144,6 +143,8 @@ foreach (HtmlNode table in html.DocumentNode.QuerySelectorAll("table.wikitable.s
                        .Replace(".p", "ProtonEmission")
                        .Replace(".2n", "DoubleNeutronEmission")
                        .Replace(".n", "NeutronEmission")
+                       .Replace(".α", "Alpha")
+                       .Replace(".SF", "SpontaneousFission")
                        ;
 
             decays.Add($"new(DecayMode.{mode}, {halflife})");
@@ -177,7 +178,7 @@ isotopes = re_perc.Replace(isotopes, m =>
     string s = new(m.Groups["P"].Value.ToArrayWhere(c => c is (>= '0' and <= '9') or '.'));
     double d = double.Parse(s) * .01;
 
-    return $"{m.Groups["A"].Value}{m.Groups["B"].Value}  <- {d}\n";
+    return $"{m.Groups["A"].Value}{m.Groups["B"].Value}  <- {s}% / {d}\n";
 });
 
 Console.WriteLine(isotopes);
@@ -321,7 +322,7 @@ foreach ((string elem, var list) in dic)
 
     foreach ((double wl, double intens) in list)
     {
-        sb1.AppendLine($"            ({wl}d.Nanometer(), {intens / max}),");
+        sb1.AppendLine($"            ({wl}d.Nanometer, {intens / max}),");
         sb2.AppendLine($"{elem},{wl},{intens / max}");
     }
 

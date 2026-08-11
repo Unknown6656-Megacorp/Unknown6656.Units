@@ -69,7 +69,7 @@ public abstract record Geolocation
 
     public static Degree NormalizeAngle(Angle angle, GeodesicAngleOrientation orientation) => NormalizeAngle(angle.Degree, orientation);
 
-    public static Degree NormalizeAngle(Degree angle, GeodesicAngleOrientation orientation) => NormalizeAngle(angle.Value, orientation).Degree();
+    public static Degree NormalizeAngle(Degree angle, GeodesicAngleOrientation orientation) => NormalizeAngle(angle.Value, orientation).Degree;
 
     public static double NormalizeAngle(double angle, GeodesicAngleOrientation orientation)
     {
@@ -118,7 +118,7 @@ public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum = WGSDat
 
 
     public ECEFLocation(double X_meters, double Y_meters, double Z_meters, WGSDatum datum = WGSDatum.WGS84)
-        : this(X_meters.Meter(), Y_meters.Meter(), Z_meters.Meter(), datum)
+        : this(X_meters.Meter, Y_meters.Meter, Z_meters.Meter, datum)
     {
     }
 
@@ -166,7 +166,7 @@ public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum = WGSDat
         double lat = Math.Atan((Z + (a2 - b2) / b2 * z0) / p);
         double lon = Math.Atan2(Y, X);
 
-        return new WGSLocation(lat.Radian(), lon.Radian(), h.Meter(), datum);
+        return new WGSLocation(lat.Radian, lon.Radian, h.Meter, datum);
     }
 
     public override Length EucledianDistanceTo(Geolocation other)
@@ -176,7 +176,7 @@ public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum = WGSDat
         double dy = (Y - ecef.Y).Meter.Value;
         double dz = (Z - ecef.Z).Meter.Value;
 
-        return Math.Sqrt(dx * dx + dy * dy + dz * dz).Meter();
+        return Math.Sqrt(dx * dx + dy * dy + dz * dz).Meter;
     }
 
     public static ECEFLocation operator +(ECEFLocation location) => location;
@@ -212,9 +212,9 @@ public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum = WGSDat
 public record WGSLocation
     : Geolocation
 {
-    public static WGSLocation NullIsland { get; } = new(0d.Degree(), 0d.Degree(), 0d.Meter());
-    public static WGSLocation NorthPole { get; } = new(90d.Degree(), 0d.Degree(), 0d.Meter());
-    public static WGSLocation SouthPole { get; } = new(-90d.Degree(), 0d.Degree(), 0d.Meter());
+    public static WGSLocation NullIsland { get; } = new(0d.Degree, 0d.Degree, 0d.Meter);
+    public static WGSLocation NorthPole { get; } = new(90d.Degree, 0d.Degree, 0d.Meter);
+    public static WGSLocation SouthPole { get; } = new(-90d.Degree, 0d.Degree, 0d.Meter);
 
 
     public Degree Latitude { get; }
@@ -230,14 +230,14 @@ public record WGSLocation
     public bool IsWest => Longitude < Angle.Zero;
     public bool IsEquator => Latitude == Degree.Zero;
     public bool IsPrimeMeridian => Longitude == Degree.Zero;
-    public bool IsAntiMeridian => Longitude == 180d.Degree() || Longitude == -180d.Degree();
+    public bool IsAntiMeridian => Longitude == 180d.Degree || Longitude == -180d.Degree;
     public bool IsNullIsland => Latitude == Degree.Zero && Longitude == Degree.Zero;
     public bool IsUnderSeaLevel => Altitude < Meter.Zero;
     public bool IsOverSeaLevel => Altitude >= Meter.Zero;
 
 
     public WGSLocation(Angle latitude, Angle longitude, WGSDatum datum = WGSDatum.WGS84)
-        : this(latitude, longitude, 0d.Meter(), datum)
+        : this(latitude, longitude, 0d.Meter, datum)
     {
     }
 
@@ -341,7 +341,7 @@ public record WGSLocation
 
         double delta_sigma = B * sin_sigma * t;
 
-        return (b * A * (sigma - delta_sigma)).Meter();
+        return (b * A * (sigma - delta_sigma)).Meter;
     }
 
     public override WGSLocation ToWGS(WGSDatum datum = WGSDatum.WGS84) => datum == Datum ? this : ToECEF(datum).ToWGS();
@@ -362,7 +362,7 @@ public record WGSLocation
         double Y = (N + h) * Math.Cos(lat) * Math.Sin(lon);
         double Z = (N * (1 - e2) + h) * Math.Sin(lat);
 
-        return new(X.Meter(), Y.Meter(), Z.Meter());
+        return new(X.Meter, Y.Meter, Z.Meter);
     }
 
     public override SwissMNLocation ToSwissMN(SwissDatum datum = SwissDatum.LV95)
@@ -418,7 +418,7 @@ public record WGSLocation
             north -= 1_000_000;
         }
 
-        return new(east.Meter(), north.Meter(), h.Meter(), datum);
+        return new(east.Meter, north.Meter, h.Meter, datum);
     }
 
     public override string ToGeoURI() => $"geo:{Latitude.Value},{Longitude.Value},{Altitude.Value}";
@@ -430,9 +430,9 @@ public record WGSLocation
 
     public static implicit operator WGSLocation((Degree latitude, Degree longitude, Meter altitude) tuple) => new(tuple.latitude, tuple.longitude, tuple.altitude);
 
-    public static implicit operator WGSLocation((double latitude, double longitude) tuple) => new(tuple.latitude.Degree(), tuple.longitude.Degree());
+    public static implicit operator WGSLocation((double latitude, double longitude) tuple) => new(tuple.latitude.Degree, tuple.longitude.Degree);
 
-    public static implicit operator WGSLocation((double latitude, double longitude, double altitude) tuple) => new(tuple.latitude.Degree(), tuple.longitude.Degree(), tuple.altitude.Meter());
+    public static implicit operator WGSLocation((double latitude, double longitude, double altitude) tuple) => new(tuple.latitude.Degree, tuple.longitude.Degree, tuple.altitude.Meter);
 
     public static implicit operator (Degree latitude, Degree longitude)(WGSLocation location) => (location.Latitude, location.Longitude);
 
@@ -454,13 +454,13 @@ public record WGSLocation
 public record SwissMNLocation(Meter East, Meter North, Meter Altitude, SwissDatum Datum = SwissDatum.LV95)
     : Geolocation
 {
-    public static SwissMNLocation Zero { get; } = new(0d.Meter(), 0d.Meter(), 0d.Meter());
-    public static SwissMNLocation ZimmerwaldObservatoryReferencePoint { get; } = new(2_602_030d.Meter(), 1_191_775d.Meter(), 898d.Meter());
-    public static SwissMNLocation BerneUniversityReferencePoint { get; } = new(2_600_000d.Meter(), 1_200_000d.Meter(), 554.2.Meter());
+    public static SwissMNLocation Zero { get; } = new(0d.Meter, 0d.Meter, 0d.Meter);
+    public static SwissMNLocation ZimmerwaldObservatoryReferencePoint { get; } = new(2_602_030d.Meter, 1_191_775d.Meter, 898d.Meter);
+    public static SwissMNLocation BerneUniversityReferencePoint { get; } = new(2_600_000d.Meter, 1_200_000d.Meter, 554.2.Meter);
 
 
     public SwissMNLocation(Meter east, Meter north, SwissDatum datum = SwissDatum.LV95)
-        : this(east, north, 0d.Meter(), datum)
+        : this(east, north, 0d.Meter, datum)
     {
     }
 
@@ -502,7 +502,7 @@ public record SwissMNLocation(Meter East, Meter North, Meter Altitude, SwissDatu
         lat *= 10 / 3.6;
         lon *= 10 / 3.6;
 
-        return new(lat.Degree(), lon.Degree(), h.Meter(), datum);
+        return new(lat.Degree, lon.Degree, h.Meter, datum);
     }
 
     public override SwissMNLocation ToSwissMN(SwissDatum datum = SwissDatum.LV95)
@@ -510,9 +510,9 @@ public record SwissMNLocation(Meter East, Meter North, Meter Altitude, SwissDatu
         if (datum == Datum)
             return this;
         else if (datum == SwissDatum.LV03 && Datum == SwissDatum.LV95)
-            return new(East - 2_000_000d.Meter(), North - 1_000_000d.Meter(), Altitude, datum);
+            return new(East - 2_000_000d.Meter, North - 1_000_000d.Meter, Altitude, datum);
         else if (datum == SwissDatum.LV95 && Datum == SwissDatum.LV03)
-            return new(East + 2_000_000d.Meter(), North + 1_000_000d.Meter(), Altitude, datum);
+            return new(East + 2_000_000d.Meter, North + 1_000_000d.Meter, Altitude, datum);
         else
             throw new NotImplementedException($"Conversion from {Datum} to {datum} is not defined.");
     }
@@ -520,11 +520,11 @@ public record SwissMNLocation(Meter East, Meter North, Meter Altitude, SwissDatu
 
     public static implicit operator SwissMNLocation((Meter East, Meter North) tuple) => new(tuple.East, tuple.North);
 
-    public static implicit operator SwissMNLocation((double East, double North) tuple) => new(tuple.East.Meter(), tuple.North.Meter());
+    public static implicit operator SwissMNLocation((double East, double North) tuple) => new(tuple.East.Meter, tuple.North.Meter);
 
     public static implicit operator SwissMNLocation((Meter East, Meter North, Meter Altitude) tuple) => new(tuple.East, tuple.North, tuple.Altitude);
 
-    public static implicit operator SwissMNLocation((double East, double North, double Altitude) tuple) => new(tuple.East.Meter(), tuple.North.Meter(), tuple.Altitude.Meter());
+    public static implicit operator SwissMNLocation((double East, double North, double Altitude) tuple) => new(tuple.East.Meter, tuple.North.Meter, tuple.Altitude.Meter);
 
     public static implicit operator (Meter East, Meter North)(SwissMNLocation location) => (location.East, location.North);
 
@@ -555,8 +555,8 @@ public record GeodesicBoundingBox
     public Meter SurfaceWidth => field ??= .5 * (NorthWestCorner - NorthEastCorner) + .5 * (SouthWestCorner - SouthEastCorner);
     public SquareDegree AngularArea => field ??= (Angle)AngularHeight * (Angle)AngularWidth;
     public SquareMeter SurfaceArea => field ??= (Length)SurfaceHeight * (Length)SurfaceWidth;
-    public Degree MinimumRadius => field ??= (Math.Min(AngularHeight.Value, AngularWidth.Value) / 2).Degree();
-    public Degree MaximumRadius => field ??= (double.Hypot(AngularWidth.Value, AngularHeight.Value) / 2).Degree();
+    public Degree MinimumRadius => field ??= (Math.Min(AngularHeight.Value, AngularWidth.Value) / 2).Degree;
+    public Degree MaximumRadius => field ??= (double.Hypot(AngularWidth.Value, AngularHeight.Value) / 2).Degree;
     public bool IsPoint => AngularArea == SquareDegree.Zero;
 
 
@@ -593,10 +593,10 @@ public record GeodesicBoundingBox
         if (west > east)
             (east, west) = (west, east);
 
-        SouthBoundary = south.Degree();
-        NorthBoundary = north.Degree();
-        WestBoundary = west.Degree();
-        EastBoundary = east.Degree();
+        SouthBoundary = south.Degree;
+        NorthBoundary = north.Degree;
+        WestBoundary = west.Degree;
+        EastBoundary = east.Degree;
         Datum = datum;
     }
 
@@ -650,7 +650,7 @@ public record OpenLocationCode
 
 
     public OpenLocationCode(double latitude, double longitude, OpenLocationCodeConfig? config = null)
-        : this(latitude.Degree(), longitude.Degree(), config)
+        : this(latitude.Degree, longitude.Degree, config)
     {
     }
 
@@ -789,10 +789,10 @@ public record OpenLocationCode
         }
 
         return new GeodesicBoundingBox(
-            lat.Degree(),
-            (lat + lat_res).Degree(),
-            lon.Degree(),
-            (lon + lon_res).Degree()
+            lat.Degree,
+            (lat + lat_res).Degree,
+            lon.Degree,
+            (lon + lon_res).Degree
         );
     }
 

@@ -28,20 +28,20 @@ public sealed partial class PeriodicTableOfElements
         Abundance = ElementAbundance.Zero,
         Thermodynamics = new()
         {
-            MeltingPoint = 283d.Kelvin(),
-            BoilingPoint = 340d.Kelvin(),
-            StandardDensity = 14d.GramPerCubicCentimeter(),
-            TriplePoint = (283d.Kelvin(), 25e3.Pascal()),
+            MeltingPoint = 283d.Kelvin,
+            BoilingPoint = 340d.Kelvin,
+            StandardDensity = 14d.GramPerCubicCentimeter,
+            TriplePoint = (283d.Kelvin, 25e3.Pascal),
             CriticalPoint = null,
             HeatOfFusion = null,
             HeatOfVaporization = null,
             ThermalCapacity = null,
             IonizationEnergies = [
-                1.155e6.JoulePerMol(),
-                2.17e6.JoulePerMol(),
-                3.16e6.JoulePerMol(),
-                4.2e6.JoulePerMol(),
-                5.5e6.JoulePerMol(),
+                1.155e6.JoulePerMol,
+                2.17e6.JoulePerMol,
+                3.16e6.JoulePerMol,
+                4.2e6.JoulePerMol,
+                5.5e6.JoulePerMol,
             ],
             ThermalExpansion = null,
             ThermalConductivity = null,
@@ -73,15 +73,15 @@ public sealed partial class PeriodicTableOfElements
             CommonOxidationStates = [],
             PaulingElectronegativity = null,
             AllenElectronegativity = null,
-            MeanAtomicRadius = 147e-12.Meter(),
-            CovalentRadius = 122e-12.Meter(),
-            VanDerWaalsRadius = 147e-12.Meter(),
+            MeanAtomicRadius = 147e-12.Meter,
+            CovalentRadius = 122e-12.Meter,
+            VanDerWaalsRadius = 147e-12.Meter,
         },
         Electromagnetics = new()
         {
             CuriePoint = null,
             SuperconductingPoint = null,
-            BandGap = 6.4.ElectronVolt(),
+            BandGap = 6.4.ElectronVolt,
             ElectricalResistivity = null,
             ElectricalType = ElectricalElementType.Semiconductor,
             MagneticOrdering = MagneticOrdering.Paramagnetic,
@@ -94,34 +94,34 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 165,
             Spin = 1.5,
-            Decays = [new(DecayMode.Alpha, 790e-6.Second())],
+            Decays = [new(DecayMode.Alpha, 790e-6.Second)],
         },
         new()
         {
             NeutronCount = 168,
             Spin = 0,
-            Decays = [new(DecayMode.SpontaneousFission, 10e-6.Second())],
+            Decays = [new(DecayMode.SpontaneousFission, 10e-6.Second)],
         },
         new()
         {
             NeutronCount = 169,
             Spin = 1.5,
-            Decays = [new(DecayMode.Alpha, 160e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 160e-3.Second)],
         },
         new()
         {
             NeutronCount = 170,
             Spin = 0,
-            Decays = [new(DecayMode.SpontaneousFission, 0.83e-3.Second())],
+            Decays = [new(DecayMode.SpontaneousFission, 0.83e-3.Second)],
         },
         new()
         {
             NeutronCount = 171,
             Spin = 0,
             Decays = [
-                new(DecayMode.Alpha, 3.81.Second(), 0.96),
-                new(DecayMode.SpontaneousFission, 3.81.Second(), 0.04),
-                new(DecayMode.ElectronCapture, 3.81.Second())
+                new(DecayMode.Alpha, 3.81.Second, 0.96),
+                new(DecayMode.SpontaneousFission, 3.81.Second, 0.04),
+                new(DecayMode.ElectronCapture, 3.81.Second)
             ],
         },
         new()
@@ -129,23 +129,23 @@ public sealed partial class PeriodicTableOfElements
             NeutronCount = 172,
             Spin = 0,
             Decays = [
-                new(DecayMode.SpontaneousFission, 121e-3.Second(), 0.98),
-                new(DecayMode.Alpha, 121e-3.Second(), 0.02)
+                new(DecayMode.SpontaneousFission, 121e-3.Second, 0.98),
+                new(DecayMode.Alpha, 121e-3.Second, 0.02)
             ],
         },
         new()
         {
             NeutronCount = 173,
             Spin = 2.5,
-            Decays = [new(DecayMode.Alpha, 28d.Second())],
+            Decays = [new(DecayMode.Alpha, 28d.Second)],
         },
         new()
         {
             NeutronCount = 174,
             Spin = 0,
             Decays = [
-                new(DecayMode.SpontaneousFission, 30.2.Second()),
-                new(DecayMode.Alpha, 30.2.Second())
+                new(DecayMode.SpontaneousFission, 30.2.Second),
+                new(DecayMode.Alpha, 30.2.Second)
             ],
         },
     ]);

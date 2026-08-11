@@ -28,20 +28,20 @@ public sealed partial class PeriodicTableOfElements
         Abundance = ElementAbundance.Zero,
         Thermodynamics = new()
         {
-            MeltingPoint = 284d.Kelvin(),
+            MeltingPoint = 284d.Kelvin,
             BoilingPoint = null,
-            StandardDensity = 11.4.GramPerCubicCentimeter(),
+            StandardDensity = 11.4.GramPerCubicCentimeter,
             TriplePoint = null,
             CriticalPoint = null,
             HeatOfFusion = null,
-            HeatOfVaporization = 38e3.JoulePerMol(),
+            HeatOfVaporization = 38e3.JoulePerMol,
             ThermalCapacity = null,
             IonizationEnergies = [
-                .8322e6.JoulePerMol(),
-                1.6e6.JoulePerMol(),
-                3.37e6.JoulePerMol(),
-                4.4e6.JoulePerMol(),
-                5.85e6.JoulePerMol(),
+                .8322e6.JoulePerMol,
+                1.6e6.JoulePerMol,
+                3.37e6.JoulePerMol,
+                4.4e6.JoulePerMol,
+                5.85e6.JoulePerMol,
             ],
             ThermalExpansion = null,
             ThermalConductivity = null,
@@ -74,15 +74,15 @@ public sealed partial class PeriodicTableOfElements
             CommonOxidationStates = [],
             PaulingElectronegativity = null,
             AllenElectronegativity = null,
-            MeanAtomicRadius = 180e-12.Meter(),
-            CovalentRadius = 174e-12.Meter(),
-            VanDerWaalsRadius = 180e-12.Meter(),
+            MeanAtomicRadius = 180e-12.Meter,
+            CovalentRadius = 174e-12.Meter,
+            VanDerWaalsRadius = 180e-12.Meter,
         },
         Electromagnetics = new()
         {
             CuriePoint = null,
             SuperconductingPoint = null,
-            BandGap = 0.8.ElectronVolt(),
+            BandGap = 0.8.ElectronVolt,
             ElectricalResistivity = null,
             ElectricalType = ElectricalElementType.Semiconductor,
             MagneticOrdering = MagneticOrdering.Paramagnetic,
@@ -96,23 +96,23 @@ public sealed partial class PeriodicTableOfElements
             NeutronCount = 170,
             Spin = 0,
             Decays = [
-                new(DecayMode.SpontaneousFission, 3.1e-3.Second(), 0.76),
-                new(DecayMode.Alpha, 3.1e-3.Second(), 0.24)
+                new(DecayMode.SpontaneousFission, 3.1e-3.Second, 0.76),
+                new(DecayMode.Alpha, 3.1e-3.Second, 0.24)
             ],
         },
         new()
         {
             NeutronCount = 171,
             Spin = 1.5,
-            Decays = [new(DecayMode.Alpha, 108e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 108e-3.Second)],
         },
         new()
         {
             NeutronCount = 172,
             Spin = 0,
             Decays = [
-                new(DecayMode.Alpha, 109e-3.Second(), 0.55),
-                new(DecayMode.SpontaneousFission, 109e-3.Second(), 0.45)
+                new(DecayMode.Alpha, 109e-3.Second, 0.55),
+                new(DecayMode.SpontaneousFission, 109e-3.Second, 0.45)
             ],
         },
         new()
@@ -120,29 +120,29 @@ public sealed partial class PeriodicTableOfElements
             NeutronCount = 173,
             Spin = 0,
             Decays = [
-                new(DecayMode.Alpha, 360e-3.Second()),
-                new(DecayMode.ElectronCapture, 360e-3.Second())
+                new(DecayMode.Alpha, 360e-3.Second),
+                new(DecayMode.ElectronCapture, 360e-3.Second)
             ],
         },
         new()
         {
             NeutronCount = 174,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 653e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 653e-3.Second)],
         },
         new()
         {
             NeutronCount = 175,
             Spin = 2.5,
-            Decays = [new(DecayMode.Alpha, 2.1.Second())],
+            Decays = [new(DecayMode.Alpha, 2.1.Second)],
         },
         new()
         {
             NeutronCount = 176,
             Spin = 0,
             Decays = [
-                new(DecayMode.ElectronCapture, 19.0.Second()),
-                new(DecayMode.Alpha, 19.0.Second())
+                new(DecayMode.ElectronCapture, 19.0.Second),
+                new(DecayMode.Alpha, 19.0.Second)
             ],
         },
     ]);

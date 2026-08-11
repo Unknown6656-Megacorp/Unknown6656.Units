@@ -28,17 +28,17 @@ public sealed partial class PeriodicTableOfElements
         Abundance = ElementAbundance.Zero,
         Thermodynamics = new()
         {
-            MeltingPoint = 325d.Kelvin(),
-            BoilingPoint = 450d.Kelvin(),
-            StandardDensity = 7.2.GramPerCubicCentimeter(),
+            MeltingPoint = 325d.Kelvin,
+            BoilingPoint = 450d.Kelvin,
+            StandardDensity = 7.2.GramPerCubicCentimeter,
             TriplePoint = null,
             CriticalPoint = null,
             HeatOfFusion = null,
             HeatOfVaporization = null,
             ThermalCapacity = null,
             IonizationEnergies = [
-                .8601e6.JoulePerMol(),
-                1.56e6.JoulePerMol(),
+                .8601e6.JoulePerMol,
+                1.56e6.JoulePerMol,
             ],
             ThermalExpansion = null,
             ThermalConductivity = null,
@@ -71,9 +71,9 @@ public sealed partial class PeriodicTableOfElements
             CommonOxidationStates = [-1, 1, 2, 4, 6],
             PaulingElectronegativity = null,
             AllenElectronegativity = null,
-            MeanAtomicRadius = 152e-12.Meter(),
-            CovalentRadius = 157e-12.Meter(),
-            VanDerWaalsRadius = 152e-12.Meter(),
+            MeanAtomicRadius = 152e-12.Meter,
+            CovalentRadius = 157e-12.Meter,
+            VanDerWaalsRadius = 152e-12.Meter,
         },
         Electromagnetics = ElectromagneticalElementProperties.Unknown[ElectricalElementType.Insulator],
         Kinematics = KinematicElementProperties.Unknown,
@@ -83,7 +83,7 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 176,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 6.8e-4.Second())],
+            Decays = [new(DecayMode.Alpha, 6.8e-4.Second)],
         },
     ]);
 }

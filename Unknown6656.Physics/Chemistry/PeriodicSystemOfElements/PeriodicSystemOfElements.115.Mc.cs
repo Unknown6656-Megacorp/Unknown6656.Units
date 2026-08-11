@@ -28,20 +28,20 @@ public sealed partial class PeriodicTableOfElements
         Abundance = ElementAbundance.Zero,
         Thermodynamics = new()
         {
-            MeltingPoint = 670d.Kelvin(),
-            BoilingPoint = 1400d.Kelvin(),
-            StandardDensity = 13.5.GramPerCubicCentimeter(),
+            MeltingPoint = 670d.Kelvin,
+            BoilingPoint = 1400d.Kelvin,
+            StandardDensity = 13.5.GramPerCubicCentimeter,
             TriplePoint = null,
             CriticalPoint = null,
-            HeatOfFusion = 5.94e3.JoulePerMol(),
-            HeatOfVaporization = 138e3.JoulePerMol(),
+            HeatOfFusion = 5.94e3.JoulePerMol,
+            HeatOfVaporization = 138e3.JoulePerMol,
             ThermalCapacity = null,
             IonizationEnergies = [
-                .5383e6.JoulePerMol(),
-                1.76e6.JoulePerMol(),
-                2.65e6.JoulePerMol(),
-                4.68e6.JoulePerMol(),
-                5.72e6.JoulePerMol(),
+                .5383e6.JoulePerMol,
+                1.76e6.JoulePerMol,
+                2.65e6.JoulePerMol,
+                4.68e6.JoulePerMol,
+                5.72e6.JoulePerMol,
             ],
             ThermalExpansion = null,
             ThermalConductivity = null,
@@ -74,9 +74,9 @@ public sealed partial class PeriodicTableOfElements
             CommonOxidationStates = [1, 3],
             PaulingElectronegativity = null,
             AllenElectronegativity = null,
-            MeanAtomicRadius = 187e-12.Meter(),
-            CovalentRadius = 157e-12.Meter(),
-            VanDerWaalsRadius = 187e-12.Meter(),
+            MeanAtomicRadius = 187e-12.Meter,
+            CovalentRadius = 157e-12.Meter,
+            VanDerWaalsRadius = 187e-12.Meter,
         },
         Electromagnetics = ElectromagneticalElementProperties.Unknown[ElectricalElementType.Semiconductor],
         Kinematics = KinematicElementProperties.Unknown,
@@ -86,31 +86,31 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 171,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 108e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 108e-3.Second)],
         },
         new()
         {
             NeutronCount = 172,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 50e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 50e-3.Second)],
         },
         new()
         {
             NeutronCount = 173,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 195e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 195e-3.Second)],
         },
         new()
         {
             NeutronCount = 174,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 266e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 266e-3.Second)],
         },
         new()
         {
             NeutronCount = 175,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 0.84.Second())],
+            Decays = [new(DecayMode.Alpha, 0.84.Second)],
         },
     ]);
 }

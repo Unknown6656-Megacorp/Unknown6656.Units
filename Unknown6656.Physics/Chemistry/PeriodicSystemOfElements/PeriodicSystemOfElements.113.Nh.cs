@@ -28,20 +28,20 @@ public sealed partial class PeriodicTableOfElements
         Abundance = ElementAbundance.Zero,
         Thermodynamics = new()
         {
-            MeltingPoint = 700d.Kelvin(),
-            BoilingPoint = 1430d.Kelvin(),
-            StandardDensity = 16d.GramPerCubicCentimeter(),
+            MeltingPoint = 700d.Kelvin,
+            BoilingPoint = 1430d.Kelvin,
+            StandardDensity = 16d.GramPerCubicCentimeter,
             TriplePoint = null,
             CriticalPoint = null,
-            HeatOfFusion = 7.61e3.JoulePerMol(),
-            HeatOfVaporization = 130e3.JoulePerMol(),
+            HeatOfFusion = 7.61e3.JoulePerMol,
+            HeatOfVaporization = 130e3.JoulePerMol,
             ThermalCapacity = null,
             IonizationEnergies = [
-                .7072e6.JoulePerMol(),
-                2.309e6.JoulePerMol(),
-                3.02e6.JoulePerMol(),
-                4.382e6.JoulePerMol(),
-                5.638e6.JoulePerMol(),
+                .7072e6.JoulePerMol,
+                2.309e6.JoulePerMol,
+                3.02e6.JoulePerMol,
+                4.382e6.JoulePerMol,
+                5.638e6.JoulePerMol,
             ],
             ThermalExpansion = null,
             ThermalConductivity = null,
@@ -74,9 +74,9 @@ public sealed partial class PeriodicTableOfElements
             CommonOxidationStates = [],
             PaulingElectronegativity = null,
             AllenElectronegativity = null,
-            MeanAtomicRadius = 170e-12.Meter(),
-            CovalentRadius = 176e-12.Meter(),
-            VanDerWaalsRadius = 170e-12.Meter(),
+            MeanAtomicRadius = 170e-12.Meter,
+            CovalentRadius = 176e-12.Meter,
+            VanDerWaalsRadius = 170e-12.Meter,
         },
         Electromagnetics = ElectromagneticalElementProperties.Unknown[ElectricalElementType.Semiconductor],
         Kinematics = KinematicElementProperties.Unknown,
@@ -86,27 +86,27 @@ public sealed partial class PeriodicTableOfElements
         {
             NeutronCount = 165,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 2.3e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 2.3e-3.Second)],
         },
         new()
         {
             NeutronCount = 169,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 61e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 61e-3.Second)],
         },
         new()
         {
             NeutronCount = 170,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 123e-3.Second())],
+            Decays = [new(DecayMode.Alpha, 123e-3.Second)],
         },
         new()
         {
             NeutronCount = 171,
             Spin = 0,
             Decays = [
-                new(DecayMode.Alpha, 0.9.Second(), .99),
-                new(DecayMode.ElectronCapture, 0.9.Second(), .1)
+                new(DecayMode.Alpha, 0.9.Second, .99),
+                new(DecayMode.ElectronCapture, 0.9.Second, .1)
             ],
         },
         new()
@@ -114,29 +114,29 @@ public sealed partial class PeriodicTableOfElements
             NeutronCount = 172,
             Spin = 0,
             Decays = [
-                new(DecayMode.Alpha, 2.1.Second(), .82),
-                new(DecayMode.SpontaneousFission, 2.1.Second(), .18)
+                new(DecayMode.Alpha, 2.1.Second, .82),
+                new(DecayMode.SpontaneousFission, 2.1.Second, .18)
             ],
         },
         new()
         {
             NeutronCount = 173,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 12.0.Second())],
+            Decays = [new(DecayMode.Alpha, 12.0.Second)],
         },
         new()
         {
             NeutronCount = 174,
             Spin = 0,
-            Decays = [new(DecayMode.Alpha, 5.5.Second())],
+            Decays = [new(DecayMode.Alpha, 5.5.Second)],
         },
         new()
         {
             NeutronCount = 177,
             Spin = 0,
             Decays = [
-                new(DecayMode.Alpha, 8.0.Second(), .5),
-                new(DecayMode.SpontaneousFission, 8.0.Second(), .5)
+                new(DecayMode.Alpha, 8.0.Second, .5),
+                new(DecayMode.SpontaneousFission, 8.0.Second, .5)
             ],
         },
     ]);
