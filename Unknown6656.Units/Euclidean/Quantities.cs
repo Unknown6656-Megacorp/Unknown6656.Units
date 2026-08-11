@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Kinematics;
@@ -8,10 +9,20 @@ using Unknown6656.Units.Thermodynamics;
 namespace Unknown6656.Units.Euclidean;
 
 
+public enum GeodesicAngleOrientation
+{
+    Horizontal,
+    Vertical,
+}
+
 public partial record Angle(Radian value)
     : Quantity<Angle, Radian, Scalar>(value)
 {
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = ;
+#else
     public static string QuantitySymbol { get; } = "∠";
+#endif
     public static Degree North { get; } = new(0);
     public static Degree East { get; } = new(90);
     public static Degree South { get; } = new(180);
@@ -19,13 +30,49 @@ public partial record Angle(Radian value)
     public static Degree CivilTwilight { get; } = new(6);
     public static Degree NauticalTwilight { get; } = new(12);
     public static Degree AstronomicalTwilight { get; } = new(18);
+
+
+    public string ToSexagesimalNotation() => ToSexagesimalNotation(null);
+
+    public string ToSexagesimalNotation(GeodesicAngleOrientation? orientation)
+    {
+        double angle = Degree.Value;
+        int sign = Math.Sign(angle);
+
+        angle = Math.Abs(angle);
+
+        double degrees = Math.Floor(angle);
+        double minutes = Math.Floor((angle - degrees) * 60);
+        double seconds = (angle - degrees - minutes / 60) * 3600;
+        string prefix = orientation is null && sign < 0 ? "-" : "";
+        string suffix = (orientation, sign) switch
+        {
+            (GeodesicAngleOrientation.Horizontal, < 0) => "W",
+            (GeodesicAngleOrientation.Horizontal, > 0) => "E",
+            (GeodesicAngleOrientation.Vertical, < 0) => "S",
+            (GeodesicAngleOrientation.Vertical, > 0) => "N",
+            _ => "",
+        };
+
+        return $"{prefix}{degrees}" +
+#if USE_PURE_ASCII
+                "deg"
+#else
+                "°"
+#endif
+             + $"{minutes}'{seconds:0.##}\"{suffix}";
+    }
 }
 
 [MultiplicativeRelationship<Angle, SolidAngle, Radian, Steradian, Scalar>]
 public partial record SolidAngle(Steradian value)
     : Quantity<SolidAngle, Steradian, Scalar>(value)
 {
+#if USE_PURE_ASCII
+    public static string QuantitySymbol { get; } = ;
+#else
     public static string QuantitySymbol { get; } = "Ω";
+#endif
 }
 
 [MultiplicativeRelationship<Length, Area, Meter, SquareMeter, Scalar>]

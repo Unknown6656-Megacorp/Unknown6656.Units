@@ -23,6 +23,11 @@ public partial record Degree
     static string[] IUnit.AlternativeUnitSymbols { get; } = ["deg"];
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)(180 / Math.PI);
+
+
+    public string ToSexagesimalNotation() => ((Angle)this).ToSexagesimalNotation();
+
+    public string ToSexagesimalNotation(GeodesicAngleOrientation orientation) => ((Angle)this).ToSexagesimalNotation(orientation);
 }
 
 [KnownUnit<Angle, Gradian, Radian, Scalar>(KnownUnitType.Linear)]
