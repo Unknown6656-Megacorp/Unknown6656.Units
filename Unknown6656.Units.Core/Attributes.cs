@@ -62,6 +62,7 @@ public class MultiplicativeRelationship<TQuantityA, TQuantityB, TQuantityC, TBas
 /// </code>
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+#warning TODO: rename to 'QuadraticRelationship' or 'PowerRelationship'
 public class MultiplicativeRelationship<TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitB, TScalar>(TScalar? x = default)
     : MultiplicativeRelationship<TQuantityA, TQuantityA, TQuantityB, TBaseUnitA, TBaseUnitA, TBaseUnitB, TScalar>(x)
     where TQuantityA : Quantity<TQuantityA, TBaseUnitA, TScalar>
@@ -241,3 +242,6 @@ public class KnownAlias<TQuantity, TUnit, TBaseUnit, TScalar>(string name, strin
 
 //[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 //public class DontEmitProperties : Attribute;
+
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+public class ForwardToUnits : Attribute;

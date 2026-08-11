@@ -756,6 +756,330 @@ public static partial class Unit
 
         return success;
     }
+
+    internal static Func<TScalar, T> GetConstructor<T, TScalar>() where T : class
+    {
+        Type @this = typeof(T);
+        ConstructorInfo? constructor = @this.GetConstructor([typeof(TScalar)]);
+        InvalidProgramException ex = new($"The unit '{@this}' does not have a constructor with a single parameter of type '{typeof(TScalar)}'.");
+
+        return constructor is null ? throw ex : new(s => constructor.Invoke([s]) as T ?? throw ex);
+    }
+
+    internal static Func<TScalar, TUnit> GetConstructor<TUnit, TBaseUnit, TScalar>()
+        where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit
+        where TBaseUnit : AbstractUnit<TBaseUnit, TBaseUnit, TScalar>
+                        , IBaseUnit<TBaseUnit, TScalar>
+                        , IUnit
+        where TScalar : INumber<TScalar>
+    {
+        Type @this = typeof(TUnit);
+
+        if (@this.IsAssignableTo(typeof(IQuantity)))
+        {
+            ConstructorInfo? constructor = @this.GetConstructor([typeof(TBaseUnit)]);
+            InvalidProgramException ex = new($"The quantity '{@this}' does not have a constructor with a single parameter of type '{typeof(TBaseUnit)}'.");
+
+            return constructor is null ? throw ex : new(s => constructor.Invoke([AbstractUnit<TBaseUnit, TBaseUnit, TScalar>.FromScalar(s)]) as TUnit ?? throw ex);
+        }
+        else
+            return GetConstructor<TUnit, TScalar>();
+    }
+
+    public static TUnit LinearInterpolate<TUnit, TBaseUnit, TScalar>(this TUnit first, TUnit second, TScalar factor)
+        where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit
+        where TBaseUnit : AbstractUnit<TBaseUnit, TBaseUnit, TScalar>
+                        , IBaseUnit<TBaseUnit, TScalar>
+                        , IUnit
+        where TScalar : INumber<TScalar> => first + (second - first) * factor;
+
+    public static TUnit LogarithmicLinearInterpolate<TUnit, TBaseUnit, TScalar>(this TUnit first, TUnit second, TScalar factor)
+        where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit
+        where TBaseUnit : AbstractUnit<TBaseUnit, TBaseUnit, TScalar>
+                        , IBaseUnit<TBaseUnit, TScalar>
+                        , IUnit
+        where TScalar : INumber<TScalar>
+                      , ILogarithmicFunctions<TScalar>
+        => LinearInterpolate<TUnit, TBaseUnit, TScalar>((TUnit)TScalar.Log(first.Value), (TUnit)TScalar.Log(second.Value), factor);
+
+    public static TScalar InverseLinearInterpolate<TUnit, TBaseUnit, TScalar>(TUnit first, TUnit second, TUnit value)
+        where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit
+        where TBaseUnit : AbstractUnit<TBaseUnit, TBaseUnit, TScalar>
+                        , IBaseUnit<TBaseUnit, TScalar>
+                        , IUnit
+        where TScalar : INumber<TScalar> => (value.Value - first.Value) / (second.Value - first.Value);
+
+    public static TScalar InverseLogarithmicLinearInterpolate<TUnit, TBaseUnit, TScalar>(TUnit first, TUnit second, TUnit value)
+        where TUnit : AbstractUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit<TUnit, TBaseUnit, TScalar>
+                    , IUnit
+        where TBaseUnit : AbstractUnit<TBaseUnit, TBaseUnit, TScalar>
+                        , IBaseUnit<TBaseUnit, TScalar>
+                        , IUnit
+        where TScalar : INumber<TScalar>
+                      , ILogarithmicFunctions<TScalar>
+    {
+        TScalar a = TScalar.Log(first.Value);
+        TScalar b = TScalar.Log(second.Value);
+        TScalar x = TScalar.Log(value.Value);
+
+        return (x - a) / (b - a);
+    }
+}
+
+public abstract record RelativeUnit<TUnit, TScalar>(TScalar Value)
+    : IAdditionOperators<TUnit, TUnit, TUnit>
+    , ISubtractionOperators<TUnit, TUnit, TUnit>
+    , IMultiplyOperators<TUnit, TUnit, TUnit>
+    , IDivisionOperators<TUnit, TUnit, TUnit>
+    , IModulusOperators<TUnit, TUnit, TUnit>
+    , IUnaryNegationOperators<TUnit, TUnit>
+    , IUnaryPlusOperators<TUnit, TUnit>
+    , IIncrementOperators<TUnit>
+    , IDecrementOperators<TUnit>
+    , IFormattable
+    , IParsable<TUnit>
+  //, IComparable<TUnit>
+    , INumber<TUnit>
+    where TUnit : RelativeUnit<TUnit, TScalar>
+                , IUnit
+    where TScalar : INumber<TScalar>
+{
+    private static readonly Func<TScalar, TUnit> _constructor;
+
+
+    public static bool IsMetric => TUnit.UnitDisplay.IsMetric();
+
+    public static bool IsSI => TUnit.UnitDisplay.IsSI();
+
+    public static bool IsImperial => TUnit.UnitDisplay.IsImperial();
+
+    static int INumberBase<TUnit>.Radix => TScalar.Radix;
+
+    static TUnit IMultiplicativeIdentity<TUnit, TUnit>.MultiplicativeIdentity => One;
+
+    static TUnit IAdditiveIdentity<TUnit, TUnit>.AdditiveIdentity => Zero;
+
+    public static TUnit Zero { get; }
+
+    public static TUnit One { get; }
+
+
+    static RelativeUnit()
+    {
+        _constructor = Unit.GetConstructor<TUnit, TScalar>();
+        Zero = _constructor(TScalar.Zero);
+        One = _constructor(TScalar.One);
+    }
+
+    public virtual int CompareTo(TUnit? other) => other is null ? 1 : Value.CompareTo(other.Value);
+
+    public int CompareTo(object? obj) => obj is TUnit u ? CompareTo(u) : 1;
+
+    bool IEquatable<TUnit>.Equals(TUnit? other) => Equals(other);
+
+    #region INUMBERBASE<> MEMBERS
+
+    public static TUnit Abs(TUnit value) => FromScalar(TScalar.Abs(value.Value));
+
+    static bool INumberBase<TUnit>.IsCanonical(TUnit value) => TScalar.IsCanonical(value.Value);
+
+    static bool INumberBase<TUnit>.IsComplexNumber(TUnit value) => TScalar.IsComplexNumber(value.Value);
+
+    static bool INumberBase<TUnit>.IsEvenInteger(TUnit value) => TScalar.IsEvenInteger(value.Value);
+
+    static bool INumberBase<TUnit>.IsFinite(TUnit value) => TScalar.IsFinite(value.Value);
+
+    static bool INumberBase<TUnit>.IsImaginaryNumber(TUnit value) => TScalar.IsImaginaryNumber(value.Value);
+
+    static bool INumberBase<TUnit>.IsInfinity(TUnit value) => TScalar.IsInfinity(value.Value);
+
+    static bool INumberBase<TUnit>.IsInteger(TUnit value) => TScalar.IsInteger(value.Value);
+
+    static bool INumberBase<TUnit>.IsNaN(TUnit value) => TScalar.IsNaN(value.Value);
+
+    static bool INumberBase<TUnit>.IsNegative(TUnit value) => TScalar.IsNegative(value.Value);
+
+    static bool INumberBase<TUnit>.IsNegativeInfinity(TUnit value) => TScalar.IsNegativeInfinity(value.Value);
+
+    static bool INumberBase<TUnit>.IsNormal(TUnit value) => TScalar.IsNormal(value.Value);
+
+    static bool INumberBase<TUnit>.IsOddInteger(TUnit value) => TScalar.IsOddInteger(value.Value);
+
+    static bool INumberBase<TUnit>.IsPositive(TUnit value) => TScalar.IsPositive(value.Value);
+
+    static bool INumberBase<TUnit>.IsPositiveInfinity(TUnit value) => TScalar.IsPositiveInfinity(value.Value);
+
+    static bool INumberBase<TUnit>.IsRealNumber(TUnit value) => TScalar.IsRealNumber(value.Value);
+
+    static bool INumberBase<TUnit>.IsSubnormal(TUnit value) => TScalar.IsSubnormal(value.Value);
+
+    static bool INumberBase<TUnit>.IsZero(TUnit value) => TScalar.IsZero(value.Value);
+
+    static TUnit INumberBase<TUnit>.MaxMagnitude(TUnit x, TUnit y) => FromScalar(TScalar.MaxMagnitude(x.Value, y.Value));
+
+    static TUnit INumberBase<TUnit>.MaxMagnitudeNumber(TUnit x, TUnit y) => FromScalar(TScalar.MaxMagnitudeNumber(x.Value, y.Value));
+
+    static TUnit INumberBase<TUnit>.MinMagnitude(TUnit x, TUnit y) => FromScalar(TScalar.MinMagnitude(x.Value, y.Value));
+
+    static TUnit INumberBase<TUnit>.MinMagnitudeNumber(TUnit x, TUnit y) => FromScalar(TScalar.MinMagnitudeNumber(x.Value, y.Value));
+
+    static bool INumberBase<TUnit>.TryConvertFromChecked<TOther>(TOther value, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    {
+        result = TScalar.TryConvertFromChecked(value, out TScalar? s) is bool success && success && s is { } ? FromScalar(s) : default;
+
+        return success;
+    }
+
+    static bool INumberBase<TUnit>.TryConvertFromSaturating<TOther>(TOther value, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    {
+        result = TScalar.TryConvertFromSaturating(value, out TScalar? s) is bool success && success && s is { } ? FromScalar(s) : default;
+
+        return success;
+    }
+
+    static bool INumberBase<TUnit>.TryConvertFromTruncating<TOther>(TOther value, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    {
+        result = TScalar.TryConvertFromTruncating(value, out TScalar? s) is bool success && success && s is { } ? FromScalar(s) : default;
+
+        return success;
+    }
+
+    static bool INumberBase<TUnit>.TryConvertToChecked<TOther>(TUnit value, [MaybeNullWhen(false), NotNullWhen(true)] out TOther result) =>
+        TScalar.TryConvertToChecked(value.Value, out result);
+
+    static bool INumberBase<TUnit>.TryConvertToSaturating<TOther>(TUnit value, [MaybeNullWhen(false), NotNullWhen(true)] out TOther result) =>
+        TScalar.TryConvertToSaturating(value.Value, out result);
+
+    static bool INumberBase<TUnit>.TryConvertToTruncating<TOther>(TUnit value, [MaybeNullWhen(false), NotNullWhen(true)] out TOther result) =>
+        TScalar.TryConvertToTruncating(value.Value, out result);
+
+    #endregion
+    #region TOSTRING / FORMATTING
+
+    public sealed override string ToString() => ToString(null, null);
+
+    public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format, formatProvider, SIUnitScale.Base_1000);
+
+    public string ToString(string? format, IFormatProvider? formatProvider, SIUnitScale scale) => Unit.Format(Value, TUnit.UnitSymbol, format, formatProvider, TUnit.UnitDisplay, scale);
+
+    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    {
+        string result = ToString(new(format), provider);
+
+        charsWritten = Math.Min(result.Length, destination.Length);
+        result.CopyTo(destination[..charsWritten]);
+
+        return charsWritten == result.Length;
+    }
+
+    #endregion
+    #region PARSING
+
+    public static TUnit Parse(string s, IFormatProvider? provider) => Parse(s, NumberStyles.Float, provider);
+
+    public static TUnit Parse(ReadOnlySpan<char> s, IFormatProvider? provider) => Parse(new(s), provider);
+
+    public static bool TryParse(string? s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) => TryParse(s, NumberStyles.Float, provider, out result);
+
+    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) => TryParse(new(s), provider, out result);
+
+    public static bool TryParse(string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result)
+    {
+        bool success;
+
+        if (Unit.TryParse<TScalar, TUnit>(s, style, provider, out TScalar? scalar))
+            (success, result) = (true, FromScalar(scalar));
+        else
+            (success, result) = (false, null);
+
+        return success;
+    }
+
+    public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false), NotNullWhen(true)] out TUnit? result) =>
+        TryParse(new(s), style, provider, out result);
+
+    public static TUnit Parse(string s, NumberStyles style, IFormatProvider? provider) =>
+        TryParse(s, style, provider, out TUnit? result) ? result : throw new FormatException($"The string '{s}' ({s.Length} char(s)) could not be parsed to a valid instance of {typeof(TUnit)} or {typeof(TScalar)}.");
+
+    public static TUnit Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider) => Parse(new(s), style, provider);
+
+    #endregion
+
+    public static TUnit Min(TUnit first, TUnit second) => first.CompareTo(second) <= 0 ? first : second;
+
+    public static TUnit Max(TUnit first, TUnit second) => first.CompareTo(second) >= 0 ? first : second;
+
+    public static TUnit FromScalar(TScalar scalar) => _constructor(scalar);
+
+    public static implicit operator TScalar(RelativeUnit<TUnit, TScalar> unit) => unit.Value;
+
+    public static implicit operator RelativeUnit<TUnit, TScalar>(TScalar scalar) => FromScalar(scalar);
+
+    public static TUnit operator +(RelativeUnit<TUnit, TScalar> value) => FromScalar(+value.Value);
+
+    public static TUnit operator -(RelativeUnit<TUnit, TScalar> value) => FromScalar(-value.Value);
+
+    public static TUnit operator ++(RelativeUnit<TUnit, TScalar> value) => FromScalar(value.Value + TScalar.One);
+
+    public static TUnit operator --(RelativeUnit<TUnit, TScalar> value) => FromScalar(value.Value - TScalar.One);
+
+    public static TUnit operator +(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => FromScalar(left.Value + right.Value);
+
+    public static TUnit operator -(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => FromScalar(left.Value - right.Value);
+
+    public static TUnit operator *(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => FromScalar(left.Value * right.Value);
+
+    public static TUnit operator /(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => FromScalar(left.Value / right.Value);
+
+    public static TUnit operator %(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => FromScalar(left.Value % right.Value);
+
+    public static bool operator <(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => left.CompareTo(right) < 0;
+
+    public static bool operator <=(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => left.CompareTo(right) <= 0;
+
+    public static bool operator >(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => left.CompareTo(right) > 0;
+
+    public static bool operator >=(RelativeUnit<TUnit, TScalar> left, RelativeUnit<TUnit, TScalar> right) => left.CompareTo(right) >= 0;
+
+    static TUnit IUnaryPlusOperators<TUnit, TUnit>.operator +(TUnit value) => +value;
+
+    static TUnit IUnaryNegationOperators<TUnit, TUnit>.operator -(TUnit value) => -value;
+
+    static TUnit IIncrementOperators<TUnit>.operator ++(TUnit value) => value + One;
+
+    static TUnit IDecrementOperators<TUnit>.operator --(TUnit value) => value - One;
+
+    static TUnit IAdditionOperators<TUnit, TUnit, TUnit>.operator +(TUnit left, TUnit right) => left + right;
+
+    static TUnit ISubtractionOperators<TUnit, TUnit, TUnit>.operator -(TUnit left, TUnit right) => left - right;
+
+    static TUnit IMultiplyOperators<TUnit, TUnit, TUnit>.operator *(TUnit left, TUnit right) => left * right;
+
+    static TUnit IDivisionOperators<TUnit, TUnit, TUnit>.operator /(TUnit left, TUnit right) => left / right;
+
+    static TUnit IModulusOperators<TUnit, TUnit, TUnit>.operator %(TUnit left, TUnit right) => left % right;
+
+    static bool IComparisonOperators<TUnit, TUnit, bool>.operator >(TUnit left, TUnit right) => left > right;
+
+    static bool IComparisonOperators<TUnit, TUnit, bool>.operator >=(TUnit left, TUnit right) => left >= right;
+
+    static bool IComparisonOperators<TUnit, TUnit, bool>.operator <(TUnit left, TUnit right) => left < right;
+
+    static bool IComparisonOperators<TUnit, TUnit, bool>.operator <=(TUnit left, TUnit right) => left <= right;
+
+    static bool IEqualityOperators<TUnit, TUnit, bool>.operator ==(TUnit? left, TUnit? right) => left == right;
+
+    static bool IEqualityOperators<TUnit, TUnit, bool>.operator !=(TUnit? left, TUnit? right) => left != right;
+
 }
 
 public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
@@ -805,18 +1129,7 @@ public abstract record AbstractUnit<TUnit, TBaseUnit, TScalar>(TScalar Value)
 
     static AbstractUnit()
     {
-        Type @this = typeof(TUnit);
-        bool is_quantity = @this.IsAssignableTo(typeof(IQuantity));
-        ConstructorInfo? constructor = @this.GetConstructor([is_quantity ? typeof(TBaseUnit) : typeof(TScalar)]);
-        InvalidProgramException ex = new(
-            is_quantity ? $"The unit type '{@this}' does not have a constructor with a single parameter of type '{typeof(TScalar)}'."
-                        : $"The quantity '{@this}' does not have a constructor with a single parameter of type '{typeof(TBaseUnit)}'."
-        );
-
-        if (constructor is null)
-            throw ex;
-
-        _constructor = s => constructor.Invoke([is_quantity ? AbstractUnit<TBaseUnit, TBaseUnit, TScalar>.FromScalar(s) : s]) as TUnit ?? throw ex;
+        _constructor = Unit.GetConstructor<TUnit, TBaseUnit, TScalar>();
         Zero = _constructor(TScalar.Zero);
         One = _constructor(TScalar.One);
     }
