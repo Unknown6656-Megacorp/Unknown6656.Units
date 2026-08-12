@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
+using System;
 
-using Unknown6656.Units;
 using Unknown6656.Units.Euclidean;
-using Unknown6656.Units.Information;
+using Unknown6656.Units;
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.Primitives;
 
 namespace Unknown6656.Physics.Geography;
 
@@ -20,42 +17,56 @@ public enum LocationFormatting
     Long,
 }
 
-public enum WGSDatum
-{
-    WGS84,
-    GRS80,
-    WGS72,
-    WGS66,
-}
-
 public enum SwissDatum
 {
     LV95,
     LV03,
 }
 
+public record WGSDatum(string Name, Meter SemiMajorAxis, Meter SemiMinorAxis)
+{
+    public static WGSDatum WGS84 { get; } = new(nameof(WGS84), 6_378_137.Meter, 6_356_752.314245.Meter);
+    public static WGSDatum GRS80 { get; } = new(nameof(GRS80), 6_378_137.Meter, 6_356_752.314140.Meter);
+    public static WGSDatum WGS72 { get; } = new(nameof(WGS72), 6_378_135.Meter, 6_356_750.Meter);
+    public static WGSDatum WGS66 { get; } = new(nameof(WGS66), 6_378_160.Meter, 6_356_750.Meter);
+
+    public double Flattening { get; } = (SemiMajorAxis - SemiMinorAxis) / SemiMajorAxis;
+    public double InverseFlattening { get; } = SemiMajorAxis / (SemiMajorAxis - SemiMinorAxis);
+    public double SquareEccentricity => Flattening * (2 - Flattening);
+
+    public override int GetHashCode() => Name.GetHashCode();
+}
+
 public abstract record Geolocation
 {
-    internal static readonly Dictionary<WGSDatum, (double a, double b)> _wgs_ellipsoid_parameters = new()
-    {
-        [WGSDatum.WGS84] = (a: 6_378_137, b: 6_356_752.314245),
-        [WGSDatum.GRS80] = (a: 6_378_137, b: 6_356_752.314140),
-        [WGSDatum.WGS72] = (a: 6_378_135, b: 6_356_750),
-        [WGSDatum.WGS66] = (a: 6_378_160, b: 6_356_750),
-    };
+    public WGSLocation WGS84 => field ??= ToWGS();
 
-    public WGSLocation WGS84 => field ??= ToWGS(WGSDatum.WGS84);
-
-    public ECEFLocation ECEF84 => field ??= ToECEF(WGSDatum.WGS84);
+    public ECEFLocation ECEF84 => field ??= ToECEF();
 
     public SwissMNLocation SwissMN95 => field ??= ToSwissMN(SwissDatum.LV95);
 
-    public OpenLocationCode OLC => field ??= new(WGS84);
+    public virtual UTMLocation UTM84 => field ??= ToUTM();
+
+    public MGRSLocation MGRS84 => field ??= ToMGRS();
+
+    public OpenLocationCode OLC84 => field ??= new(WGS84);
 
 
-    public abstract WGSLocation ToWGS(WGSDatum datum = WGSDatum.WGS84);
+    public WGSLocation ToWGS() => ToWGS(WGSDatum.WGS84);
 
-    public virtual ECEFLocation ToECEF(WGSDatum datum = WGSDatum.WGS84) => ToWGS(datum).ToECEF(datum);
+    public abstract WGSLocation ToWGS(WGSDatum datum);
+
+    public ECEFLocation ToECEF() => ToECEF(WGSDatum.WGS84);
+
+    public virtual ECEFLocation ToECEF(WGSDatum datum) => ToWGS(datum).ToECEF(datum);
+
+    public UTMLocation ToUTM() => ToUTM(WGSDatum.WGS84);
+
+    public virtual UTMLocation ToUTM(WGSDatum datum) => new(ToWGS(datum));
+
+    public MGRSLocation ToMGRS() => ToMGRS(WGSDatum.WGS84);
+
+    public virtual MGRSLocation ToMGRS(WGSDatum datum) => new(ToUTM(datum));
 
     public virtual SwissMNLocation ToSwissMN(SwissDatum datum = SwissDatum.LV95) => ToWGS(WGSDatum.WGS84).ToSwissMN(datum);
 
@@ -90,15 +101,12 @@ public abstract record Geolocation
     public static Length operator -(Geolocation first, Geolocation second) => first.SurfaceDistanceTo(second);
 }
 
-
 // TODO: ED50
 // TODO: ETRS89
 // TODO: NAD83 / NAVD88
 // TODO: GEOREF https://en.wikipedia.org/wiki/World_Geographic_Reference_System
 // TODO: ENU coordinates
 // TODO: geohash https://en.wikipedia.org/wiki/Geohash
-// TODO: UTM coordinates https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system
-// TODO: MGRS coordinates https://en.wikipedia.org/wiki/Military_Grid_Reference_System
 // TODO: https://en.wikipedia.org/wiki/Natural_Area_Code
 // TODO: https://en.wikipedia.org/wiki/Helmert_transformation#Application
 
@@ -109,7 +117,7 @@ public abstract record Geolocation
 /// <param name="Y">The ECEF's Y coordinate.</param>
 /// <param name="Z">The ECEF's Z coordinate.</param>
 /// <param name="Datum">The WGS datum.</param>
-public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum = WGSDatum.WGS84)
+public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum)
     : Geolocation
 {
     public bool IsNorth => Z > Length.Zero;
@@ -117,14 +125,24 @@ public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum = WGSDat
     public bool IsEquator => Z == Length.Zero;
 
 
-    public ECEFLocation(double X_meters, double Y_meters, double Z_meters, WGSDatum datum = WGSDatum.WGS84)
+    public ECEFLocation(Length X, Length Y, Length Z)
+        : this(X, Y, Z, WGSDatum.WGS84)
+    {
+    }
+
+    public ECEFLocation(double X_meters, double Y_meters, double Z_meters)
+        : this(X_meters, Y_meters, Z_meters, WGSDatum.WGS84)
+    {
+    }
+
+    public ECEFLocation(double X_meters, double Y_meters, double Z_meters, WGSDatum datum)
         : this(X_meters.Meter, Y_meters.Meter, Z_meters.Meter, datum)
     {
     }
 
     public override string ToString() => $"({X}, {Y}, {Z})";
 
-    public override ECEFLocation ToECEF(WGSDatum datum = WGSDatum.WGS84)
+    public override ECEFLocation ToECEF(WGSDatum datum)
     {
         if (datum == Datum)
             return this;
@@ -134,12 +152,13 @@ public record ECEFLocation(Length X, Length Y, Length Z, WGSDatum Datum = WGSDat
         throw new NotImplementedException();
     }
 
-    public override WGSLocation ToWGS(WGSDatum datum = WGSDatum.WGS84)
+    public override WGSLocation ToWGS(WGSDatum datum)
     {
         if (datum != Datum)
             return ToECEF(datum).ToWGS(datum);
 
-        (double a, double b) = _wgs_ellipsoid_parameters[datum];
+        double a = datum.SemiMajorAxis.Value;
+        double b = datum.SemiMinorAxis.Value;
         double X = this.X.Meter.Value;
         double Y = this.Y.Meter.Value;
         double Z = this.Z.Meter.Value;
@@ -230,18 +249,28 @@ public record WGSLocation
     public bool IsWest => Longitude < Angle.Zero;
     public bool IsEquator => Latitude == Degree.Zero;
     public bool IsPrimeMeridian => Longitude == Degree.Zero;
-    public bool IsAntiMeridian => Longitude == 180.Degree || Longitude == -180.Degree;
+    public bool IsAntiMeridian => Math.Abs(Longitude.Value) == 180;
     public bool IsNullIsland => Latitude == Degree.Zero && Longitude == Degree.Zero;
     public bool IsUnderSeaLevel => Altitude < Meter.Zero;
     public bool IsOverSeaLevel => Altitude >= Meter.Zero;
 
 
-    public WGSLocation(Angle latitude, Angle longitude, WGSDatum datum = WGSDatum.WGS84)
-        : this(latitude, longitude, 0.Meter, datum)
+    public WGSLocation(Angle latitude, Angle longitude)
+        : this(latitude, longitude, WGSDatum.WGS84)
     {
     }
 
-    public WGSLocation(Angle latitude, Angle longitude, Length altitude, WGSDatum datum = WGSDatum.WGS84)
+    public WGSLocation(Angle latitude, Angle longitude, WGSDatum datum)
+        : this(latitude, longitude, Meter.Zero, datum)
+    {
+    }
+
+    public WGSLocation(Angle latitude, Angle longitude, Length altitude)
+        : this(latitude, longitude, altitude, WGSDatum.WGS84)
+    {
+    }
+
+    public WGSLocation(Angle latitude, Angle longitude, Length altitude, WGSDatum datum)
     {
         Datum = datum;
         Altitude = altitude; // TODO : clamp altitude to valid range for datum (esp. inside the Earth)
@@ -287,8 +316,9 @@ public record WGSLocation
     public override Length SurfaceDistanceTo(Geolocation other)
     {
         WGSLocation loc = other.ToWGS(Datum);
-        (double a, double b) = _wgs_ellipsoid_parameters[Datum];
-        double f = (a - b) / a;
+        double a = Datum.SemiMajorAxis.Value;
+        double b = Datum.SemiMinorAxis.Value;
+        double f = Datum.Flattening;
 
         const double tolerance = 1e-11;
 
@@ -297,11 +327,10 @@ public record WGSLocation
         double L1 = Longitude.Radian.Value,
                L2 = loc.Longitude.Radian.Value;
         double L = L2 - L1;
+        double lambda_old = L + 0;
         double U1 = Math.Atan((1 - f) * Math.Tan(phi1));
         double U2 = Math.Atan((1 - f) * Math.Tan(phi2));
-        double t;
-        double lambda_old = L + 0;
-        double cos_sq_alpha, cos_2sigma_m, sin_sigma, cos_sigma, sigma;
+        double cos_sq_alpha, cos_2sigma_m, sin_sigma, cos_sigma, sigma, t;
 
         while (true)
         {
@@ -344,14 +373,15 @@ public record WGSLocation
         return (b * A * (sigma - delta_sigma)).Meter;
     }
 
-    public override WGSLocation ToWGS(WGSDatum datum = WGSDatum.WGS84) => datum == Datum ? this : ToECEF(datum).ToWGS();
+    public override WGSLocation ToWGS(WGSDatum datum) => datum == Datum ? this : ToECEF(datum).ToWGS();
 
-    public override ECEFLocation ToECEF(WGSDatum datum = WGSDatum.WGS84)
+    public override ECEFLocation ToECEF(WGSDatum datum)
     {
         if (datum != Datum)
             return ToECEF(Datum).ToECEF(datum);
 
-        (double a, double b) = _wgs_ellipsoid_parameters[datum];
+        double a = datum.SemiMajorAxis.Value;
+        double b = datum.SemiMinorAxis.Value;
         double lat = Latitude.Radian.Value;
         double lon = Longitude.Radian.Value;
         double h = Altitude.Value;
@@ -449,6 +479,8 @@ public record WGSLocation
     public static implicit operator WGSLocation(ECEFLocation location) => location.ToWGS();
 
     public static implicit operator WGSLocation(SwissMNLocation location) => location.ToWGS();
+
+    // TODO : more implicit conversions
 }
 
 public record SwissMNLocation(Meter East, Meter North, Meter Altitude, SwissDatum Datum = SwissDatum.LV95)
@@ -466,7 +498,7 @@ public record SwissMNLocation(Meter East, Meter North, Meter Altitude, SwissDatu
 
     public override string ToString() => $"E={East.Value}, N={North.Value}, {Altitude}";
 
-    public override WGSLocation ToWGS(WGSDatum datum = WGSDatum.WGS84)
+    public override WGSLocation ToWGS(WGSDatum datum)
     {
         if (datum != WGSDatum.WGS84)
             return ToWGS(WGSDatum.WGS84).ToWGS(datum);
@@ -570,17 +602,32 @@ public record GeodesicBoundingBox
     {
     }
 
-    public GeodesicBoundingBox(Angle south, Angle north, Angle west, Angle east, WGSDatum datum = WGSDatum.WGS84)
+    public GeodesicBoundingBox(Angle south, Angle north, Angle west, Angle east)
+        : this(south, north, west, east, WGSDatum.WGS84)
+    {
+    }
+
+    public GeodesicBoundingBox(Angle south, Angle north, Angle west, Angle east, WGSDatum datum)
         : this(south.Degree, north.Degree, west.Degree, east.Degree, datum)
     {
     }
 
-    public GeodesicBoundingBox(Degree south, Degree north, Degree west, Degree east, WGSDatum datum = WGSDatum.WGS84)
+    public GeodesicBoundingBox(Degree south, Degree north, Degree west, Degree east)
+        : this(south, north, west, east, WGSDatum.WGS84)
+    {
+    }
+
+    public GeodesicBoundingBox(Degree south, Degree north, Degree west, Degree east, WGSDatum datum)
         : this(south.Value, north.Value, west.Value, east.Value, datum)
     {
     }
 
-    public GeodesicBoundingBox(double south, double north, double west, double east, WGSDatum datum = WGSDatum.WGS84)
+    public GeodesicBoundingBox(double south, double north, double west, double east)
+        : this(south, north, west, east, WGSDatum.WGS84)
+    {
+    }
+
+    public GeodesicBoundingBox(double south, double north, double west, double east, WGSDatum datum)
     {
         west = Geolocation.NormalizeAngle(west, GeodesicAngleOrientation.Horizontal);
         east = Geolocation.NormalizeAngle(east, GeodesicAngleOrientation.Horizontal);
@@ -685,7 +732,7 @@ public record OpenLocationCode
 
     public override string ToString() => Code;
 
-    public override WGSLocation ToWGS(WGSDatum datum = WGSDatum.WGS84) => CenterLocation.ToWGS(datum);
+    public override WGSLocation ToWGS(WGSDatum datum) => CenterLocation.ToWGS(datum);
 
     private static string Encode(double latitude, double longitude, OpenLocationCodeConfig config)
     {
@@ -1037,6 +1084,381 @@ public record OpenLocationCode
     public static implicit operator OpenLocationCode(WGSLocation location) => new(location);
 
     public static implicit operator OpenLocationCode(GeodesicBoundingBox bounding_box) => new(bounding_box);
+}
+
+public record UTMLocation
+    : Geolocation
+{
+    private const double _K0 = 0.9996;
+
+    public int Zone { get; }
+    public bool IsNorthernHemisphere { get; }
+    public double Easting { get; }
+    public double Northing { get; }
+    public WGSDatum Datum { get; }
+
+
+    public UTMLocation(int zone, bool is_northern_hemisphere, double easting, double northing)
+        : this(zone, is_northern_hemisphere, easting, northing, WGSDatum.WGS84)
+    {
+    }
+
+    public UTMLocation(int zone, bool is_northern_hemisphere, double easting, double northing, WGSDatum datum)
+    {
+        if (zone < 1 || zone > 60)
+            throw new ArgumentOutOfRangeException(nameof(zone));
+        else if (easting < 100000.0 || easting > 1000000.0)
+            throw new ArgumentOutOfRangeException(nameof(easting));
+        else if (northing < 0.0 || northing > 10000000.0)
+            throw new ArgumentOutOfRangeException(nameof(northing));
+
+        Zone = zone;
+        Easting = easting;
+        Northing = northing;
+        IsNorthernHemisphere = is_northern_hemisphere;
+        Datum = datum;
+    }
+
+    public UTMLocation(WGSLocation location)
+    {
+        Degree longitude = NormalizeAngle(location.Longitude, GeodesicAngleOrientation.Horizontal);
+
+        if (location.Latitude.Value < -80 || location.Latitude.Value > 84)
+            throw new ArgumentOutOfRangeException(nameof(location.Latitude), "UTM is defined from 80°S to 84°N.");
+
+        Zone = ComputeUTMZone(location.Latitude.Value, location.Longitude.Value);
+        IsNorthernHemisphere = location.Latitude > Angle.Zero;
+        Datum = location.Datum;
+
+        double a = Datum.SemiMajorAxis.Value;
+        double e2 = Datum.SquareEccentricity;
+        double ep2 = e2 / (1 - e2);
+        double lat = location.Latitude.Radian.Value;
+        double lon = longitude.Radian.Value;
+        double lon0 = (Zone * 6 - 183).Degree.Radian.Value;
+        double cos_lat = Math.Cos(lat);
+        double tan_lat = Math.Tan(lat);
+
+        double N = a / Math.Sqrt(1 - e2 * Math.Sin(lat) * Math.Sin(lat));
+        double T = tan_lat * tan_lat;
+        double C = ep2 * cos_lat * cos_lat;
+        double A1 = cos_lat * (lon - lon0);
+
+        double M = a * (
+                      (1 - .25 * e2 -   .046875 * e2 * e2 -           .01953125 * e2 * e2 * e2) * lat
+                    - (   .375 * e2 +    .09375 * e2 * e2 +         .0439453125 * e2 * e2 * e2) * Math.Sin(2 * lat)
+                    + (               .05859375 * e2 * e2 +         .0439453125 * e2 * e2 * e2) * Math.Sin(4 * lat)
+                    - (                                     .011393229166666666 * e2 * e2 * e2) * Math.Sin(6 * lat)
+                  );
+
+        Easting = _K0 * N * (
+                    A1
+                    + (1 - T + C) * A1 * A1 * A1 / 6
+                    + (5 - 18 * T + T * T + 72 * C - 58 * ep2) * Math.Pow(A1, 5) / 120
+                ) + 500_000;
+
+        Northing = _K0 * (M + N * tan_lat * (
+                            A1 * A1 / 2
+                            + (5 - T + 9 * C + 4 * C * C) * Math.Pow(A1, 4) / 24
+                            + (61 - 58 * T + T * T + 600 * C - 330 * ep2) * Math.Pow(A1, 6) / 720
+                        ));
+
+        if (location.Latitude < Angle.Zero)
+            Northing += 10_000_000;
+    }
+
+    private static int ComputeUTMZone(double latitude, double longitude)
+    {
+        int zone = (int)Math.Floor(longitude / 6 + 30) + 1;
+
+        if (latitude is >= 56 and < 64 && longitude is >= 3 and < 12)
+            return 32; // Norway
+        else if (latitude is >= 72 and < 84)
+            return longitude switch
+            {
+                >= 0 and < 9 => 31,
+                >= 9 and < 21 => 33,
+                >= 21 and < 33 => 35,
+                >= 33 and < 42 => 37,
+                _ => zone,
+            }; // Svalbard
+        else
+            return zone;
+    }
+
+    public override string ToString() => $"{Zone}{(IsNorthernHemisphere ? 'N' : 'S')} {Easting} {Northing}";
+
+    public override WGSLocation ToWGS(WGSDatum datum)
+    {
+        double x = Easting - 500_000;
+        double y = IsNorthernHemisphere ? Northing : Northing - 10_000_000;
+        double a = Datum.SemiMajorAxis.Value;
+        double e2 = Datum.SquareEccentricity;
+        double ep2 = e2 / (1 - e2);
+        double lon0 = (Zone * 6 - 183).Degree.Radian.Value;
+        double M = y / _K0;
+        double mu = M / (a * (1 -     .25 * e2
+                                - .046875 * e2 * e2
+                                - .015625 * e2 * e2 * e2
+                             ));
+        double e1 = (1 - Math.Sqrt(1 - e2))
+                  / (1 + Math.Sqrt(1 - e2));
+        double phi1 = mu
+                    + (   1.5 * e1      - 0.84375 * e1 * e1 * e1)      * Math.Sin(2 * mu)
+                    + (1.3125 * e1 * e1 - 1.71875 * e1 * e1 * e1 * e1) * Math.Sin(4 * mu)
+                    + (1.572916666666666666666667 * e1 * e1 * e1)      * Math.Sin(6 * mu)
+                    + (               2.142578125 * e1 * e1 * e1 * e1) * Math.Sin(8 * mu);
+
+        double sin_phi1_2 = Math.Sin(phi1);
+
+        sin_phi1_2 *= sin_phi1_2;
+
+        double cos_phi1 = Math.Cos(phi1);
+        double tan_phi1 = Math.Tan(phi1);
+
+        double C1 = ep2 * cos_phi1 * cos_phi1;
+        double T1 = tan_phi1 * tan_phi1;
+        double N1 = a / Math.Sqrt(1 - e2 * sin_phi1_2);
+        double R1 = a * (1 - e2) / Math.Pow(1 - e2 * sin_phi1_2, 1.5);
+        double D = x / (N1 * _K0);
+
+        double lat = phi1 - (N1 * tan_phi1 / R1) * (
+                        .5 * D * D
+                        - (5 + 3 * T1 + 10 * C1 - 4 * C1 * C1 - 9 * ep2) * Math.Pow(D, 4) / 24
+                        + (61 + 90 * T1 + 298 * C1 + 45 * T1 * T1 - 252 * ep2 - 3 * C1 * C1)
+                        * Math.Pow(D, 6) / 720
+                    );
+        double lon = lon0 + (
+                        D
+                        - (1 + 2 * T1 + C1) * D * D * D / 6
+                        + (5 - 2 * C1 + 28 * T1 - 3 * C1 * C1 + 8 * ep2 + 24 * T1 * T1) * Math.Pow(D, 5) / 120
+                ) / cos_phi1;
+
+        return new WGSLocation(lat.Radian, lon.Radian, Datum).ToWGS(datum);
+    }
+}
+
+public record MGRSLocation
+    : Geolocation
+{
+    private const string _BANDS = "CDEFGHJKLMNPQRSTUVWXX";
+    private static readonly string[] _COLUMN_SETS =
+    {
+        "ABCDEFGH", // zones 1, 4, 7, ...
+        "JKLMNPQR", // zones 2, 5, 8, ...
+        "STUVWXYZ", // zones 3, 6, 9, ...
+    };
+    private const string _ODD_ROWS = "ABCDEFGHJKLMNPQRSTUV";
+    private const string _EVEN_ROWS = "FGHJKLMNPQRSTUVABCDE";
+
+
+    private readonly UTMLocation _utm;
+
+
+    public override UTMLocation UTM84 => field ??= _utm;
+
+    public Meter Precision { get; }
+
+    public string Code { get; }
+
+
+    public MGRSLocation(double latitude, double longitude)
+        : this(latitude.Degree, longitude.Degree)
+    {
+    }
+
+    public MGRSLocation(double latitude, double longitude, WGSDatum datum)
+        : this(latitude.Degree, longitude.Degree, datum)
+    {
+    }
+
+    public MGRSLocation(Degree latitude, Degree longitude)
+        : this((Angle)latitude, (Angle)longitude)
+    {
+    }
+
+    public MGRSLocation(Degree latitude, Degree longitude, WGSDatum datum)
+        : this((Angle)latitude, (Angle)longitude, datum)
+    {
+    }
+
+    public MGRSLocation(Angle latitude, Angle longitude)
+        : this(latitude, longitude, WGSDatum.WGS84)
+    {
+    }
+
+    public MGRSLocation(Angle latitude, Angle longitude, WGSDatum datum)
+        : this(new WGSLocation(latitude, longitude, datum))
+    {
+    }
+
+    public MGRSLocation(WGSLocation location)
+        : this(location, new(location))
+    {
+    }
+
+    public MGRSLocation(UTMLocation location)
+        : this(location.ToWGS(location.Datum), location)
+    {
+    }
+
+    private MGRSLocation(WGSLocation location, UTMLocation utm, int precision = 5)
+    {
+        if (precision is < 0 or > 5)
+            throw new ArgumentOutOfRangeException(nameof(precision));
+
+        int scale = (int)Math.Pow(10, 5 - precision);
+        char band = GetLatitudeBand(location.Latitude.Value);
+        char column = GetColumnLetter(utm.Zone, utm.Easting);
+        char row = GetRowLetter(utm.Zone, utm.Northing);
+        string east = precision == 0 ? "" : ((int)(utm.Easting % 100_000 / scale)).ToString($"D{precision}");
+        string north = precision == 0 ? "" : ((int)(utm.Northing % 100_000 / scale)).ToString($"D{precision}");
+
+        _utm = utm;
+        Code = $"{utm.Zone:00}{band} {column} {row} {east} {north}".Trim();
+        Precision = scale.Meter;
+    }
+
+    public MGRSLocation(string code)
+        : this(code, WGSDatum.WGS84)
+    {
+    }
+
+    public MGRSLocation(string code, WGSDatum datum)
+    {
+        Code = code = new([.. from c in code
+                              where char.IsAsciiLetterOrDigit(c)
+                              select char.ToUpperInvariant(c)]);
+
+        if (code.Length < 3)
+            throw new FormatException($"Invalid MGRS coordinate '{code}'.");
+
+        int zone = char.IsDigit(code[0]) ? code[0] - '0' : throw new FormatException($"Invalid MGRS zone '{code}'.");
+        int p = 1;
+
+        if (char.IsDigit(code[1]))
+        {
+            zone = zone * 10 + (code[1] - '0');
+            p = 2;
+        }
+
+        if (zone < 1 || zone > 60)
+            throw new FormatException($"Invalid MGRS zone {zone}.");
+        else if (p + 3 > code.Length)
+            throw new FormatException($"Invalid MGRS coordinate '{code}'.");
+
+        char band = code[p++];
+        char column = code[p++];
+        char row = code[p++];
+
+        if (_BANDS.IndexOf(band) < 0)
+            throw new FormatException($"Invalid MGRS latitude band '{band}'.");
+
+        double easting = GetColumnEasting(zone, column);
+        double northing = GetRowNorthing(zone, row);
+        int digit_count = code.Length - p;
+
+        if ((digit_count & 1) != 0)
+            throw new FormatException("MGRS easting/northing must contain equal numbers of digits.");
+        else if (digit_count > 10)
+            throw new FormatException("MGRS precision cannot exceed 5 digits.");
+
+        int precision = digit_count / 2;
+        int eastingDigits = int.Parse(code[p..(p + precision)]);
+        int northingDigits = int.Parse(code[(p + precision)..]);
+        int scale = (int)Math.Pow(10, 5 - precision);
+
+        easting += eastingDigits * scale;
+        northing += northingDigits * scale;
+        Precision = scale.Meter;
+
+        double lat_candidate = northing;
+
+        for (int i = 0; i < 6; ++i)
+        {
+            if (lat_candidate is >= 0 and <= 10_000_000)
+            {
+                _utm = new(zone, band >= 'N', easting, lat_candidate);
+
+                WGSLocation wgs = _utm.ToWGS(datum);
+
+                if (LatitudeBelongsToBand(wgs.Latitude.Value, band))
+                    return;
+            }
+
+            lat_candidate += 2_000_000;
+        }
+
+        throw new FormatException("MGRS northing is inconsistent with its latitude band.");
+    }
+
+    public override string ToString() => Code;
+
+    public override WGSLocation ToWGS(WGSDatum datum) => _utm.ToWGS(datum);
+
+    public static MGRSLocation Parse(string code) => new(code);
+
+    public static implicit operator string(MGRSLocation location) => location.Code;
+
+    public static implicit operator MGRSLocation(string code) => Parse(code);
+
+
+    private static int GetColumnEasting(int zone, char letter)
+    {
+        string set = _COLUMN_SETS[(zone - 1) % 3];
+        int index = set.IndexOf(letter);
+
+        return index >= 0 ? (index + 1) * 100_000 : throw new FormatException($"Invalid MGRS easting letter '{letter}' for zone {zone}.");
+    }
+
+    private static int GetRowNorthing(int zone, char letter)
+    {
+        string rows = (zone & 1) != 0 ? _ODD_ROWS : _EVEN_ROWS;
+        int index = rows.IndexOf(letter);
+
+        return index >= 0 ? index * 100_000 : throw new FormatException($"Invalid MGRS northing letter '{letter}'.");
+    }
+
+    private static char GetColumnLetter(int zone, double easting)
+    {
+        int column = (int)(easting / 100_000);
+
+        return column < 1 || column > 8 ? throw new ArgumentOutOfRangeException(nameof(easting)) : _COLUMN_SETS[(zone - 1) % 3][column - 1];
+    }
+
+    private static char GetRowLetter(int zone, double northing)
+    {
+        string rows = (zone & 1) != 0 ? _ODD_ROWS : _EVEN_ROWS;
+        int index = ((int)(northing / 100_000)) % 20;
+
+        return rows[index];
+    }
+
+    private static char GetLatitudeBand(double latitude)
+    {
+        if (latitude < -80 || latitude > 84)
+            throw new ArgumentOutOfRangeException(nameof(latitude));
+        else if (latitude >= 72)
+            return 'X';
+        else
+            return _BANDS[(int)(latitude / 8 + 10)];
+    }
+
+    private static bool LatitudeBelongsToBand(double latitude, char band)
+    {
+        int index = _BANDS.IndexOf(band);
+
+        if (index < 0)
+            return false;
+        else if (band == 'X')
+            return latitude is >= 72 and <= 84;
+        else
+        {
+            double min = -80 + index * 8;
+
+            return latitude >= min && latitude < min + 8;
+        }
+    }
 }
 
 // public record MercatorLocation()

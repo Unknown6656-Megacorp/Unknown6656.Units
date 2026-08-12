@@ -929,7 +929,7 @@ public sealed class QuantityDependencyGenerator
                 extensions_sb.AppendLine($"            public {static_info.Result} {static_info.Result.Name} => new((Scalar)value);");
             }
 
-            foreach (string numeric_type in new[] { "int", "uint", "short", "ushort", "System.Half", "float", "double", "decimal", "long", "ulong" })
+            foreach (string numeric_type in new[] { "short", "ushort", "int", "uint", "long", "ulong", "System.Half", "float", "double", "decimal" })
                 sb.AppendLine($$"""
                         extension ({{numeric_type}} value)
                         {
