@@ -412,7 +412,7 @@ public record ElectromagneticalElementProperties
     {
         CuriePoint = null,
         SuperconductingPoint = null,
-        BandGap = null,
+        BandGap = (c is ElectricalElementType.Conductor ? 0 : double.PositiveInfinity).ElectronVolt,
         ElectricalResistivity = null,
         ElectricalType = c,
         MagneticOrdering = MagneticOrdering.Paramagnetic,
