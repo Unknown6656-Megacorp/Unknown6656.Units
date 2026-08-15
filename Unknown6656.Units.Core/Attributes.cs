@@ -153,8 +153,30 @@ public enum KnownUnitType
     //Exponential,
 }
 
+public enum KnownRelativeUnitType
+{
+    Linear,
+    Logarithmic,
+}
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+public abstract class UnitAttribute<TScalar> : Attribute where TScalar : INumber<TScalar>;
+
 /// <summary>
 /// Indicates to the source generator that this data type represents a known unit of measurement.
+/// <br/>
+/// You can use this attribute as follows:
+/// <code>
+///     [<see cref="KnownUnit"/>&lt;Length, Yard, Meter, <see langword="double"/>&gt;]
+///     <see langword="public partial record"/> Yard
+///     {
+///         <see langword="public static string"/> UnitSymbol { <see langword="get"/>; } = "yd";
+///         <see langword="public static"/> <see cref="UnitDisplay"/> UnitDisplay { <see langword="get"/>; } = <see cref="UnitDisplay.Imperial"/>;
+///         <see langword="public static double"/> ScalingFactor { <see langword="get"/>; } = 1.0936132983377078;
+///     }
+/// </code>
+/// <para/>
+/// ------
 /// <para/>
 /// <b>
 ///     DO NOT FORGET TO REMOVE THE FOLLOWING TYPE ANNOTATIONS WHEN USING THIS ATTRIBUTE!
@@ -172,9 +194,8 @@ public enum KnownUnitType
 ///     [<see langword="assembly"/>: <see cref="DisableEmittingIUnitInterfaces"/>]
 /// </code>
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>(KnownUnitType type)
-    : Attribute
+    : UnitAttribute<TScalar>
     where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
                     , IQuantity<TQuantity>
     where TUnit : Quantity<TQuantity, TBaseUnit, TScalar>.Unit<TUnit>
@@ -190,6 +211,18 @@ public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>(KnownUnitType type)
 
 /// <summary>
 /// Indicates to the source generator that this data type represents a known base unit of measurement.
+/// <br/>
+/// You can use this attribute as follows:
+/// <code>
+///     [<see cref="KnownBaseUnit"/>&lt;Length, Meter, <see langword="double"/>&gt;]
+///     <see langword="public partial record"/> Meter
+///     {
+///         <see langword="public static string"/> UnitSymbol { <see langword="get"/>; } = "m";
+///         <see langword="public static"/> <see cref="UnitDisplay"/> UnitDisplay { <see langword="get"/>; } = <see cref="UnitDisplay.MetricUseSIPrefixes"/>;
+///     }
+/// </code>
+/// <para/>
+/// ------
 /// <para/>
 /// <b>
 ///     DO NOT FORGET TO REMOVE THE FOLLOWING TYPE ANNOTATIONS WHEN USING THIS ATTRIBUTE!
@@ -207,7 +240,6 @@ public class KnownUnit<TQuantity, TUnit, TBaseUnit, TScalar>(KnownUnitType type)
 ///     [<see langword="assembly"/>: <see cref="DisableEmittingIUnitInterfaces"/>]
 /// </code>
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 public class KnownBaseUnit<TQuantity, TBaseUnit, TScalar>()
     : KnownUnit<TQuantity, TBaseUnit, TBaseUnit, TScalar>(KnownUnitType.Linear)
     where TQuantity : Quantity<TQuantity, TBaseUnit, TScalar>
@@ -216,6 +248,28 @@ public class KnownBaseUnit<TQuantity, TBaseUnit, TScalar>()
                     , IBaseUnit<TBaseUnit, TScalar>
                     , IUnit
     where TScalar : INumber<TScalar>;
+
+/// <summary>
+/// Indicates to the source generator that this data type represents a known relative unit of measurement, e.g. "dB", "%", "ppm", etc.
+/// <br/>
+/// You can use this attribute as follows:
+/// <code>
+///     [<see cref="KnownRelativeUnit"/>&lt;Decibel, <see langword="double"/>&gt;]
+///     <see langword="public partial record"/> Decibel
+///     {
+///         <see langword="public static string"/> UnitSymbol { <see langword="get"/>; } = "dB";
+///         <see langword="public static double"/> Base { <see langword="get"/>; } = 10;
+///         <see langword="public static double"/> PowerFactor { <see langword="get"/>; } = 10;
+///         <see langword="public static double"/> AmplitudeFactor { <see langword="get"/>; } = 20;
+///     }
+/// </code>
+/// </summary>
+public class KnownRelativeUnit<TScalar>(KnownRelativeUnitType type)
+    : UnitAttribute<TScalar>
+    where TScalar : INumber<TScalar>
+{
+    public KnownRelativeUnitType UnitType => type;
+}
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
 public class KnownAlias<TQuantity, TBaseUnit, TScalar>(string name, string unit_symbol, params string[] alternative_symbols)
