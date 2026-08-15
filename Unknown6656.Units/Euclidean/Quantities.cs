@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 using Unknown6656.Units.Energy;
 using Unknown6656.Units.Kinematics;
@@ -23,13 +22,13 @@ public partial record Angle(Radian value)
 #else
     public static string QuantitySymbol { get; } = "∠";
 #endif
-    public static Degree North { get; } = new(0);
-    public static Degree East { get; } = new(90);
-    public static Degree South { get; } = new(180);
-    public static Degree West { get; } = new(270);
-    public static Degree CivilTwilight { get; } = new(6);
-    public static Degree NauticalTwilight { get; } = new(12);
-    public static Degree AstronomicalTwilight { get; } = new(18);
+    public static Degree North { get; } = 0.Degree;
+    public static Degree East { get; } = 90.Degree;
+    public static Degree South { get; } = 180.Degree;
+    public static Degree West { get; } = 270.Degree;
+    public static Degree CivilTwilight { get; } = 6.Degree;
+    public static Degree NauticalTwilight { get; } = 12.Degree;
+    public static Degree AstronomicalTwilight { get; } = 18.Degree;
 
 
     public string ToSexagesimalNotation() => ToSexagesimalNotation(null);

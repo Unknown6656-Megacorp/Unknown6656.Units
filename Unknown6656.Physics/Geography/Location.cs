@@ -5,8 +5,6 @@ using System;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units;
 
-using Microsoft.Extensions.Primitives;
-
 namespace Unknown6656.Physics.Geography;
 
 

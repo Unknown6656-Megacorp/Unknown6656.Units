@@ -166,28 +166,28 @@ public partial record EquivalentDose(Sievert value)
 {
     public static string QuantitySymbol { get; } = "H";
 
-    public static EquivalentDose AirportScreeningDose { get; } = new Sievert(2.5e-7);
-    public static EquivalentDose AverageDentalRadiographDose { get; } = new Sievert(1e-5);
-    public static EquivalentDose AverageChestRadiographDose { get; } = new Sievert(1e-5);
-    public static EquivalentDose TwoViewMammogramDose { get; } = new Sievert(5e-4);
-    public static EquivalentDose FullBodyCTScanDose { get; } = new Sievert(3e-3);
-    public static EquivalentDose AverageDosePerAnnum { get; } = new Sievert(1e-3);
-    public static EquivalentDose BariumFluoroscopyDose { get; } = new Sievert(6e-3);
-    public static EquivalentDose TotalDosePerAnnumLimitUS { get; } = new Sievert(5e-2);
-    public static EquivalentDose ISSDosePerAnnum { get; } = new Sievert(.16);
-    public static EquivalentDose SolarSystemBackgroundRadiationPerAnnum { get; } = new Sievert(.6);
-    public static EquivalentDose NASADosePerLifetimeLimit { get; } = new Sievert(1);
-    public static EquivalentDose HumanLD50_In30Days { get; } = new Sievert(4.5);
-    public static EquivalentDose FatalAcuteDose_HarryDaghlian { get; } = new Sievert(5.1);
+    public static EquivalentDose AirportScreeningDose { get; } = 2.5e-7.Sievert;
+    public static EquivalentDose AverageDentalRadiographDose { get; } = 1e-5.Sievert;
+    public static EquivalentDose AverageChestRadiographDose { get; } = 1e-5.Sievert;
+    public static EquivalentDose TwoViewMammogramDose { get; } = 5e-4.Sievert;
+    public static EquivalentDose FullBodyCTScanDose { get; } = 3e-3.Sievert;
+    public static EquivalentDose AverageDosePerAnnum { get; } = 1e-3.Sievert;
+    public static EquivalentDose BariumFluoroscopyDose { get; } = 6e-3.Sievert;
+    public static EquivalentDose TotalDosePerAnnumLimitUS { get; } = 5e-2.Sievert;
+    public static EquivalentDose ISSDosePerAnnum { get; } = .16.Sievert;
+    public static EquivalentDose SolarSystemBackgroundRadiationPerAnnum { get; } = .6.Sievert;
+    public static EquivalentDose NASADosePerLifetimeLimit { get; } = 1.Sievert;
+    public static EquivalentDose HumanLD50_In30Days { get; } = 4.5.Sievert;
+    public static EquivalentDose FatalAcuteDose_HarryDaghlian { get; } = 5.1.Sievert;
 #if USE_DIACRITICS
-    public static EquivalentDose FatalAcuteDose_GoiâniaIncident { get; } = new Sievert(6);
+    public static EquivalentDose FatalAcuteDose_GoiâniaIncident { get; } = 6.Sievert;
 #else
-    public static EquivalentDose FatalAcuteDose_GoianiaIncident { get; } = new Sievert(6);
+    public static EquivalentDose FatalAcuteDose_GoianiaIncident { get; } = 6.Sievert;
 #endif
-    public static EquivalentDose FatalAcuteDose_HisashiOuchi { get; } = new Sievert(17);
-    public static EquivalentDose FatalAcuteDose_LouisSlotin { get; } = new Sievert(21);
-    public static EquivalentDose FatalAcuteDose_CecilKelley { get; } = new Sievert(36);
-    public static EquivalentDose FatalAcuteDose_BorisKorchilov { get; } = new Sievert(54);
+    public static EquivalentDose FatalAcuteDose_HisashiOuchi { get; } = 17.Sievert;
+    public static EquivalentDose FatalAcuteDose_LouisSlotin { get; } = 21.Sievert;
+    public static EquivalentDose FatalAcuteDose_CecilKelley { get; } = 36.Sievert;
+    public static EquivalentDose FatalAcuteDose_BorisKorchilov { get; } = 54.Sievert;
 }
 
 [MultiplicativeRelationship<DoseRate, Time, EquivalentDose, SievertPerSecond, Second, Sievert, Scalar>]
