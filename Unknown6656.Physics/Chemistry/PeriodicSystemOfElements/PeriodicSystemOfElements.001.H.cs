@@ -10,9 +10,9 @@ using Unknown6656.Physics.Optics;
 namespace Unknown6656.Physics.Chemistry;
 
 
-public sealed partial class PeriodicTableOfElements
+public partial class Element
 {
-    public static Element Hydrogen { get; } = Table.RegisterElement(new(Table)
+    public static Element Hydrogen => field ??= PeriodicTableOfElements.RegisterElement(new()
     {
         Name = nameof(Hydrogen),
         AlternateNames = ["protium", "deuterium", "tritium"],

@@ -1,20 +1,17 @@
 ﻿using Unknown6656.Units.Thermodynamics;
-using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Euclidean;
-using Unknown6656.Units.Magnetism;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 
 using Unknown6656.Physics.Optics;
-using System.ComponentModel.DataAnnotations;
 
 namespace Unknown6656.Physics.Chemistry;
 
 
-public sealed partial class PeriodicTableOfElements
+public partial class Element
 {
-    public static Element Nitrogen { get; } = Table.RegisterElement(new(Table)
+    public static Element Nitrogen => field ??= PeriodicTableOfElements.RegisterElement(new()
     {
         Name = nameof(Nitrogen),
         AlternateNames = ["Azote"],

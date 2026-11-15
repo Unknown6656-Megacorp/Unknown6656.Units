@@ -540,12 +540,12 @@ public record ElementAbundance
 /// <summary>
 /// Represents a chemical element.
 /// </summary>
-public class Element
+public partial class Element
 {
     private readonly HashSet<Isotope> _isotopes = [];
 
 
-    public PeriodicTableOfElements PeriodicTable { get; }
+    public PeriodicTableOfElements PeriodicTable => PeriodicTableOfElements.Table;
 
     /// <summary>
     /// The name of the element.
@@ -693,7 +693,9 @@ public class Element
     public Isotope? this[uint neutron_or_hadron_count] => GetIsotopeByNeutronCount(neutron_or_hadron_count) ?? GetIsotopeByHadronCount(neutron_or_hadron_count);
 
 
-    internal Element(PeriodicTableOfElements table) => PeriodicTable = table;
+    internal Element()
+    {
+    }
 
     internal Element AddIsotope(IsotopeConfig isotope)
     {

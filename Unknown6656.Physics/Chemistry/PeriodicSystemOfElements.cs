@@ -1,9 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
-using System;
+using System.Reflection;
 
-using Unknown6656.Generics;
 using Unknown6656.Common;
+using Unknown6656.Generics;
 
 namespace Unknown6656.Physics.Chemistry;
 
@@ -23,14 +24,14 @@ namespace Unknown6656.Physics.Chemistry;
 // TODO: radium f       = po-210
 
 
-public sealed partial class PeriodicTableOfElements
+public class PeriodicTableOfElements
 {
-    private readonly ConcurrentDictionary<uint, Element> _elements = new();
+    private readonly static ConcurrentDictionary<uint, Element> _elements = new();
 
 
     public static PeriodicTableOfElements Table { get; } = new();
 
-    public Element[] ElementsByAtomicNumber => field ??= _elements.Values.OrderBy(e => e.AtomicNumber).ToArray();
+    public Element[] ElementsByAtomicNumber => field ??= [.. _elements.Values.OrderBy(e => e.AtomicNumber)];
 
     public Isotope[] IsotopesByAtomicNumber => field ??= [.. from kvp in _elements
                                                              from iso in kvp.Value.KnownIsotopes
@@ -52,9 +53,13 @@ public sealed partial class PeriodicTableOfElements
 
     private PeriodicTableOfElements()
     {
+        // trigger static initialization of all elements after .cctor and .ctor
+        foreach (PropertyInfo prop in typeof(Element).GetProperties(BindingFlags.Public | BindingFlags.Static))
+            if (prop.PropertyType == typeof(Element))
+                prop.GetValue(null);
     }
 
-    private Element RegisterElement(Element element) => _elements[element.AtomicNumber] = element;
+    internal static Element RegisterElement(Element element) => _elements[element.AtomicNumber] = element;
 
     public Element? TryGetElement(string name_or_symbol)
     {

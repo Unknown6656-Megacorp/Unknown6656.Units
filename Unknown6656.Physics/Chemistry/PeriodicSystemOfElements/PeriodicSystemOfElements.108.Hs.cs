@@ -1,20 +1,14 @@
 ﻿using Unknown6656.Units.Thermodynamics;
-using Unknown6656.Units.Electricity;
-using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Euclidean;
-using Unknown6656.Units.Magnetism;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
-using Unknown6656.Units.Energy;
-
-using Unknown6656.Physics.Optics;
 
 namespace Unknown6656.Physics.Chemistry;
 
 
-public sealed partial class PeriodicTableOfElements
+public partial class Element
 {
-    public static Element Hassium { get; } = Table.RegisterElement(new(Table)
+    public static Element Hassium => field ??= PeriodicTableOfElements.RegisterElement(new()
     {
         Name = nameof(Hassium),
         AlternateNames = ["Unniloctium"],
@@ -61,13 +55,13 @@ public sealed partial class PeriodicTableOfElements
                 new(4, ElectronOrbital.S, 2),
                 new(4, ElectronOrbital.P, 6),
                 new(4, ElectronOrbital.D, 10),
+                new(4, ElectronOrbital.F, 14),
                 new(5, ElectronOrbital.S, 2),
                 new(5, ElectronOrbital.P, 6),
-                new(4, ElectronOrbital.F, 14),
                 new(5, ElectronOrbital.D, 10),
+                new(5, ElectronOrbital.F, 14),
                 new(6, ElectronOrbital.S, 2),
                 new(6, ElectronOrbital.P, 6),
-                new(5, ElectronOrbital.F, 14),
                 new(6, ElectronOrbital.D, 6),
                 new(7, ElectronOrbital.S, 2),
             ]),
@@ -102,7 +96,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 157,
-            Spin = 9/2,
+            Spin = 4.5,
             Decays = [new(DecayMode.Alpha, 1.96e-3.Second)],
         },
         new()
@@ -129,7 +123,7 @@ public sealed partial class PeriodicTableOfElements
         new()
         {
             NeutronCount = 161,
-            Spin = 9/2,
+            Spin = 4.5,
             Decays = [new(DecayMode.Alpha, 13.Second)],
         },
         new()

@@ -7,14 +7,13 @@ using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 
 using Unknown6656.Physics.Optics;
-using System.ComponentModel.DataAnnotations;
 
 namespace Unknown6656.Physics.Chemistry;
 
 
-public sealed partial class PeriodicTableOfElements
+public partial class Element
 {
-    public static Element Carbon { get; } = Table.RegisterElement(new(Table)
+    public static Element Carbon => field ??= PeriodicTableOfElements.RegisterElement(new()
     {
         Name = nameof(Carbon),
         Symbol = "C",

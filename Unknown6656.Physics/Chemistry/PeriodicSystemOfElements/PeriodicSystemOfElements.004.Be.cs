@@ -11,9 +11,9 @@ using Unknown6656.Physics.Optics;
 namespace Unknown6656.Physics.Chemistry;
 
 
-public sealed partial class PeriodicTableOfElements
+public partial class Element
 {
-    public static Element Beryllium { get; } = Table.RegisterElement(new(Table)
+    public static Element Beryllium => field ??= PeriodicTableOfElements.RegisterElement(new()
     {
         Name = nameof(Beryllium),
         AlternateNames = ["Glucinium"],

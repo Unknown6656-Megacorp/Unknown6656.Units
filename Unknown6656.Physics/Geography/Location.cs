@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Text.RegularExpressions;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using System;
 
@@ -82,6 +84,9 @@ public abstract record Geolocation
 
     public static double NormalizeAngle(double angle, GeodesicAngleOrientation orientation)
     {
+        if (!double.IsFinite(angle))
+            throw new ArgumentOutOfRangeException(nameof(angle), "Angle must be a finite number.");
+
         if (orientation is GeodesicAngleOrientation.Vertical)
             angle = double.Clamp(angle, -90, 90);
         else
@@ -102,7 +107,6 @@ public abstract record Geolocation
 // TODO: ED50
 // TODO: ETRS89
 // TODO: NAD83 / NAVD88
-// TODO: GEOREF https://en.wikipedia.org/wiki/World_Geographic_Reference_System
 // TODO: ENU coordinates
 // TODO: geohash https://en.wikipedia.org/wiki/Geohash
 // TODO: https://en.wikipedia.org/wiki/Natural_Area_Code
@@ -1241,11 +1245,11 @@ public record MGRSLocation
 {
     private const string _BANDS = "CDEFGHJKLMNPQRSTUVWXX";
     private static readonly string[] _COLUMN_SETS =
-    {
+    [
         "ABCDEFGH", // zones 1, 4, 7, ...
         "JKLMNPQR", // zones 2, 5, 8, ...
         "STUVWXYZ", // zones 3, 6, 9, ...
-    };
+    ];
     private const string _ODD_ROWS = "ABCDEFGHJKLMNPQRSTUV";
     private const string _EVEN_ROWS = "FGHJKLMNPQRSTUVABCDE";
 
@@ -1309,8 +1313,8 @@ public record MGRSLocation
         char band = GetLatitudeBand(location.Latitude.Value);
         char column = GetColumnLetter(utm.Zone, utm.Easting);
         char row = GetRowLetter(utm.Zone, utm.Northing);
-        string east = precision == 0 ? "" : ((int)(utm.Easting % 100_000 / scale)).ToString($"D{precision}");
-        string north = precision == 0 ? "" : ((int)(utm.Northing % 100_000 / scale)).ToString($"D{precision}");
+        string east = precision == 0 ? "" : ((int)(utm.Easting % 100_000 / scale)).ToString($"D{precision}", CultureInfo.InvariantCulture);
+        string north = precision == 0 ? "" : ((int)(utm.Northing % 100_000 / scale)).ToString($"D{precision}", CultureInfo.InvariantCulture);
 
         _utm = utm;
         Code = $"{utm.Zone:00}{band} {column} {row} {east} {north}".Trim();
@@ -1488,3 +1492,139 @@ public record MGRSLocation
 //         return [lon, lat];
 //     }
 // }
+
+public partial record GEOREFLocation
+    : Geolocation
+{
+    private const string ALPHABET_LON15 = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    private const string ALPHABET_LAT15 = "ABCDEFGHJKLM";
+    private const string ALPHABET_DEGREE = "ABCDEFGHJKLMNPQ";
+
+    public GeodesicBoundingBox BoundingBox { get; }
+    public WGSLocation Center => BoundingBox.Center;
+    public int Precision { get; }
+    public string Code { get; }
+    public string CodeWithAltitude => $"{Code}{Center.Altitude.Value:+0.##;-0.##}m";
+
+
+    [GeneratedRegex($@"^(?<lon15>[{ALPHABET_LON15}])(?<lat15>[{ALPHABET_LAT15}])(?<londeg>[{ALPHABET_DEGREE}])(?<latdeg>[{ALPHABET_DEGREE}])(?<digits>(\d\d)*)((\b|,)(?<altitude>[+\-]?(\d+(\.\d*)?|\d*\.\d+))m?)?$")]
+    private static partial Regex GEOREFRegex { get; }
+
+
+    public GEOREFLocation(string code)
+    {
+        Code = code = new([.. from c in code
+                              where char.IsAsciiLetterOrDigit(c) || c is '+' or '-' or '.' or ','
+                              select char.ToUpperInvariant(c)]);
+
+        if (GEOREFRegex.Match(code) is { Success: true, Groups: GroupCollection groups })
+        {
+            int lon15 = ALPHABET_LON15.IndexOf(groups["lon15"].Value[0]);
+            int lat15 = ALPHABET_LAT15.IndexOf(groups["lat15"].Value[0]);
+            int lon_deg = ALPHABET_DEGREE.IndexOf(groups["londeg"].Value[0]);
+            int lat_deg = ALPHABET_DEGREE.IndexOf(groups["latdeg"].Value[0]);
+            string altitude = groups.TryGetValue("altitude", out var altGroup) ? altGroup.Value : "+0";
+            double longitude = -180 + lon15 * 15 + lon_deg;
+            double latitude = -90 + lat15 * 15 + lat_deg;
+
+            if (groups["digits"].Value is { Length: int precision and > 0 } digits)
+            {
+                precision >>= 1;
+
+                long lon_value = long.Parse(digits[..precision]);
+                long lat_value = long.Parse(digits[precision..]);
+                long scale = (long)Math.Pow(10, precision);
+
+                if (lon_value >= 60 * scale)
+                    throw new FormatException($"GEOREF longitude minute component has a value of {lon_value}, which is larger than >= 60 * {scale}.");
+                else if (lat_value >= 60 * scale)
+                    throw new FormatException($"GEOREF latitude minute component has a value of {lat_value}, which is larger than >= 60 * {scale}.");
+
+                longitude += (lon_value + .5) / 60 * scale;
+                latitude += (lat_value + .5) / 60 * scale;
+
+                Degree resolution = (1 / (60 * scale)).Degree;
+
+                BoundingBox = new(new(latitude.Degree, longitude.Degree), resolution, resolution);
+            }
+            else
+                BoundingBox = new(new((latitude + .5).Degree, (longitude + .5).Degree), Degree.One, Degree.One);
+        }
+        else
+            throw new FormatException($"Invalid or unparsable GEOREF coordinate string '{code}'.");
+    }
+
+    public GEOREFLocation(WGSLocation location)
+        : this(location, 4)
+    {
+    }
+
+    public GEOREFLocation(WGSLocation location, int precision = 4)
+    {
+        BoundingBox = new(location);
+        Precision = precision;
+
+        double latitude = location.Latitude.Value;
+
+        if (latitude >= 90)
+            latitude = double.BitDecrement(90);
+
+        double x = location.Longitude.Value + 180;
+        double y = latitude + 90;
+        int lon_15 = (int)Math.Floor(x / 15);
+        int lat_15 = (int)Math.Floor(y / 15);
+        double lon_inside_15 = x - lon_15 * 15;
+        double lat_inside_15 = y - lat_15 * 15;
+        int lon_deg = (int)Math.Floor(lon_inside_15);
+        int lat_deg = (int)Math.Floor(lat_inside_15);
+        StringBuilder result = new(4 + (precision << 1));
+
+        result.Append(ALPHABET_LON15[lon_15]);
+        result.Append(ALPHABET_LAT15[lat_15]);
+        result.Append(ALPHABET_DEGREE[lon_deg]);
+        result.Append(ALPHABET_DEGREE[lat_deg]);
+
+        if (precision > 0)
+        {
+            double lon_minutes = (lon_inside_15 - lon_deg) * 60;
+            double lat_minutes = (lat_inside_15 - lat_deg) * 60;
+            double scale = Math.Pow(10, precision);
+            long lon_val = (long)Math.Floor(lon_minutes * scale);
+            long lat_val = (long)Math.Floor(lat_minutes * scale);
+            long limit = 60L * (long)scale;
+
+            if (lon_val >= limit)
+                lon_val = limit - 1;
+
+            if (lat_val >= limit)
+                lat_val = limit - 1;
+
+            result.Append(lon_val.ToString($"D{precision}", CultureInfo.InvariantCulture));
+            result.Append(lat_val.ToString($"D{precision}", CultureInfo.InvariantCulture));
+        }
+
+        Code = result.ToString();
+    }
+
+    public GEOREFLocation(Angle latitude, Angle longitude, int precision = 4)
+        : this(latitude, longitude, WGSDatum.WGS84, precision)
+    {
+    }
+
+    public GEOREFLocation(Angle latitude, Angle longitude, WGSDatum datum, int precision = 4)
+        : this(latitude, longitude, Meter.Zero, datum, precision)
+    {
+    }
+
+    public GEOREFLocation(Angle latitude, Angle longitude, Length altitude, int precision = 4)
+        : this(latitude, longitude, altitude, WGSDatum.WGS84, precision)
+    {
+    }
+
+    public GEOREFLocation(Angle latitude, Angle longitude, Length altitude, WGSDatum datum, int precision = 4)
+        : this(new WGSLocation(latitude, longitude, altitude, datum), precision)
+    {
+    }
+
+    public override WGSLocation ToWGS(WGSDatum datum) => Center.ToWGS(datum);
+}

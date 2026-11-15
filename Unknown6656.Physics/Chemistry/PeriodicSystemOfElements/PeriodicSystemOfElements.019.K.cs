@@ -5,16 +5,15 @@ using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Magnetism;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
-using Unknown6656.Units.Energy;
 
 using Unknown6656.Physics.Optics;
 
 namespace Unknown6656.Physics.Chemistry;
 
 
-public sealed partial class PeriodicTableOfElements
+public partial class Element
 {
-    public static Element Potassium { get; } = Table.RegisterElement(new(Table)
+    public static Element Potassium => field ??= PeriodicTableOfElements.RegisterElement(new()
     {
         Name = nameof(Potassium),
         AlternateNames = ["Kalium"],

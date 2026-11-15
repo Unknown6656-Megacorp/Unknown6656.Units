@@ -5,7 +5,6 @@ using System.Text;
 using System;
 
 using Unknown6656.Physics.Nuclear;
-using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Temporal;
 using Unknown6656.Units.Matter;
 using Unknown6656.Generics;
@@ -219,8 +218,8 @@ public class Isotope
                    .Replace(" ", "")
                    .Replace('_', '-');
 
-        if (name is "-" or "0")
-            return PeriodicTableOfElements.Neutronium.MostAbundantIsotope;
+        if (name is "-" or "0" or "/")
+            return Element.Neutronium.MostAbundantIsotope;
         else if (_named_isotopes.TryGetValue(name, out Isotope? named_isotope))
             return named_isotope;
 

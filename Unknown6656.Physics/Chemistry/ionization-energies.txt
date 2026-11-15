@@ -34,12 +34,6 @@ barium
 	.9652e6.JoulePerMol,
 	3.6e6.JoulePerMol,
 	
-berkelium
-	.601e6.JoulePerMol,
-	1.186e6.JoulePerMol,
-	2.152e6.JoulePerMol,
-	3.434e6.JoulePerMol,
-	
 beryllium
 	.8995e6.JoulePerMol,
 	1.7571e6.JoulePerMol,
@@ -80,12 +74,6 @@ caesium
 	.3757e6.JoulePerMol,
 	2.2343e6.JoulePerMol,
 	3.4e6.JoulePerMol,
-	
-californium
-	.608e6.JoulePerMol,
-	1.206e6.JoulePerMol,
-	2.267e6.JoulePerMol,
-	3.599e6.JoulePerMol,
 	
 carbon
 	1.0865e6.JoulePerMol,
@@ -189,30 +177,11 @@ copper
 	19.2e6.JoulePerMol,
 	22.4e6.JoulePerMol,
 	
-curium
-	.581e6.JoulePerMol,
-	1.196e6.JoulePerMol,
-	2.026e6.JoulePerMol,
-	3.55e6.JoulePerMol,
-	
-dubnium
-	.665e6.JoulePerMol,
-	1.547e6.JoulePerMol,
-	2.378e6.JoulePerMol,
-	3.299e6.JoulePerMol,
-	4.305e6.JoulePerMol,
-	
 dysprosium
 	.573e6.JoulePerMol,
 	1.13e6.JoulePerMol,
 	2.2e6.JoulePerMol,
 	3.99e6.JoulePerMol,
-	
-einsteinium
-	.619e6.JoulePerMol,
-	1.216e6.JoulePerMol,
-	2.334e6.JoulePerMol,
-	3.734e6.JoulePerMol,
 	
 erbium
 	.5893e6.JoulePerMol,
@@ -225,12 +194,6 @@ europium
 	1.085e6.JoulePerMol,
 	2.404e6.JoulePerMol,
 	4.12e6.JoulePerMol,
-	
-fermium
-	.629e6.JoulePerMol,
-	1.225e6.JoulePerMol,
-	2.363e6.JoulePerMol,
-	3.792e6.JoulePerMol,
 	
 fluorine
 	1.681e6.JoulePerMol,
@@ -370,12 +333,6 @@ lanthanum
 	4.819e6.JoulePerMol,
 	5.94e6.JoulePerMol,
 	
-lawrencium
-	.479e6.JoulePerMol,
-	1.428e6.JoulePerMol,
-	2.228e6.JoulePerMol,
-	4.91e6.JoulePerMol,
-	
 lead
 	.7156e6.JoulePerMol,
 	1.4505e6.JoulePerMol,
@@ -421,12 +378,6 @@ manganese
 	18.77e6.JoulePerMol,
 	21.4e6.JoulePerMol,
 	23.96e6.JoulePerMol,
-	
-mendelevium
-	.636e6.JoulePerMol,
-	1.235e6.JoulePerMol,
-	2.47e6.JoulePerMol,
-	3.84e6.JoulePerMol,
 	
 mercury
 	1.0071e6.JoulePerMol,
@@ -517,12 +468,6 @@ niobium
 	9.847e6.JoulePerMol,
 	12.1e6.JoulePerMol,
 	
-nobelium
-	.639e6.JoulePerMol,
-	1.254e6.JoulePerMol,
-	2.643e6.JoulePerMol,
-	3.956e6.JoulePerMol,
-	
 osmium
 	.84e6.JoulePerMol,
 	1.6e6.JoulePerMol,
@@ -599,25 +544,11 @@ ruthenium
 	1.62e6.JoulePerMol,
 	2.747e6.JoulePerMol,
 	
-rutherfordium
-	.58e6.JoulePerMol,
-	1.39e6.JoulePerMol,
-	2.3e6.JoulePerMol,
-	3.08e6.JoulePerMol,
-	
 samarium
 	.5445e6.JoulePerMol,
 	1.07e6.JoulePerMol,
 	2.26e6.JoulePerMol,
 	3.99e6.JoulePerMol,
-	
-seaborgium
-	.757e6.JoulePerMol,
-	1.733e6.JoulePerMol,
-	2.484e6.JoulePerMol,
-	3.416e6.JoulePerMol,
-	4.562e6.JoulePerMol,
-	5.716e6.JoulePerMol,
 	
 selenium
 	.941e6.JoulePerMol,

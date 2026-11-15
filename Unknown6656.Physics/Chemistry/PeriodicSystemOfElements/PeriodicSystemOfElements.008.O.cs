@@ -1,5 +1,4 @@
 ﻿using Unknown6656.Units.Thermodynamics;
-using Unknown6656.Units.Electricity;
 using Unknown6656.Units.Kinematics;
 using Unknown6656.Units.Euclidean;
 using Unknown6656.Units.Magnetism;
@@ -11,9 +10,9 @@ using Unknown6656.Physics.Optics;
 namespace Unknown6656.Physics.Chemistry;
 
 
-public sealed partial class PeriodicTableOfElements
+public partial class Element
 {
-    public static Element Oxygen { get; } = Table.RegisterElement(new(Table)
+    public static Element Oxygen => field ??= PeriodicTableOfElements.RegisterElement(new()
     {
         Name = nameof(Oxygen),
         Symbol = "O",

@@ -1,4 +1,8 @@
-﻿namespace Unknown6656.Units.Euclidean;
+﻿#if !USE_DIACRITICS
+global using Feddān = Unknown6656.Units.Euclidean.Feddan;
+#endif
+
+namespace Unknown6656.Units.Euclidean;
 
 #pragma warning disable IDE0004 // Remove Unnecessary Cast
 
@@ -154,4 +158,17 @@ public partial record Morgen
     public static string UnitSymbol { get; } = "Mg";
     public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
     public static Scalar ScalingFactor { get; } = (Scalar)1.1674987040764384751532925798452363717876273157336795356157154665e-4;
+}
+
+#if USE_DIACRITICS
+[KnownUnit<Area, Feddān, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Feddān
+#else
+[KnownUnit<Area, Feddan, SquareMeter, Scalar>(KnownUnitType.Linear)]
+public partial record Feddan
+#endif
+{
+    public static string UnitSymbol { get; } = "fed";
+    public static UnitDisplay UnitDisplay { get; } = UnitDisplay.MetricNoSIPrefixes;
+    public static Scalar ScalingFactor { get; } = (Scalar)2.38095238095238095238095238095238095238095238095238095238095238e-4;
 }
