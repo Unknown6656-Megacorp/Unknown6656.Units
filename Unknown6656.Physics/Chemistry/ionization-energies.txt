@@ -4,12 +4,6 @@
 	1.9e6.JoulePerMol,
 	4.7e6.JoulePerMol,
 	
-americium
-	.578e6.JoulePerMol,
-	1.158e6.JoulePerMol,
-	2.132e6.JoulePerMol,
-	3.493e6.JoulePerMol,
-	
 antimony
 	.834e6.JoulePerMol,
 	1.5949e6.JoulePerMol,
